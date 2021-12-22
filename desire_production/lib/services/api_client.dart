@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:desire_production/model/addDailyProductionOrderModel.dart';
 import 'package:desire_production/model/address_model.dart';
 import 'package:desire_production/model/admin_chat_details_model.dart';
 import 'package:desire_production/model/admin_chat_list_model.dart';
@@ -8,6 +9,7 @@ import 'package:desire_production/model/category_list_model.dart';
 import 'package:desire_production/model/credit_list_model.dart';
 import 'package:desire_production/model/customer_list_for_chat_model.dart';
 import 'package:desire_production/model/dailyOrderListModel.dart';
+import 'package:desire_production/model/dailyProductionAddlistModel.dart';
 import 'package:desire_production/model/dailyProductionListModel.dart';
 import 'package:desire_production/model/dashboard_production_model.dart';
 import 'package:desire_production/model/dispatchOrderDetailsModel.dart';
@@ -747,6 +749,22 @@ Future<ModelNoWiseListModel> getModelWiseDailyProductionList(var modelNoId) asyn
 
     return modelWiseDailyProductionListModel;
   }
+
+  Future<DailyProductionAddlistModel> getDailyProductionaddmodelList() async {
+    var response = await http.post(Uri.parse("http://loccon.in/desiremoulding/api/ProductionApiController/dailyProductionAddOrderModelList"), body: {
+      "secretkey" : Connection.secretKey,
+    });
+    var result = json.decode(response.body);
+    print("daily  production add lis† response $result ${result['data']}");
+
+
+    DailyProductionAddlistModel dailyproductionaddlistmodel;
+    dailyproductionaddlistmodel = DailyProductionAddlistModel.fromJson(result);
+    print("_userModel $dailyproductionaddlistmodel");
+
+    return dailyproductionaddlistmodel;
+  }
+
 
 
 }
