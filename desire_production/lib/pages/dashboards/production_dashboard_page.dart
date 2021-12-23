@@ -4,6 +4,7 @@ import 'package:desire_production/bloc/production_dashboard_bloc.dart';
 import 'package:desire_production/model/dashboard_production_model.dart';
 import 'package:desire_production/model/product_model.dart';
 import 'package:desire_production/pages/dashboards/admin_dashboard_page.dart';
+import 'package:desire_production/pages/warehouse/dispatch_to_warehouse.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:desire_production/bloc/dashboard_bloc.dart';
@@ -196,6 +197,65 @@ class _DashboardPageProductionState extends State<DashboardPageProduction> {
                           ),
                           Text(
                             'List of Production',
+                            style: TextStyle(
+                              fontSize: 14.0,
+                              color: profile_item_color,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+            SizedBox(height: 20,),
+            GestureDetector(
+              onTap: (){
+                Navigator.push(context, MaterialPageRoute(builder: (b) => DispatchtoWarehouse()));
+              },
+              child: Container(
+                decoration: BoxDecoration(
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey,
+                      blurRadius: 5, // has the effect of softening the shadow
+                      spreadRadius: 0, // has the effect of extending the shadow
+                    ),
+                  ],
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(
+                    5.0,
+                  ),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: <Widget>[
+                      Image.asset(
+                        "assets/images/production_planning.png",
+                        color: kPrimaryColor,
+                        height: 40,
+                        width: 40,
+                      ),
+                      SizedBox(width: 10,),
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Text(
+                            'Dispatch to Warehouse',
+                            style: TextStyle(
+                              fontSize: 18.0,
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          Text(
+                            'Dispatch to Warehouse',
                             style: TextStyle(
                               fontSize: 14.0,
                               color: profile_item_color,
