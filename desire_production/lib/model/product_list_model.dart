@@ -25,23 +25,23 @@ class ProductListModel {
 class Product {
   Product({
     this.id,
-    this.productName,
-    this.qty,
+    this.model_no,
+    this.planning_date,
   });
 
   String id;
-  String productName;
-  String qty;
+  String model_no;
+  String planning_date;
 
   factory Product.fromJson(Map<String, dynamic> json) => Product(
     id: json["id"],
-    productName: json["product_name"],
-    qty: json["qty"],
+    model_no: json["model_no"],
+    planning_date: json["planning_date"],
   );
 
   Map<String, dynamic> toJson() => {
     "id": id,
-    "product_name": productName,
-    "qty": qty,
+    "model_no": model_no,
+    "planning_date": planning_date,
   };
 }
