@@ -146,7 +146,9 @@ class _DailyProductionListPageState extends State<DailyProductionListPage> {
           backgroundColor: kPrimaryColor,
           onPressed: () {
             showDialog(
-                context: context, builder: (builder) => AddModelDailog(passedbloc:dailyProductionListBloc));
+                context: context,
+                builder: (builder) =>
+                    AddModelDailog(passedbloc: dailyProductionListBloc));
           },
           label: Text("Add Model"),
           icon: Icon(
@@ -1276,7 +1278,6 @@ class _DailyProductionListPageState extends State<DailyProductionListPage> {
 }
 
 class AddModelDailog extends StatefulWidget {
-
   final DailyProductionListBloc passedbloc;
 
   const AddModelDailog({@required this.passedbloc});
@@ -1295,6 +1296,7 @@ class _AddModelDailogState extends State<AddModelDailog> {
     dailyProductionAddorderListBloc.fetchDailyProductionAddList();
     super.initState();
   }
+
   @override
   void dispose() {
     // TODO: implement dispose
@@ -1306,119 +1308,139 @@ class _AddModelDailogState extends State<AddModelDailog> {
   Widget build(BuildContext context) {
     // TODO: implement build
     return CupertinoAlertDialog(
-        title: Text("Add Model"),
-
-        content: StreamBuilder<DailyProductionAddlistModel>(
-            stream:
-                dailyProductionAddorderListBloc.dailyProductionAddListStream,
-            builder: (c, s) {
-              if (s.connectionState == ConnectionState.waiting) {
-                print("all connection");
-                return Container(
-                    height: 300,
-                    alignment: Alignment.center,
-                    child: Center(
-                      heightFactor: 50,
-                      child: CircularProgressIndicator(
-                        color: kPrimaryColor,
-                      ),
-                    ));
+      title: Text("Add Model"),
+      actions: [
+        Container(
+          padding: EdgeInsets.all(10),
+          child: DefaultButton(
+            text: "Add",
+            press: () {
+              if (_chosenValue != null) {
+                Navigator.of(context).pop();
+                addDailyProductionOrderList(
+                    _chosenValue, widget.passedbloc, context);
+              } else {
+                Alerts.showAlertAndBack(
+                    context, "Something went wrong", "Please select model");
               }
-              if (s.hasError) {
-                print("as3 error");
-                return Container(
+            },
+          ),
+        ),
+      ],
+      content: StreamBuilder<DailyProductionAddlistModel>(
+          stream: dailyProductionAddorderListBloc.dailyProductionAddListStream,
+          builder: (c, s) {
+            if (s.connectionState == ConnectionState.waiting) {
+              print("all connection");
+              return Container(
                   height: 300,
                   alignment: Alignment.center,
-                  child: Text(
-                    "Error Loading Data",
-                  ),
-                );
-              }
+                  child: Center(
+                    heightFactor: 50,
+                    child: CircularProgressIndicator(
+                      color: kPrimaryColor,
+                    ),
+                  ));
+            }
+            if (s.hasError) {
+              print("as3 error");
+              return Container(
+                height: 300,
+                alignment: Alignment.center,
+                child: Text(
+                  "Error Loading Data",
+                ),
+              );
+            }
 
-              if (s.data.data == null) {
-                print("as3 empty");
-                return Container(
-                  height: 300,
-                  alignment: Alignment.center,
-                  child: Text(
-                    "No Orders Found",
-                  ),
-                );
-              }
+            if (s.data.data == null) {
+              print("as3 empty");
+              return Container(
+                height: 300,
+                alignment: Alignment.center,
+                child: Text(
+                  "No Orders Found",
+                ),
+              );
+            }
 
-              if (s.connectionState == ConnectionState.active) {
-                return Container(
-                    height: 115,
-                    color:Colors.red,
-                    // padding: const EdgeInsets.only(left: 5.0, right: 5.0),
-                    child: Scaffold(
-
-                        body: Column(
-                      children: [
-                        Container(
-                            child: DropdownButton<String>(
-                              value: _chosenValue,
-                              underline: SizedBox(),
-                              //elevation: 5,
-                              style: TextStyle(color: Colors.black),
-
-                              items: s.data.data
-                                  .map<DropdownMenuItem<String>>((Data1 value) {
-                                return DropdownMenuItem<String>(
-                                  value: value.modelNoId,
-                                  child: Text(value.modelNo),
-                                );
-                              }).toList(),
-                              hint: Text(
-                                "Please choose a model",
-                                style: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w600),
-                              ),
-                              onChanged: (String value) {
-                                setState(() {
-                                  _chosenValue = value;
-                                });
-                              },
-                            )),
-
-
-                        Container(
-                          margin: EdgeInsets.only(top: 10),
-                          child: DefaultButton(
-                            text: "Add",
-                            press: () {
-
-                              if(_chosenValue != null) {
-                                Navigator.of(context).pop();
-                                addDailyProductionOrderList(
-                                    _chosenValue, widget.passedbloc, context);
-                              }
-                              else{
-                                Alerts.showAlertAndBack(context, "Something went wrong", "Please select model");
-                              }
-
-                            },
-                          ),
+            return Container(
+              height: 70,
+              // padding: const EdgeInsets.only(left: 5.0, right: 5.0),
+              child: Scaffold(
+                backgroundColor: Colors.transparent,
+                body: Column(
+                  children: [
+                    Container(
+                        margin: EdgeInsets.only(top: 10),
+                        width: double.infinity,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
                         ),
-                      ],
-                    )));
-              }
-            }));
-
+                        child: DropdownButton<String>(
+                          value: _chosenValue,
+                          elevation: 16,
+                          isExpanded: true,
+                          //elevation: 5,
+                          style: TextStyle(color: Colors.black),
+                          icon: Icon(Icons.arrow_downward),
+                          iconSize: 24,
+                          items: s.data.data
+                              .map<DropdownMenuItem<String>>((Data1 value) {
+                            return DropdownMenuItem<String>(
+                              value: value.modelNoId,
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Text(value.modelNo),
+                              ),
+                            );
+                          }).toList(),
+                          hint: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text(
+                              "Please choose a model",
+                              style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w600),
+                            ),
+                          ),
+                          onChanged: (String value) {
+                            setState(() {
+                              _chosenValue = value;
+                            });
+                          },
+                        )),
+                  ],
+                ),
+              ),
+            );
+          }),
+    );
   }
 
-  addDailyProductionOrderList(String value, DailyProductionListBloc dailyProductionListBloc, BuildContext context) async{
-    print("Id"+ value);
-    ProgressDialog pr = ProgressDialog(context, type: ProgressDialogType.Normal,
-      isDismissible: false,);
-    pr.style(message: 'Please wait...',
-      progressWidget: Center(child: CircularProgressIndicator(color: kPrimaryColor,)),);
+  addDailyProductionOrderList(
+      String value,
+      DailyProductionListBloc dailyProductionListBloc,
+      BuildContext context) async {
+    print("Id" + value);
+    ProgressDialog pr = ProgressDialog(
+      context,
+      type: ProgressDialogType.Normal,
+      isDismissible: false,
+    );
+    pr.style(
+      message: 'Please wait...',
+      progressWidget: Center(
+          child: CircularProgressIndicator(
+        color: kPrimaryColor,
+      )),
+    );
     pr.show();
-    var response = await http.post(Uri.parse("http://loccon.in/desiremoulding/api/ProductionApiController/addDailyProductionOrderList"), body: {
-      'secretkey':Connection.secretKey,
-      'model_no_id':"$value",
+    var response = await http
+        .post(Uri.parse(Connection.ip + "addDailyProductionOrderList"), body: {
+      'secretkey': Connection.secretKey,
+      'model_no_id': "$value",
     });
     print("object ${response.body}");
 
@@ -1428,9 +1450,9 @@ class _AddModelDailogState extends State<AddModelDailog> {
     if (results['status'] == true) {
       // Alerts.showAlertAndBack(context, "Success", results['message']);
       dailyProductionListBloc.fetchDailyProductionList();
-
     } else {
-      Alerts.showAlertAndBack(context, "Something Went Wrong", "Could not added");
+      Alerts.showAlertAndBack(
+          context, "Something Went Wrong", "Could not added");
     }
   }
 }
