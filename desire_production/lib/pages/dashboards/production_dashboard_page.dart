@@ -272,7 +272,7 @@ class _DashboardPageProductionState extends State<DashboardPageProduction> {
             SizedBox(height: 20,),
             GestureDetector(
               onTap: (){
-                //Navigator.push(context, MaterialPageRoute(builder: (b) => ProductionPlanningPage(page: widget.page,)));
+                Navigator.push(context, MaterialPageRoute(builder: (b) => ProductionPlanningPage(page: widget.page,)));
               },
               child: Container(
                 decoration: BoxDecoration(
