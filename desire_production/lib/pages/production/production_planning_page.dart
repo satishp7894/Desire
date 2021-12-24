@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:date_time_picker/date_time_picker.dart';
 import 'package:desire_production/bloc/daily_production_addorder_list_bloc.dart';
 import 'package:desire_production/bloc/daily_production_list_bloc.dart';
 import 'package:desire_production/bloc/production_list_bloc.dart';
@@ -21,6 +22,7 @@ import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'dart:io';
 import 'package:downloads_path_provider/downloads_path_provider.dart';
 import 'package:http/http.dart' as http;
+import 'package:intl/intl.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:permission_handler/permission_handler.dart';
@@ -150,8 +152,7 @@ class _ProductionPlanningPageState extends State<ProductionPlanningPage> {
           onPressed: () {
             showDialog(
                 context: context,
-                builder: (builder) =>
-                    AddModelDailog(passedbloc: productBloc));
+                builder: (builder) => AddModelDailog(passedbloc: productBloc));
           },
           label: Text("Add Model"),
           icon: Icon(
@@ -1164,6 +1165,7 @@ class AddModelDailog extends StatefulWidget {
 class _AddModelDailogState extends State<AddModelDailog> {
   String _chosenValue;
   final dailyProductionAddorderListBloc = DailyProductionAddOrderListBloc();
+  String date;
 
   @override
   void initState() {
@@ -1181,74 +1183,104 @@ class _AddModelDailogState extends State<AddModelDailog> {
 
   @override
   Widget build(BuildContext context) {
+    // TODO: implement build
     return CupertinoAlertDialog(
-        title: Text("Add Model"),
-        content: StreamBuilder<DailyProductionAddlistModel>(
-            stream:
-                dailyProductionAddorderListBloc.dailyProductionAddListStream,
-            builder: (c, s) {
-              if (s.connectionState == ConnectionState.waiting) {
-                print("all connection");
-                return Container(
-                    height: 300,
-                    alignment: Alignment.center,
-                    child: Center(
-                      heightFactor: 50,
-                      child: CircularProgressIndicator(
-                        color: kPrimaryColor,
-                      ),
-                    ));
+      title: Text("Add Model"),
+      actions: [
+        Container(
+          padding: EdgeInsets.all(10),
+          child: DefaultButton(
+            text: "Add",
+            press: () {
+              if (_chosenValue != null) {
+                Navigator.of(context).pop();
+                addDailyProductionOrderList(
+                    _chosenValue, widget.passedbloc, context);
+              } else {
+                Alerts.showAlertAndBack(
+                    context, "Something went wrong", "Please select model");
               }
-              if (s.hasError) {
-                print("as3 error");
-                return Container(
+            },
+          ),
+        ),
+      ],
+      content: StreamBuilder<DailyProductionAddlistModel>(
+          stream: dailyProductionAddorderListBloc.dailyProductionAddListStream,
+          builder: (c, s) {
+            if (s.connectionState == ConnectionState.waiting) {
+              print("all connection");
+              return Container(
                   height: 300,
                   alignment: Alignment.center,
-                  child: Text(
-                    "Error Loading Data",
-                  ),
-                );
-              }
+                  child: Center(
+                    heightFactor: 50,
+                    child: CircularProgressIndicator(
+                      color: kPrimaryColor,
+                    ),
+                  ));
+            }
+            if (s.hasError) {
+              print("as3 error");
+              return Container(
+                height: 300,
+                alignment: Alignment.center,
+                child: Text(
+                  "Error Loading Data",
+                ),
+              );
+            }
 
-              if (s.data.data == null) {
-                print("as3 empty");
-                return Container(
-                  height: 300,
-                  alignment: Alignment.center,
-                  child: Text(
-                    "No Orders Found",
-                  ),
-                );
-              }
+            if (s.data.data == null) {
+              print("as3 empty");
+              return Container(
+                height: 300,
+                alignment: Alignment.center,
+                child: Text(
+                  "No Orders Found",
+                ),
+              );
+            }
 
-              if (s.connectionState == ConnectionState.active) {
-                return Container(
-                    height: 115,
-                    color: Colors.red,
-                    // padding: const EdgeInsets.only(left: 5.0, right: 5.0),
-                    child: Scaffold(
-                        body: Column(
-                      children: [
-                        Container(
-                            child: DropdownButton<String>(
+            return Container(
+              height: 150,
+              // padding: const EdgeInsets.only(left: 5.0, right: 5.0),
+              child: Scaffold(
+                backgroundColor: Colors.transparent,
+                body: Column(
+                  children: [
+                    Container(
+                        margin: EdgeInsets.only(top: 10),
+                        width: double.infinity,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                        ),
+                        child: DropdownButton<String>(
                           value: _chosenValue,
-                          underline: SizedBox(),
+                          elevation: 16,
+                          isExpanded: true,
                           //elevation: 5,
                           style: TextStyle(color: Colors.black),
-
+                          icon: Icon(Icons.arrow_downward),
+                          iconSize: 24,
                           items: s.data.data
                               .map<DropdownMenuItem<String>>((Data1 value) {
                             return DropdownMenuItem<String>(
                               value: value.modelNoId,
-                              child: Text(value.modelNo),
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Text(value.modelNo),
+                              ),
                             );
                           }).toList(),
-                          hint: Text(
-                            "Please choose a model",
-                            style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 16,
-                                fontWeight: FontWeight.w600),
+                          hint: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text(
+                              "Please choose a model",
+                              style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w600),
+                            ),
                           ),
                           onChanged: (String value) {
                             setState(() {
@@ -1256,34 +1288,51 @@ class _AddModelDailogState extends State<AddModelDailog> {
                             });
                           },
                         )),
-                        Container(
-                          margin: EdgeInsets.only(top: 10),
-                          child: DefaultButton(
-                            text: "Add",
-                            press: () {
-                              if (_chosenValue != null) {
-                                Navigator.of(context).pop();
-                                addDailyProductionOrderList(
-                                    _chosenValue, widget.passedbloc, context);
-                              } else {
-                                Alerts.showAlertAndBack(
-                                    context,
-                                    "Something went wrong",
-                                    "Please select model");
-                              }
-                            },
-                          ),
-                        ),
-                      ],
-                    )));
-              }
-            }));
+                    Container(
+                      margin: EdgeInsets.only(top: 10),
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                      ),
+                      child: DateTimePicker(
+                        type: DateTimePickerType.date,
+                        dateMask: 'yyyy-MM-dd',
+                        initialValue: DateTime.now().toString(),
+                        firstDate: DateTime(2100),
+                        lastDate: DateTime(2100),
+                        icon: Icon(Icons.event),
+                        dateLabelText: 'Date',
+                        // timeLabelText: "Hour",
+                        selectableDayPredicate: (date) {
+                          // Disable weekend days to select from the calendar
+                          if (date.weekday == 6 || date.weekday == 7) {
+                            return false;
+                          }
+                          return true;
+                        },
+                        onChanged: (val) //print(val),
+                            {
+                          setState(() {
+                            date = val;
+                          });
+                        },
+                        validator: (val) {
+                          print(val);
+                          return null;
+                        },
+                        onSaved: (val) => print(val),
+                      ),
+                    )
+                  ],
+                ),
+              ),
+            );
+          }),
+    );
   }
 
-  addDailyProductionOrderList(
-      String value,
-      ProductionListBloc dailyProductionListBloc,
-      BuildContext context) async {
+  addDailyProductionOrderList(String value,
+      ProductionListBloc dailyProductionListBloc, BuildContext context) async {
     print("Id" + value);
     ProgressDialog pr = ProgressDialog(
       context,
@@ -1300,10 +1349,11 @@ class _AddModelDailogState extends State<AddModelDailog> {
     pr.show();
     var response = await http.post(
         Uri.parse(
-            "http://loccon.in/desiremoulding/api/ProductionApiController/addDailyProductionOrderList"),
+            "http://loccon.in/desiremoulding/api/ProductionApiController/addProductionPlanning"),
         body: {
           'secretkey': Connection.secretKey,
           'model_no_id': "$value",
+          "planning_date": date,
         });
     print("object ${response.body}");
 
