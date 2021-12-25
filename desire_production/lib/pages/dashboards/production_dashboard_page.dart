@@ -512,73 +512,68 @@ class _DashboardPageProductionState extends State<DashboardPageProduction> {
               SizedBox(
                 height: 20,
               ),
-              widget.page == "production"
-                  ? GestureDetector(
-                      onTap: () {
-                        Alerts.showLogOut(context, "Logout",
-                            "Are you sure you want to logout");
-                      },
-                      child: Container(
-                        decoration: BoxDecoration(
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.grey,
-                              blurRadius:
-                                  5, // has the effect of softening the shadow
-                              spreadRadius:
-                                  0, // has the effect of extending the shadow
+              GestureDetector(
+                onTap: () {
+                  Alerts.showLogOut(
+                      context, "Logout", "Are you sure you want to logout");
+                },
+                child: Container(
+                  decoration: BoxDecoration(
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey,
+                        blurRadius: 5, // has the effect of softening the shadow
+                        spreadRadius:
+                            0, // has the effect of extending the shadow
+                      ),
+                    ],
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(
+                      5.0,
+                    ),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: <Widget>[
+                        Image.asset(
+                          "assets/images/logout.png",
+                          color: kPrimaryColor,
+                          height: 40,
+                          width: 40,
+                        ),
+                        SizedBox(
+                          width: 10,
+                        ),
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Text(
+                              'Logout',
+                              style: TextStyle(
+                                fontSize: 18.0,
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            Text(
+                              'Production Logout',
+                              style: TextStyle(
+                                fontSize: 14.0,
+                                color: profile_item_color,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
                           ],
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(
-                            5.0,
-                          ),
                         ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(10.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: <Widget>[
-                              Image.asset(
-                                "assets/images/logout.png",
-                                color: kPrimaryColor,
-                                height: 40,
-                                width: 40,
-                              ),
-                              SizedBox(
-                                width: 10,
-                              ),
-                              Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: <Widget>[
-                                  Text(
-                                    'Logout',
-                                    style: TextStyle(
-                                      fontSize: 18.0,
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  Text(
-                                    'Production Logout',
-                                    style: TextStyle(
-                                      fontSize: 14.0,
-                                      color: profile_item_color,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    )
-                  : SizedBox(
-                      height: 20,
+                      ],
                     ),
+                  ),
+                ),
+              ),
               SizedBox(
                 height: 30,
               ),

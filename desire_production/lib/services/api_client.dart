@@ -1,44 +1,44 @@
 import 'dart:convert';
 import 'dart:io';
-import 'package:desire_production/model/addDailyProductionOrderModel.dart';
+
 import 'package:desire_production/model/address_model.dart';
 import 'package:desire_production/model/admin_chat_details_model.dart';
 import 'package:desire_production/model/admin_chat_list_model.dart';
 import 'package:desire_production/model/cart_model.dart';
 import 'package:desire_production/model/category_list_model.dart';
+import 'package:desire_production/model/category_model.dart';
 import 'package:desire_production/model/credit_list_model.dart';
 import 'package:desire_production/model/customer_list_for_chat_model.dart';
 import 'package:desire_production/model/dailyOrderListModel.dart';
 import 'package:desire_production/model/dailyProductionAddlistModel.dart';
 import 'package:desire_production/model/dailyProductionListModel.dart';
+import 'package:desire_production/model/dashboard_count_model.dart';
 import 'package:desire_production/model/dashboard_production_model.dart';
 import 'package:desire_production/model/dispatchOrderDetailsModel.dart';
+import 'package:desire_production/model/dispatch_processing_model.dart';
+import 'package:desire_production/model/invoices_list_Model.dart';
+import 'package:desire_production/model/kyc_model.dart';
+import 'package:desire_production/model/kyc_view_model.dart';
 import 'package:desire_production/model/modelList_model.dart';
 import 'package:desire_production/model/modelNoWiseListModel.dart';
 import 'package:desire_production/model/model_listing_model.dart';
 import 'package:desire_production/model/order_model.dart';
 import 'package:desire_production/model/order_track_model.dart';
+import 'package:desire_production/model/product_list_model.dart';
 import 'package:desire_production/model/product_list_order_model.dart';
+import 'package:desire_production/model/product_model.dart';
 import 'package:desire_production/model/productionUserProfile_model.dart';
-import 'package:desire_production/model/production_order_model.dart';
+import 'package:desire_production/model/readyStockDetailListModel.dart';
+import 'package:desire_production/model/readyStockListModel.dart';
 import 'package:desire_production/model/readyToDispatchListModel.dart';
 import 'package:desire_production/model/role_model.dart';
 import 'package:desire_production/model/sales_customer_list_model.dart';
 import 'package:desire_production/model/salesman_list_for_chat_model.dart';
 import 'package:desire_production/model/user_model.dart';
 import 'package:desire_production/model/warehouse_dashboard_model.dart';
-import 'package:http_parser/http_parser.dart';
-
-import 'package:desire_production/model/category_model.dart';
-import 'package:desire_production/model/dispatch_processing_model.dart';
-import 'package:desire_production/model/kyc_model.dart';
-import 'package:desire_production/model/kyc_view_model.dart';
-import 'package:desire_production/model/product_list_model.dart';
-import 'package:desire_production/model/product_model.dart';
 import 'package:desire_production/model/warehouse_list_model.dart';
 import 'package:http/http.dart' as http;
-
-import 'package:desire_production/model/dashboard_count_model.dart';
+import 'package:http_parser/http_parser.dart';
 
 import 'connections.dart';
 
@@ -750,5 +750,47 @@ class ApiClient {
     print("_userModel $dailyproductionaddlistmodel");
 
     return dailyproductionaddlistmodel;
+  }
+
+  Future<ReadyStockListModel> getReadyStockList() async {
+    var response = await http.post(
+        Uri.parse(Connection.warehouseReadyStockList),
+        body: {"secretkey": Connection.secretKey});
+    var result = json.decode(response.body);
+    print("product daily response $result");
+
+    ReadyStockListModel productListModel;
+    productListModel = (ReadyStockListModel.fromJson(result));
+    print("productionPlanningList $productListModel");
+
+    return productListModel;
+  }
+
+  Future<ReadyStockDetailListModel> getReadyStockDetailList(
+      String modelNoId) async {
+    var response = await http.post(
+        Uri.parse(Connection.warehouseReadyStockDetailList),
+        body: {"secretkey": Connection.secretKey, "model_no_id": modelNoId});
+    var result = json.decode(response.body);
+    print("product daily response $result");
+
+    ReadyStockDetailListModel productListModel;
+    productListModel = (ReadyStockDetailListModel.fromJson(result));
+    print("productionPlanningList $productListModel");
+
+    return productListModel;
+  }
+
+  Future<InvoicesListModel> getinvoicesList() async {
+    var response = await http.post(Uri.parse(Connection.dispatchCompleteList),
+        body: {"secretkey": Connection.secretKey});
+    var result = json.decode(response.body);
+    print("product daily response $result");
+
+    InvoicesListModel productListModel;
+    productListModel = (InvoicesListModel.fromJson(result));
+    print("productionPlanningList $productListModel");
+
+    return productListModel;
   }
 }

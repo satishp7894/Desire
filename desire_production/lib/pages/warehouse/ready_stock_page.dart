@@ -1,9 +1,9 @@
 import 'dart:io';
 
-import 'package:desire_production/bloc/readyToDispatchBloc.dart';
-import 'package:desire_production/model/readyToDispatchListModel.dart';
+import 'package:desire_production/bloc/ready_stock_list_bloc.dart';
+import 'package:desire_production/model/readyStockListModel.dart';
 import 'package:desire_production/pages/dashboards/dashboard_page_warhouse.dart';
-import 'package:desire_production/pages/warehouse/dispatchOrderDetailsPage.dart';
+import 'package:desire_production/pages/warehouse/ready_stock_detail_page.dart';
 import 'package:desire_production/utils/alerts.dart';
 import 'package:desire_production/utils/constants.dart';
 import 'package:downloads_path_provider/downloads_path_provider.dart';
@@ -13,32 +13,32 @@ import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:permission_handler/permission_handler.dart';
 
-class ReadyToDispatchListPage extends StatefulWidget {
+class ReadyStockListPage extends StatefulWidget {
   final String page;
 
-  const ReadyToDispatchListPage({@required this.page});
+  const ReadyStockListPage({@required this.page});
 
   @override
-  _ReadyToDispatchListPageState createState() =>
-      _ReadyToDispatchListPageState();
+  _ReadyStockListPageListPageState createState() =>
+      _ReadyStockListPageListPageState();
 }
 
-class _ReadyToDispatchListPageState extends State<ReadyToDispatchListPage> {
-  final ReadyToDispatchBloc readyToDispatchBloc = ReadyToDispatchBloc();
+class _ReadyStockListPageListPageState extends State<ReadyStockListPage> {
+  final ReadyStockListBloc readyToDispatchBloc = ReadyStockListBloc();
 
-  AsyncSnapshot<ReadyToDispatchListModel> as;
+  AsyncSnapshot<ReadyStockListModel> as;
 
   TextEditingController searchView;
 
   bool search = false;
-  List<Data> _searchResult = [];
-  List<Data> _list = [];
+  List<ReadyStock> _searchResult = [];
+  List<ReadyStock> _list = [];
 
   @override
   void initState() {
     super.initState();
     searchView = TextEditingController();
-    readyToDispatchBloc.fetchReadyToDispatchList();
+    readyToDispatchBloc.fetchreadyStockList();
   }
 
   @override
@@ -116,7 +116,7 @@ class _ReadyToDispatchListPageState extends State<ReadyToDispatchListPage> {
                     ])
           ],
           title: Text(
-            "Ready To Dispatch List",
+            "Ready Stock List",
             style: TextStyle(
                 color: Colors.black, fontWeight: FontWeight.bold, fontSize: 20),
             textAlign: TextAlign.center,
@@ -140,20 +140,19 @@ class _ReadyToDispatchListPageState extends State<ReadyToDispatchListPage> {
                   context,
                   MaterialPageRoute(
                       builder: (builder) =>
-                          ReadyToDispatchListPage(page: 'warHouse')),
+                          ReadyStockListPage(page: 'warHouse')),
                   (route) => false)
               : Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
-                      builder: (builder) =>
-                          ReadyToDispatchListPage(page: 'admin')),
+                      builder: (builder) => ReadyStockListPage(page: 'admin')),
                 );
         },
         child: SingleChildScrollView(
             padding: EdgeInsets.all(10),
             physics: AlwaysScrollableScrollPhysics(),
-            child: StreamBuilder<ReadyToDispatchListModel>(
-                stream: readyToDispatchBloc.readyToDispatchStream,
+            child: StreamBuilder<ReadyStockListModel>(
+                stream: readyToDispatchBloc.readyStockStream,
                 builder: (c, s) {
                   if (s.connectionState != ConnectionState.active) {
                     print("all connection");
@@ -176,7 +175,8 @@ class _ReadyToDispatchListPageState extends State<ReadyToDispatchListPage> {
                       ),
                     );
                   } else {
-                    _list = s.data.data;
+                    _list = s.data.readyStockList;
+                    as = s;
                     _list == null
                         ? print("0")
                         : print("Length" + _list.length.toString());
@@ -247,7 +247,7 @@ class _ReadyToDispatchListPageState extends State<ReadyToDispatchListPage> {
                                                                     .black)),
                                                       ),
                                                       child: Text(
-                                                          'Customer Id', //style: content1,
+                                                          'Model No', //style: content1,
                                                           textAlign:
                                                               TextAlign.center,
                                                           style: TextStyle(
@@ -273,7 +273,7 @@ class _ReadyToDispatchListPageState extends State<ReadyToDispatchListPage> {
                                                                     .black)),
                                                       ),
                                                       child: Text(
-                                                          'Order Number', //style: content1,
+                                                          'quantity', //style: content1,
                                                           textAlign:
                                                               TextAlign.center,
                                                           style: TextStyle(
@@ -299,7 +299,7 @@ class _ReadyToDispatchListPageState extends State<ReadyToDispatchListPage> {
                                                                     .black)),
                                                       ),
                                                       child: Text(
-                                                          'Customer Name', //style: content1,
+                                                          '', //style: content1,
                                                           textAlign:
                                                               TextAlign.center,
                                                           style: TextStyle(
@@ -308,38 +308,11 @@ class _ReadyToDispatchListPageState extends State<ReadyToDispatchListPage> {
                                                       alignment:
                                                           Alignment.center,
                                                     )),
-                                                Expanded(
-                                                  child: Container(
-                                                    width: 50,
-                                                    alignment: Alignment.center,
-                                                    decoration: BoxDecoration(
-                                                      color: kPrimaryColor,
-                                                      border: Border(
-                                                          right: BorderSide(
-                                                              color:
-                                                                  Colors.black),
-                                                          bottom: BorderSide(
-                                                              color:
-                                                                  Colors.black),
-                                                          top: BorderSide(
-                                                              color: Colors
-                                                                  .black)),
-                                                    ),
-                                                    child: Text(
-                                                      '', //style: content1,
-                                                      textAlign:
-                                                          TextAlign.center,
-                                                      style: TextStyle(
-                                                          color: Colors.white),
-                                                    ),
-                                                    //alignment: Alignment.center,
-                                                  ),
-                                                ),
                                               ],
                                             ),
                                           ),
                                           for (int i = 0;
-                                              i < s.data.data.length;
+                                              i < s.data.readyStockList.length;
                                               i++)
                                             AnimationConfiguration
                                                 .staggeredList(
@@ -394,7 +367,7 @@ class _ReadyToDispatchListPageState extends State<ReadyToDispatchListPage> {
                                                                             .black)),
                                                               ),
                                                               child: Text(
-                                                                '${s.data.data[i].customerId}', //style: content1,
+                                                                '${s.data.readyStockList[i].modelNo}', //style: content1,
                                                                 textAlign:
                                                                     TextAlign
                                                                         .center,
@@ -417,7 +390,7 @@ class _ReadyToDispatchListPageState extends State<ReadyToDispatchListPage> {
                                                                             .black)),
                                                               ),
                                                               child: Text(
-                                                                '${s.data.data[i].orderNumber}', //style: content1,
+                                                                '${s.data.readyStockList[i].quantity}', //style: content1,
                                                                 textAlign:
                                                                     TextAlign
                                                                         .center,
@@ -428,67 +401,54 @@ class _ReadyToDispatchListPageState extends State<ReadyToDispatchListPage> {
                                                             )),
                                                         Expanded(
                                                             flex: 2,
-                                                            child: Container(
-                                                              decoration:
-                                                                  BoxDecoration(
-                                                                border: Border(
-                                                                    right: BorderSide(
-                                                                        color: Colors
-                                                                            .black),
-                                                                    bottom: BorderSide(
-                                                                        color: Colors
-                                                                            .black)),
-                                                              ),
-                                                              child: Text(
-                                                                '${s.data.data[i].customerName}', //style: content1,
-                                                                textAlign:
-                                                                    TextAlign
-                                                                        .center,
-                                                              ),
-                                                              alignment:
-                                                                  Alignment
-                                                                      .center,
-                                                            )),
-                                                        Expanded(
-                                                          child: Container(
-                                                            width: 50,
-                                                            alignment: Alignment
-                                                                .center,
-                                                            decoration:
-                                                                BoxDecoration(
-                                                              //color: bg,
-                                                              border: Border(
-                                                                  right: BorderSide(
-                                                                      color: Colors
-                                                                          .black),
-                                                                  bottom: BorderSide(
-                                                                      color: Colors
-                                                                          .black)),
-                                                            ),
-                                                            child: IconButton(
-                                                                onPressed: () {
-                                                                  // sendToDispatch(s.data.data[i].customerName);
-                                                                  Navigator
-                                                                      .pushReplacement(
+                                                            child:
+                                                                GestureDetector(
+                                                              onTap: () {
+                                                                Navigator.push(
                                                                     context,
                                                                     MaterialPageRoute(
-                                                                        builder: (builder) =>
-                                                                            DispatchOrderDetailsPage(
-                                                                              orderId: s.data.data[i].orderId,
-                                                                              page: widget.page,
-                                                                              customerId: s.data.data[i].customerId,
-                                                                            )),
-                                                                  );
-                                                                },
-                                                                icon: Icon(
-                                                                  Icons
-                                                                      .local_shipping_outlined,
-                                                                  color:
-                                                                      kPrimaryColor,
-                                                                )),
-                                                            //alignment: Alignment.center,
-                                                          ),
-                                                        ),
+                                                                        builder: (context) =>
+                                                                            ReadyStockDetailPage(
+                                                                              modelNoId: s.data.readyStockList[i].modelNoId,
+                                                                              modelNo: s.data.readyStockList[i].modelNo,
+                                                                              status: 1,
+                                                                            )));
+                                                              },
+                                                              child: Container(
+                                                                decoration:
+                                                                    BoxDecoration(
+                                                                  color: Colors
+                                                                      .white,
+                                                                  border: Border(
+                                                                      right: BorderSide(
+                                                                          color: Colors
+                                                                              .black),
+                                                                      bottom: BorderSide(
+                                                                          color: Colors
+                                                                              .black),
+                                                                      top: BorderSide(
+                                                                          color:
+                                                                              Colors.black)),
+                                                                ),
+                                                                child: Text(
+                                                                  'View Details',
+                                                                  style: TextStyle(
+                                                                      decoration:
+                                                                          TextDecoration
+                                                                              .underline,
+                                                                      fontSize:
+                                                                          14,
+                                                                      color:
+                                                                          kPrimaryColor), //style: content1,
+                                                                  textAlign:
+                                                                      TextAlign
+                                                                          .center,
+                                                                ),
+                                                                alignment:
+                                                                    Alignment
+                                                                        .center,
+                                                              ),
+                                                            ))
                                                       ],
                                                     ),
                                                   ),
@@ -557,7 +517,7 @@ class _ReadyToDispatchListPageState extends State<ReadyToDispatchListPage> {
                                                                     .black)),
                                                       ),
                                                       child: Text(
-                                                          'Customer Id', //style: content1,
+                                                          'Model No', //style: content1,
                                                           textAlign:
                                                               TextAlign.center,
                                                           style: TextStyle(
@@ -583,7 +543,7 @@ class _ReadyToDispatchListPageState extends State<ReadyToDispatchListPage> {
                                                                     .black)),
                                                       ),
                                                       child: Text(
-                                                          'Order Number', //style: content1,
+                                                          'Qty', //style: content1,
                                                           textAlign:
                                                               TextAlign.center,
                                                           style: TextStyle(
@@ -592,59 +552,6 @@ class _ReadyToDispatchListPageState extends State<ReadyToDispatchListPage> {
                                                       alignment:
                                                           Alignment.center,
                                                     )),
-                                                Expanded(
-                                                    flex: 2,
-                                                    child: Container(
-                                                      decoration: BoxDecoration(
-                                                        color: kPrimaryColor,
-                                                        border: Border(
-                                                            right: BorderSide(
-                                                                color: Colors
-                                                                    .black),
-                                                            bottom: BorderSide(
-                                                                color: Colors
-                                                                    .black),
-                                                            top: BorderSide(
-                                                                color: Colors
-                                                                    .black)),
-                                                      ),
-                                                      child: Text(
-                                                          'Customer Name', //style: content1,
-                                                          textAlign:
-                                                              TextAlign.center,
-                                                          style: TextStyle(
-                                                              color: Colors
-                                                                  .white)),
-                                                      alignment:
-                                                          Alignment.center,
-                                                    )),
-                                                Expanded(
-                                                  child: Container(
-                                                    width: 50,
-                                                    alignment: Alignment.center,
-                                                    decoration: BoxDecoration(
-                                                      color: kPrimaryColor,
-                                                      border: Border(
-                                                          right: BorderSide(
-                                                              color:
-                                                                  Colors.black),
-                                                          bottom: BorderSide(
-                                                              color:
-                                                                  Colors.black),
-                                                          top: BorderSide(
-                                                              color: Colors
-                                                                  .black)),
-                                                    ),
-                                                    child: Text(
-                                                      '', //style: content1,
-                                                      textAlign:
-                                                          TextAlign.center,
-                                                      style: TextStyle(
-                                                          color: Colors.white),
-                                                    ),
-                                                    //alignment: Alignment.center,
-                                                  ),
-                                                ),
                                               ],
                                             ),
                                           ),
@@ -704,7 +611,7 @@ class _ReadyToDispatchListPageState extends State<ReadyToDispatchListPage> {
                                                                             .black)),
                                                               ),
                                                               child: Text(
-                                                                '${_searchResult[i].customerId}', //style: content1,
+                                                                '${_searchResult[i].modelNo}', //style: content1,
                                                                 textAlign:
                                                                     TextAlign
                                                                         .center,
@@ -727,7 +634,7 @@ class _ReadyToDispatchListPageState extends State<ReadyToDispatchListPage> {
                                                                             .black)),
                                                               ),
                                                               child: Text(
-                                                                '${_searchResult[i].orderNumber}', //style: content1,
+                                                                '${_searchResult[i].quantity}', //style: content1,
                                                                 textAlign:
                                                                     TextAlign
                                                                         .center,
@@ -736,68 +643,6 @@ class _ReadyToDispatchListPageState extends State<ReadyToDispatchListPage> {
                                                                   Alignment
                                                                       .center,
                                                             )),
-                                                        Expanded(
-                                                            flex: 2,
-                                                            child: Container(
-                                                              decoration:
-                                                                  BoxDecoration(
-                                                                border: Border(
-                                                                    right: BorderSide(
-                                                                        color: Colors
-                                                                            .black),
-                                                                    bottom: BorderSide(
-                                                                        color: Colors
-                                                                            .black)),
-                                                              ),
-                                                              child: Text(
-                                                                '${_searchResult[i].customerName}', //style: content1,
-                                                                textAlign:
-                                                                    TextAlign
-                                                                        .center,
-                                                              ),
-                                                              alignment:
-                                                                  Alignment
-                                                                      .center,
-                                                            )),
-                                                        Expanded(
-                                                          child: Container(
-                                                            width: 50,
-                                                            alignment: Alignment
-                                                                .center,
-                                                            decoration:
-                                                                BoxDecoration(
-                                                              //color: bg,
-                                                              border: Border(
-                                                                  right: BorderSide(
-                                                                      color: Colors
-                                                                          .black),
-                                                                  bottom: BorderSide(
-                                                                      color: Colors
-                                                                          .black)),
-                                                            ),
-                                                            child: IconButton(
-                                                                onPressed: () {
-                                                                  Navigator
-                                                                      .pushReplacement(
-                                                                    context,
-                                                                    MaterialPageRoute(
-                                                                        builder: (builder) =>
-                                                                            DispatchOrderDetailsPage(
-                                                                              orderId: _searchResult[i].orderId,
-                                                                              customerId: _searchResult[i].customerId,
-                                                                              page: widget.page,
-                                                                            )),
-                                                                  );
-                                                                },
-                                                                icon: Icon(
-                                                                  Icons
-                                                                      .local_shipping_outlined,
-                                                                  color:
-                                                                      kPrimaryColor,
-                                                                )),
-                                                            //alignment: Alignment.center,
-                                                          ),
-                                                        ),
                                                       ],
                                                     ),
                                                   ),
@@ -852,19 +697,7 @@ class _ReadyToDispatchListPageState extends State<ReadyToDispatchListPage> {
                   ),
                   pw.Container(
                     child: pw.Text(
-                      'Order Number',
-                      style: pw.TextStyle(
-                          fontWeight: pw.FontWeight.bold, fontSize: 15),
-                      textAlign: pw.TextAlign.center,
-                    ),
-                    width: 100,
-                    height: 52,
-                    padding: pw.EdgeInsets.only(left: 10),
-                    alignment: pw.Alignment.center,
-                  ),
-                  pw.Container(
-                    child: pw.Text(
-                      'Product Name',
+                      'Model Number',
                       style: pw.TextStyle(
                           fontWeight: pw.FontWeight.bold, fontSize: 15),
                       textAlign: pw.TextAlign.center,
@@ -889,7 +722,7 @@ class _ReadyToDispatchListPageState extends State<ReadyToDispatchListPage> {
             pw.Divider(color: PdfColor.fromHex('#4684C2'), thickness: 3),
             pw.ListView.builder(
                 //padding: pw.EdgeInsets.only(bottom: 10),
-                itemCount: as.data.data.length,
+                itemCount: as.data.readyStockList.length,
                 itemBuilder: (c, i) {
                   if (i.isEven) {
                     return pw.Container(
@@ -913,7 +746,7 @@ class _ReadyToDispatchListPageState extends State<ReadyToDispatchListPage> {
                             ),
                             pw.Container(
                               child: pw.Text(
-                                '${as.data.data[i].customerId}',
+                                '${as.data.readyStockList[i].modelNo}',
                                 style: pw.TextStyle(
                                     fontWeight: pw.FontWeight.bold,
                                     fontSize: 15),
@@ -926,7 +759,7 @@ class _ReadyToDispatchListPageState extends State<ReadyToDispatchListPage> {
                             ),
                             pw.Container(
                               child: pw.Text(
-                                '${as.data.data[i].orderNumber}',
+                                '${as.data.readyStockList[i].quantity}',
                                 style: pw.TextStyle(
                                     fontWeight: pw.FontWeight.bold,
                                     fontSize: 15),
@@ -957,7 +790,7 @@ class _ReadyToDispatchListPageState extends State<ReadyToDispatchListPage> {
                         ),
                         pw.Container(
                           child: pw.Text(
-                            '${as.data.data[i].customerId}',
+                            '${as.data.readyStockList[i].modelNo}',
                             style: pw.TextStyle(
                                 fontWeight: pw.FontWeight.bold, fontSize: 15),
                             textAlign: pw.TextAlign.center,
@@ -969,7 +802,7 @@ class _ReadyToDispatchListPageState extends State<ReadyToDispatchListPage> {
                         ),
                         pw.Container(
                           child: pw.Text(
-                            '${as.data.data[i].orderNumber}',
+                            '${as.data.readyStockList[i].quantity}',
                             style: pw.TextStyle(
                                 fontWeight: pw.FontWeight.bold, fontSize: 15),
                             textAlign: pw.TextAlign.center,
@@ -1042,19 +875,7 @@ class _ReadyToDispatchListPageState extends State<ReadyToDispatchListPage> {
                   ),
                   pw.Container(
                     child: pw.Text(
-                      'Order Number',
-                      style: pw.TextStyle(
-                          fontWeight: pw.FontWeight.bold, fontSize: 15),
-                      textAlign: pw.TextAlign.center,
-                    ),
-                    width: 100,
-                    height: 52,
-                    padding: pw.EdgeInsets.only(left: 10),
-                    alignment: pw.Alignment.center,
-                  ),
-                  pw.Container(
-                    child: pw.Text(
-                      'Product Name',
+                      'Model Number',
                       style: pw.TextStyle(
                           fontWeight: pw.FontWeight.bold, fontSize: 15),
                       textAlign: pw.TextAlign.center,
@@ -1079,7 +900,7 @@ class _ReadyToDispatchListPageState extends State<ReadyToDispatchListPage> {
             pw.Divider(color: PdfColor.fromHex('#4684C2'), thickness: 3),
             pw.ListView.builder(
                 //padding: pw.EdgeInsets.only(bottom: 10),
-                itemCount: as.data.data.length,
+                itemCount: as.data.readyStockList.length,
                 itemBuilder: (c, i) {
                   if (i.isEven) {
                     return pw.Container(
@@ -1103,7 +924,7 @@ class _ReadyToDispatchListPageState extends State<ReadyToDispatchListPage> {
                             ),
                             pw.Container(
                               child: pw.Text(
-                                '${as.data.data[i].customerId}',
+                                '${as.data.readyStockList[i].modelNo}',
                                 style: pw.TextStyle(
                                     fontWeight: pw.FontWeight.bold,
                                     fontSize: 15),
@@ -1116,7 +937,7 @@ class _ReadyToDispatchListPageState extends State<ReadyToDispatchListPage> {
                             ),
                             pw.Container(
                               child: pw.Text(
-                                '${as.data.data[i].orderNumber}',
+                                '${as.data.readyStockList[i].quantity}',
                                 style: pw.TextStyle(
                                     fontWeight: pw.FontWeight.bold,
                                     fontSize: 15),
@@ -1147,7 +968,7 @@ class _ReadyToDispatchListPageState extends State<ReadyToDispatchListPage> {
                         ),
                         pw.Container(
                           child: pw.Text(
-                            '${as.data.data[i].customerId}',
+                            '${as.data.readyStockList[i].modelNo}',
                             style: pw.TextStyle(
                                 fontWeight: pw.FontWeight.bold, fontSize: 15),
                             textAlign: pw.TextAlign.center,
@@ -1159,7 +980,7 @@ class _ReadyToDispatchListPageState extends State<ReadyToDispatchListPage> {
                         ),
                         pw.Container(
                           child: pw.Text(
-                            '${as.data.data[i].orderNumber}',
+                            '${as.data.readyStockList[i].quantity}',
                             style: pw.TextStyle(
                                 fontWeight: pw.FontWeight.bold, fontSize: 15),
                             textAlign: pw.TextAlign.center,
@@ -1244,7 +1065,7 @@ class _ReadyToDispatchListPageState extends State<ReadyToDispatchListPage> {
     }
 
     _list.forEach((exp) {
-      if (exp.orderNumber.contains(text)) _searchResult.add(exp);
+      if (exp.modelNo.contains(text)) _searchResult.add(exp);
     });
     //print("search objects ${_searchResult.first}");
     print("search result length ${_searchResult.length}");

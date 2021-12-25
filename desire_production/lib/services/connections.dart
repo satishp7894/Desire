@@ -53,6 +53,10 @@ class Connection {
 
   static final String wareLRimageUpload = ip + "wareLRimageUpload";
   static final String wareEVAimageUpload = ip + "wareEVAimageUpload";
+  static final String warehouseReadyStockList = ip + "readyStockList";
+  static final String warehouseReadyStockDetailList =
+      ip + "modelNoWiseReadyStockList";
+  static final String dispatchCompleteList = ip + "dispatchCompleteList";
 
   //products
   static final String newProduct = ipUsers + "NewProduct";
