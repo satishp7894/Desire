@@ -4,6 +4,7 @@ import 'package:desire_production/bloc/production_dashboard_bloc.dart';
 import 'package:desire_production/model/dashboard_production_model.dart';
 import 'package:desire_production/model/product_model.dart';
 import 'package:desire_production/pages/dashboards/admin_dashboard_page.dart';
+import 'package:desire_production/pages/production/customer_complaint_page.dart';
 import 'package:desire_production/pages/production/productionUserProfile.dart';
 import 'package:desire_production/pages/warehouse/dispatch_to_warehouse.dart';
 import 'package:http/http.dart' as http;
@@ -509,6 +510,74 @@ class _DashboardPageProductionState extends State<DashboardPageProduction> {
                   ),
                 ),
               ),
+              SizedBox(
+                height: 20,
+              ),
+              GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (b) => CustomerComplaintPage()));
+                },
+                child: Container(
+                  decoration: BoxDecoration(
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey,
+                        blurRadius: 5, // has the effect of softening the shadow
+                        spreadRadius:
+                        0, // has the effect of extending the shadow
+                      ),
+                    ],
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(
+                      5.0,
+                    ),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: <Widget>[
+                        Image.asset(
+                          "assets/images/user.png",
+                          color: kPrimaryColor,
+                          height: 40,
+                          width: 40,
+                        ),
+                        SizedBox(
+                          width: 10,
+                        ),
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Text(
+                              'Customer Complaint',
+                              style: TextStyle(
+                                fontSize: 18.0,
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            Text(
+                              'List of customer complaint',
+                              style: TextStyle(
+                                fontSize: 14.0,
+                                color: profile_item_color,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+
               SizedBox(
                 height: 20,
               ),

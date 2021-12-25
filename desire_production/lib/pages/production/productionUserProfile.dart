@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 
 class ProductionUserProfile extends StatefulWidget {
   final String page;
+
   const ProductionUserProfile({@required this.page}) : super();
 
   @override
@@ -83,99 +84,101 @@ class _ProductionUserProfileState extends State<ProductionUserProfile> {
           profile = s;
           userDetail = s.data.data;
 
-          return Container(
-            padding: EdgeInsets.all(10),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Card(
-                  borderOnForeground: true,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10)),
-                  child: Padding(
-                    padding: const EdgeInsets.only(
-                        left: 10.0, right: 10, bottom: 10, top: 10),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(children: [
-                          Text(
-                            "Name : ",
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 14,
-                                color: Colors.black),
-                          ),
-                          Text(
-                              '${userDetail[0].firstname} ${userDetail[0].lastname} ',
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 14,
-                                  color: Colors.black))
-                        ]),
-                        SizedBox(
-                          height: 10,
+          return GestureDetector(
+              onTap: () => { },
+              child: Container(
+                padding: EdgeInsets.all(10),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Card(
+                      borderOnForeground: true,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10)),
+                      child: Padding(
+                        padding: const EdgeInsets.only(
+                            left: 10.0, right: 10, bottom: 10, top: 10),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(children: [
+                              Text(
+                                "Name : ",
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 14,
+                                    color: Colors.black),
+                              ),
+                              Text(
+                                  '${userDetail[0].firstname} ${userDetail[0].lastname} ',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 14,
+                                      color: Colors.black))
+                            ]),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            Row(children: [
+                              Text(
+                                "Email : ",
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 14,
+                                    color: Colors.black),
+                              ),
+                              Text(userDetail[0].email,
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 14,
+                                      color: Colors.black))
+                            ]),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            Row(children: [
+                              Text(
+                                "Gender : ",
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 14,
+                                    color: Colors.black),
+                              ),
+                              Text(userDetail[0].gender,
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 14,
+                                      color: Colors.black))
+                            ]),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            Row(children: [
+                              Text(
+                                "Mobile : ",
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 14,
+                                    color: Colors.black),
+                              ),
+                              Text(
+                                  userDetail[0].userMobile == null
+                                      ? "N/A"
+                                      : userDetail[0].userMobile,
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 14,
+                                      color: Colors.black))
+                            ]),
+                          ],
                         ),
-                        Row(children: [
-                          Text(
-                            "Email : ",
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 14,
-                                color: Colors.black),
-                          ),
-                          Text(userDetail[0].email,
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 14,
-                                  color: Colors.black))
-                        ]),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        Row(children: [
-                          Text(
-                            "Gender : ",
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 14,
-                                color: Colors.black),
-                          ),
-                          Text(userDetail[0].gender,
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 14,
-                                  color: Colors.black))
-                        ]),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        Row(children: [
-                          Text(
-                            "Mobile : ",
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 14,
-                                color: Colors.black),
-                          ),
-                          Text(
-                              userDetail[0].userMobile == null
-                                  ? "N/A"
-                                  : userDetail[0].userMobile,
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 14,
-                                  color: Colors.black))
-                        ]),
-                      ],
+                      ),
                     ),
-                  ),
+                  ],
                 ),
-              ],
-            ),
-          );
+              ));
         },
       ),
     );
