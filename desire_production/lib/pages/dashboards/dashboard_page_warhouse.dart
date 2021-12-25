@@ -308,7 +308,7 @@ class _DashboardPageWarehouseState extends State<DashboardPageWarehouse> {
               ),
               GestureDetector(
                 onTap: () {
-                  Navigator.pushReplacement(
+                  Navigator.push(
                       context,
                       MaterialPageRoute(
                           builder: (b) => InvoicesListPage(

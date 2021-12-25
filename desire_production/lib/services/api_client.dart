@@ -7,7 +7,9 @@ import 'package:desire_production/model/admin_chat_list_model.dart';
 import 'package:desire_production/model/cart_model.dart';
 import 'package:desire_production/model/category_list_model.dart';
 import 'package:desire_production/model/category_model.dart';
+import 'package:desire_production/model/complaint_detail_model.dart';
 import 'package:desire_production/model/credit_list_model.dart';
+import 'package:desire_production/model/customer_complaint_list_model.dart';
 import 'package:desire_production/model/customer_list_for_chat_model.dart';
 import 'package:desire_production/model/dailyOrderListModel.dart';
 import 'package:desire_production/model/dailyProductionAddlistModel.dart';
@@ -792,5 +794,37 @@ class ApiClient {
     print("productionPlanningList $productListModel");
 
     return productListModel;
+  }
+
+  Future<CustomerComplaintListModel> getCustomerComplaintList() async {
+    var response = await http.post(
+        Uri.parse(
+            "http://loccon.in/desiremoulding/api/ProductionApiController/customerComplaintList"),
+        body: {
+          "secretkey": Connection.secretKey,
+        });
+    var result = json.decode(response.body);
+    print("Complaint lis† response $result ${result['complaintList']}");
+
+    CustomerComplaintListModel customerComplaintListModel;
+    customerComplaintListModel = CustomerComplaintListModel.fromJson(result);
+    print("_userModel $customerComplaintListModel");
+
+    return customerComplaintListModel;
+  }
+
+  Future<ComplaintDetailModel> getCustomerComplaintDetail(String id) async {
+    var response = await http.post(
+        Uri.parse(
+            "http://loccon.in/desiremoulding/api/ProductionApiController/customerComplaintDetails"),
+        body: {"secretkey": Connection.secretKey, "complaint_id": id});
+    var result = json.decode(response.body);
+    print("Complaint detail response $result ${result['complaintDetails']}");
+
+    ComplaintDetailModel complaintDetailModel;
+    complaintDetailModel = ComplaintDetailModel.fromJson(result);
+    print("_userModel $complaintDetailModel");
+
+    return complaintDetailModel;
   }
 }
