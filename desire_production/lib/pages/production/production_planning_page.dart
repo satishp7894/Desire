@@ -4,6 +4,7 @@ import 'package:date_time_picker/date_time_picker.dart';
 import 'package:desire_production/bloc/daily_production_addorder_list_bloc.dart';
 import 'package:desire_production/bloc/daily_production_list_bloc.dart';
 import 'package:desire_production/bloc/production_list_bloc.dart';
+import 'package:desire_production/bloc/production_planning_model_list_bloc.dart';
 import 'package:desire_production/model/dailyProductionAddlistModel.dart';
 import 'package:desire_production/model/product_list_model.dart';
 import 'package:desire_production/pages/dashboards/production_dashboard_page.dart';
@@ -1164,13 +1165,15 @@ class AddModelDailog extends StatefulWidget {
 
 class _AddModelDailogState extends State<AddModelDailog> {
   String _chosenValue;
-  final dailyProductionAddorderListBloc = DailyProductionAddOrderListBloc();
-  String date;
+  final dailyProductionAddorderListBloc = ProductioinPlanningModeListBloc();
+  String _date = DateFormat('y/M/d')
+      .format(DateTime.now()); //.yMd().format(DateTime.now());
 
   @override
   void initState() {
     // TODO: implement initState
-    dailyProductionAddorderListBloc.fetchDailyProductionAddList();
+    dailyProductionAddorderListBloc.fetchProductionPlanning();
+    print(_date);
     super.initState();
   }
 
@@ -1195,7 +1198,7 @@ class _AddModelDailogState extends State<AddModelDailog> {
               if (_chosenValue != null) {
                 Navigator.of(context).pop();
                 addDailyProductionOrderList(
-                    _chosenValue, widget.passedbloc, context);
+                    _chosenValue, _date, widget.passedbloc, context);
               } else {
                 Alerts.showAlertAndBack(
                     context, "Something went wrong", "Please select model");
@@ -1290,34 +1293,23 @@ class _AddModelDailogState extends State<AddModelDailog> {
                         )),
                     Container(
                       margin: EdgeInsets.only(top: 10),
+                      padding: EdgeInsets.all(10),
                       width: double.infinity,
                       decoration: BoxDecoration(
                         color: Colors.white,
                       ),
                       child: DateTimePicker(
-                        type: DateTimePickerType.date,
-                        dateMask: 'yyyy-MM-dd',
                         initialValue: DateTime.now().toString(),
-                        firstDate: DateTime(2100),
+                        dateMask: 'd MMM yyyy',
+                        firstDate: DateTime.now(),
                         lastDate: DateTime(2100),
-                        icon: Icon(Icons.event),
                         dateLabelText: 'Date',
-                        // timeLabelText: "Hour",
-                        selectableDayPredicate: (date) {
-                          // Disable weekend days to select from the calendar
-                          if (date.weekday == 6 || date.weekday == 7) {
-                            return false;
-                          }
-                          return true;
-                        },
-                        onChanged: (val) //print(val),
-                            {
-                          setState(() {
-                            date = val;
-                          });
-                        },
+                        onChanged: (val) => setState(() {
+                          _date = val;
+                        }),
                         validator: (val) {
                           print(val);
+
                           return null;
                         },
                         onSaved: (val) => print(val),
@@ -1331,7 +1323,7 @@ class _AddModelDailogState extends State<AddModelDailog> {
     );
   }
 
-  addDailyProductionOrderList(String value,
+  addDailyProductionOrderList(String value, String date,
       ProductionListBloc dailyProductionListBloc, BuildContext context) async {
     print("Id" + value);
     ProgressDialog pr = ProgressDialog(
@@ -1347,14 +1339,12 @@ class _AddModelDailogState extends State<AddModelDailog> {
       )),
     );
     pr.show();
-    var response = await http.post(
-        Uri.parse(
-            "http://loccon.in/desiremoulding/api/ProductionApiController/addProductionPlanning"),
-        body: {
-          'secretkey': Connection.secretKey,
-          'model_no_id': "$value",
-          "planning_date": date,
-        });
+    var response = await http
+        .post(Uri.parse(Connection.ip + "addProductionPlanning"), body: {
+      'secretkey': Connection.secretKey,
+      'model_no_id': "$value",
+      "planning_date": date,
+    });
     print("object ${response.body}");
 
     var results = json.decode(response.body);

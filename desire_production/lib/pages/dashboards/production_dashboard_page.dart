@@ -140,7 +140,7 @@ class _DashboardPageProductionState extends State<DashboardPageProduction> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: <Widget>[
                         Image.asset(
-                          "assets/images/production_order.png",
+                          "assets/images/user.png",
                           color: kPrimaryColor,
                           height: 40,
                           width: 40,
@@ -343,7 +343,7 @@ class _DashboardPageProductionState extends State<DashboardPageProduction> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: <Widget>[
                         Image.asset(
-                          "assets/images/production_planning.png",
+                          "assets/images/warehouse.png",
                           color: kPrimaryColor,
                           height: 40,
                           width: 40,

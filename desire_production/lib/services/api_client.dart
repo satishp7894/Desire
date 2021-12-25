@@ -734,4 +734,21 @@ class ApiClient {
 
     return dailyproductionaddlistmodel;
   }
+
+  Future<DailyProductionAddlistModel> getProductionPlanningmodelList() async {
+    var response = await http.post(
+        Uri.parse(
+            "http://loccon.in/desiremoulding/api/ProductionApiController/productionPlanningModelList"),
+        body: {
+          "secretkey": Connection.secretKey,
+        });
+    var result = json.decode(response.body);
+    print("production add lis† response $result ${result['data']}");
+
+    DailyProductionAddlistModel dailyproductionaddlistmodel;
+    dailyproductionaddlistmodel = DailyProductionAddlistModel.fromJson(result);
+    print("_userModel $dailyproductionaddlistmodel");
+
+    return dailyproductionaddlistmodel;
+  }
 }
