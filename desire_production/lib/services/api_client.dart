@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:desire_production/model/InvoiceDetail.dart';
 import 'package:desire_production/model/address_model.dart';
 import 'package:desire_production/model/admin_chat_details_model.dart';
 import 'package:desire_production/model/admin_chat_list_model.dart';
@@ -826,5 +827,20 @@ class ApiClient {
     print("_userModel $complaintDetailModel");
 
     return complaintDetailModel;
+  }
+
+  Future<InvoiceDetail> getInvoiceDetail(String id) async {
+    var response = await http.post(
+        Uri.parse(
+            "http://loccon.in/desiremoulding/api/ProductionApiController/editDispatchInvoice"),
+        body: {"secretkey": Connection.secretKey, "dispatch_invoice_id": id});
+    var result = json.decode(response.body);
+    print("Complaint detail response $result ${result['complaintDetails']}");
+
+    InvoiceDetail invoicedetail;
+    invoicedetail = InvoiceDetail.fromJson(result);
+    print("_userModel $invoicedetail");
+
+    return invoicedetail;
   }
 }

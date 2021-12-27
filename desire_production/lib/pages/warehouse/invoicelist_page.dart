@@ -376,9 +376,7 @@ class ModelWiseListTile extends StatelessWidget {
       child: GestureDetector(
         onTap: () {
           Navigator.push(context, MaterialPageRoute(builder: (context) {
-            return InvoiceDetailPage(
-              page: "",
-            );
+            return InvoiceDetailPage(data.dispatchInvoiceId);
           }));
         },
         child: Card(

@@ -25,6 +25,12 @@ class _ComplaintDetailPageSate extends State<ComplaintDetailPage> {
     complaintDetail.fetchComplaintDetail(widget.complaintId);
     super.initState();
   }
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    complaintDetail.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {

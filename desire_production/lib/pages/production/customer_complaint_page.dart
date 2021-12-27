@@ -18,6 +18,12 @@ class _CustomerComplaintPageState extends State<CustomerComplaintPage> {
     complaintList.fetchCustomerComplaintList();
     super.initState();
   }
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    complaintList.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
