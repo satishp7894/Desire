@@ -18,6 +18,7 @@ import 'package:desire_production/model/dailyProductionListModel.dart';
 import 'package:desire_production/model/dashboard_count_model.dart';
 import 'package:desire_production/model/dashboard_production_model.dart';
 import 'package:desire_production/model/dispatchOrderDetailsModel.dart';
+import 'package:desire_production/model/dispatch_order_warhouse_list_model.dart';
 import 'package:desire_production/model/dispatch_processing_model.dart';
 import 'package:desire_production/model/invoices_list_Model.dart';
 import 'package:desire_production/model/kyc_model.dart';
@@ -842,5 +843,22 @@ class ApiClient {
     print("_userModel $invoicedetail");
 
     return invoicedetail;
+  }
+  Future<DispatchOrderWarhouseListModel> getDispatchList(String id) async {
+    var response = await http.post(
+        Uri.parse(
+            "http://loccon.in/desiremoulding/api/ProductionApiController/dispatchOrderDetailsList"),
+        body: {"secretkey": Connection.secretKey, "customer_id": id});
+    var result = json.decode(response.body);
+    print("dispatch $result");
+
+    if(result.containsKey("data")) {
+      DispatchOrderWarhouseListModel dispatchorderwarhouselistmodel;
+      dispatchorderwarhouselistmodel =
+          DispatchOrderWarhouseListModel.fromJson(result);
+      print("_userModel $dispatchorderwarhouselistmodel");
+
+      return dispatchorderwarhouselistmodel;
+    }
   }
 }

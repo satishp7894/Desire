@@ -67,10 +67,11 @@ class DataInvoice {
   }
 
   List<Map<String, dynamic>> toPostJson() {
-    return this.orderDetails.map((v) {
-      if(v.isSelected == true)
-          return v.toPostJson();
-    }).toList();
+    return this
+        .orderDetails
+        .where((v) => v.isSelected)
+        .map((v) => v.toPostJson())
+        .toList();
   }
 }
 
@@ -260,8 +261,8 @@ class OrderDetails {
   Map<String, dynamic> toPostJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['orderdetail_id'] = this.orderdetailId;
-    data['invoice_qty'] = this.invoiceQty;
-    data['invoice_price'] = this.invoicePrice;
+    data['total_stick'] = this.invoiceTotalStick;
+    data['total_price'] = this.invoiceTotalPrice;
     return data;
   }
 }

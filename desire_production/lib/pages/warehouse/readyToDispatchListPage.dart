@@ -13,6 +13,8 @@ import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:permission_handler/permission_handler.dart';
 
+import 'add_new_invoice_order.dart';
+
 class ReadyToDispatchListPage extends StatefulWidget {
   final String page;
 
@@ -31,8 +33,8 @@ class _ReadyToDispatchListPageState extends State<ReadyToDispatchListPage> {
   TextEditingController searchView;
 
   bool search = false;
-  List<Data> _searchResult = [];
-  List<Data> _list = [];
+  List<DataReady> _searchResult = [];
+  List<DataReady> _list = [];
 
   @override
   void initState() {
@@ -469,15 +471,11 @@ class _ReadyToDispatchListPageState extends State<ReadyToDispatchListPage> {
                                                                 onPressed: () {
                                                                   // sendToDispatch(s.data.data[i].customerName);
                                                                   Navigator
-                                                                      .pushReplacement(
+                                                                      .push(
                                                                     context,
                                                                     MaterialPageRoute(
                                                                         builder: (builder) =>
-                                                                            DispatchOrderDetailsPage(
-                                                                              orderId: s.data.data[i].orderId,
-                                                                              page: widget.page,
-                                                                              customerId: s.data.data[i].customerId,
-                                                                            )),
+                                                                            AddNewInvoiceOrderPage(s.data.data[i].customerId)),
                                                                   );
                                                                 },
                                                                 icon: Icon(
@@ -778,15 +776,11 @@ class _ReadyToDispatchListPageState extends State<ReadyToDispatchListPage> {
                                                             child: IconButton(
                                                                 onPressed: () {
                                                                   Navigator
-                                                                      .pushReplacement(
+                                                                      .push(
                                                                     context,
                                                                     MaterialPageRoute(
                                                                         builder: (builder) =>
-                                                                            DispatchOrderDetailsPage(
-                                                                              orderId: _searchResult[i].orderId,
-                                                                              customerId: _searchResult[i].customerId,
-                                                                              page: widget.page,
-                                                                            )),
+                                                                            AddNewInvoiceOrderPage(_searchResult[i].customerId)),
                                                                   );
                                                                 },
                                                                 icon: Icon(

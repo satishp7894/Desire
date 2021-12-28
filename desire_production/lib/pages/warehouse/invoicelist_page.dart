@@ -1,11 +1,16 @@
 import 'dart:io';
 
 import 'package:desire_production/bloc/invoice_list_bloc.dart';
+import 'package:desire_production/bloc/readyToDispatchBloc.dart';
+import 'package:desire_production/components/default_button.dart';
 import 'package:desire_production/model/invoices_list_Model.dart';
+import 'package:desire_production/model/readyToDispatchListModel.dart';
+import 'package:desire_production/pages/warehouse/add_new_invoice_order.dart';
 import 'package:desire_production/pages/warehouse/invoicedetail_page.dart';
 import 'package:desire_production/utils/alerts.dart';
 import 'package:desire_production/utils/constants.dart';
 import 'package:downloads_path_provider/downloads_path_provider.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
@@ -93,6 +98,15 @@ class _InvoicesListPageState extends State<InvoicesListPage> {
           child: _searchView(),
         ),
       ),
+      floatingActionButton: FloatingActionButton.extended(
+          backgroundColor: kPrimaryColor,
+          onPressed: () {
+            showDialog(
+                context: context,
+                builder: (builder) =>
+                    AddInvoiceDailog());
+          },
+          label: Text("Add Invoice")),
       body: StreamBuilder<InvoicesListModel>(
         stream: modelWiseListBloc.invoicesStream,
         builder: (c, s) {
@@ -439,4 +453,145 @@ Widget FieldValueSet(String title, String value) {
       ),
     ],
   );
+}
+
+
+class AddInvoiceDailog extends StatefulWidget {
+  @override
+  _AddInvoiceDailogState createState() => _AddInvoiceDailogState();
+}
+
+class _AddInvoiceDailogState extends State<AddInvoiceDailog> {
+  String _chosenValue;
+  final ReadyToDispatchBloc readyToDispatchBloc = ReadyToDispatchBloc();
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    readyToDispatchBloc.fetchReadyToDispatchList();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    readyToDispatchBloc.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+    return CupertinoAlertDialog(
+      title: Text("Add Invoice"),
+      actions: [
+        Container(
+          padding: EdgeInsets.all(10),
+          child: DefaultButton(
+            text: "Add",
+            press: () {
+              if (_chosenValue != null) {
+                Navigator.of(context).pop();
+                Navigator.push(context, MaterialPageRoute(builder: (context) {
+                  return AddNewInvoiceOrderPage(_chosenValue);
+                }));
+              } else {
+                Alerts.showAlertAndBack(
+                    context, "Something went wrong", "Please select customer name");
+              }
+            },
+          ),
+        ),
+      ],
+      content: StreamBuilder<ReadyToDispatchListModel>(
+          stream: readyToDispatchBloc.readyToDispatchStream,
+          builder: (c, s) {
+            if (s.connectionState == ConnectionState.waiting) {
+              print("all connection");
+              return Container(
+                  height: 300,
+                  alignment: Alignment.center,
+                  child: Center(
+                    heightFactor: 50,
+                    child: CircularProgressIndicator(
+                      color: kPrimaryColor,
+                    ),
+                  ));
+            }
+            if (s.hasError) {
+              print("as3 error");
+              return Container(
+                height: 300,
+                alignment: Alignment.center,
+                child: Text(
+                  "Error Loading Data",
+                ),
+              );
+            }
+
+            if (s.data.data == null) {
+              print("as3 empty");
+              return Container(
+                height: 300,
+                alignment: Alignment.center,
+                child: Text(
+                  "No Orders Found",
+                ),
+              );
+            }
+
+            return Container(
+              height: 70,
+              // padding: const EdgeInsets.only(left: 5.0, right: 5.0),
+              child: Scaffold(
+                backgroundColor: Colors.transparent,
+                body: Column(
+                  children: [
+                    Container(
+                        margin: EdgeInsets.only(top: 10),
+                        width: double.infinity,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                        ),
+                        child: DropdownButton<String>(
+                          value: _chosenValue,
+                          elevation: 16,
+                          isExpanded: true,
+                          //elevation: 5,
+                          style: TextStyle(color: Colors.black),
+                          icon: Icon(Icons.arrow_downward),
+                          iconSize: 24,
+                          items: s.data.data
+                              .map<DropdownMenuItem<String>>((DataReady value) {
+                            return DropdownMenuItem<String>(
+                              value: value.customerId,
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Text(value.customerName),
+                              ),
+                            );
+                          }).toList(),
+                          hint: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text(
+                              "Please choose a Customer",
+                              style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w600),
+                            ),
+                          ),
+                          onChanged: (String value) {
+                            setState(() {
+                              _chosenValue = value;
+                            });
+                          },
+                        )),
+                  ],
+                ),
+              ),
+            );
+          }),
+    );
+  }
 }

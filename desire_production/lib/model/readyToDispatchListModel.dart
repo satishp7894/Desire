@@ -1,7 +1,7 @@
 class ReadyToDispatchListModel {
   bool status;
   String message;
-  List<Data> data;
+  List<DataReady> data;
 
   ReadyToDispatchListModel({this.status, this.message, this.data});
 
@@ -9,9 +9,9 @@ class ReadyToDispatchListModel {
     status = json['status'];
     message = json['message'];
     if (json['data'] != null) {
-      data = new List<Data>();
+      data = new List<DataReady>();
       json['data'].forEach((v) {
-        data.add(new Data.fromJson(v));
+        data.add(new DataReady.fromJson(v));
       });
     }
   }
@@ -27,15 +27,15 @@ class ReadyToDispatchListModel {
   }
 }
 
-class Data {
+class DataReady {
   String orderId;
   String customerId;
   String orderNumber;
   String customerName;
 
-  Data({this.orderId, this.customerId, this.orderNumber, this.customerName});
+  DataReady({this.orderId, this.customerId, this.orderNumber, this.customerName});
 
-  Data.fromJson(Map<String, dynamic> json) {
+  DataReady.fromJson(Map<String, dynamic> json) {
     orderId = json['order_id'];
     customerId = json['customer_id'];
     orderNumber = json['order_number'];

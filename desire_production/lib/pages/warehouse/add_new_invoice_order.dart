@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:desire_production/bloc/InvoiceDetailBloc.dart';
 import 'package:desire_production/bloc/dispatch_warhouse_bloc.dart';
-import 'package:desire_production/model/InvoiceDetail.dart';
 import 'package:desire_production/model/dispatchOrderDetailsModel.dart';
 import 'package:desire_production/model/dispatch_order_warhouse_list_model.dart';
 import 'package:desire_production/services/connections.dart';
@@ -16,16 +15,16 @@ import 'package:flutter/services.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:http/http.dart' as http;
 
-class InvoiceDetailPage extends StatefulWidget {
-  final dispatchInvoiceId;
+class AddNewInvoiceOrderPage extends StatefulWidget {
+  final customerId;
 
-  const InvoiceDetailPage(@required this.dispatchInvoiceId);
+  const AddNewInvoiceOrderPage(@required this.customerId);
 
   @override
-  _InvoiceDetailPageState createState() => _InvoiceDetailPageState();
+  _AddNewInvoiceOrderPageState createState() => _AddNewInvoiceOrderPageState();
 }
 
-class _InvoiceDetailPageState extends State<InvoiceDetailPage> {
+class _AddNewInvoiceOrderPageState extends State<AddNewInvoiceOrderPage> {
   final InvoiceDetailBloc invoicedetailbloc = InvoiceDetailBloc();
   TextEditingController searchViewController = TextEditingController();
   TextEditingController invoiceController = TextEditingController();
@@ -39,26 +38,25 @@ class _InvoiceDetailPageState extends State<InvoiceDetailPage> {
   bool checkAll = false;
   List<String> send = [];
   bool search = false;
-  List<OrderDetails> _searchResult = [];
-  List<OrderDetails> _list = [];
 
+  List<DataWarhouse> _searchResultWarhouse = [];
+  List<DataWarhouse> _listWarhouse = [];
   var list;
   var customerID;
-  DataInvoice od;
+  DispatchOrderWarhouseListModel ow;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-
-    invoicedetailbloc.fetchinvoicesDetail(widget.dispatchInvoiceId);
+    dispatchwarhousebloc.fetchDispatchWarhouseLilst(widget.customerId);
   }
 
   @override
   void dispose() {
     // TODO: implement dispose
     super.dispose();
-    invoicedetailbloc.dispose();
+    dispatchwarhousebloc.dispose();
   }
 
   @override
@@ -71,7 +69,7 @@ class _InvoiceDetailPageState extends State<InvoiceDetailPage> {
         centerTitle: true,
         backgroundColor: Colors.transparent,
         title: Text(
-          "Invoice Orders Details List",
+          "Add Orders Details",
           style: TextStyle(
               color: Colors.black, fontWeight: FontWeight.bold, fontSize: 20),
           textAlign: TextAlign.center,
@@ -93,7 +91,7 @@ class _InvoiceDetailPageState extends State<InvoiceDetailPage> {
               context,
               MaterialPageRoute(
                   builder: (builder) =>
-                      InvoiceDetailPage(widget.dispatchInvoiceId)),
+                      AddNewInvoiceOrderPage(widget.customerId)),
               (route) => false);
         },
         child: SingleChildScrollView(
@@ -101,8 +99,9 @@ class _InvoiceDetailPageState extends State<InvoiceDetailPage> {
             physics: AlwaysScrollableScrollPhysics(),
             child: Column(
               children: [
-                StreamBuilder<InvoiceDetail>(
-                    stream: invoicedetailbloc.invoicesStream,
+                StreamBuilder<DispatchOrderWarhouseListModel>(
+                    stream:
+                        dispatchwarhousebloc.dispatchOrderWarhouseListStream,
                     builder: (c, s) {
                       if (s.connectionState != ConnectionState.active) {
                         print("all connection");
@@ -124,32 +123,30 @@ class _InvoiceDetailPageState extends State<InvoiceDetailPage> {
                             "Error Loading Data",
                           ),
                         );
+                      } else if (s.data == null) {
+                        print("as3 empty");
+                        return Container(
+                          height: 300,
+                          alignment: Alignment.center,
+                          child: Text(
+                            "No Data Found",
+                          ),
+                        );
                       } else {
                         var data = s.data.data;
-                        od = s.data.data;
+                        ow = s.data;
+                        _listWarhouse = data;
 
-                        Future.delayed(const Duration(milliseconds: 500), () {
-                          invoiceController.text = data
-                              .invoiceResult[0].clientInvoiceNumber
-                              .toString();
-
-                          lrNoController.text =
-                              data.dispatchResult[0].lrNumber.toString();
-                          eWayBillViewController.text =
-                              data.dispatchResult[0].ewayBill.toString();
-                        });
-
-                        _list = data.orderDetails;
-
-                        _list == null
+                        _listWarhouse == null
                             ? print("0")
-                            : print("Length" + _list.length.toString());
-                        for (int i = 0; i < _list.length; i++) {
+                            : print("Length" + _listWarhouse.length.toString());
+                        for (int i = 0; i < _listWarhouse.length; i++) {
                           check.add(false);
                         }
 
-                        print("object length ${_list.length} ${check.length}");
-                        return _list == null
+                        print(
+                            "object length ${_listWarhouse.length} ${check.length}");
+                        return _listWarhouse == null
                             ? Center(
                                 child: Text("No Items are ready to dispatch"),
                               )
@@ -157,7 +154,7 @@ class _InvoiceDetailPageState extends State<InvoiceDetailPage> {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
-                                  _searchResult.length == 0
+                                  _searchResultWarhouse.length == 0
                                       ? Container(
                                           alignment: Alignment.center,
                                           child: Column(
@@ -202,31 +199,21 @@ class _InvoiceDetailPageState extends State<InvoiceDetailPage> {
                                                           if (checkAll ==
                                                               true) {
                                                             for (int i = 0;
-                                                                i <
-                                                                    data.orderDetails
-                                                                        .length;
+                                                                i < data.length;
                                                                 i++) {
                                                               check[i] = true;
-                                                              data
-                                                                  .orderDetails[
-                                                                      i]
-                                                                  .isSelected = true;
-                                                              send.add(data
-                                                                  .orderDetails[
-                                                                      i]
+                                                              data[i].isSelected =
+                                                                  true;
+                                                              send.add(data[i]
                                                                   .orderId);
                                                             }
                                                           } else {
                                                             for (int i = 0;
-                                                                i <
-                                                                    data.orderDetails
-                                                                        .length;
+                                                                i < data.length;
                                                                 i++) {
                                                               check[i] = false;
-                                                              data
-                                                                  .orderDetails[
-                                                                      i]
-                                                                  .isSelected = false;
+                                                              data[i].isSelected =
+                                                                  false;
                                                               send = [];
                                                             }
                                                           }
@@ -390,7 +377,7 @@ class _InvoiceDetailPageState extends State<InvoiceDetailPage> {
                                                 ),
                                               ),
                                               for (int i = 0;
-                                                  i < data.orderDetails.length;
+                                                  i < data.length;
                                                   i++)
                                                 AnimationConfiguration
                                                     .staggeredList(
@@ -429,25 +416,21 @@ class _InvoiceDetailPageState extends State<InvoiceDetailPage> {
                                                                   setState(() {
                                                                     check[i] =
                                                                         value;
-                                                                    data
-                                                                        .orderDetails[
-                                                                            i]
-                                                                        .isSelected = value;
+                                                                    data[i].isSelected =
+                                                                        value;
                                                                   });
                                                                   print(
                                                                       "object remember ${check[i]}");
                                                                   if (check[
                                                                           i] ==
                                                                       true) {
-                                                                    send.add(data
-                                                                        .orderDetails[
+                                                                    send.add(data[
                                                                             i]
                                                                         .orderId);
                                                                   } else {
-                                                                    send.remove(data
-                                                                        .orderDetails[
-                                                                            i]
-                                                                        .orderId);
+                                                                    send.remove(
+                                                                        data[i]
+                                                                            .orderId);
                                                                   }
                                                                 },
                                                               ),
@@ -473,9 +456,7 @@ class _InvoiceDetailPageState extends State<InvoiceDetailPage> {
                                                                               Colors.black)),
                                                                 ),
                                                                 child: Text(
-                                                                  data
-                                                                      .orderDetails[
-                                                                          i]
+                                                                  data[i]
                                                                       .customerName,
                                                                   //style: content1,
                                                                   textAlign:
@@ -500,7 +481,7 @@ class _InvoiceDetailPageState extends State<InvoiceDetailPage> {
                                                                                 Colors.black)),
                                                                   ),
                                                                   child: Text(
-                                                                    '${data.orderDetails[i].productName}',
+                                                                    '${data[i].productName}',
                                                                     //style: content1,
                                                                     textAlign:
                                                                         TextAlign
@@ -525,7 +506,7 @@ class _InvoiceDetailPageState extends State<InvoiceDetailPage> {
                                                                                 Colors.black)),
                                                                   ),
                                                                   child: Text(
-                                                                    '${data.orderDetails[i].orderId}',
+                                                                    '${data[i].orderId}',
                                                                     //style: content1,
                                                                     textAlign:
                                                                         TextAlign
@@ -550,7 +531,7 @@ class _InvoiceDetailPageState extends State<InvoiceDetailPage> {
                                                                                 Colors.black)),
                                                                   ),
                                                                   child: Text(
-                                                                    '${data.orderDetails[i].modelNo}',
+                                                                    '${data[i].modelNo}',
                                                                     //style: content1,
                                                                     textAlign:
                                                                         TextAlign
@@ -580,19 +561,16 @@ class _InvoiceDetailPageState extends State<InvoiceDetailPage> {
                                                                             () {
                                                                           check[i] =
                                                                               true;
-                                                                          data.orderDetails[i].isSelected =
+                                                                          data[i].isSelected =
                                                                               true;
-                                                                          data.orderDetails[i].invoiceTotalStick =
-                                                                              text;
-                                                                          data.orderDetails[i].invoiceTotalPrice =
-                                                                              (int.parse(text) * int.parse(data.orderDetails[i].invoicePrice)).toString();
+                                                                          data[i].totalStick =
+                                                                              int.parse(text);
+                                                                          data[i].totalPrice =
+                                                                              (int.parse(text) * int.parse(data[i].mrpPrice));
                                                                           // OrderDetailsUpdate(data.orderDetails[i].orderdetailId,text,(int.parse(text) * int.parse(data.orderDetails[i].invoicePrice)).toString());
-                                                                          customerID = data
-                                                                              .orderDetails[i]
-                                                                              .customerId;
                                                                         });
                                                                       },
-                                                                      initialValue: data.orderDetails[i].invoiceTotalStick,
+                                                                      initialValue: data[i].totalStick.toString(),
                                                                       maxLines: 1,
                                                                       textAlign: TextAlign.center,
                                                                       maxLength: 4,
@@ -665,21 +643,15 @@ class _InvoiceDetailPageState extends State<InvoiceDetailPage> {
                                                           if (checkAll ==
                                                               true) {
                                                             for (int i = 0;
-                                                                i <
-                                                                    data.orderDetails
-                                                                        .length;
+                                                                i < data.length;
                                                                 i++) {
                                                               check[i] = true;
-                                                              send.add(data
-                                                                  .orderDetails[
-                                                                      i]
+                                                              send.add(data[i]
                                                                   .orderId);
                                                             }
                                                           } else {
                                                             for (int i = 0;
-                                                                i <
-                                                                    data.orderDetails
-                                                                        .length;
+                                                                i < data.length;
                                                                 i++) {
                                                               check[i] = false;
                                                               send = [];
@@ -845,7 +817,9 @@ class _InvoiceDetailPageState extends State<InvoiceDetailPage> {
                                                 ),
                                               ),
                                               for (int i = 0;
-                                                  i < _searchResult.length;
+                                                  i <
+                                                      _searchResultWarhouse
+                                                          .length;
                                                   i++)
                                                 AnimationConfiguration
                                                     .staggeredList(
@@ -890,12 +864,12 @@ class _InvoiceDetailPageState extends State<InvoiceDetailPage> {
                                                                   if (check[
                                                                           i] ==
                                                                       true) {
-                                                                    send.add(_searchResult[
+                                                                    send.add(_searchResultWarhouse[
                                                                             i]
                                                                         .orderId);
                                                                   } else {
                                                                     send.remove(
-                                                                        _searchResult[i]
+                                                                        _searchResultWarhouse[i]
                                                                             .orderId);
                                                                   }
                                                                 },
@@ -922,7 +896,7 @@ class _InvoiceDetailPageState extends State<InvoiceDetailPage> {
                                                                               Colors.black)),
                                                                 ),
                                                                 child: Text(
-                                                                  _searchResult[
+                                                                  _searchResultWarhouse[
                                                                           i]
                                                                       .customerName,
                                                                   //style: content1,
@@ -948,7 +922,7 @@ class _InvoiceDetailPageState extends State<InvoiceDetailPage> {
                                                                                 Colors.black)),
                                                                   ),
                                                                   child: Text(
-                                                                    '${_searchResult[i].productName}',
+                                                                    '${_searchResultWarhouse[i].productName}',
                                                                     //style: content1,
                                                                     textAlign:
                                                                         TextAlign
@@ -973,7 +947,7 @@ class _InvoiceDetailPageState extends State<InvoiceDetailPage> {
                                                                                 Colors.black)),
                                                                   ),
                                                                   child: Text(
-                                                                    '${_searchResult[i].hsnSac}',
+                                                                    '${_searchResultWarhouse[i].hsnSac}',
                                                                     //style: content1,
                                                                     textAlign:
                                                                         TextAlign
@@ -998,7 +972,7 @@ class _InvoiceDetailPageState extends State<InvoiceDetailPage> {
                                                                                 Colors.black)),
                                                                   ),
                                                                   child: Text(
-                                                                    '${_searchResult[i].modelNo}',
+                                                                    '${_searchResultWarhouse[i].modelNo}',
                                                                     //style: content1,
                                                                     textAlign:
                                                                         TextAlign
@@ -1028,19 +1002,16 @@ class _InvoiceDetailPageState extends State<InvoiceDetailPage> {
                                                                             () {
                                                                           check[i] =
                                                                               true;
-                                                                          data.orderDetails[i].isSelected =
+                                                                          data[i].isSelected =
                                                                               true;
-                                                                          data.orderDetails[i].invoiceTotalStick =
-                                                                              text;
-                                                                          data.orderDetails[i].invoiceTotalPrice =
-                                                                              (int.parse(text) * int.parse(data.orderDetails[i].invoicePrice)).toString();
+                                                                          data[i].totalStick =
+                                                                              int.parse(text);
+                                                                          data[i].totalPrice =
+                                                                              (int.parse(text) * int.parse(data[i].mrpPrice));
                                                                           // OrderDetailsUpdate(data.orderDetails[i].orderdetailId,text,(int.parse(text) * int.parse(data.orderDetails[i].invoicePrice)).toString());
-                                                                          customerID = data
-                                                                              .orderDetails[i]
-                                                                              .customerId;
                                                                         });
                                                                       },
-                                                                      initialValue: data.orderDetails[i].invoiceTotalStick,
+                                                                      initialValue: data[i].totalStick.toString(),
                                                                       maxLines: 1,
                                                                       textAlign: TextAlign.center,
                                                                       maxLength: 4,
@@ -1143,17 +1114,16 @@ class _InvoiceDetailPageState extends State<InvoiceDetailPage> {
         color: kPrimaryColor,
       )),
     );
+    print(ow.toPostJson());
     pr.show();
 
     var response = await http.post(
         Uri.parse(
-            "http://loccon.in/desiremoulding/api/ProductionApiController/submitDispatchInvoice"),
+            "http://loccon.in/desiremoulding/api/ProductionApiController/submitDispatch"),
         body: {
           'secretkey': Connection.secretKey,
-          'orderdetails_list': jsonEncode(od.toPostJson()),
-          'dispatch_id': od.dispatchResult[0].dispatchId,
-          "customer_id": od.dispatchResult[0].customerId,
-          "dispatch_invoice_id": od.dispatchResult[0].dispatchInvoiceId,
+          'orderdetails_list': jsonEncode(ow.toPostJson()),
+          "customer_id": widget.customerId,
           "invoice_no": invoiceController.text,
           "lr_no": lrNoController.text,
           "eway_bill_no": eWayBillViewController.text,
@@ -1215,7 +1185,7 @@ class _InvoiceDetailPageState extends State<InvoiceDetailPage> {
   }
 
   onSearchTextChangedICD(String text) async {
-    _searchResult.clear();
+    _searchResultWarhouse.clear();
     print("$text value from search");
     if (text.isEmpty) {
       setState(() {
@@ -1223,11 +1193,12 @@ class _InvoiceDetailPageState extends State<InvoiceDetailPage> {
       });
       return;
     }
-    _list.forEach((exp) {
-      if (exp.modelNo.contains(text)) _searchResult.add(exp);
+
+    _listWarhouse.forEach((exp) {
+      if (exp.modelNo.contains(text)) _searchResultWarhouse.add(exp);
     });
     //print("search objects ${_searchResult.first}");
-    print("search result length ${_searchResult.length} ");
+    print("search result length  ${_searchResultWarhouse.length}");
     setState(() {});
   }
 }
