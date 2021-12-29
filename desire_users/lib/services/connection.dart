@@ -69,5 +69,8 @@ static String categoryWiseModelNo = "http://loccon.in/desiremoulding/api/UserApi
 
   static final String verifyMobileNumber = ip+"customermobilecheck";
 
+  //ledger
+
+  static final String customerLedger = ip+"customerLedger";
 
 }

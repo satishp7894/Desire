@@ -8,6 +8,7 @@ import 'package:desire_users/models/customer_chat_details_model.dart';
 import 'package:desire_users/models/customer_chat_list_model.dart';
 import 'package:desire_users/models/invoice_model.dart';
 import 'package:desire_users/models/kyc_view_model.dart';
+import 'package:desire_users/models/ledger_model.dart';
 import 'package:desire_users/models/modelNumberFromCategoryModel.dart';
 import 'package:desire_users/models/orderDetailsByIdModel.dart';
 import 'package:desire_users/models/order_model.dart';
@@ -578,6 +579,24 @@ class ApiClient {
     print("wishlist model Performance $orderTrackModel");
 
     return orderTrackModel;
+  }
+  Future<LedgerModel> getLedgerDetails(String customerId) async {
+
+    print("object userid $customerId");
+
+    var response = await http.post(Uri.parse(Connection.customerLedger), body: {
+      "secretkey" : Connection.secretKey,
+      "customer_id" : "83"
+    });
+
+    var result = json.decode(response.body);
+    print("order list response $result");
+
+    LedgerModel ledgermodel;
+    ledgermodel = LedgerModel.fromJson(result);
+    print("wishlist model Performance $ledgermodel");
+
+    return ledgermodel;
   }
 
 }

@@ -1,4 +1,5 @@
 import 'package:data_connection_checker/data_connection_checker.dart';
+import 'package:desire_users/pages/ledger/customerLedgerPage.dart';
 import 'package:desire_users/sales/bloc/customer_bloc.dart';
 import 'package:desire_users/sales/pages/customer/customer_edit_page.dart';
 import 'package:desire_users/sales/pages/orders/customerOrderHistoryPage.dart';
@@ -422,7 +423,22 @@ class _CustomerListPageState extends State<CustomerListPage> {
                                     child: Image.asset(
                                       "assets/images/production_order.png",height: 30,width: 30,),
                                   ),
-                                ],
+                                  GestureDetector(
+                                    onTap: () {
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (builder) =>
+                                                  CustomerLedgerPage(
+                                                    customerId: _searchResult[i].customerId,
+                                                  )
+                                          )
+                                      );
+                                    },
+                                    child: Image.asset(
+                                      "assets/images/ledger.png",height: 30,width: 30,),
+                                  ),
+                            ],
                               )
                             ],
                           ),
@@ -690,6 +706,19 @@ class _CustomerListPageState extends State<CustomerListPage> {
                                    },
                                    child: Image.asset(
                                        "assets/images/production_order.png",height: 30,width: 30,),
+                                 ),
+                                 GestureDetector(
+                                   onTap: () {
+                                     Navigator.push(
+                                         context,
+                                         MaterialPageRoute(
+                                             builder: (builder) =>
+                                                CustomerLedgerPage(
+                                                   customerId: customerList[i].customerId,
+                                                 )));
+                                   },
+                                   child: Image.asset(
+                                     "assets/images/ledger.png",height: 30,width: 30,),
                                  ),
                                ],
                              )

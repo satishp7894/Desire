@@ -17,6 +17,7 @@ import 'package:desire_users/pages/home/model_list_page.dart';
 import 'package:desire_users/pages/home/userSearchedPage.dart';
 import 'package:desire_users/pages/intro/block_page.dart';
 import 'package:desire_users/pages/invoice/invoice_list_page.dart';
+import 'package:desire_users/pages/ledger/customerLedgerPage.dart';
 import 'package:desire_users/pages/notifications/notifications.dart';
 import 'package:desire_users/pages/product/productFromModelDetailPage.dart';
 import 'package:desire_users/pages/product/productFromModelPage.dart';
@@ -632,7 +633,7 @@ class _HomePageState extends State<HomePage> {
                 padding: const EdgeInsets.only(left: 10.0,right: 10,top: 5,bottom: 5),
                 child: GestureDetector(
                   onTap: (){
-
+                    Navigator.push(context, MaterialPageRoute(builder: (context)=>CustomerLedgerPage(customerId: widget.customerId)));
                   },
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
