@@ -1,11 +1,14 @@
 import 'package:desire_users/bloc/ready_stock_list_bloc.dart';
 import 'package:desire_users/models/ready_stock_list_model.dart';
+import 'package:desire_users/pages/product/productFromModelPage.dart';
+import 'package:desire_users/pages/ready_stock/ready_Stock_from_model_page.dart';
 import 'package:desire_users/utils/constants.dart';
 import 'package:flutter/material.dart';
 
 
 class ReadyStockListView extends StatefulWidget {
-  const ReadyStockListView({Key key}) : super(key: key);
+  final customerId;
+  const ReadyStockListView({Key key, this.customerId}) : super(key: key);
 
   @override
   _ReadyStockListViewState createState() => _ReadyStockListViewState();
@@ -120,6 +123,7 @@ class _ReadyStockListViewState extends State<ReadyStockListView> {
                   ),
                   ...List.generate(asyncSnapshot.data.readyStockList.length, (index) => ModelListTile(
                     readyStockList: asyncSnapshot.data.readyStockList[index],
+                    customerId: widget.customerId,
                   ))
                 ],
               ),
@@ -132,8 +136,9 @@ class _ReadyStockListViewState extends State<ReadyStockListView> {
 class ModelListTile extends StatelessWidget {
 
   final  ReadyStockList readyStockList;
+  final customerId;
 
-  const ModelListTile({Key key,this.readyStockList}) : super(key: key);
+  const ModelListTile({Key key,this.readyStockList, this.customerId}) : super(key: key);
 
 
   @override
@@ -179,7 +184,9 @@ class ModelListTile extends StatelessWidget {
                   padding: const EdgeInsets.all(10.0),
                   child: GestureDetector(
                     onTap: (){
-
+                      Navigator.push(context, MaterialPageRoute(builder: (context){
+                        return ReadyStockFromModelPage(customerId: customerId,modelNoId: readyStockList.modelNoId);
+                      }));
                     },
                     child: Container(
                         decoration: BoxDecoration(

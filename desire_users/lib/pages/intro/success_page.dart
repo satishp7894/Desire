@@ -135,7 +135,7 @@ class _SuccessPageState extends State<SuccessPage> {
       progressWidget: Center(child: CircularProgressIndicator()),);
     pr.show();
     var response = await http.post(Uri.parse(Connection.login), body: {
-      'username':preferences.getString("User_name"),
+      'email':preferences.getString("User_name"),
       'password':preferences.getString("show_password"),
       'secretkey':Connection.secretKey
     });

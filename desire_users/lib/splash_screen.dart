@@ -1,6 +1,10 @@
 import 'dart:async';
+import 'package:desire_users/pages/home/home_page.dart';
+import 'package:desire_users/pages/intro/kyc_pagen.dart';
 import 'package:desire_users/pages/intro/new_login_page.dart';
 import 'package:desire_users/pages/intro/sales_login_page.dart';
+import 'package:desire_users/pages/intro/success_page.dart';
+import 'package:desire_users/sales/pages/sales_home_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -10,7 +14,8 @@ class SplashScreen extends StatefulWidget {
   SplashScreenState createState() => new SplashScreenState();
 }
 
-class SplashScreenState extends State<SplashScreen> with SingleTickerProviderStateMixin {
+class SplashScreenState extends State<SplashScreen>
+    with SingleTickerProviderStateMixin {
   var _visible = true;
   AnimationController animationController;
   Animation<double> animation;
@@ -20,13 +25,61 @@ class SplashScreenState extends State<SplashScreen> with SingleTickerProviderSta
     return new Timer(_duration, navigationPage);
   }
 
-  void navigationPage() async{
+  void navigationPage() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String login = prefs.getString("login");
-    if(login == "sales") {
-      Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (builder) => SalesLoginPage()), (route) => false);
+    if (login == "sales") {
+      if (prefs.getBool('sales_remember') != null && prefs.getBool('sales_remember')) {
+        setState(() {
+          Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(
+                  builder: (builder) => SalesHomePage(
+                        salesManId: prefs.getString("sales_id"),
+                      )),
+              (route) => false);
+        });
+      } else {
+        Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(builder: (builder) => SalesLoginPage()),
+            (route) => false);
+      }
     } else {
-      Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (builder) => NewLoginPage()), (route) => false);
+      if (prefs.getBool('remember') != null && prefs.getBool('remember')) {
+        setState(() {
+          prefs.getString("kycStats") == "0"
+              ? Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => KYCPageN(
+                            userId: prefs.getString("customer_id"),
+                          )),
+                  (Route<dynamic> route) => false)
+              : prefs.getString("kyc") == "1"
+                  ? Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => HomePage(
+                                status: true,
+                                customerId: prefs.getString("customer_id"),
+                                customerName: prefs.getString("Customer_name"),
+                                customerEmail: prefs.getString("Email"),
+                                mobileNo: prefs.getString("Mobile_no"),
+                                salesmanId: prefs.getString("salesmanId"),
+                              )),
+                      (Route<dynamic> route) => false)
+                  : Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => SuccessPage(
+                              userId: prefs.getString("customer_id"))),
+                      (Route<dynamic> route) => false);
+        });
+      } else {
+        Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(builder: (builder) => NewLoginPage()),
+            (route) => false);
+      }
     }
   }
 
@@ -35,8 +88,8 @@ class SplashScreenState extends State<SplashScreen> with SingleTickerProviderSta
     super.initState();
     animationController = new AnimationController(
         vsync: this, duration: new Duration(seconds: 2));
-    animation =
-    new CurvedAnimation(parent: animationController, curve: Curves.elasticInOut);
+    animation = new CurvedAnimation(
+        parent: animationController, curve: Curves.elasticInOut);
 
     animation.addListener(() => this.setState(() {}));
     animationController.forward();
@@ -54,7 +107,8 @@ class SplashScreenState extends State<SplashScreen> with SingleTickerProviderSta
         fit: StackFit.expand,
         children: <Widget>[
           Center(
-            child: new Image.asset('assets/images/logo.png',
+            child: new Image.asset(
+              'assets/images/logo.png',
               width: animation.value * 250,
               height: animation.value * 250,
             ),
@@ -63,6 +117,4 @@ class SplashScreenState extends State<SplashScreen> with SingleTickerProviderSta
       ),
     );
   }
-
-
 }

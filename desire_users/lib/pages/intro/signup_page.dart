@@ -2,7 +2,8 @@ import 'dart:convert';
 
 import 'package:data_connection_checker/data_connection_checker.dart';
 import 'package:desire_users/models/user_model.dart';
-import 'package:desire_users/pages/intro/verify_kyc_screen.dart';
+import 'package:desire_users/pages/intro/select_card_type.dart';
+import 'package:desire_users/pages/intro/verify_kyc_screen_old.dart';
 import 'package:desire_users/services/connection.dart';
 import 'package:desire_users/utils/alerts.dart';
 import 'package:desire_users/utils/progress_dialog.dart';
@@ -621,7 +622,7 @@ class _SignUpPageState extends State<SignUpPage> with Validator{
       // });
 
       //Alerts.showAlertAndBack(context, "Success", "SignUp");
-      Navigator.pushReplacement(context, MaterialPageRoute(builder: (c) => VerifyKycScreen(userId: userModel.customerId,)));
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (c) => SelectCardType(userId: userModel.customerId)));
       //Navigator.pushReplacement(context, MaterialPageRoute(builder: (c) => OtpPage(page: "login", mob: userModel.mobileNo, remember:  false,)));
       return true;
     }

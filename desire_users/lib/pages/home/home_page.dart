@@ -7,8 +7,12 @@ import 'package:desire_users/bloc/product_bloc.dart';
 import 'package:desire_users/models/allModel.dart';
 import 'package:desire_users/models/cart_model.dart';
 import 'package:desire_users/models/category_model.dart';
+import 'package:desire_users/models/hold_orders_model.dart';
+import 'package:desire_users/pages/cart/complete_order_list.dart';
 import 'package:desire_users/pages/cart/cust_cart_page.dart';
+import 'package:desire_users/pages/cart/hold_order_page.dart';
 import 'package:desire_users/pages/cart/order_history_page.dart';
+import 'package:desire_users/pages/cart/pending_order_list.dart';
 import 'package:desire_users/pages/chatting/chat_list_page.dart';
 import 'package:desire_users/pages/complaint/add_complaint.dart';
 import 'package:desire_users/pages/home/customer_price_list.dart';
@@ -396,7 +400,7 @@ class _HomePageState extends State<HomePage> {
                 padding: const EdgeInsets.only(left: 10.0,right: 10,top: 5,bottom: 5),
                 child: GestureDetector(
                   onTap: (){
-                     Navigator.push(context, MaterialPageRoute(builder: (builder) => ReadyStockListView()));
+                     Navigator.push(context, MaterialPageRoute(builder: (builder) => ReadyStockListView(customerId: widget.customerId,)));
                   },
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -448,7 +452,35 @@ class _HomePageState extends State<HomePage> {
                 padding: const EdgeInsets.only(left: 10.0,right: 10,top: 5,bottom: 5),
                 child: GestureDetector(
                   onTap: (){
-                  //  Navigator.push(context, MaterialPageRoute(builder: (builder) => CustCartPage(customerId: widget.customerId,customerName: widget.customerName,customerEmail: widget.customerEmail,customerMobile: widget.mobileNo,)));
+
+                    Navigator.push(context, MaterialPageRoute(builder: (builder) => CompleteOrderList(customerId: widget.customerId)));
+                  },
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Icon(Icons.shopping_bag,color: kPrimaryColor,),
+                      Expanded(
+                          flex: 2,
+                          child: Padding(
+                            padding: const EdgeInsets.only(left: 10.0),
+                            child: Text("Completed Orders",style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold),),
+                          )),
+                      Icon(Icons.arrow_forward_ios,color: kPrimaryColor,),
+
+
+
+                    ],
+                  ),
+                ),
+              ),
+              Divider(color: kSecondaryColor,),
+              Padding(
+                padding: const EdgeInsets.only(left: 10.0,right: 10,top: 5,bottom: 5),
+                child: GestureDetector(
+                  onTap: (){
+
+                     Navigator.push(context, MaterialPageRoute(builder: (builder) => PendingOrderList(customerId: widget.customerId)));
                   },
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -501,6 +533,7 @@ class _HomePageState extends State<HomePage> {
                 padding: const EdgeInsets.only(left: 10.0,right: 10,top: 5,bottom: 5),
                 child: GestureDetector(
                   onTap: (){
+                    Navigator.push(context, MaterialPageRoute(builder: (builder) => HoldOrderPage(customerId: widget.customerId)));
                   //  Navigator.push(context, MaterialPageRoute(builder: (builder) => CustCartPage(customerId: widget.customerId,customerName: widget.customerName,customerEmail: widget.customerEmail,customerMobile: widget.mobileNo,)));
                   },
                   child: Row(

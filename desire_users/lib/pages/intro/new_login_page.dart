@@ -10,10 +10,12 @@ import 'package:desire_users/pages/intro/kyc_pagen.dart';
 import 'package:desire_users/pages/intro/mobile_veriy_page.dart';
 import 'package:desire_users/pages/intro/otp_page.dart';
 import 'package:desire_users/pages/intro/sales_login_page.dart';
+import 'package:desire_users/pages/intro/select_card_type.dart';
 import 'package:desire_users/pages/intro/signup_page.dart';
 import 'package:desire_users/pages/intro/success_page.dart';
 import 'package:desire_users/pages/intro/verifyMobileNumberPage.dart';
 import 'package:desire_users/pages/intro/verify_kyc_screen.dart';
+import 'package:desire_users/pages/intro/verify_kyc_screen_old.dart';
 import 'package:desire_users/sales/utils_sales/alerts.dart';
 import 'package:desire_users/sales/utils_sales/progress_dialog.dart';
 import 'package:desire_users/sales/utils_sales/validator.dart';
@@ -112,7 +114,7 @@ class _NewLoginPageState extends State<NewLoginPage> {
       if (prefs.getBool('remember')) {
         setState(() {
           userNameController =
-              TextEditingController(text: prefs.getString("User_name"));
+              TextEditingController(text: prefs.getString("Email"));
           passwordController =
               TextEditingController(text: prefs.getString("show_password"));
           // name.text = prefs.getString("User_name");
@@ -641,7 +643,7 @@ class _NewLoginPageState extends State<NewLoginPage> {
       );
       pr.show();
       var response = await http.post(Uri.parse(Connection.login), body: {
-        'username': userNameController.text,
+        'email': userNameController.text,
         'password': passwordController.text,
         'secretkey': Connection.secretKey
       });
@@ -681,7 +683,7 @@ class _NewLoginPageState extends State<NewLoginPage> {
             ? Navigator.pushAndRemoveUntil(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => VerifyKycScreen(
+                    builder: (context) => SelectCardType(
                           userId: userModel.customerId,
                         )),
                 (Route<dynamic> route) => false)

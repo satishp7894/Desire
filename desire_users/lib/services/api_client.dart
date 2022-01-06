@@ -4,8 +4,10 @@ import 'package:desire_users/models/address_model.dart';
 import 'package:desire_users/models/allModel.dart';
 import 'package:desire_users/models/cart_model.dart';
 import 'package:desire_users/models/category_model.dart';
+import 'package:desire_users/models/complete_order_list_model.dart';
 import 'package:desire_users/models/customer_chat_details_model.dart';
 import 'package:desire_users/models/customer_chat_list_model.dart';
+import 'package:desire_users/models/hold_orders_model.dart';
 import 'package:desire_users/models/invoice_model.dart';
 import 'package:desire_users/models/kyc_view_model.dart';
 import 'package:desire_users/models/ledger_model.dart';
@@ -13,13 +15,16 @@ import 'package:desire_users/models/modelNumberFromCategoryModel.dart';
 import 'package:desire_users/models/orderDetailsByIdModel.dart';
 import 'package:desire_users/models/order_model.dart';
 import 'package:desire_users/models/order_track_model.dart';
+import 'package:desire_users/models/pending_order_list_model.dart';
 import 'package:desire_users/models/productFromModelNoModel.dart';
 import 'package:desire_users/models/product_details_model.dart';
 import 'package:desire_users/models/product_model.dart';
+import 'package:desire_users/models/readyStockModel.dart';
 import 'package:desire_users/models/ready_stock_list_model.dart';
 import 'package:desire_users/models/today_production_model.dart';
 import 'package:desire_users/models/transport_list_model.dart';
 import 'package:desire_users/models/userSearchingModel.dart';
+import 'package:desire_users/models/verify_gst_model.dart';
 import 'package:desire_users/models/wishlist_model.dart';
 import 'package:desire_users/services/connection_sales.dart';
 import 'package:http_parser/http_parser.dart';
@@ -521,7 +526,7 @@ class ApiClient {
 
     print("object userid $customerId");
 
-    var response = await http.post(Uri.parse("http://loccon.in/desiremoulding/api/UserApiController/customerInvoiceList"), body: {
+    var response = await http.post(Uri.parse(Connection.customerInvoiceList), body: {
       "secretkey" : r"12!@34#$5%",
       "customer_id" : customerId
     });
@@ -543,7 +548,7 @@ class ApiClient {
 
     print("customer id : $customerId");
 
-    var response = await http.post(Uri.parse("http://loccon.in/desiremoulding/api/UserApiController/customerTransportList"), body: {
+    var response = await http.post(Uri.parse(Connection.customerTransportList), body: {
       "secretkey" : r"12!@34#$5%",
       "customer_id" : customerId
     });
@@ -586,7 +591,7 @@ class ApiClient {
 
     var response = await http.post(Uri.parse(Connection.customerLedger), body: {
       "secretkey" : Connection.secretKey,
-      "customer_id" : "83"
+      "customer_id" : customerId
     });
 
     var result = json.decode(response.body);
@@ -597,6 +602,89 @@ class ApiClient {
     print("wishlist model Performance $ledgermodel");
 
     return ledgermodel;
+  }
+
+  Future<VerifyGSTModel> getVerifyGST(String gstnumber) async {
+
+    print("object GST $gstnumber");
+
+    var response = await http.post(Uri.parse(Connection.customerLedger), body: {
+      "secretkey" : Connection.secretKey,
+      "gst_number" : gstnumber
+    });
+
+    var result = json.decode(response.body);
+    print("order list response $result");
+
+    VerifyGSTModel verifygstmodel;
+    verifygstmodel = VerifyGSTModel.fromJson(result);
+    print("wishlist model Performance $verifygstmodel");
+
+    return verifygstmodel;
+  }
+
+  Future<ReadyStockModel> getReadyProductFromModelNo(String modelNoId,String customerId) async {
+    var response = await http.post(Uri.parse(Connection.modelNoWiseReadyStockList), body: {
+      "secretkey" : r"12!@34#$5%",
+      "model_no_id": modelNoId,
+    });
+    var result = json.decode(response.body);
+    print("product from model  response $result");
+
+
+    ReadyStockModel readystockmodel;
+    readystockmodel = (ReadyStockModel.fromJson(result));
+    print("product from model api $readystockmodel");
+
+    return readystockmodel;
+  }
+
+  Future<PendingOrderListModel> getPendingOrderList(String customerId) async {
+    var response = await http.post(Uri.parse(Connection.pendingOrderList), body: {
+      "secretkey" : r"12!@34#$5%",
+      "customer_id": customerId,
+    });
+    var result = json.decode(response.body);
+    print("product from model  response $result");
+
+      PendingOrderListModel pendingorderlistmodel;
+      pendingorderlistmodel = (PendingOrderListModel.fromJson(result));
+      print("product from model api $pendingorderlistmodel");
+
+      return pendingorderlistmodel;
+
+  }
+
+  Future<HoldOrderModel> getHoldOrderList(String customerId) async {
+    var response = await http.post(Uri.parse(Connection.holdOrderList), body: {
+      "secretkey" : r"12!@34#$5%",
+      "customer_id": customerId,
+    });
+    var result = json.decode(response.body);
+    print("product from model  response $result");
+
+    HoldOrderModel holdOrderModel;
+    holdOrderModel = (HoldOrderModel.fromJson(result));
+    print("product from model api $holdOrderModel");
+
+    return holdOrderModel;
+
+  }
+
+  Future<CompleteOrderListModel> getCompleteOrderList(String customerId) async {
+    var response = await http.post(Uri.parse(Connection.completeOrderList), body: {
+      "secretkey" : r"12!@34#$5%",
+      "customer_id": customerId,
+    });
+    var result = json.decode(response.body);
+    print("product from model  response $result");
+
+    CompleteOrderListModel completeOrderListModel;
+    completeOrderListModel = (CompleteOrderListModel.fromJson(result));
+    print("product from model api $completeOrderListModel");
+
+    return completeOrderListModel;
+
   }
 
 }
