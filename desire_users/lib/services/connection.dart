@@ -90,5 +90,7 @@ static String categoryWiseModelNo = "http://loccon.in/desiremoulding/api/UserApi
   static final String holdOrderList = ip+"holdOrderList";
   static final String completeOrderList = ip+"completeOrderList";
 
+  static final String customerInvoiceProductList = ip+"customerInvoiceProductList";
+
 
 }

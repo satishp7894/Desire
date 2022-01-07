@@ -8,6 +8,7 @@ import 'package:desire_users/models/complete_order_list_model.dart';
 import 'package:desire_users/models/customer_chat_details_model.dart';
 import 'package:desire_users/models/customer_chat_list_model.dart';
 import 'package:desire_users/models/hold_orders_model.dart';
+import 'package:desire_users/models/invoice_detail_model.dart';
 import 'package:desire_users/models/invoice_model.dart';
 import 'package:desire_users/models/kyc_view_model.dart';
 import 'package:desire_users/models/ledger_model.dart';
@@ -591,7 +592,7 @@ class ApiClient {
 
     var response = await http.post(Uri.parse(Connection.customerLedger), body: {
       "secretkey" : Connection.secretKey,
-      "customer_id" : customerId
+      "customer_id" : "83"
     });
 
     var result = json.decode(response.body);
@@ -604,24 +605,24 @@ class ApiClient {
     return ledgermodel;
   }
 
-  Future<VerifyGSTModel> getVerifyGST(String gstnumber) async {
-
-    print("object GST $gstnumber");
-
-    var response = await http.post(Uri.parse(Connection.customerLedger), body: {
-      "secretkey" : Connection.secretKey,
-      "gst_number" : gstnumber
-    });
-
-    var result = json.decode(response.body);
-    print("order list response $result");
-
-    VerifyGSTModel verifygstmodel;
-    verifygstmodel = VerifyGSTModel.fromJson(result);
-    print("wishlist model Performance $verifygstmodel");
-
-    return verifygstmodel;
-  }
+  // Future<VerifyGSTModel> getVerifyGST(String gstnumber) async {
+  //
+  //   print("object GST $gstnumber");
+  //
+  //   var response = await http.post(Uri.parse(Connection.customerLedger), body: {
+  //     "secretkey" : Connection.secretKey,
+  //     "gst_number" : gstnumber
+  //   });
+  //
+  //   var result = json.decode(response.body);
+  //   print("order list response $result");
+  //
+  //   VerifyGSTModel verifygstmodel;
+  //   verifygstmodel = VerifyGSTModel.fromJson(result);
+  //   print("wishlist model Performance $verifygstmodel");
+  //
+  //   return verifygstmodel;
+  // }
 
   Future<ReadyStockModel> getReadyProductFromModelNo(String modelNoId,String customerId) async {
     var response = await http.post(Uri.parse(Connection.modelNoWiseReadyStockList), body: {
@@ -684,6 +685,22 @@ class ApiClient {
     print("product from model api $completeOrderListModel");
 
     return completeOrderListModel;
+
+  }
+
+  Future<InvoiceDetailModel> getInvoiceviseDetail(String invoiceid) async {
+    var response = await http.post(Uri.parse(Connection.customerInvoiceProductList), body: {
+      "secretkey" : r"12!@34#$5%",
+      "invoice_id": invoiceid,
+    });
+    var result = json.decode(response.body);
+    print("product from model  response $result");
+
+    InvoiceDetailModel invoicedetailmodel;
+    invoicedetailmodel = (InvoiceDetailModel.fromJson(result));
+    print("product from model api $invoicedetailmodel");
+
+    return invoicedetailmodel;
 
   }
 

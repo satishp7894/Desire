@@ -301,6 +301,6 @@ class DropdownTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Text(customerInvoice.invoiceId+customerInvoice.invoiceNumber);
+    return Text(customerInvoice.dispatchinvoiceid+customerInvoice.invoiceNumber);
   }
 }

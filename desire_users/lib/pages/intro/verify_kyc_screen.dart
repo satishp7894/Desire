@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:data_connection_checker/data_connection_checker.dart';
-import 'package:desire_users/bloc/verify_gst_bloc.dart';
 import 'package:desire_users/models/verify_gst_model.dart';
 import 'package:desire_users/sales/utils_sales/alerts.dart';
 import 'package:desire_users/sales/utils_sales/progress_dialog.dart';
@@ -23,7 +22,6 @@ class VerifyKycScreen extends StatefulWidget {
 }
 
 class _VerifyKycScreenState extends State<VerifyKycScreen> {
-  final gstBloc = VerifyGSTBloc();
   TextEditingController gstNumberController, panNumberController;
 
   @override

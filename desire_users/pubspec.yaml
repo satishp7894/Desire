@@ -70,6 +70,7 @@ dependencies:
   shimmer: ^2.0.0
   flutter_swiper: ^1.1.6
   multi_image_picker2: ^5.0.02
+  intl: ^0.16.1
 
 
 

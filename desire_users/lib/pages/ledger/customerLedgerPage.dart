@@ -1,14 +1,21 @@
+import 'dart:convert';
+
 import 'package:desire_users/bloc/ledger_bloc.dart';
+import 'package:desire_users/components/default_button.dart';
 import 'package:desire_users/models/ledger_model.dart';
 import 'package:desire_users/sales/utils_sales/alerts.dart';
+import 'package:desire_users/sales/utils_sales/progress_dialog.dart';
+import 'package:desire_users/services/connection.dart';
 import 'package:desire_users/utils/constants.dart';
 import 'package:downloads_path_provider/downloads_path_provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:permission_handler/permission_handler.dart';
 import 'dart:io';
+import 'package:http/http.dart' as http;
 
 class CustomerLedgerPage extends StatefulWidget {
   final customerId;
@@ -21,9 +28,12 @@ class CustomerLedgerPage extends StatefulWidget {
 
 class _CustomerLedgerPageState extends State<CustomerLedgerPage> {
   var ledgerBloc = LedgerBloc();
-  AsyncSnapshot<LedgerModel> asyncSnapshot;
+  List<CustomerLedger> asyncSnapshot;
+  LedgerModel ledgermodel;
 
   List<CustomerLedger> as;
+  TextEditingController fromDateinput = TextEditingController();
+  TextEditingController toDateinput = TextEditingController();
 
   @override
   void initState() {
@@ -112,18 +122,130 @@ class _CustomerLedgerPageState extends State<CustomerLedgerPage> {
               ),
             );
           } else {
-            asyncSnapshot = s;
+            asyncSnapshot = s.data.customerLedger;
             as = s.data.customerLedger;
             return SingleChildScrollView(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  Column(
+                    children: [
+                      Center(
+                          child: TextField(
+                        controller: fromDateinput,
+                        //editing controller of this TextField
+                        decoration: InputDecoration(
+                            icon: Icon(Icons.calendar_today),
+                            //icon of text field
+                            labelText: "Enter Start Date" //label text of field
+                            ),
+                        readOnly: true,
+                        //set it true, so that user will not able to edit text
+                        onTap: () async {
+                          DateTime pickedDate = await showDatePicker(
+                              context: context,
+                              initialDate: DateTime.now(),
+                              firstDate: DateTime(2000),
+                              //DateTime.now() - not to allow to choose before today.
+                              lastDate: DateTime(2101));
+
+                          if (pickedDate != null) {
+                            print(
+                                pickedDate); //pickedDate output format => 2021-03-10 00:00:00.000
+
+                            setState(() {
+                              fromDateinput.text =
+                                  DateFormat('yyyy-MM-dd').format(pickedDate);
+                              //set output date to TextField value.
+                            });
+                          } else {
+                            print("Date is not selected");
+                          }
+                        },
+                      )),
+                      Container(
+                        margin: EdgeInsets.only(bottom: 10),
+                        child: Center(
+                            child: TextField(
+                          controller: toDateinput,
+                          //editing controller of this TextField
+                          decoration: InputDecoration(
+                              icon: Icon(Icons.calendar_today),
+                              //icon of text field
+                              labelText: "Enter End Date" //label text of field
+                              ),
+                          readOnly: true,
+                          //set it true, so that user will not able to edit text
+                          onTap: () async {
+                            DateTime pickedDate = await showDatePicker(
+                                context: context,
+                                initialDate: DateTime.now(),
+                                firstDate: DateTime(2000),
+                                lastDate: DateTime(2101));
+
+                            if (pickedDate != null) {
+                              print(
+                                  pickedDate); //pickedDate output format => 2021-03-10 00:00:00.000
+
+                              setState(() {
+                                toDateinput.text = DateFormat('yyyy-MM-dd').format(
+                                    pickedDate); //set output date to TextField value.
+                              });
+                            } else {
+                              print("Date is not selected");
+                            }
+                          },
+                        )),
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Center(
+                            child: Container(
+                              width: 150,
+                              height: 50,
+                              child: DefaultButton(
+                                text: "Filter",
+                                press: () {
+                                  if (fromDateinput.text != "" &&
+                                      toDateinput.text != "") {
+                                    filterLedgerList(widget.customerId);
+                                  } else {
+                                    final snackBar = SnackBar(
+                                        content: Text(
+                                            "Please Enter Start Date and End Date."));
+                                    ScaffoldMessenger.of(context)
+                                        .showSnackBar(snackBar);
+                                  }
+                                },
+                              ),
+                            ),
+                          ),
+                          Center(
+                            child: Container(
+                              width: 150,
+                              height: 50,
+                              child: DefaultButton(
+                                text: "Clear Filter",
+                                press: () {
+                                  fromDateinput.clear();
+                                  toDateinput.clear();
+                                  asyncSnapshot.clear();
+                                  ledgerBloc.fetchLedger(widget.customerId);
+                                },
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
                   ...List.generate(
-                      asyncSnapshot.data.customerLedger.length,
+                      asyncSnapshot.length,
                       (index) => LedgerListTile(
-                            customerLedger:
-                                asyncSnapshot.data.customerLedger[index],
+                            customerLedger: asyncSnapshot[index],
                           ))
                 ],
               ),
@@ -166,7 +288,7 @@ class _CustomerLedgerPageState extends State<CustomerLedgerPage> {
   final pdf = pw.Document();
 
   generatePdf() {
-    print("total lenght" + as.length.toString());
+    print("total lenght" + asyncSnapshot.length.toString());
     pdf.addPage(pw.MultiPage(
       margin: pw.EdgeInsets.all(15),
       crossAxisAlignment: pw.CrossAxisAlignment.start,
@@ -228,98 +350,67 @@ class _CustomerLedgerPageState extends State<CustomerLedgerPage> {
                       )
                     ],
                   ));
-                  // pw.Column(
-                  //          children: [
-                  //            pw.Row(
-                  //              mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
-                  //              crossAxisAlignment: pw.CrossAxisAlignment.start,
-                  //              children: [
-                  //                pw.Row(
-                  //                  children: [
-                  //                    pw.Column(
-                  //                      mainAxisAlignment: pw.MainAxisAlignment.start,
-                  //                      crossAxisAlignment: pw.CrossAxisAlignment.start,
-                  //                      children: [
-                  //                        pw.Row(
-                  //                          mainAxisAlignment: pw.MainAxisAlignment.start,
-                  //                          crossAxisAlignment: pw.CrossAxisAlignment.start,
-                  //                          children: [
-                  //                            as[i].ledgerDate == null
-                  //                                ? pw.Text("N/A")
-                  //                                : pw.Text( as[i].ledgerDate,
-                  //                                style:pw.TextStyle(
-                  //                                    fontWeight: pw.FontWeight.bold)),
-                  //                          ],
-                  //                        ),
-                  //                        pw.SizedBox(
-                  //                          height: 10,
-                  //                        ),
-                  //                        pw.Row(
-                  //                          mainAxisAlignment: pw.MainAxisAlignment.start,
-                  //                          crossAxisAlignment: pw.CrossAxisAlignment.start,
-                  //                          children: [
-                  //                            as[i].ledgerAccount == null
-                  //                                ? pw.Text("N/A")
-                  //                                : pw.Text(
-                  //                              as[i].ledgerAccount,
-                  //                              style: pw.TextStyle(
-                  //                                  fontWeight: pw.FontWeight.bold),
-                  //                            ),
-                  //                          ],
-                  //                        ),
-                  //                      ],
-                  //                    ),
-                  //                  ],
-                  //                ),
-                  //                pw.Column(
-                  //                  children: [
-                  //                    as[i].creditAmount != ""
-                  //                        ?  pw.Row(
-                  //                      mainAxisAlignment: pw.MainAxisAlignment.end,
-                  //                      crossAxisAlignment: pw.CrossAxisAlignment.center,
-                  //                      children: [
-                  //                        pw.Text(
-                  //                          "${ as[i].creditAmount} Cr ",
-                  //                          style: pw.TextStyle(
-                  //                              color: PdfColor.fromHex('#000000'),
-                  //                              fontWeight: pw.FontWeight.bold),
-                  //                        ),
-                  //                      ],
-                  //                    )
-                  //                        :  pw.Row(
-                  //                      mainAxisAlignment:pw.MainAxisAlignment.end,
-                  //                      crossAxisAlignment: pw.CrossAxisAlignment.center,
-                  //                      children: [
-                  //                        pw.Text("${ as[i].debitAmount} Dr ",
-                  //                            style: pw.TextStyle(
-                  //                                color: PdfColor.fromHex('#000000'),
-                  //                                fontWeight: pw.FontWeight.bold)),
-                  //                      ],
-                  //                    ),
-                  //                    pw.Row(
-                  //                      mainAxisAlignment: pw.MainAxisAlignment.end,
-                  //                      crossAxisAlignment: pw.CrossAxisAlignment.center,
-                  //                      children: [
-                  //                        as[i].type == ""
-                  //                            ? pw.Text("")
-                  //                            : pw.Text( as[i].type,
-                  //                            style: pw.TextStyle(fontWeight: pw.FontWeight.bold))
-                  //                      ],
-                  //                    ),
-                  //                  ],
-                  //                )
-                  //              ],
-                  //            ),
-                  //            pw.SizedBox(
-                  //              height: 10,
-                  //            ),
-                  //          ],
-                  //        );
                 })
           ])
         ];
       },
     ));
+  }
+
+  void filterLedgerList(customerId) async {
+    ProgressDialog pr = ProgressDialog(
+      context,
+      type: ProgressDialogType.Normal,
+      isDismissible: false,
+    );
+    pr.style(
+      message: 'Please wait...',
+      progressWidget: Center(child: CircularProgressIndicator()),
+    );
+    pr.show();
+    var response = await http.post(
+        Uri.parse(
+            "http://loccon.in/desiremoulding/api/UserApiController/customerLedgerFilter"),
+        body: {
+          'secretkey': Connection.secretKey,
+          'customer_id': "83",
+          'start_date': fromDateinput.text,
+          'end_date': toDateinput.text
+        });
+
+    var results = json.decode(response.body);
+    print('response == $results  ${response.body}');
+    pr.hide();
+    if (results['status'] == true) {
+      var result = json.decode(response.body);
+      print("ledger list response $result");
+
+      ledgermodel = LedgerModel.fromJson(result);
+      setState(() {
+        if (ledgermodel.customerLedger != null &&
+            ledgermodel.customerLedger.length > 0) {
+          asyncSnapshot.clear();
+          asyncSnapshot.addAll(ledgermodel.customerLedger);
+        }
+      });
+      print(ledgermodel.customerLedger.length);
+      // final snackBar = SnackBar(
+      //     content: Row(
+      //       children: [
+      //         Text(results['message']),
+      //       ],
+      //     ));
+      // ScaffoldMessenger.of(context).showSnackBar(snackBar);
+
+      //Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (builder)=>AccessoryDetailPage(product: widget.product,page: widget.page,snapshot: widget.snapshot,status: true, orderCount: widget.orderCount,)), (route) => false);
+    } else {
+      if (results['customerLedger'] != null &&
+          results['customerLedger'].length > 0) {
+        final snackBar = SnackBar(content: Text(results['message'].toString()));
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      }
+    }
+    pr.hide();
   }
 }
 

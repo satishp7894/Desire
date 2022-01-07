@@ -4,6 +4,8 @@ import 'package:desire_users/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'invoice_detail_page.dart';
+
 class InvoiceListPage extends StatefulWidget {
 
   final customerId, customerName;
@@ -123,7 +125,12 @@ class InvoicesTile extends StatelessWidget {
                   style: TextButton.styleFrom(
                     backgroundColor: kPrimaryColor
                   ),
-                  onPressed: (){}, child: Text("View & Download Invoice",style: TextStyle(color: kWhiteColor),))
+                  onPressed: (){
+                    Navigator.push(context, MaterialPageRoute(builder: (context)=>InvoiceDetailPage(
+                     id:customerInvoice.dispatchinvoiceid
+                    )));
+
+                  }, child: Text("View & Download Invoice",style: TextStyle(color: kWhiteColor),))
             ],
           ),
           SizedBox(height: 10,),
