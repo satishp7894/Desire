@@ -1002,16 +1002,16 @@ class _AddNewInvoiceOrderPageState extends State<AddNewInvoiceOrderPage> {
                                                                             () {
                                                                           check[i] =
                                                                               true;
-                                                                          data[i].isSelected =
+                                                                          _searchResultWarhouse[i].isSelected =
                                                                               true;
-                                                                          data[i].totalStick =
+                                                                          _searchResultWarhouse[i].totalStick =
                                                                               int.parse(text);
-                                                                          data[i].totalPrice =
-                                                                              (int.parse(text) * int.parse(data[i].mrpPrice));
+                                                                          _searchResultWarhouse[i].totalPrice =
+                                                                              (int.parse(text) * int.parse(_searchResultWarhouse[i].mrpPrice));
                                                                           // OrderDetailsUpdate(data.orderDetails[i].orderdetailId,text,(int.parse(text) * int.parse(data.orderDetails[i].invoicePrice)).toString());
                                                                         });
                                                                       },
-                                                                      initialValue: data[i].totalStick.toString(),
+                                                                      initialValue: _searchResultWarhouse[i].totalStick.toString(),
                                                                       maxLines: 1,
                                                                       textAlign: TextAlign.center,
                                                                       maxLength: 4,

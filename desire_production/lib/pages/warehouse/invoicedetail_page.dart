@@ -1028,19 +1028,18 @@ class _InvoiceDetailPageState extends State<InvoiceDetailPage> {
                                                                             () {
                                                                           check[i] =
                                                                               true;
-                                                                          data.orderDetails[i].isSelected =
+                                                                          _searchResult[i].isSelected =
                                                                               true;
-                                                                          data.orderDetails[i].invoiceTotalStick =
+                                                                          _searchResult[i].invoiceTotalStick =
                                                                               text;
-                                                                          data.orderDetails[i].invoiceTotalPrice =
-                                                                              (int.parse(text) * int.parse(data.orderDetails[i].invoicePrice)).toString();
+                                                                          _searchResult[i].invoiceTotalPrice =
+                                                                              (int.parse(text) * int.parse(_searchResult[i].invoicePrice)).toString();
                                                                           // OrderDetailsUpdate(data.orderDetails[i].orderdetailId,text,(int.parse(text) * int.parse(data.orderDetails[i].invoicePrice)).toString());
-                                                                          customerID = data
-                                                                              .orderDetails[i]
+                                                                          customerID = _searchResult[i]
                                                                               .customerId;
                                                                         });
                                                                       },
-                                                                      initialValue: data.orderDetails[i].invoiceTotalStick,
+                                                                      initialValue: _searchResult[i].invoiceTotalStick,
                                                                       maxLines: 1,
                                                                       textAlign: TextAlign.center,
                                                                       maxLength: 4,
