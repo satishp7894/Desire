@@ -26,6 +26,14 @@ class InvoiceDetailModel {
     }
     return data;
   }
+
+  List<Map<String, dynamic>> toPostJson() {
+    return this
+        .invoiceProducts
+        .where((v) => v.isSelected)
+        .map((v) => v.toPostJson())
+        .toList();
+  }
 }
 
 class InvoiceProducts {
@@ -37,6 +45,8 @@ class InvoiceProducts {
   String productName;
   String modelNoId;
   String productQuantity;
+  bool isSelected = false;
+  int changeQuantity = 0;
 
   InvoiceProducts(
       {this.dispatchInvoiceId,
@@ -69,6 +79,15 @@ class InvoiceProducts {
     data['product_name'] = this.productName;
     data['model_no_id'] = this.modelNoId;
     data['product_quantity'] = this.productQuantity;
+    return data;
+  }
+
+  Map<String, dynamic> toPostJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['order_id'] = this.orderId;
+    data['orderdetail_id'] = this.orderdetailId;
+    data['product_id'] = this.productId;
+    data['return_qty'] = this.changeQuantity;
     return data;
   }
 }

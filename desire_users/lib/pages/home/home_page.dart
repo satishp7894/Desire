@@ -506,7 +506,7 @@ class _HomePageState extends State<HomePage> {
                 padding: const EdgeInsets.only(left: 10.0,right: 10,top: 5,bottom: 5),
                 child: GestureDetector(
                   onTap: (){
-                    Navigator.push(context, MaterialPageRoute(builder: (builder) => InvoiceListPage(customerId: widget.customerId,customerName: widget.customerName,)));
+                    Navigator.push(context, MaterialPageRoute(builder: (builder) => InvoiceListPage(customerId: widget.customerId,customerName: widget.customerName,type: 0,)));
 
                   },
                   child: Row(
@@ -691,7 +691,7 @@ class _HomePageState extends State<HomePage> {
                 padding: const EdgeInsets.only(left: 10.0,right: 10,top: 5,bottom: 5),
                 child: GestureDetector(
                   onTap: (){
-
+                    Navigator.push(context, MaterialPageRoute(builder: (builder) => InvoiceListPage(customerId: widget.customerId,customerName: widget.customerName,type: 1,)));
                   },
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,

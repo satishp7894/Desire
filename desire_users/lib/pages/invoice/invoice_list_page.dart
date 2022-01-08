@@ -1,15 +1,18 @@
 import 'package:desire_users/bloc/invoice_bloc.dart';
+import 'package:desire_users/components/default_button.dart';
 import 'package:desire_users/models/invoice_model.dart';
+import 'package:desire_users/pages/return_material/submit_return_material.dart';
 import 'package:desire_users/utils/constants.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'invoice_detail_page.dart';
 
 class InvoiceListPage extends StatefulWidget {
 
-  final customerId, customerName;
-  const InvoiceListPage({Key key,this.customerId,this.customerName}) : super(key: key);
+  final customerId, customerName, type;
+  const InvoiceListPage({Key key,this.customerId,this.customerName, this.type}) : super(key: key);
 
   @override
   _InvoiceListPageState createState() => _InvoiceListPageState();
@@ -18,6 +21,9 @@ class InvoiceListPage extends StatefulWidget {
 class _InvoiceListPageState extends State<InvoiceListPage> {
   final InvoiceBloc invoiceBloc =  InvoiceBloc();
   AsyncSnapshot<InvoiceModel> asyncSnapshot;
+  TextEditingController fromDateinput = TextEditingController();
+  TextEditingController toDateinput = TextEditingController();
+
 
 
   String customerName = "";
@@ -87,8 +93,121 @@ class _InvoiceListPageState extends State<InvoiceListPage> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  Column(
+                    children: [
+                      Center(
+                          child: TextField(
+                            controller: fromDateinput,
+                            //editing controller of this TextField
+                            decoration: InputDecoration(
+                                icon: Icon(Icons.calendar_today),
+                                //icon of text field
+                                labelText: "Enter Start Date" //label text of field
+                            ),
+                            readOnly: true,
+                            //set it true, so that user will not able to edit text
+                            onTap: () async {
+                              DateTime pickedDate = await showDatePicker(
+                                  context: context,
+                                  initialDate: DateTime.now(),
+                                  firstDate: DateTime(2000),
+                                  //DateTime.now() - not to allow to choose before today.
+                                  lastDate: DateTime(2101));
+
+                              if (pickedDate != null) {
+                                print(
+                                    pickedDate); //pickedDate output format => 2021-03-10 00:00:00.000
+
+                                setState(() {
+                                  fromDateinput.text =
+                                      DateFormat('yyyy-MM-dd').format(pickedDate);
+                                  //set output date to TextField value.
+                                });
+                              } else {
+                                print("Date is not selected");
+                              }
+                            },
+                          )),
+                      Container(
+                        margin: EdgeInsets.only(bottom: 10),
+                        child: Center(
+                            child: TextField(
+                              controller: toDateinput,
+                              //editing controller of this TextField
+                              decoration: InputDecoration(
+                                  icon: Icon(Icons.calendar_today),
+                                  //icon of text field
+                                  labelText: "Enter End Date" //label text of field
+                              ),
+                              readOnly: true,
+                              //set it true, so that user will not able to edit text
+                              onTap: () async {
+                                DateTime pickedDate = await showDatePicker(
+                                    context: context,
+                                    initialDate: DateTime.now(),
+                                    firstDate: DateTime(2000),
+                                    lastDate: DateTime(2101));
+
+                                if (pickedDate != null) {
+                                  print(
+                                      pickedDate); //pickedDate output format => 2021-03-10 00:00:00.000
+
+                                  setState(() {
+                                    toDateinput.text = DateFormat('yyyy-MM-dd').format(
+                                        pickedDate); //set output date to TextField value.
+                                  });
+                                } else {
+                                  print("Date is not selected");
+                                }
+                              },
+                            )),
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Center(
+                            child: Container(
+                              width: 150,
+                              height: 50,
+                              child: DefaultButton(
+                                text: "Filter",
+                                press: () {
+                                  // if (fromDateinput.text != "" &&
+                                  //     toDateinput.text != "") {
+                                  //   filterLedgerList(widget.customerId);
+                                  // } else {
+                                  //   final snackBar = SnackBar(
+                                  //       content: Text(
+                                  //           "Please Enter Start Date and End Date."));
+                                  //   ScaffoldMessenger.of(context)
+                                  //       .showSnackBar(snackBar);
+                                  // }
+                                },
+                              ),
+                            ),
+                          ),
+                          Center(
+                            child: Container(
+                              width: 150,
+                              height: 50,
+                              child: DefaultButton(
+                                text: "Clear Filter",
+                                press: () {
+                                  // fromDateinput.clear();
+                                  // toDateinput.clear();
+                                  // asyncSnapshot.clear();
+                                  // ledgerBloc.fetchLedger(widget.customerId);
+                                },
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
                   ...List.generate(asyncSnapshot.data.customerInvoice.length, (index) => InvoicesTile(
-                    customerInvoice: asyncSnapshot.data.customerInvoice[index],
+                    customerInvoice: asyncSnapshot.data.customerInvoice[index],type: widget.type,customerId:widget.customerId
                   ))
                 ],
               ),
@@ -103,8 +222,10 @@ class _InvoiceListPageState extends State<InvoiceListPage> {
 class InvoicesTile extends StatelessWidget {
 
  final  CustomerInvoice customerInvoice;
+ final type;
+ final customerId;
 
-  const InvoicesTile({Key key,this.customerInvoice}) : super(key: key);
+  const InvoicesTile({Key key,this.customerInvoice, this.type, this.customerId}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -126,9 +247,19 @@ class InvoicesTile extends StatelessWidget {
                     backgroundColor: kPrimaryColor
                   ),
                   onPressed: (){
-                    Navigator.push(context, MaterialPageRoute(builder: (context)=>InvoiceDetailPage(
-                     id:customerInvoice.dispatchinvoiceid
-                    )));
+                    if(type == 0) {
+                      Navigator.push(
+                          context, MaterialPageRoute(builder: (context) =>
+                          InvoiceDetailPage(
+                              id: customerInvoice.dispatchinvoiceid
+                          )));
+                    }else{
+                      Navigator.push(
+                          context, MaterialPageRoute(builder: (context) =>
+                          SubmitReturnMaterial(
+                              id: customerInvoice.dispatchinvoiceid, customerId: customerId
+                          )));
+                    }
 
                   }, child: Text("View & Download Invoice",style: TextStyle(color: kWhiteColor),))
             ],
