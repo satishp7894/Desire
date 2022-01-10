@@ -34,6 +34,13 @@ class InvoiceDetailModel {
         .map((v) => v.toPostJson())
         .toList();
   }
+  List<Map<String, dynamic>> toPostJsonComplaint() {
+    return this
+        .invoiceProducts
+        .where((v) => v.isSelected)
+        .map((v) => v.toPostJsonComplaint())
+        .toList();
+  }
 }
 
 class InvoiceProducts {
@@ -87,7 +94,15 @@ class InvoiceProducts {
     data['order_id'] = this.orderId;
     data['orderdetail_id'] = this.orderdetailId;
     data['product_id'] = this.productId;
-    data['return_qty'] = this.changeQuantity;
+    data['return_qty'] =  this.changeQuantity == 0 ? this.productQuantity: this.changeQuantity;
+    return data;
+  }
+
+  Map<String, dynamic> toPostJsonComplaint() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['order_id'] = this.orderId;
+    data['orderdetail_id'] = this.orderdetailId;
+    data['product_id'] = this.productId;
     return data;
   }
 }

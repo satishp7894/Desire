@@ -70,4 +70,6 @@ class CustomerChat {
     data['date'] = this.date;
     return data;
   }
+
+
 }

@@ -158,11 +158,10 @@ class ApiClient {
     return allModel;
   }
 
-  Future<CustomerChatDetailsModel> getCustomerChatDetails(String customerId , String receiverId) async {
+  Future<CustomerChatDetailsModel> getCustomerChatDetails(String conversionId) async {
     var response = await http.post(Uri.parse("http://loccon.in/desiremoulding/api/UserApiController/customerChatDetails"), body: {
       "secretkey" : r"12!@34#$5%",
-      "customer_id": customerId,
-      "receiver_id": receiverId,
+      "conversation_id": conversionId,
 
     });
     var result = json.decode(response.body);
@@ -592,7 +591,7 @@ class ApiClient {
 
     var response = await http.post(Uri.parse(Connection.customerLedger), body: {
       "secretkey" : Connection.secretKey,
-      "customer_id" : "83"
+      "customer_id" : customerId
     });
 
     var result = json.decode(response.body);

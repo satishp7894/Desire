@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:desire_users/bloc/invoice_detail_bloc.dart';
 import 'package:desire_users/models/invoice_detail_model.dart';
+import 'package:desire_users/pages/complaint/add_complaint.dart';
 import 'package:desire_users/sales/utils_sales/alerts.dart';
 import 'package:desire_users/sales/utils_sales/progress_dialog.dart';
 import 'package:desire_users/services/connection.dart';
@@ -15,8 +16,10 @@ import 'package:shared_preferences/shared_preferences.dart';
 class SubmitReturnMaterial extends StatefulWidget {
   final id;
   final customerId;
+  final type;
 
-  const SubmitReturnMaterial({Key key, this.id, this.customerId}) : super(key: key);
+  const SubmitReturnMaterial({Key key, this.id, this.customerId, this.type})
+      : super(key: key);
 
   @override
   _SubmitReturnMaterialState createState() => _SubmitReturnMaterialState();
@@ -36,13 +39,13 @@ class _SubmitReturnMaterialState extends State<SubmitReturnMaterial> {
   TextEditingController fromDateinput = TextEditingController();
   TextEditingController toDateinput = TextEditingController();
   TextEditingController searchViewController = TextEditingController();
-  
+  final descriptionController = TextEditingController();
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    invoiceDetailBloc.fetchInvoiceDetails("11");
+    invoiceDetailBloc.fetchInvoiceDetails(widget.id);
   }
 
   @override
@@ -59,7 +62,7 @@ class _SubmitReturnMaterialState extends State<SubmitReturnMaterial> {
       appBar: AppBar(
           backgroundColor: kWhiteColor,
           iconTheme: IconThemeData(color: kBlackColor),
-          title: Text("Return Material"),
+          title: Text(widget.type == 0 ? "Return Material" : "Complaint"),
           titleTextStyle: TextStyle(
               color: kBlackColor, fontSize: 18, fontWeight: FontWeight.bold),
           centerTitle: true,
@@ -67,21 +70,88 @@ class _SubmitReturnMaterialState extends State<SubmitReturnMaterial> {
             preferredSize: Size.fromHeight(50),
             child: _searchView(),
           )),
-      floatingActionButton: FloatingActionButton.extended(
-        backgroundColor: kPrimaryColor,
-        onPressed: () {
-          sumbitMaterial(widget.id, widget.customerId);
-        },
-        label: Text(
-          "Return Material",
-          style: TextStyle(color: kWhiteColor),
-        ),
-        icon: Icon(
-          Icons.assignment_return,
-          color: kWhiteColor,
-        ),
+      floatingActionButton: widget.type == 0
+          ? FloatingActionButton.extended(
+              backgroundColor: kPrimaryColor,
+              onPressed: () {
+                if (check.contains(true)) {
+                  sumbitMaterial(widget.id, widget.customerId);
+                }else{
+                  Alerts.showAlertAndBack(
+                      context, "Error", "Please check atleast one item");
+                }
+              },
+              label: Text(
+                "Return Material",
+                style: TextStyle(color: kWhiteColor),
+              ),
+              icon: Icon(
+                Icons.assignment_return,
+                color: kWhiteColor,
+              ),
+            )
+          : FloatingActionButton.extended(
+              backgroundColor: kPrimaryColor,
+              onPressed: () {
+                if (check.contains(true)) {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => AddComplaint(
+                                customerId: widget.customerId,
+                                invoiceId: widget.id,
+                                orderdetails_list:
+                                    jsonEncode(as.toPostJsonComplaint()),
+                              )));
+                } else {
+                  Alerts.showAlertAndBack(
+                      context, "Error", "Please check atleast one item");
+                }
+              },
+              label: Text(
+                "Add Complaint",
+                style: TextStyle(color: kWhiteColor),
+              ),
+              icon: Icon(
+                Icons.feedback,
+                color: kWhiteColor,
+              ),
+            ),
+      body: Stack(
+        children: <Widget>[
+          Container(
+            child: _body(),
+          ),
+          widget.type == 0
+              ? Align(
+                  alignment: Alignment.bottomCenter,
+                  child: Container(
+                    margin: EdgeInsets.only(bottom: 100, right: 20, left: 20),
+                    child: TextFormField(
+                      cursorColor: kSecondaryColor,
+                      controller: descriptionController,
+                      keyboardType: TextInputType.multiline,
+                      decoration: InputDecoration(
+                          floatingLabelBehavior: FloatingLabelBehavior.always,
+                          labelText: "Description",
+                          hintText: "Enter Description",
+                          labelStyle:
+                              TextStyle(color: kPrimaryColor, fontSize: 14),
+                          hintStyle:
+                              TextStyle(color: kSecondaryColor, fontSize: 12),
+                          border: OutlineInputBorder(
+                            borderSide: BorderSide(color: kSecondaryColor),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: kPrimaryColor),
+                          )),
+                      maxLength: 500,
+                      maxLines: 5,
+                    ),
+                  ))
+              : Container()
+        ],
       ),
-      body: _body(),
     );
   }
 
@@ -557,6 +627,10 @@ class _SubmitReturnMaterialState extends State<SubmitReturnMaterial> {
                                                                     i]
                                                                 .productQuantity,
                                                             maxLines: 1,
+                                                            enabled:
+                                                                widget.type == 0
+                                                                    ? true
+                                                                    : false,
                                                             textAlign: TextAlign
                                                                 .center,
                                                             maxLength: 4,
@@ -934,6 +1008,10 @@ class _SubmitReturnMaterialState extends State<SubmitReturnMaterial> {
                                                                 _searchResult[i]
                                                                     .productQuantity,
                                                             maxLines: 1,
+                                                            enabled:
+                                                                widget.type == 0
+                                                                    ? true
+                                                                    : false,
                                                             textAlign: TextAlign
                                                                 .center,
                                                             maxLength: 4,
@@ -999,7 +1077,7 @@ class _SubmitReturnMaterialState extends State<SubmitReturnMaterial> {
       'customer_id': customerId,
       'invoice_id': id,
       'orderdetails_list': jsonEncode(as.toPostJson()),
-      'description': "test return material"
+      'description': descriptionController.text
     });
     pr.hide();
     if (response.statusCode == 200) {

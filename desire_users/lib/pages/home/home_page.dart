@@ -613,7 +613,7 @@ class _HomePageState extends State<HomePage> {
                 child: GestureDetector(
                   onTap: (){
 
-                    Navigator.push(context, MaterialPageRoute(builder: (context)=>AddComplaint()));
+                    Navigator.push(context, MaterialPageRoute(builder: (builder) => InvoiceListPage(customerId: widget.customerId,customerName: widget.customerName,type: 2,)));
 
                   },
                   child: Row(

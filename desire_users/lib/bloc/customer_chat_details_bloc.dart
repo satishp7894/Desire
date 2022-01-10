@@ -11,9 +11,9 @@ class CustomerChatDetailsBloc {
 
   Stream<CustomerChatDetailsModel> get customerChatDetailsStream => _customerChatDetailsController.stream;
 
-  fetchCustomerChatDetails(String customerId,String receiverId) async {
+  fetchCustomerChatDetails(String conversionId) async {
     try {
-      final results = await _apiClient.getCustomerChatDetails(customerId,receiverId);
+      final results = await _apiClient.getCustomerChatDetails(conversionId);
       _customerChatDetailsController.sink.add(results);
       print("CustomerChatDetailsBloc ${results.status}");
 

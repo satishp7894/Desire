@@ -373,7 +373,7 @@ class _CustomerLedgerPageState extends State<CustomerLedgerPage> {
             "http://loccon.in/desiremoulding/api/UserApiController/customerLedgerFilter"),
         body: {
           'secretkey': Connection.secretKey,
-          'customer_id': "83",
+          'customer_id': customerId,
           'start_date': fromDateinput.text,
           'end_date': toDateinput.text
         });
