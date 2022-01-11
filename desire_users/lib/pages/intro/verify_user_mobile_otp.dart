@@ -1,5 +1,7 @@
+import 'dart:async';
+
 import 'package:data_connection_checker/data_connection_checker.dart';
-import 'package:desire_users/pages/intro/select_card_type.dart';
+import 'package:desire_users/pages/intro/signup_page.dart';
 import 'package:desire_users/sales/pages/customer/add_customer_kyc_page.dart';
 import 'package:desire_users/sales/utils_sales/alerts.dart';
 import 'package:desire_users/sales/utils_sales/validator.dart';
@@ -8,21 +10,17 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:pin_code_text_field/pin_code_text_field.dart';
 
-
-class CustomerOtpPage extends StatefulWidget {
+class VerifyUserMobileOTP extends StatefulWidget {
   final String mob;
-  final String customerId;
-  final String salesId;
-  final String name;
-  final String email;
 
-  const CustomerOtpPage({@required this.mob, @required this.customerId, @required this.salesId,@required this.name, @required this.email});
+  const VerifyUserMobileOTP({@required this.mob});
+
   @override
-  _CustomerOtpPageState createState() => _CustomerOtpPageState();
+  _VerifyUserMobileOTPState createState() => _VerifyUserMobileOTPState();
 }
 
-class _CustomerOtpPageState extends State<CustomerOtpPage>  with Validator{
-
+class _VerifyUserMobileOTPState extends State<VerifyUserMobileOTP>
+    with Validator {
   TextEditingController _otpController;
   String otp;
   var count;
@@ -36,17 +34,18 @@ class _CustomerOtpPageState extends State<CustomerOtpPage>  with Validator{
     _otpController = TextEditingController();
     _verifyPhone();
   }
-  checkConnectivity() async{
+
+  checkConnectivity() async {
     bool result = await DataConnectionChecker().hasConnection;
-    if(result == true) {
+    if (result == true) {
       print('YAY! Free cute dog pics!');
     } else {
       print('No internet :( Reason:');
       print(DataConnectionChecker().lastTryResults);
-      Alerts.showAlertAndBack(context, "No Internet Connection", "Please check your internet");
+      Alerts.showAlertAndBack(
+          context, "No Internet Connection", "Please check your internet");
     }
   }
-
 
   @override
   void dispose() {
@@ -54,10 +53,53 @@ class _CustomerOtpPageState extends State<CustomerOtpPage>  with Validator{
     _otpController.dispose();
   }
 
+  Future<bool> _verifyPhone() async {
+    var completer = Completer<bool>();
+
+    await FirebaseAuth.instance.verifyPhoneNumber(
+        phoneNumber: '+91 ${widget.mob}',
+        verificationCompleted: (PhoneAuthCredential credential) async {
+          await FirebaseAuth.instance
+              .signInWithCredential(credential)
+              .then((value) async {
+            if (value.user != null) {
+              // _initOneSignal();
+              // widget.page == "login" ? getLoginDetails() : getDetails();
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => SignUpPage(
+                          mobile: widget.mob,
+                        )),
+              );
+            }
+          });
+        },
+        verificationFailed: (FirebaseAuthException e) {
+          print(e.message);
+        },
+        codeSent: (String verificationID, int resendToken) {
+          setState(() {
+            _verificationCode = verificationID;
+          });
+        },
+        codeAutoRetrievalTimeout: (String verificationID) {
+          setState(() {
+            if (mounted) {
+              setState(() {
+                _verificationCode = verificationID;
+              });
+            }
+          });
+        },
+        timeout: Duration(seconds: 120));
+
+    return completer.future;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-
       body: Container(
         color: Colors.grey.shade200,
         alignment: Alignment.center,
@@ -72,25 +114,38 @@ class _CustomerOtpPageState extends State<CustomerOtpPage>  with Validator{
                 "OTP Verification",
                 style: headingStyle,
               ),
-              SizedBox(height: 20,),
-              Text("We sent your code to ${widget.mob.replaceRange(0, 6, "******")}"),
+              SizedBox(
+                height: 20,
+              ),
+              Text(
+                  "We sent your code to ${widget.mob.replaceRange(0, 6, "******")}"),
               buildTimer(),
-              count == 0.0 ? TextButton(
-                child: Text("Resend OTP Code", style: TextStyle(decoration: TextDecoration.underline, color: Colors.indigoAccent),),
-                onPressed: (){
-                  _verifyPhone();
-                },
-              ) : Container(),
-              SizedBox(height: 20,),
+              count == 0.0
+                  ? TextButton(
+                      child: Text(
+                        "Resend OTP Code",
+                        style: TextStyle(
+                            decoration: TextDecoration.underline,
+                            color: Colors.indigoAccent),
+                      ),
+                      onPressed: () {
+                        _verifyPhone();
+                      },
+                    )
+                  : Container(),
+              SizedBox(
+                height: 20,
+              ),
               Column(
-                children:[
+                children: [
                   PinCodeTextField(
                     controller: _otpController,
                     highlightColor: Colors.white,
                     highlightAnimation: true,
                     highlightAnimationBeginColor: Colors.white,
                     highlightAnimationEndColor: Theme.of(context).primaryColor,
-                    pinTextAnimatedSwitcherDuration: Duration(milliseconds: 500),
+                    pinTextAnimatedSwitcherDuration:
+                        Duration(milliseconds: 500),
                     wrapAlignment: WrapAlignment.center,
                     hasTextBorderColor: Colors.transparent,
                     highlightPinBoxColor: Colors.white,
@@ -102,43 +157,56 @@ class _CustomerOtpPageState extends State<CustomerOtpPage>  with Validator{
                     pinBoxColor: Color.fromRGBO(255, 255, 255, 0.8),
                     maxLength: 6,
                   ),
-                  SizedBox(height: 20,),
+                  SizedBox(
+                    height: 20,
+                  ),
                   SizedBox(
                     width: double.infinity,
                     height: 56,
                     child: TextButton(
                       style: TextButton.styleFrom(
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20)),
                           primary: kPrimaryColor,
-                          backgroundColor: kPrimaryColor
-                      ),
-                      onPressed: () async{
+                          backgroundColor: kPrimaryColor),
+                      onPressed: () async {
                         setState(() {
                           otp = _otpController.text.trim();
                         });
 
-                        if(otp == null || otp.length<6){
-                          final snackBar = SnackBar(content: Text('Please Enter OTP sent on your registered number'));
+                        if (otp == null || otp.length < 6) {
+                          final snackBar = SnackBar(
+                              content: Text(
+                                  'Please Enter OTP sent on your registered number'));
                           ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                        } else{
+                        } else {
                           try {
                             await FirebaseAuth.instance
-                                .signInWithCredential(PhoneAuthProvider.credential(
-                                verificationId: _verificationCode, smsCode: _otpController.text))
+                                .signInWithCredential(
+                                    PhoneAuthProvider.credential(
+                                        verificationId: _verificationCode,
+                                        smsCode: _otpController.text))
                                 .then((value) async {
                               if (value.user != null) {
                                 //_initOneSignal();
                                 //widget.page == "login" ? getLoginDetails() : getDetails();
-                                Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (builder) => SelectCardType(userId: widget.customerId)), (route) => false);
+                                Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => SignUpPage(
+                                            mobile: widget.mob,
+                                          )),
+                                );
                               }
                             });
                           } catch (e) {
                             FocusScope.of(context).unfocus();
-                            final snackBar = SnackBar(content: Text('Invalid OTP'));
-                            ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                            final snackBar =
+                                SnackBar(content: Text('Invalid OTP'));
+                            ScaffoldMessenger.of(context)
+                                .showSnackBar(snackBar);
                           }
                         }
-
                       },
                       child: Text(
                         "Continue",
@@ -167,50 +235,14 @@ class _CustomerOtpPageState extends State<CustomerOtpPage>  with Validator{
             tween: Tween(begin: 60, end: 0.0),
             duration: Duration(seconds: 60),
             builder: (_, value, child) {
-              print("object value for count $value");
+              // print("object value for count $value");
               count = value;
               return Text(
                 "0:${value.toInt()}",
                 style: TextStyle(color: kPrimaryColor),
               );
-            }
-        ),
+            }),
       ],
     );
-  }
-
-  _verifyPhone() async {
-    print("object mobile number ${widget.mob}");
-    await FirebaseAuth.instance.verifyPhoneNumber(
-        phoneNumber: '+91${widget.mob}',
-        verificationCompleted: (PhoneAuthCredential credential) async {
-          await FirebaseAuth.instance
-              .signInWithCredential(credential)
-              .then((value) async {
-            if (value.user != null) {
-              // _initOneSignal();
-              // widget.page == "login" ? getLoginDetails() : getDetails();
-              Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (builder) => SelectCardType(userId: widget.customerId)), (route) => false);
-            }
-          });
-        },
-        verificationFailed: (FirebaseAuthException e) {
-          print(e.message);
-        },
-        codeSent: (String verificationID, int resendToken) {
-          setState(() {
-            _verificationCode = verificationID;
-          });
-        },
-        codeAutoRetrievalTimeout: (String verificationID) {
-          setState(() {
-            if (mounted) {
-              setState(() {
-                _verificationCode = verificationID;
-              });
-            }
-          });
-        },
-        timeout: Duration(seconds: 120));
   }
 }

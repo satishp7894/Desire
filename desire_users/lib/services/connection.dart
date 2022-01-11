@@ -95,5 +95,9 @@ static String categoryWiseModelNo = "http://loccon.in/desiremoulding/api/UserApi
 
   static final String submitCustomerComplaint = ip+"submitCustomerComplaint";
 
+  static final String customerNotificationList = ip+"customerNotificationList";
+
+  static final String clearCustomerNotification = ip+"clearCustomerNotification";
+
 
 }

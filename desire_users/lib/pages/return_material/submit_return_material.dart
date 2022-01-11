@@ -45,7 +45,7 @@ class _SubmitReturnMaterialState extends State<SubmitReturnMaterial> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    invoiceDetailBloc.fetchInvoiceDetails(widget.id);
+    invoiceDetailBloc.fetchInvoiceDetails("11");
   }
 
   @override

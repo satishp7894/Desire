@@ -2,6 +2,7 @@ import 'package:data_connection_checker/data_connection_checker.dart';
 import 'package:desire_users/bloc/complete_order_bloc.dart';
 import 'package:desire_users/bloc/hold_order_bloc.dart';
 import 'package:desire_users/bloc/pending_order_list_bloc.dart';
+import 'package:desire_users/components/default_button.dart';
 import 'package:desire_users/models/complete_order_list_model.dart';
 import 'package:desire_users/models/pending_order_list_model.dart';
 import 'package:desire_users/pages/home/customer_price_list.dart';
@@ -9,6 +10,7 @@ import 'package:desire_users/sales/pages/orders/orderDetailsByIdPage.dart';
 import 'package:desire_users/sales/utils_sales/alerts.dart';
 import 'package:desire_users/utils/constants.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class CompleteOrderList extends StatefulWidget {
   final customerId;
@@ -24,6 +26,11 @@ class _CompleteOrderListState extends State<CompleteOrderList> {
   AsyncSnapshot<CompleteOrderListModel> asyncSnapshot;
   DateTime selectedDate = DateTime.now();
   TextEditingController dateinput = TextEditingController();
+  List<CompleteOrder> filterDate = [];
+  var toDate;
+  var fromDate;
+  TextEditingController fromDateinput = TextEditingController();
+  TextEditingController toDateinput = TextEditingController();
 
   Future<void> _selectDate(BuildContext context) async {
     final DateTime picked = await showDatePicker(
@@ -34,7 +41,7 @@ class _CompleteOrderListState extends State<CompleteOrderList> {
     if (picked != null && picked != selectedDate)
       setState(() {
         selectedDate = picked;
-        print("Date "+ selectedDate.toString());
+        print("Date " + selectedDate.toString());
       });
   }
 
@@ -84,8 +91,8 @@ class _CompleteOrderListState extends State<CompleteOrderList> {
             return Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
-                    builder: (builder) => CompleteOrderList(
-                        customerId: widget.customerId)));
+                    builder: (builder) =>
+                        CompleteOrderList(customerId: widget.customerId)));
           },
           child: _body(),
         ));
@@ -132,74 +139,140 @@ class _CompleteOrderListState extends State<CompleteOrderList> {
               child: Column(
                 children: [
                   Center(
-                      child:TextField(
-                        controller: dateinput, //editing controller of this TextField
-                        decoration: InputDecoration(
-                            icon: Icon(Icons.calendar_today), //icon of text field
-                            labelText: "Enter From Date" //label text of field
+                      child: TextField(
+                    controller: fromDateinput,
+                    //editing controller of this TextField
+                    decoration: InputDecoration(
+                        icon: Icon(Icons.calendar_today),
+                        //icon of text field
+                        labelText: "Enter Start Date" //label text of field
                         ),
-                        readOnly: true,  //set it true, so that user will not able to edit text
-                        onTap: () async {
-                          DateTime pickedDate = await showDatePicker(
-                              context: context, initialDate: DateTime.now(),
-                              firstDate: DateTime(2000), //DateTime.now() - not to allow to choose before today.
-                              lastDate: DateTime(2101)
-                          );
+                    readOnly: true,
+                    //set it true, so that user will not able to edit text
+                    onTap: () async {
+                      DateTime pickedDate = await showDatePicker(
+                          context: context,
+                          initialDate: DateTime.now(),
+                          firstDate: DateTime(2000),
+                          //DateTime.now() - not to allow to choose before today.
+                          lastDate: DateTime(2101));
 
-                          if(pickedDate != null ){
-                            print(pickedDate);  //pickedDate output format => 2021-03-10 00:00:00.000
-
-
-                            setState(() {
-                              dateinput.text = pickedDate.toString(); //set output date to TextField value.
-                            });
-                          }else{
-                            print("Date is not selected");
-                          }
-                        },
-                      )
-                  ),
+                      if (pickedDate != null) {
+                        print(
+                            pickedDate); //pickedDate output format => 2021-03-10 00:00:00.000
+                        setState(() {
+                          fromDate = pickedDate;
+                          fromDateinput.text =
+                              DateFormat('yyyy-MM-dd').format(pickedDate);
+                          //set output date to TextField value.
+                        });
+                      } else {
+                        print("Date is not selected");
+                      }
+                    },
+                  )),
                   Center(
-                      child:TextField(
-                        controller: dateinput, //editing controller of this TextField
-                        decoration: InputDecoration(
-                            icon: Icon(Icons.calendar_today), //icon of text field
-                            labelText: "Enter To Date" //label text of field
+                      child: TextField(
+                    controller: toDateinput,
+                    //editing controller of this TextField
+                    decoration: InputDecoration(
+                        icon: Icon(Icons.calendar_today),
+                        //icon of text field
+                        labelText: "Enter To Date" //label text of field
                         ),
-                        readOnly: true,  //set it true, so that user will not able to edit text
-                        onTap: () async {
-                          DateTime pickedDate = await showDatePicker(
-                              context: context, initialDate: DateTime.now(),
-                              firstDate: DateTime(2000), //DateTime.now() - not to allow to choose before today.
-                              lastDate: DateTime(2101)
-                          );
+                    readOnly: true,
+                    //set it true, so that user will not able to edit text
+                    onTap: () async {
+                      DateTime pickedDate = await showDatePicker(
+                          context: context,
+                          initialDate: DateTime.now(),
+                          firstDate: DateTime(2000),
+                          //DateTime.now() - not to allow to choose before today.
+                          lastDate: DateTime(2101));
 
-                          if(pickedDate != null ){
-                            print(pickedDate);  //pickedDate output format => 2021-03-10 00:00:00.000
-
-
-                            setState(() {
-                              dateinput.text = pickedDate.toString(); //set output date to TextField value.
-                            });
-                          }else{
-                            print("Date is not selected");
-                          }
-                        },
-                      )
+                      if (pickedDate != null) {
+                        print(
+                            pickedDate); //pickedDate output format => 2021-03-10 00:00:00.000
+                        setState(() {
+                          toDate = pickedDate;
+                          toDateinput.text = DateFormat('yyyy-MM-dd').format(
+                              pickedDate); //set output date to TextField value.
+                        });
+                      } else {
+                        print("Date is not selected");
+                      }
+                    },
+                  )),
+                  Container(
+                    margin: EdgeInsets.only(top: 10),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Center(
+                          child: Container(
+                            width: 150,
+                            height: 50,
+                            child: DefaultButton(
+                              text: "Filter",
+                              press: () {
+                                filterList();
+                              },
+                            ),
+                          ),
+                        ),
+                        Center(
+                          child: Container(
+                            width: 150,
+                            height: 50,
+                            child: DefaultButton(
+                              text: "Clear Filter",
+                              press: () {
+                                setState(() {
+                                  fromDateinput.clear();
+                                  toDateinput.clear();
+                                  filterDate.clear();
+                                });
+                              },
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-
                   ...List.generate(
                       asyncSnapshot.data.completeOrder.length,
-                          (index) => ModelListTile(
+                      (index) => ModelListTile(
                             completeOrder:
-                        asyncSnapshot.data.completeOrder[index],
-                        customerId: widget.customerId,
-                      ))
+                                asyncSnapshot.data.completeOrder[index],
+                            customerId: widget.customerId,
+                          ))
                 ],
               ),
             );
           }
         });
+  }
+
+  void filterList() {
+    filterDate.clear();
+    asyncSnapshot.data.completeOrder
+        .map((item) => {
+              if (fromDate.isBefore(
+                      new DateFormat("yyyy-MM-dd").parse(item.complete_date)) &&
+                  toDate.isAfter(
+                      new DateFormat("yyyy-MM-dd").parse(item.complete_date)))
+                filterDate.add(item)
+            })
+        .toList();
+    setState(() {
+      print("filtered length >>>>" + filterDate.length.toString());
+      if (filterDate.length == 0) {
+        final snackBar =
+            SnackBar(content: Text('No invoice found between provided Date'));
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      }
+    });
   }
 }
 
@@ -312,10 +385,10 @@ class ModelListTile extends StatelessWidget {
                               context,
                               MaterialPageRoute(
                                   builder: (context) => OrderDetailsByIdPage(
-                                    customerId: customerId,
-                                    orderId: completeOrder.orderId,
-                                    orderName: completeOrder.orderNumber,
-                                  )));
+                                        customerId: customerId,
+                                        orderId: completeOrder.orderId,
+                                        orderName: completeOrder.orderNumber,
+                                      )));
                         },
                         child: Container(
                             decoration: BoxDecoration(

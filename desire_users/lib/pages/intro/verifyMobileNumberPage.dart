@@ -3,6 +3,8 @@ import 'dart:convert';
 import 'package:data_connection_checker/data_connection_checker.dart';
 import 'package:desire_users/pages/intro/new_login_page.dart';
 import 'package:desire_users/pages/intro/signup_page.dart';
+import 'package:desire_users/pages/intro/verify_user_mobile_otp.dart';
+import 'package:desire_users/sales/pages/customer/customer_otp_page.dart';
 import 'package:desire_users/sales/utils_sales/alerts.dart';
 import 'package:desire_users/sales/utils_sales/validator.dart';
 import 'package:desire_users/services/connection.dart';
@@ -176,6 +178,7 @@ class _VerifyMobileNumberPageState extends State<VerifyMobileNumberPage> with Va
         ScaffoldMessenger.of(context).showSnackBar(snackBar);
       }
       else if(results['status'] == false){
+
         final snackBar =
         SnackBar(content: Text("Mobile Number Not Registered."));
         ScaffoldMessenger.of(context).showSnackBar(snackBar);
@@ -183,9 +186,16 @@ class _VerifyMobileNumberPageState extends State<VerifyMobileNumberPage> with Va
           context,
           MaterialPageRoute(
               builder: (context) =>
-                  SignUpPage(
-                    mobile: mobileNumberController.text,
+              VerifyUserMobileOTP(
+                    mob: mobileNumberController.text,
                   )),);
+        // Navigator.pushReplacement(
+        //   context,
+        //   MaterialPageRoute(
+        //       builder: (context) =>
+        //           SignUpPage(
+        //             mobile: mobileNumberController.text,
+        //           )),);
       }
       else {
 

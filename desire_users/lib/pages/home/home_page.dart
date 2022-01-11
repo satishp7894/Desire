@@ -310,7 +310,7 @@ class _HomePageState extends State<HomePage> {
                   child: IconButton(
                       tooltip: "Notifications",
                       onPressed: (){
-                        Navigator.push(context, MaterialPageRoute(builder: (builder) => CustomerNotifications()));
+                        Navigator.push(context, MaterialPageRoute(builder: (builder) => CustomerNotifications(customerId: widget.customerId,)));
 
 
                       }, icon: Icon(Icons.notifications,color: kWhiteColor,size: 30,)),
