@@ -388,9 +388,9 @@ class _NewLoginPageState extends State<NewLoginPage> {
                         Icons.phone_android,
                         color: kPrimaryColor,
                       ),
-                      hintText: "Enter Username",
+                      hintText: "Enter your email",
                       hintStyle: TextStyle(color: kSecondaryColor,fontSize: 12),
-                      labelText: "Username",
+                      labelText: "Email",
                       labelStyle: TextStyle(color: kPrimaryColor),
                       floatingLabelBehavior: FloatingLabelBehavior.always,
                       focusedBorder: OutlineInputBorder(

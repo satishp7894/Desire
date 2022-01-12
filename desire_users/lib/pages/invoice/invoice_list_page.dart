@@ -33,6 +33,7 @@ class _InvoiceListPageState extends State<InvoiceListPage> {
 
   String customerName = "";
   String customerId = "";
+  bool isVisible = false;
 
   getUserDetails() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
@@ -60,6 +61,23 @@ class _InvoiceListPageState extends State<InvoiceListPage> {
         titleTextStyle: TextStyle(
             color: kBlackColor, fontSize: 18, fontWeight: FontWeight.bold),
         centerTitle: true,
+        actions: [
+          IconButton(
+              onPressed: () {
+                setState(() {
+                  if (isVisible) {
+                    isVisible = false;
+                  } else {
+                    isVisible = true;
+                  }
+                });
+              },
+              icon: Icon(
+                Icons.filter_list,
+                size: 30,
+                color: kPrimaryColor,
+              ))
+        ],
       ),
       body: _body(),
     );
@@ -104,120 +122,189 @@ class _InvoiceListPageState extends State<InvoiceListPage> {
             cs = asyncSnapshot.customerInvoice;
             return SingleChildScrollView(
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Column(
-                    children: [
-                      Center(
-                          child: TextField(
-                        controller: fromDateinput,
-                        //editing controller of this TextField
-                        decoration: InputDecoration(
-                            icon: Icon(Icons.calendar_today),
-                            //icon of text field
-                            labelText: "Enter Start Date" //label text of field
-                            ),
-                        readOnly: true,
-                        //set it true, so that user will not able to edit text
-                        onTap: () async {
-                          DateTime pickedDate = await showDatePicker(
-                              context: context,
-                              initialDate: DateTime.now(),
-                              firstDate: DateTime(2000),
-                              //DateTime.now() - not to allow to choose before today.
-                              lastDate: DateTime(2101));
+                  AnimatedSize(
+                      duration: Duration(milliseconds: 1000),
+                      child: Container(
+                        height: !isVisible ? 0.0 :null,
+                          child: Visibility(
+                              visible: isVisible,
+                              child: Column(
+                                children: [
+                                  Row(
+                                    children: [
+                                      Container(
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width /
+                                              2,
+                                          margin: const EdgeInsets.only(top: 5),
+                                          padding: const EdgeInsets.all(10.0),
+                                          child: TextField(
+                                            controller: fromDateinput,
+                                            //editing controller of this TextField
+                                            decoration: InputDecoration(
+                                                prefixIcon:
+                                                    Icon(Icons.date_range),
+                                                hintText: "Enter Start Date",
+                                                hintStyle: TextStyle(
+                                                    color: kSecondaryColor,
+                                                    fontSize: 12),
+                                                labelText: "Start Date",
+                                                labelStyle: TextStyle(
+                                                    color: kPrimaryColor),
+                                                floatingLabelBehavior:
+                                                    FloatingLabelBehavior
+                                                        .always,
+                                                focusedBorder:
+                                                    OutlineInputBorder(
+                                                        borderSide: BorderSide(
+                                                            color:
+                                                                kPrimaryColor)),
+                                                border: OutlineInputBorder(
+                                                    borderSide: BorderSide(
+                                                        color: kPrimaryColor))),
+                                            readOnly: true,
+                                            //set it true, so that user will not able to edit text
+                                            onTap: () async {
+                                              DateTime pickedDate =
+                                                  await showDatePicker(
+                                                      context: context,
+                                                      initialDate:
+                                                          DateTime.now(),
+                                                      firstDate: DateTime(2000),
+                                                      //DateTime.now() - not to allow to choose before today.
+                                                      lastDate: DateTime(2101));
 
-                          if (pickedDate != null) {
-                            print(
-                                pickedDate); //pickedDate output format => 2021-03-10 00:00:00.000
+                                              if (pickedDate != null) {
+                                                print(
+                                                    pickedDate); //pickedDate output format => 2021-03-10 00:00:00.000
 
-                            setState(() {
-                              fromDate = pickedDate;
-                              fromDateinput.text =
-                                  DateFormat('yyyy-MM-dd').format(pickedDate);
-                              //set output date to TextField value.
-                            });
-                          } else {
-                            print("Date is not selected");
-                          }
-                        },
-                      )),
-                      Container(
-                        margin: EdgeInsets.only(bottom: 10),
-                        child: Center(
-                            child: TextField(
-                          controller: toDateinput,
-                          //editing controller of this TextField
-                          decoration: InputDecoration(
-                              icon: Icon(Icons.calendar_today),
-                              //icon of text field
-                              labelText: "Enter End Date" //label text of field
-                              ),
-                          readOnly: true,
-                          //set it true, so that user will not able to edit text
-                          onTap: () async {
-                            DateTime pickedDate = await showDatePicker(
-                                context: context,
-                                initialDate: DateTime.now(),
-                                firstDate: DateTime(2000),
-                                lastDate: DateTime(2101));
+                                                setState(() {
+                                                  fromDate = pickedDate;
+                                                  fromDateinput.text =
+                                                      DateFormat('yyyy-MM-dd')
+                                                          .format(pickedDate);
+                                                  //set output date to TextField value.
+                                                });
+                                              } else {
+                                                print("Date is not selected");
+                                              }
+                                            },
+                                          )),
+                                      Container(
+                                        width:
+                                            MediaQuery.of(context).size.width /
+                                                2,
+                                        margin: const EdgeInsets.only(top: 5),
+                                        padding: EdgeInsets.all(10),
+                                        child: TextField(
+                                          controller: toDateinput,
+                                          //editing controller of this TextField
+                                          decoration: InputDecoration(
+                                              prefixIcon:
+                                                  Icon(Icons.date_range),
+                                              hintText: "Enter End Date",
+                                              hintStyle: TextStyle(
+                                                  color: kSecondaryColor,
+                                                  fontSize: 12),
+                                              labelText: "End Date",
+                                              labelStyle: TextStyle(
+                                                  color: kPrimaryColor),
+                                              floatingLabelBehavior:
+                                                  FloatingLabelBehavior.always,
+                                              focusedBorder: OutlineInputBorder(
+                                                  borderSide: BorderSide(
+                                                      color: kPrimaryColor)),
+                                              border: OutlineInputBorder(
+                                                  borderSide: BorderSide(
+                                                      color: kPrimaryColor))),
+                                          readOnly: true,
+                                          //set it true, so that user will not able to edit text
+                                          onTap: () async {
+                                            DateTime pickedDate =
+                                                await showDatePicker(
+                                                    context: context,
+                                                    initialDate: DateTime.now(),
+                                                    firstDate: DateTime(2000),
+                                                    lastDate: DateTime(2101));
 
-                            if (pickedDate != null) {
-                              print(
-                                  pickedDate); //pickedDate output format => 2021-03-10 00:00:00.000
+                                            if (pickedDate != null) {
+                                              print(
+                                                  pickedDate); //pickedDate output format => 2021-03-10 00:00:00.000
 
-                              setState(() {
-                                toDate = pickedDate;
-                                toDateinput.text = DateFormat('yyyy-MM-dd').format(
-                                    pickedDate); //set output date to TextField value.
-                              });
-                            } else {
-                              print("Date is not selected");
-                            }
-                          },
-                        )),
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Center(
-                            child: Container(
-                              width: 150,
-                              height: 50,
-                              child: DefaultButton(
-                                text: "Filter",
-                                press: () {
-                                  filterList();
-                                },
-                              ),
-                            ),
-                          ),
-                          Center(
-                            child: Container(
-                              width: 150,
-                              height: 50,
-                              child: DefaultButton(
-                                text: "Clear Filter",
-                                press: () {
-                                  setState(() {
-                                    fromDateinput.clear();
-                                    toDateinput.clear();
-                                    filterDate.clear();
-                                  });
-                                },
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
+                                              setState(() {
+                                                toDate = pickedDate;
+                                                toDateinput.text = DateFormat(
+                                                        'yyyy-MM-dd')
+                                                    .format(
+                                                        pickedDate); //set output date to TextField value.
+                                              });
+                                            } else {
+                                              print("Date is not selected");
+                                            }
+                                          },
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  Container(
+                                    margin: EdgeInsets.all(10),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceEvenly,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: [
+                                        TextButton(
+                                          style: TextButton.styleFrom(
+                                            backgroundColor: kPrimaryColor,
+                                            textStyle: const TextStyle(
+                                                fontSize: 14,
+                                                color: Colors.white),
+                                          ),
+                                          onPressed: () {
+                                            setState(() {
+                                              filterList();
+                                            });
+                                          },
+                                          child: const Text('Filter',
+                                              style: TextStyle(
+                                                  color: Colors.white)),
+                                        ),
+                                        TextButton(
+                                          style: TextButton.styleFrom(
+                                            backgroundColor: kPrimaryColor,
+                                            textStyle: const TextStyle(
+                                                fontSize: 14,
+                                                color: Colors.white),
+                                          ),
+                                          onPressed: () {
+                                            setState(() {
+                                              fromDateinput.clear();
+                                              toDateinput.clear();
+                                              filterDate.clear();
+                                            });
+                                          },
+                                          child: const Text(
+                                            'Clear Filter',
+                                            style:
+                                                TextStyle(color: Colors.white),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              )))),
                   ...List.generate(
-                      filterDate.length > 0 ? filterDate.length : asyncSnapshot.customerInvoice.length,
+                      filterDate.length > 0
+                          ? filterDate.length
+                          : asyncSnapshot.customerInvoice.length,
                       (index) => InvoicesTile(
-                          customerInvoice: filterDate.length > 0 ? filterDate[index] : asyncSnapshot.customerInvoice[index],
+                          customerInvoice: filterDate.length > 0
+                              ? filterDate[index]
+                              : asyncSnapshot.customerInvoice[index],
                           type: widget.type,
                           customerId: widget.customerId))
                 ],
@@ -235,14 +322,14 @@ class _InvoiceListPageState extends State<InvoiceListPage> {
                       new DateFormat("yyyy-MM-dd").parse(item.invoiceDate)) &&
                   toDate.isAfter(
                       new DateFormat("yyyy-MM-dd").parse(item.invoiceDate)))
-
                 filterDate.add(item)
             })
         .toList();
     setState(() {
       print("filtered length >>>>" + filterDate.length.toString());
-      if(filterDate.length == 0){
-        final snackBar = SnackBar(content: Text('No invoice found between provided Date'));
+      if (filterDate.length == 0) {
+        final snackBar =
+            SnackBar(content: Text('No invoice found between provided Date'));
         ScaffoldMessenger.of(context).showSnackBar(snackBar);
       }
     });

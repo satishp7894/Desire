@@ -125,10 +125,10 @@ class _ChattingPageState extends State<ChattingPage> {
         builder: (c,s){
           asyncSnapshot = s;
           return  asyncSnapshot.connectionState != ConnectionState.active ?
-          Center(child: CircularProgressIndicator(color: Colors.red,)):
-          asyncSnapshot.hasError ? Center(child: Text("Something went wrong")):
-          asyncSnapshot.data == null ?   Text("No Chats"):
-          asyncSnapshot.data.customerChat == [] ?   Center(child: Text("No Chat",style: TextStyle(color: kBlackColor),)):
+          Center(child: CircularProgressIndicator(color: kSecondaryColor,)):
+              asyncSnapshot.hasError ? Center(child: Text("Something went wrong")):
+              asyncSnapshot.data == null ?   Text("No Chats"):
+              asyncSnapshot.data.customerChat == [] ?   Center(child: Text("No Chat",style: TextStyle(color: kBlackColor),)):
           RefreshIndicator(
             color: kPrimaryColor,
             onRefresh: (){
