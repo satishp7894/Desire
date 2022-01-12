@@ -66,6 +66,7 @@ class _DailyProductionListByModelNumberState extends State<DailyProductionListBy
           preferredSize: Size.fromHeight(50),
           child: _searchView(),
         ),
+
       ),
       body: _body(),
     );

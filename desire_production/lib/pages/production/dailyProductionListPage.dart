@@ -141,6 +141,15 @@ class _DailyProductionListPageState extends State<DailyProductionListPage> {
             preferredSize: Size.fromHeight(50),
             child: _searchView(),
           ),
+          leading: IconButton(
+            icon: Icon(
+              Icons.arrow_back,
+              color: Colors.black,
+            ),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
         ),
         floatingActionButton: FloatingActionButton.extended(
           backgroundColor: kPrimaryColor,

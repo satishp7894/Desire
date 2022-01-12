@@ -183,8 +183,8 @@ class _LoginPageState extends State<LoginPage> with Validator{
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Container(
-                      height: 14,
-                      width: 10,
+                      height: 20,
+                      width: 20,
                       child: Checkbox(
                         value: remember,
                         activeColor: kPrimaryColor,

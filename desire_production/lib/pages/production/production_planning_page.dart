@@ -86,6 +86,15 @@ class _ProductionPlanningPageState extends State<ProductionPlanningPage> {
           elevation: 0,
           centerTitle: true,
           backgroundColor: Colors.transparent,
+          leading: IconButton(
+            icon: Icon(
+              Icons.arrow_back,
+              color: Colors.black,
+            ),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
           /*leading: Builder(
             builder: (c) {
               return IconButton(

@@ -94,6 +94,15 @@ class _DailyOrdersPageState extends State<DailyOrdersPage> {
             preferredSize: Size.fromHeight(50),
             child: _searchView(),
           ),
+          leading: IconButton(
+            icon: Icon(
+              Icons.arrow_back,
+              color: Colors.black,
+            ),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
         ),
         body: _body(),
       ),

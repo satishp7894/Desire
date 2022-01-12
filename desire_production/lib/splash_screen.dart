@@ -1,6 +1,10 @@
 import 'dart:async';
+import 'package:desire_production/pages/dashboards/admin_dashboard_page.dart';
+import 'package:desire_production/pages/dashboards/dashboard_page_warhouse.dart';
+import 'package:desire_production/pages/dashboards/production_dashboard_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'pages/login_page.dart';
 
@@ -15,6 +19,9 @@ class SplashScreenState extends State<SplashScreen>
 
   AnimationController animationController;
   Animation<double> animation;
+  String adminRoleId = "1";
+  String productionRoleId = "4";
+  String wareHouseRoleId = "5";
 
   startTime() async {
     var _duration = new Duration(seconds: 3);
@@ -22,7 +29,23 @@ class SplashScreenState extends State<SplashScreen>
   }
 
   void navigationPage() async{
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    if (prefs.getBool('remember') != null && prefs.getBool('remember')) {
+      setState(() {
+        if(prefs.getString("role_id") == adminRoleId){
+          Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (builder) => AdminDashboardPage()), (route) => false);
+        }
+        else if(prefs.getString("role_id") == productionRoleId){
+          Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (builder) => DashboardPageProduction(page: 'production',)), (route) => false);
+        }
+        else if(prefs.getString("role_id") == wareHouseRoleId){
+          Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (builder) => DashboardPageWarehouse(page: "warHouse",)), (route) => false);
+        }
+      });
+    } else {
       Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (builder) => LoginPage()), (route) => false);
+    }
+
   }
 
   @override
