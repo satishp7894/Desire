@@ -1,12 +1,15 @@
 import 'dart:io';
 import 'package:data_connection_checker/data_connection_checker.dart';
 import 'package:desire_users/models/sales_customer_list_model.dart';
+import 'package:desire_users/pages/ready_stock/ready_stock_list.dart';
+import 'package:desire_users/pages/today_production/today_production_page.dart';
 import 'package:desire_users/sales/bloc/customer_bloc.dart';
 import 'package:desire_users/sales/pages/brochure/brochure_page.dart';
 import 'package:desire_users/sales/pages/chatting/sales_chat_list.dart';
 import 'package:desire_users/sales/pages/customer/add_customer_page.dart';
 import 'package:desire_users/sales/pages/customer/customer_list_page.dart';
 import 'package:desire_users/sales/pages/customerCredit/customer_credit_page.dart';
+import 'package:desire_users/sales/pages/dashboard/customer_list_common_page.dart';
 import 'package:desire_users/sales/pages/orders/customerOrdersListPage.dart';
 import 'package:desire_users/sales/utils_sales/alerts.dart';
 import 'package:desire_users/utils/constants.dart';
@@ -17,6 +20,7 @@ import 'profile/sales_profile_page.dart';
 
 class SalesHomePage extends StatefulWidget {
   final String salesManId;
+
   SalesHomePage({this.salesManId});
 
   @override
@@ -116,14 +120,9 @@ class _SalesHomePageState extends State<SalesHomePage> {
     );
   }
 
-
-
   void logoutDialog() {
     return Alerts.showSalesLogOut(context, "LOGOUT", "Are you sure?");
   }
-
-
-
 
   Widget dashBoardScreenView() {
     return GridView(
@@ -364,7 +363,9 @@ class _SalesHomePageState extends State<SalesHomePage> {
           onTap: () {
             Navigator.push(context, MaterialPageRoute(builder: (context) {
               return CustomerOrdersListPage(
-                  salesManId: widget.salesManId,salesManName: salesName,);
+                salesManId: widget.salesManId,
+                salesManName: salesName,
+              );
             }));
           },
           child: Padding(
@@ -456,6 +457,8 @@ class _SalesHomePageState extends State<SalesHomePage> {
             //   return CustomerOrdersListPage(
             //     salesManId: widget.salesManId,salesManName: salesName,);
             // }));
+            Navigator.push(context, MaterialPageRoute(builder: (builder) => ReadyStockListView(type : "sales")));
+
           },
           child: Padding(
             padding: const EdgeInsets.all(8.0),
@@ -498,8 +501,7 @@ class _SalesHomePageState extends State<SalesHomePage> {
         GestureDetector(
           onTap: () {
             Navigator.push(context, MaterialPageRoute(builder: (context) {
-              return SalesChatList(
-                salesId: widget.salesManId);
+              return SalesChatList(salesId: widget.salesManId);
             }));
           },
           child: Padding(
@@ -518,9 +520,9 @@ class _SalesHomePageState extends State<SalesHomePage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                Icon(
+                  Icon(
                     Icons.message,
-                   size: 40,
+                    size: 40,
                     color: kWhiteColor,
                   ),
                   SizedBox(
@@ -528,6 +530,135 @@ class _SalesHomePageState extends State<SalesHomePage> {
                   ),
                   Text(
                     "Chat",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 14,
+                        color: kWhiteColor),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+        GestureDetector(
+          onTap: () {
+            Navigator.push(context, MaterialPageRoute(builder: (context) {
+              return CustomerListCommonPage(
+                  salesId: salesManId, email: salesEmail, name: salesName, type: 0,);
+            }));
+          },
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Container(
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.all(Radius.circular(15)),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey,
+                      blurRadius: 5.0,
+                    ),
+                  ],
+                  color: kSecondaryColor),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.list_alt_rounded,
+                    size: 40,
+                    color: kWhiteColor,
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Text(
+                    "Ledger",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 14,
+                        color: kWhiteColor),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+        GestureDetector(
+          onTap: () {
+            Navigator.push(context, MaterialPageRoute(builder: (context) {
+              return CustomerListCommonPage(
+                  salesId: salesManId, email: salesEmail, name: salesName, type:1);
+            }));
+          },
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Container(
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.all(Radius.circular(15)),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey,
+                      blurRadius: 5.0,
+                    ),
+                  ],
+                  color: kSecondaryColor),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Image.asset("assets/images/rupees.png",scale: 12,color: Colors.white,),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Text(
+                    "Price List",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 14,
+                        color: kWhiteColor),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+        GestureDetector(
+          onTap: () {
+            // Navigator.push(context, MaterialPageRoute(builder: (context) {
+            //   return CustomerListCommonPage(
+            //       salesId: salesManId, email: salesEmail, name: salesName, type:1);
+            // }));
+            Navigator.push(context, MaterialPageRoute(builder: (builder) => TodayProductionPage(type: "sales",)));
+          },
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Container(
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.all(Radius.circular(15)),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey,
+                      blurRadius: 5.0,
+                    ),
+                  ],
+                  color: kPrimaryColor),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.production_quantity_limits,
+                    size: 40,
+                    color: kWhiteColor,
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Text(
+                    "Today's Production",
                     textAlign: TextAlign.center,
                     style: TextStyle(
                         fontWeight: FontWeight.bold,

@@ -68,66 +68,52 @@ class _CustomerPricingPageState extends State<CustomerPricingPage> {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () {
-        return Navigator.pushAndRemoveUntil(
-            context,
-            MaterialPageRoute(
-                builder: (builder) => CustomerListPage(
-                      salesId: widget.salesId,
-                      name: widget.name,
-                      email: widget.email,
-                  customerId: widget.customerId,
-                    )),
-            (route) => false);
-      },
-      child: SafeArea(
-          child: Scaffold(
-        appBar: AppBar(
-          elevation: 0,
-          backgroundColor: kWhiteColor,
-          iconTheme: IconThemeData(
-            color: kBlackColor
-          ),
-          title: Text(
-            "Customer Pricing List",
-            style: TextStyle(color: Colors.black, fontSize: 16),
-            textAlign: TextAlign.center,
-          ),
-          centerTitle: true,
+    return SafeArea(
+        child: Scaffold(
+      appBar: AppBar(
+        elevation: 0,
+        backgroundColor: kWhiteColor,
+        iconTheme: IconThemeData(
+          color: kBlackColor
         ),
-        body: _body(),
-            bottomNavigationBar:  SafeArea(
-              child: GestureDetector(
-                onTap: (){
-                  print("send value ${send.length}");
-                  if (send.length > 0) {
-                    submitPricing();
-                  } else {
-                    final snackBar = SnackBar(
-                        content: Text(
-                          "No Products Selected",
-                          textAlign: TextAlign.center,
-                        ));
-                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                  }
-                },
-                child: Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20),
-                      color: kPrimaryColor,
-                    ),
-
-                    height: 50,
-                    child: Center(child: Text("SAVE",textAlign: TextAlign.center,style: TextStyle(color: kWhiteColor,fontSize: 16),)),
+        title: Text(
+          "Customer Pricing List",
+          style: TextStyle(color: Colors.black, fontSize: 16),
+          textAlign: TextAlign.center,
+        ),
+        centerTitle: true,
+      ),
+      body: _body(),
+          bottomNavigationBar:  SafeArea(
+            child: GestureDetector(
+              onTap: (){
+                print("send value ${send.length}");
+                if (send.length > 0) {
+                  submitPricing();
+                } else {
+                  final snackBar = SnackBar(
+                      content: Text(
+                        "No Products Selected",
+                        textAlign: TextAlign.center,
+                      ));
+                  ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                }
+              },
+              child: Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20),
+                    color: kPrimaryColor,
                   ),
+
+                  height: 50,
+                  child: Center(child: Text("SAVE",textAlign: TextAlign.center,style: TextStyle(color: kWhiteColor,fontSize: 16),)),
                 ),
               ),
             ),
-      )),
-    );
+          ),
+    ));
   }
 
   Widget _body() {

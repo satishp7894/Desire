@@ -247,7 +247,7 @@ class ApiClient {
     var response = await http.post(Uri.parse("http://loccon.in/desiremoulding/api/UserApiController/modelNoWiseProductList"), body: {
       "secretkey" : r"12!@34#$5%",
       "model_no_id": modelNoId,
-      "customer_id": customerId
+      // "customer_id": customerId
     });
     var result = json.decode(response.body);
     print("product from model  response $result");

@@ -8,7 +8,8 @@ import 'package:flutter/material.dart';
 
 class ReadyStockListView extends StatefulWidget {
   final customerId;
-  const ReadyStockListView({Key key, this.customerId}) : super(key: key);
+  final type;
+  const ReadyStockListView({Key key, this.customerId, this.type}) : super(key: key);
 
   @override
   _ReadyStockListViewState createState() => _ReadyStockListViewState();
@@ -26,6 +27,12 @@ class _ReadyStockListViewState extends State<ReadyStockListView> {
     readyStockListBloc.fetchReadyStockList();
   }
 
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    readyStockListBloc.dispose();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -123,7 +130,7 @@ class _ReadyStockListViewState extends State<ReadyStockListView> {
                   ),
                   ...List.generate(asyncSnapshot.data.readyStockList.length, (index) => ModelListTile(
                     readyStockList: asyncSnapshot.data.readyStockList[index],
-                    customerId: widget.customerId,
+                    customerId: widget.customerId,type : widget.type
                   ))
                 ],
               ),
@@ -137,8 +144,9 @@ class ModelListTile extends StatelessWidget {
 
   final  ReadyStockList readyStockList;
   final customerId;
+  final type;
 
-  const ModelListTile({Key key,this.readyStockList, this.customerId}) : super(key: key);
+  const ModelListTile({Key key,this.readyStockList, this.customerId, this.type}) : super(key: key);
 
 
   @override
@@ -185,7 +193,7 @@ class ModelListTile extends StatelessWidget {
                   child: GestureDetector(
                     onTap: (){
                       Navigator.push(context, MaterialPageRoute(builder: (context){
-                        return ReadyStockFromModelPage(customerId: customerId,modelNoId: readyStockList.modelNoId);
+                        return ReadyStockFromModelPage(customerId: customerId,modelNoId: readyStockList.modelNoId, type : type);
                       }));
                     },
                     child: Container(

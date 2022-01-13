@@ -27,6 +27,7 @@ class CustomerListPage extends StatefulWidget {
   final String customerId;
   final String name;
   final String email;
+
   const CustomerListPage({
     @required this.customerId,
     @required this.salesId,
@@ -46,14 +47,13 @@ class _CustomerListPageState extends State<CustomerListPage> {
   bool search = false;
   List<UserModel> _searchResult = [];
 
-
   @override
   void initState() {
     super.initState();
     checkConnectivity();
     searchView = TextEditingController();
     print("object sales id ${widget.salesId}");
-   customerBloc.fetchCustomerList(widget.salesId);
+    customerBloc.fetchCustomerList(widget.salesId);
   }
 
   checkConnectivity() async {
@@ -79,18 +79,19 @@ class _CustomerListPageState extends State<CustomerListPage> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () {
-        return  Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (builder) => SalesHomePage(
-          salesManId: widget.salesId.toString(),
-        )), (route) => false);
+        return Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(
+                builder: (builder) => SalesHomePage(
+                      salesManId: widget.salesId.toString(),
+                    )),
+            (route) => false);
       },
       child: SafeArea(
           child: Scaffold(
         appBar: AppBar(
-
           backgroundColor: kWhiteColor,
-          iconTheme: IconThemeData(
-            color: kBlackColor
-          ),
+          iconTheme: IconThemeData(color: kBlackColor),
           elevation: 0.0,
           title: Text(
             "All Customers",
@@ -98,7 +99,6 @@ class _CustomerListPageState extends State<CustomerListPage> {
             textAlign: TextAlign.center,
           ),
           centerTitle: true,
-
           bottom: PreferredSize(
             preferredSize: Size.fromHeight(50),
             child: Container(
@@ -111,25 +111,24 @@ class _CustomerListPageState extends State<CustomerListPage> {
     );
   }
 
-
-  Widget allCustomersListView(){
+  Widget allCustomersListView() {
     return RefreshIndicator(
       color: kPrimaryColor,
       onRefresh: () {
         return Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-                builder: (builder) => CustomerListPage(
-                  salesId: widget.salesId,
-                  name: widget.name,
-                  email: widget.email,
-                  customerId: widget.customerId,
-                )),
-                );
+          context,
+          MaterialPageRoute(
+              builder: (builder) => CustomerListPage(
+                    salesId: widget.salesId,
+                    name: widget.name,
+                    email: widget.email,
+                    customerId: widget.customerId,
+                  )),
+        );
       },
-      child:  StreamBuilder<SalesCustomerModel>(
+      child: StreamBuilder<SalesCustomerModel>(
         stream: customerBloc.newCustomerStream,
-        builder: (c,s){
+        builder: (c, s) {
           if (s.connectionState != ConnectionState.active) {
             print("all connection");
             return Container(
@@ -167,572 +166,712 @@ class _CustomerListPageState extends State<CustomerListPage> {
             physics: BouncingScrollPhysics(),
             shrinkWrap: true,
             children: [
-             _searchResult.length != 0 ?
-             ListView.builder(
-                shrinkWrap: true,
-                  itemCount: _searchResult.length,
-                  itemBuilder: (c,i){
-                    _searchResult[i].isActive == "0"
-                        ? status.add(false)
-                        : status.add(true);
-                    return Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Container(
-                        decoration: BoxDecoration(
-                            color: kWhiteColor,
-                            borderRadius: BorderRadius.circular(10),
-                            boxShadow:[ BoxShadow(
-                                color: Colors.grey,
-                                blurRadius: 5
-                            )]
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.only(left: 10.0,top: 10,bottom: 10,right: 10),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              _searchResult.length != 0
+                  ? ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: _searchResult.length,
+                      itemBuilder: (c, i) {
+                        _searchResult[i].isActive == "0"
+                            ? status.add(false)
+                            : status.add(true);
+                        return Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Container(
+                            decoration: BoxDecoration(
+                                color: kWhiteColor,
+                                borderRadius: BorderRadius.circular(10),
+                                boxShadow: [
+                                  BoxShadow(color: Colors.grey, blurRadius: 5)
+                                ]),
+                            child: Padding(
+                              padding: const EdgeInsets.only(
+                                  left: 10.0, top: 10, bottom: 10, right: 10),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text(
-                                    "${_searchResult[i].customerName}",
-                                    textAlign: TextAlign.left,
-                                    style: TextStyle(
-                                        color: kPrimaryColor,
-                                        fontSize: 16,
-                                        fontWeight:
-                                        FontWeight.bold),
-                                  ),
-                                  _searchResult[i].isActive == "0"
-                                      ? Text("Blocked", textAlign: TextAlign.left,
-                                    style: TextStyle(color: Colors.redAccent,fontSize: 16,),)
-                                      : Text("Active", textAlign: TextAlign.left,
-                                    style: TextStyle(color: Colors.green,fontSize: 16,),),
-
-                                  GestureDetector(
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                          color: kPrimaryColor,
-                                          borderRadius: BorderRadius.circular(10)
-                                      ),
-                                      height: 30,
-                                      child: Center(
-                                        child: Padding(
-                                          padding: const EdgeInsets.only(left: 4.0,right: 4,),
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Flexible(
+                                        child: Container(
+                                          padding: EdgeInsets.only(right: 13.0),
                                           child: Text(
-                                            "Buy Product",style: TextStyle(fontSize: 12,fontWeight: FontWeight.bold,color: kWhiteColor),),
+                                            "${_searchResult[i].customerName}",
+                                            textAlign: TextAlign.left,
+                                            maxLines: 1,
+                                            overflow: TextOverflow.ellipsis,
+                                            style: TextStyle(
+                                                color: kPrimaryColor,
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.bold),
+                                          ),
                                         ),
                                       ),
-                                    ),
-                                    onTap: (){
-                                      Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (builder) =>
-                                                  ProductHomePage(
-                                                    customerId: _searchResult[i].customerId,
-                                                    customerName: _searchResult[i].customerName,
-
-                                                  )));
-                                    },
-                                  ),
-
-
-                                ],
-                              ),
-                              SizedBox(height: 10,),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  _searchResult[i].kycStatus == "0"
-                                      ? Text("Documents not Uploaded",  textAlign: TextAlign.left,style: TextStyle(fontSize: 12,color: Colors.black),
-                                  )
-                                      : Text("Documents Uploaded", textAlign: TextAlign.left, style: TextStyle(fontSize: 12,color: Colors.black),
-                                  ),
-                                  _searchResult[i].kycStatus == "2" ? _searchResult[i].kycApprove == "0"
-                                      ? Text(
-                                    "KYC Pending", style: TextStyle(color: Colors.orange,fontSize: 12),
-                                  )
-                                      : _searchResult[i].kycApprove == "1"
-                                      ? Text(
-                                    "KYC Approved", textAlign: TextAlign.left,
-                                    style: TextStyle(fontSize: 12,
-                                        color: Colors
-                                            .green),
-                                  )
-                                      : Text(
-                                    "KYC Rejected", textAlign: TextAlign.left,
-                                    style: TextStyle(fontSize: 12,
-                                        color: Colors
-                                            .redAccent),
-                                  )
-                                      : Text(
-                                    "KYC Pending", textAlign: TextAlign.left,
-                                    style: TextStyle(fontSize: 12,
-                                        color: Colors.orange),
-                                  ),
-                                  GestureDetector(
-                                    onTap: () {
-                                      Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (builder) =>
-                                                  CustomerDetailsPage(
-                                                    salesId:
-                                                    widget.salesId,
-                                                    name: widget.name,
-                                                    email: widget.email,
-                                                    customer:
-                                                    _searchResult[i],
-                                                  )));
-                                    },
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                          color: kPrimaryColor,
-                                          borderRadius: BorderRadius.circular(10)
+                                      _searchResult[i].isActive == "0"
+                                          ? Text(
+                                              "Blocked",
+                                              textAlign: TextAlign.left,
+                                              style: TextStyle(
+                                                color: Colors.redAccent,
+                                                fontSize: 16,
+                                              ),
+                                            )
+                                          : Text(
+                                              "Active",
+                                              textAlign: TextAlign.left,
+                                              style: TextStyle(
+                                                color: Colors.green,
+                                                fontSize: 16,
+                                              ),
+                                            ),
+                                      GestureDetector(
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                              color: kPrimaryColor,
+                                              borderRadius:
+                                                  BorderRadius.circular(10)),
+                                          height: 30,
+                                          child: Center(
+                                            child: Padding(
+                                              padding: const EdgeInsets.only(
+                                                left: 4.0,
+                                                right: 4,
+                                              ),
+                                              child: Text(
+                                                "Buy Product",
+                                                style: TextStyle(
+                                                    fontSize: 12,
+                                                    fontWeight: FontWeight.bold,
+                                                    color: kWhiteColor),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        onTap: () {
+                                          Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (builder) =>
+                                                      ProductHomePage(
+                                                        customerId:
+                                                            _searchResult[i]
+                                                                .customerId,
+                                                        customerName:
+                                                            _searchResult[i]
+                                                                .customerName,
+                                                      )));
+                                        },
                                       ),
-                                      height: 30,
-                                      child: Center(
-                                        child: Padding(
-                                          padding: const EdgeInsets.only(left: 4.0,right: 4,),
-                                          child: Text(
-                                            "View Details",style: TextStyle(fontSize: 12,fontWeight: FontWeight.bold,color: kWhiteColor),),
+                                    ],
+                                  ),
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      _searchResult[i].kycStatus == "0"
+                                          ? Text(
+                                              "Documents not Uploaded",
+                                              textAlign: TextAlign.left,
+                                              style: TextStyle(
+                                                  fontSize: 12,
+                                                  color: Colors.black),
+                                            )
+                                          : Text(
+                                              "Documents Uploaded",
+                                              textAlign: TextAlign.left,
+                                              style: TextStyle(
+                                                  fontSize: 12,
+                                                  color: Colors.black),
+                                            ),
+                                      _searchResult[i].kycStatus == "2"
+                                          ? _searchResult[i].kycApprove == "0"
+                                              ? Text(
+                                                  "KYC Pending",
+                                                  style: TextStyle(
+                                                      color: Colors.orange,
+                                                      fontSize: 12),
+                                                )
+                                              : _searchResult[i].kycApprove ==
+                                                      "1"
+                                                  ? Text(
+                                                      "KYC Approved",
+                                                      textAlign: TextAlign.left,
+                                                      style: TextStyle(
+                                                          fontSize: 12,
+                                                          color: Colors.green),
+                                                    )
+                                                  : Text(
+                                                      "KYC Rejected",
+                                                      textAlign: TextAlign.left,
+                                                      style: TextStyle(
+                                                          fontSize: 12,
+                                                          color:
+                                                              Colors.redAccent),
+                                                    )
+                                          : Text(
+                                              "KYC Pending",
+                                              textAlign: TextAlign.left,
+                                              style: TextStyle(
+                                                  fontSize: 12,
+                                                  color: Colors.orange),
+                                            ),
+                                      GestureDetector(
+                                        onTap: () {
+                                          Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (builder) =>
+                                                      CustomerDetailsPage(
+                                                        salesId: widget.salesId,
+                                                        name: widget.name,
+                                                        email: widget.email,
+                                                        customer:
+                                                            _searchResult[i],
+                                                      )));
+                                        },
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                              color: kPrimaryColor,
+                                              borderRadius:
+                                                  BorderRadius.circular(10)),
+                                          height: 30,
+                                          child: Center(
+                                            child: Padding(
+                                              padding: const EdgeInsets.only(
+                                                left: 4.0,
+                                                right: 4,
+                                              ),
+                                              child: Text(
+                                                "View Details",
+                                                style: TextStyle(
+                                                    fontSize: 12,
+                                                    fontWeight: FontWeight.bold,
+                                                    color: kWhiteColor),
+                                              ),
+                                            ),
+                                          ),
                                         ),
                                       ),
+                                    ],
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(
+                                        top: 10.0, bottom: 10),
+                                    child: Divider(
+                                      color: Colors.grey,
+                                      height: 0.0,
+                                      thickness: 1,
                                     ),
                                   ),
-
-
-
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      GestureDetector(
+                                        onTap: () {
+                                          Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (builder) =>
+                                                      CustomerPricingPage(
+                                                        customerId:
+                                                            " ${_searchResult[i].customerId}",
+                                                        customerName:
+                                                            "${_searchResult[i].customerName}",
+                                                        salesId: widget.salesId,
+                                                      )));
+                                        },
+                                        child: Image.asset(
+                                          "assets/images/rupees.png",
+                                          height: 25,
+                                          width: 25,
+                                        ),
+                                      ),
+                                      GestureDetector(
+                                        onTap: () {
+                                          Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (builder) =>
+                                                      CustomerEditPage(
+                                                        salesId: widget.salesId,
+                                                        name: widget.name,
+                                                        email: widget.email,
+                                                        customer:
+                                                            _searchResult[i],
+                                                      )));
+                                        },
+                                        child: Icon(Icons.edit_outlined),
+                                      ),
+                                      _searchResult[i].isActive == "0"
+                                          ? GestureDetector(
+                                              onTap: () {
+                                                updateStatusId(
+                                                    "1",
+                                                    _searchResult[i]
+                                                        .customerId);
+                                              },
+                                              child: Icon(
+                                                Icons.block,
+                                                color: Colors.red,
+                                              ),
+                                            )
+                                          : GestureDetector(
+                                              onTap: () {
+                                                updateStatusId(
+                                                    "0",
+                                                    _searchResult[i]
+                                                        .customerId);
+                                              },
+                                              child: Icon(
+                                                Icons.block,
+                                                color: Colors.green,
+                                              ),
+                                            ),
+                                      _searchResult[i].kycStatus == "2" &&
+                                              _searchResult[i].kycApprove == "0"
+                                          ? GestureDetector(
+                                              onTap: () {
+                                                Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                        builder: (builder) =>
+                                                            CustomerKYCDetailsPage(
+                                                              customerId:
+                                                                  _searchResult[
+                                                                          i]
+                                                                      .customerId,
+                                                              salesId: widget
+                                                                  .salesId,
+                                                              name: widget.name,
+                                                              email:
+                                                                  widget.email,
+                                                            )));
+                                              },
+                                              child: Icon(
+                                                Icons.check_circle_outline,
+                                                color: Colors.red,
+                                              ),
+                                            )
+                                          : Icon(
+                                              Icons.check_circle_outline,
+                                              color: Colors.green,
+                                            ),
+                                      GestureDetector(
+                                        onTap: () {
+                                          Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (builder) =>
+                                                      CustomerOrderHistoryPage(
+                                                        customerName:
+                                                            _searchResult[i]
+                                                                .customerName,
+                                                        customerId:
+                                                            _searchResult[i]
+                                                                .customerId,
+                                                      )));
+                                        },
+                                        child: Image.asset(
+                                          "assets/images/production_order.png",
+                                          height: 30,
+                                          width: 30,
+                                        ),
+                                      ),
+                                      GestureDetector(
+                                        onTap: () {
+                                          Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (builder) =>
+                                                      CustomerLedgerPage(
+                                                        customerId:
+                                                            _searchResult[i]
+                                                                .customerId,
+                                                      )));
+                                        },
+                                        child: Image.asset(
+                                          "assets/images/ledger.png",
+                                          height: 30,
+                                          width: 30,
+                                        ),
+                                      ),
+                                    ],
+                                  )
                                 ],
                               ),
-                              Padding(
-                                padding: const EdgeInsets.only(top: 10.0,bottom: 10),
-                                child: Divider(color: Colors.grey,height: 0.0,thickness: 1,),
-                              ),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  GestureDetector(
-                                    onTap: () {
-                                      Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (builder) =>
-                                                  CustomerPricingPage(
-                                                    customerId:" ${_searchResult[i].customerId}",
-                                                    customerName: "${_searchResult[i].customerName}",
-                                                    salesId:   widget.salesId,
-
-                                                  )
-                                          )
-                                      );
-                                    },
-                                    child: Image.asset("assets/images/rupees.png",height: 25,width: 25,),
-                                  ),
-                                  GestureDetector(
-                                    onTap: () {
-                                      Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (builder) =>
-                                                  CustomerEditPage(
-                                                    salesId:
-                                                    widget.salesId,
-                                                    name: widget.name,
-                                                    email: widget.email,
-                                                    customer:
-                                                    _searchResult[i],
-                                                  )));
-                                    },
-                                    child: Icon(Icons.edit_outlined),
-                                  ),
-                                  _searchResult[i].isActive == "0"
-                                      ? GestureDetector(
-                                    onTap: () {
-                                      updateStatusId(
-                                          "1",
-                                          _searchResult[i]
-                                              .customerId);
-                                    },
-                                    child: Icon(
-                                      Icons.block,
-                                      color: Colors.red,
-                                    ),
-                                  )
-                                      : GestureDetector(
-                                    onTap: () {
-                                      updateStatusId(
-                                          "0",
-                                          _searchResult[i]
-                                              .customerId);
-                                    },
-                                    child: Icon(
-                                      Icons.block,
-                                      color: Colors.green,
-                                    ),
-                                  ),
-                                  _searchResult[i].kycStatus == "2" && _searchResult[i].kycApprove == "0"
-                                      ? GestureDetector(
-                                    onTap: () {
-                                      Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (builder) =>
-                                                  CustomerKYCDetailsPage(
-                                                    customerId:
-                                                    _searchResult[
-                                                    i]
-                                                        .customerId,
-                                                    salesId: widget
-                                                        .salesId,
-                                                    name: widget
-                                                        .name,
-                                                    email: widget
-                                                        .email,
-                                                  )));
-                                    },
-                                    child: Icon(
-                                      Icons
-                                          .check_circle_outline,
-                                      color: Colors.red,
-                                    ),
-                                  )
-                                      : Icon(
-                                    Icons
-                                        .check_circle_outline,
-                                    color: Colors.green,
-                                  ),
-                                  GestureDetector(
-                                    onTap: () {
-                                      Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (builder) =>
-                                                  CustomerOrderHistoryPage(
-                                                    customerName: _searchResult[i].customerName,
-                                                    customerId: _searchResult[i].customerId,
-                                                  )
-                                          )
-                                      );
-                                    },
-                                    child: Image.asset(
-                                      "assets/images/production_order.png",height: 30,width: 30,),
-                                  ),
-                                  GestureDetector(
-                                    onTap: () {
-                                      Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (builder) =>
-                                                  CustomerLedgerPage(
-                                                    customerId: _searchResult[i].customerId,
-                                                  )
-                                          )
-                                      );
-                                    },
-                                    child: Image.asset(
-                                      "assets/images/ledger.png",height: 30,width: 30,),
-                                  ),
-                            ],
-                              )
-                            ],
+                            ),
                           ),
-                        ),
-                      ),
-                    );
-
-              })
-                 :ListView.builder(
-                 physics: BouncingScrollPhysics(),
-                 shrinkWrap: true,
-                 itemCount: customerList.length,
-                 itemBuilder: (c,i){
-                   customerList[i].isActive == "0"
-                       ? status.add(false)
-                       : status.add(true);
-                   return Padding(
-                     padding: const EdgeInsets.all(8.0),
-                     child: Container(
-                       decoration: BoxDecoration(
-                           color: kWhiteColor,
-                           borderRadius: BorderRadius.circular(10),
-                           boxShadow:[ BoxShadow(
-                               color: Colors.grey,
-                               blurRadius: 5
-                           )]
-                       ),
-                       child: Padding(
-                         padding: const EdgeInsets.only(left: 10.0,top: 10,bottom: 10,right: 10),
-                         child: Column(
-                           mainAxisAlignment: MainAxisAlignment.start,
-                           crossAxisAlignment: CrossAxisAlignment.start,
-                           children: [
-                             Row(
-                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                               crossAxisAlignment: CrossAxisAlignment.start,
-                               children: [
-                                 Text(
-                                   "${customerList[i].customerName}",
-                                   textAlign: TextAlign.left,
-                                   style: TextStyle(
-                                       color: kPrimaryColor,
-                                       fontSize: 16,
-                                       fontWeight:
-                                       FontWeight.bold),
-                                 ),
-                                 customerList[i].isActive == "0"
-                                     ? Text("Blocked", textAlign: TextAlign.left,
-                                   style: TextStyle(color: Colors.redAccent,fontSize: 16,),)
-                                     : Text("Active", textAlign: TextAlign.left,
-                                   style: TextStyle(color: Colors.green,fontSize: 16,),),
-
-                                 GestureDetector(
-                                   child: Container(
-                                     decoration: BoxDecoration(
-                                         color: kPrimaryColor,
-                                         borderRadius: BorderRadius.circular(10)
-                                     ),
-                                     height: 30,
-                                     child: Center(
-                                       child: Padding(
-                                         padding: const EdgeInsets.only(left: 4.0,right: 4,),
-                                         child: Text(
-                                           "Buy Product",style: TextStyle(fontSize: 12,fontWeight: FontWeight.bold,color: kWhiteColor),),
-                                       ),
-                                     ),
-                                   ),
-                                   onTap: (){
-                                     Navigator.push(
-                                         context,
-                                         MaterialPageRoute(
-                                             builder: (builder) =>
-                                                 ProductHomePage(
-                                                   customerId: customerList[i].customerId,
-                                                   customerName: customerList[i].customerName,
-                                                 )));
-                                   },
-                                 ),
-
-
-                               ],
-                             ),
-                             SizedBox(height: 10,),
-                             Row(
-                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                               crossAxisAlignment: CrossAxisAlignment.start,
-                               children: [
-                                 customerList[i].kycStatus == "0"
-                                     ? Text("Documents not Uploaded",  textAlign: TextAlign.left,style: TextStyle(fontSize: 12,color: Colors.black),
-                                 )
-                                     : Text("Documents Uploaded", textAlign: TextAlign.left, style: TextStyle(fontSize: 12,color: Colors.black),
-                                 ),
-                                 customerList[i].kycStatus == "2" ? customerList[i].kycApprove == "0"
-                                     ? Text(
-                                   "KYC Pending", style: TextStyle(color: Colors.orange,fontSize: 12),
-                                 )
-                                     : customerList[i].kycApprove == "1"
-                                     ? Text(
-                                   "KYC Approved", textAlign: TextAlign.left,
-                                   style: TextStyle(fontSize: 12,
-                                       color: Colors
-                                           .green),
-                                 )
-                                     : Text(
-                                   "KYC Rejected", textAlign: TextAlign.left,
-                                   style: TextStyle(fontSize: 12,
-                                       color: Colors
-                                           .redAccent),
-                                 )
-                                     : Text(
-                                   "KYC Pending", textAlign: TextAlign.left,
-                                   style: TextStyle(fontSize: 12,
-                                       color: Colors.orange),
-                                 ),
-                                 GestureDetector(
-                                   onTap: () {
-                                     Navigator.push(
-                                         context,
-                                         MaterialPageRoute(
-                                             builder: (builder) =>
-                                                 CustomerDetailsPage(
-                                                   salesId:
-                                                   widget.salesId,
-                                                   name: widget.name,
-                                                   email: widget.email,
-                                                   customer:
-                                                   customerList[i],
-                                                 )));
-                                   },
-                                   child: Container(
-                                     decoration: BoxDecoration(
-                                         color: kPrimaryColor,
-                                         borderRadius: BorderRadius.circular(10)
-                                     ),
-                                     height: 30,
-                                     child: Center(
-                                       child: Padding(
-                                         padding: const EdgeInsets.only(left: 4.0,right: 4,),
-                                         child: Text(
-                                           "View Details",style: TextStyle(fontSize: 12,fontWeight: FontWeight.bold,color: kWhiteColor,),
-                                       ),
-                                     ),
-                                   ),
-                                 ),
-
-
-
-                                 )],
-                             ),
-                             Padding(
-                               padding: const EdgeInsets.only(top: 10.0,bottom: 10),
-                               child: Divider(color: Colors.grey,height: 0.0,thickness: 1,),
-                             ),
-                             Row(
-                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                               crossAxisAlignment: CrossAxisAlignment.start,
-                               children: [
-                                 GestureDetector(
-                                   onTap: () {
-                                     Navigator.push(
-                                         context,
-                                         MaterialPageRoute(
-                                             builder: (builder) =>
-                                                 CustomerPricingPage(
-                                                   customerId:" ${customerList[i].customerId}",
-                                                   customerName: "${customerList[i].customerName}",
-                                                   salesId: widget.salesId,
-
-                                                 )
-                                         )
-                                     );
-                                   },
-                                   child: Image.asset("assets/images/rupees.png",height: 25,width: 25,),
-                                 ),
-                                 GestureDetector(
-                                   onTap: () {
-                                     Navigator.push(
-                                         context,
-                                         MaterialPageRoute(
-                                             builder: (builder) =>
-                                                 CustomerEditPage(
-                                                   salesId:
-                                                   widget.salesId,
-                                                   name: widget.name,
-                                                   email: widget.email,
-                                                   customer:
-                                                   customerList[i],
-                                                 )));
-                                   },
-                                   child: Icon(Icons.edit_outlined),
-                                 ),
-                                 customerList[i].isActive == "0"
-                                     ? GestureDetector(
-                                   onTap: () {
-                                     updateStatusId(
-                                         "1",
-                                         customerList[i]
-                                             .customerId);
-                                   },
-                                   child: Icon(
-                                     Icons.block,
-                                     color: Colors.red,
-                                   ),
-                                 )
-                                     : GestureDetector(
-                                   onTap: () {
-                                     updateStatusId(
-                                         "0",
-                                         customerList[i]
-                                             .customerId);
-                                   },
-                                   child: Icon(
-                                     Icons.block,
-                                     color: Colors.green,
-                                   ),
-                                 ),
-                                 customerList[i].kycStatus == "2" && customerList[i].kycApprove == "1"
-                                     ? GestureDetector(
-                                   onTap: () {
-                                     final snackBar = SnackBar(content: Text('KYC Approved'));
-                                     ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                                   },
-                                   child: Icon(
-                                     Icons
-                                         .check_circle_outline,
-                                     color: Colors.green,
-                                   ),
-                                 )
-                                     : GestureDetector(
-                                   onTap: (){
-                                     Navigator.push(
-                                         context,
-                                         MaterialPageRoute(
-                                             builder: (builder) =>
-                                                 CustomerKYCDetailsPage(
-                                                   customerId:
-                                                   customerList[
-                                                   i]
-                                                       .customerId,
-                                                   salesId: widget
-                                                       .salesId,
-                                                   name: widget
-                                                       .name,
-                                                   email: widget
-                                                       .email,
-                                                 )));
-
-                                   },
-                                   child: Icon(
-                                     Icons
-                                         .check_circle_outline,
-                                     color: Colors.red,
-                                   ),
-                                 ),
-                                 GestureDetector(
-                                   onTap: () {
-                                     Navigator.push(
-                                         context,
-                                         MaterialPageRoute(
-                                             builder: (builder) =>
-                                                 CustomerOrderHistoryPage(
-                                                   customerName: customerList[i].customerName,
-                                                   customerId: customerList[i].customerId,
-                                                 )));
-                                   },
-                                   child: Image.asset(
-                                       "assets/images/production_order.png",height: 30,width: 30,),
-                                 ),
-                                 GestureDetector(
-                                   onTap: () {
-                                     Navigator.push(
-                                         context,
-                                         MaterialPageRoute(
-                                             builder: (builder) =>
-                                                CustomerLedgerPage(
-                                                   customerId: customerList[i].customerId,
-                                                 )));
-                                   },
-                                   child: Image.asset(
-                                     "assets/images/ledger.png",height: 30,width: 30,),
-                                 ),
-                               ],
-                             )
-                           ],
-                         ),
-                       ),
-                     ),
-                   );
-
-                 })
+                        );
+                      })
+                  : ListView.builder(
+                      physics: BouncingScrollPhysics(),
+                      shrinkWrap: true,
+                      itemCount: customerList.length,
+                      itemBuilder: (c, i) {
+                        customerList[i].isActive == "0"
+                            ? status.add(false)
+                            : status.add(true);
+                        return Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Container(
+                            decoration: BoxDecoration(
+                                color: kWhiteColor,
+                                borderRadius: BorderRadius.circular(10),
+                                boxShadow: [
+                                  BoxShadow(color: Colors.grey, blurRadius: 5)
+                                ]),
+                            child: Padding(
+                              padding: const EdgeInsets.only(
+                                  left: 10.0, top: 10, bottom: 10, right: 10),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Flexible(
+                                        child: Container(
+                                          padding: EdgeInsets.only(right: 13.0),
+                                          child: Text(
+                                            "${customerList[i].customerName}",
+                                            textAlign: TextAlign.left,
+                                            maxLines: 1,
+                                            overflow: TextOverflow.ellipsis,
+                                            style: TextStyle(
+                                                color: kPrimaryColor,
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                        ),
+                                      ),
+                                      customerList[i].isActive == "0"
+                                          ? Text(
+                                              "Blocked",
+                                              textAlign: TextAlign.left,
+                                              style: TextStyle(
+                                                color: Colors.redAccent,
+                                                fontSize: 16,
+                                              ),
+                                            )
+                                          : Text(
+                                              "Active",
+                                              textAlign: TextAlign.left,
+                                              style: TextStyle(
+                                                color: Colors.green,
+                                                fontSize: 16,
+                                              ),
+                                            ),
+                                      GestureDetector(
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                              color: kPrimaryColor,
+                                              borderRadius:
+                                                  BorderRadius.circular(10)),
+                                          height: 30,
+                                          child: Center(
+                                            child: Padding(
+                                              padding: const EdgeInsets.only(
+                                                left: 4.0,
+                                                right: 4,
+                                              ),
+                                              child: Text(
+                                                "Buy Product",
+                                                style: TextStyle(
+                                                    fontSize: 12,
+                                                    fontWeight: FontWeight.bold,
+                                                    color: kWhiteColor),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        onTap: () {
+                                          Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (builder) =>
+                                                      ProductHomePage(
+                                                        customerId:
+                                                            customerList[i]
+                                                                .customerId,
+                                                        customerName:
+                                                            customerList[i]
+                                                                .customerName,
+                                                      )));
+                                        },
+                                      ),
+                                    ],
+                                  ),
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      customerList[i].kycStatus == "0"
+                                          ? Text(
+                                              "Documents not Uploaded",
+                                              textAlign: TextAlign.left,
+                                              style: TextStyle(
+                                                  fontSize: 12,
+                                                  color: Colors.black),
+                                            )
+                                          : Text(
+                                              "Documents Uploaded",
+                                              textAlign: TextAlign.left,
+                                              style: TextStyle(
+                                                  fontSize: 12,
+                                                  color: Colors.black),
+                                            ),
+                                      customerList[i].kycStatus == "2"
+                                          ? customerList[i].kycApprove == "0"
+                                              ? Text(
+                                                  "KYC Pending",
+                                                  style: TextStyle(
+                                                      color: Colors.orange,
+                                                      fontSize: 12),
+                                                )
+                                              : customerList[i].kycApprove ==
+                                                      "1"
+                                                  ? Text(
+                                                      "KYC Approved",
+                                                      textAlign: TextAlign.left,
+                                                      style: TextStyle(
+                                                          fontSize: 12,
+                                                          color: Colors.green),
+                                                    )
+                                                  : Text(
+                                                      "KYC Rejected",
+                                                      textAlign: TextAlign.left,
+                                                      style: TextStyle(
+                                                          fontSize: 12,
+                                                          color:
+                                                              Colors.redAccent),
+                                                    )
+                                          : Text(
+                                              "KYC Pending",
+                                              textAlign: TextAlign.left,
+                                              style: TextStyle(
+                                                  fontSize: 12,
+                                                  color: Colors.orange),
+                                            ),
+                                      GestureDetector(
+                                        onTap: () {
+                                          Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (builder) =>
+                                                      CustomerDetailsPage(
+                                                        salesId: widget.salesId,
+                                                        name: widget.name,
+                                                        email: widget.email,
+                                                        customer:
+                                                            customerList[i],
+                                                      )));
+                                        },
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                              color: kPrimaryColor,
+                                              borderRadius:
+                                                  BorderRadius.circular(10)),
+                                          height: 30,
+                                          child: Center(
+                                            child: Padding(
+                                              padding: const EdgeInsets.only(
+                                                left: 4.0,
+                                                right: 4,
+                                              ),
+                                              child: Text(
+                                                "View Details",
+                                                style: TextStyle(
+                                                  fontSize: 12,
+                                                  fontWeight: FontWeight.bold,
+                                                  color: kWhiteColor,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(
+                                        top: 10.0, bottom: 10),
+                                    child: Divider(
+                                      color: Colors.grey,
+                                      height: 0.0,
+                                      thickness: 1,
+                                    ),
+                                  ),
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      GestureDetector(
+                                        onTap: () {
+                                          Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (builder) =>
+                                                      CustomerPricingPage(
+                                                        customerId:
+                                                            " ${customerList[i].customerId}",
+                                                        customerName:
+                                                            "${customerList[i].customerName}",
+                                                        salesId: widget.salesId,
+                                                      )));
+                                        },
+                                        child: Image.asset(
+                                          "assets/images/rupees.png",
+                                          height: 25,
+                                          width: 25,
+                                        ),
+                                      ),
+                                      GestureDetector(
+                                        onTap: () {
+                                          Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (builder) =>
+                                                      CustomerEditPage(
+                                                        salesId: widget.salesId,
+                                                        name: widget.name,
+                                                        email: widget.email,
+                                                        customer:
+                                                            customerList[i],
+                                                      )));
+                                        },
+                                        child: Icon(Icons.edit_outlined),
+                                      ),
+                                      customerList[i].isActive == "0"
+                                          ? GestureDetector(
+                                              onTap: () {
+                                                updateStatusId("1",
+                                                    customerList[i].customerId);
+                                              },
+                                              child: Icon(
+                                                Icons.block,
+                                                color: Colors.red,
+                                              ),
+                                            )
+                                          : GestureDetector(
+                                              onTap: () {
+                                                updateStatusId("0",
+                                                    customerList[i].customerId);
+                                              },
+                                              child: Icon(
+                                                Icons.block,
+                                                color: Colors.green,
+                                              ),
+                                            ),
+                                      customerList[i].kycStatus == "2" &&
+                                              customerList[i].kycApprove == "1"
+                                          ? GestureDetector(
+                                              onTap: () {
+                                                final snackBar = SnackBar(
+                                                    content:
+                                                        Text('KYC Approved'));
+                                                ScaffoldMessenger.of(context)
+                                                    .showSnackBar(snackBar);
+                                              },
+                                              child: Icon(
+                                                Icons.check_circle_outline,
+                                                color: Colors.green,
+                                              ),
+                                            )
+                                          : GestureDetector(
+                                              onTap: () {
+                                                Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                        builder: (builder) =>
+                                                            CustomerKYCDetailsPage(
+                                                              customerId:
+                                                                  customerList[
+                                                                          i]
+                                                                      .customerId,
+                                                              salesId: widget
+                                                                  .salesId,
+                                                              name: widget.name,
+                                                              email:
+                                                                  widget.email,
+                                                            )));
+                                              },
+                                              child: Icon(
+                                                Icons.check_circle_outline,
+                                                color: Colors.red,
+                                              ),
+                                            ),
+                                      GestureDetector(
+                                        onTap: () {
+                                          Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (builder) =>
+                                                      CustomerOrderHistoryPage(
+                                                        customerName:
+                                                            customerList[i]
+                                                                .customerName,
+                                                        customerId:
+                                                            customerList[i]
+                                                                .customerId,
+                                                      )));
+                                        },
+                                        child: Image.asset(
+                                          "assets/images/production_order.png",
+                                          height: 30,
+                                          width: 30,
+                                        ),
+                                      ),
+                                      GestureDetector(
+                                        onTap: () {
+                                          Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (builder) =>
+                                                      CustomerLedgerPage(
+                                                        customerId:
+                                                            customerList[i]
+                                                                .customerId,
+                                                      )));
+                                        },
+                                        child: Image.asset(
+                                          "assets/images/ledger.png",
+                                          height: 30,
+                                          width: 30,
+                                        ),
+                                      ),
+                                    ],
+                                  )
+                                ],
+                              ),
+                            ),
+                          ),
+                        );
+                      })
             ],
-
           );
-
         },
       ),
     );
@@ -835,7 +974,7 @@ class _CustomerListPageState extends State<CustomerListPage> {
                     salesId: widget.salesId,
                     name: widget.name,
                     email: widget.email,
-                  customerId: widget.customerId,
+                    customerId: widget.customerId,
                   )),
           (Route<dynamic> route) => false);
     } else {

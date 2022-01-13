@@ -6,79 +6,89 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class TodayProductionPage extends StatefulWidget {
-  const TodayProductionPage({Key key}) : super(key: key);
+  final type;
+  final customerId;
+  final customerName;
+
+  const TodayProductionPage(
+      {Key key, this.type, this.customerId, this.customerName})
+      : super(key: key);
 
   @override
   _TodayProductionPageState createState() => _TodayProductionPageState();
 }
 
 class _TodayProductionPageState extends State<TodayProductionPage> {
-
-  final TodayProductionBloc todayProductionBloc =  TodayProductionBloc();
+  final TodayProductionBloc todayProductionBloc = TodayProductionBloc();
   AsyncSnapshot<TodayProductionModel> asyncSnapshot;
-
-
-  String customerName = "";
-  String customerId = "";
-  getUserDetails()async{
-    SharedPreferences sharedPreferences= await SharedPreferences.getInstance();
-  setState(() {
-    customerName = sharedPreferences.getString("Customer_name");
-    customerId = sharedPreferences.getString("customer_id");
-  });
-  }
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    getUserDetails();
+    // if (widget.type != "sales") {
+    //   getUserDetails();
+    // }
     todayProductionBloc.fetchTodayProduction();
   }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    todayProductionBloc.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: kWhiteColor,
-        iconTheme: IconThemeData(
-            color: kBlackColor
-        ),
+        iconTheme: IconThemeData(color: kBlackColor),
         title: Text("Today Production "),
-        titleTextStyle: TextStyle(color: kBlackColor,fontSize: 18,fontWeight: FontWeight.bold),
+        titleTextStyle: TextStyle(
+            color: kBlackColor, fontSize: 18, fontWeight: FontWeight.bold),
         centerTitle: true,
       ),
       body: _body(),
     );
   }
 
-
-  Widget _body(){
+  Widget _body() {
     return StreamBuilder<TodayProductionModel>(
         stream: todayProductionBloc.todayProductionStream,
-        builder: (c,s){
+        builder: (c, s) {
           if (s.connectionState != ConnectionState.active) {
             print("all connection");
-            return Container(height: 300,
+            return Container(
+                height: 300,
                 alignment: Alignment.center,
                 child: Center(
-                  heightFactor: 50, child: CircularProgressIndicator(
-                  color: kPrimaryColor,
-                ),));
-          }
-          else if (s.hasError) {
+                  heightFactor: 50,
+                  child: CircularProgressIndicator(
+                    color: kPrimaryColor,
+                  ),
+                ));
+          } else if (s.hasError) {
             print("as3 error");
             print(s.error);
-            return Container(height: 300,
+            return Container(
+              height: 300,
               alignment: Alignment.center,
-              child: SelectableText("Error Loading Data ${s.error}",),);
-          }
-          else  if (s.data.toString().isEmpty) {
+              child: SelectableText(
+                "Error Loading Data ${s.error}",
+              ),
+            );
+          } else if (s.data.toString().isEmpty) {
             print("as3 empty");
-            return Container(height: 300,
+            return Container(
+              height: 300,
               alignment: Alignment.center,
-              child: Text("No Data Found",),);
-          }
-          else {
+              child: Text(
+                "No Data Found",
+              ),
+            );
+          } else {
             asyncSnapshot = s;
             return SingleChildScrollView(
               child: Column(
@@ -86,7 +96,8 @@ class _TodayProductionPageState extends State<TodayProductionPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Padding(
-                    padding: const EdgeInsets.only(left: 10.0,right: 10,top: 10),
+                    padding:
+                        const EdgeInsets.only(left: 10.0, right: 10, top: 10),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
@@ -96,11 +107,18 @@ class _TodayProductionPageState extends State<TodayProductionPage> {
                           child: Container(
                               decoration: BoxDecoration(
                                   borderRadius: BorderRadius.zero,
-                                  border: Border.all(color: kBlackColor,width: 0.5)
-                              ),
+                                  border: Border.all(
+                                      color: kBlackColor, width: 0.5)),
                               child: Padding(
                                 padding: const EdgeInsets.all(10.0),
-                                child: Text("Model No",textAlign: TextAlign.center,style: TextStyle(color: kPrimaryColor,fontSize: 14,fontWeight: FontWeight.bold),),
+                                child: Text(
+                                  "Model No",
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      color: kPrimaryColor,
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.bold),
+                                ),
                               )),
                         ),
                         Expanded(
@@ -108,41 +126,56 @@ class _TodayProductionPageState extends State<TodayProductionPage> {
                           child: Container(
                               decoration: BoxDecoration(
                                   borderRadius: BorderRadius.zero,
-                                  border: Border.all(color: kBlackColor,width: 0.5)
-                              ),
+                                  border: Border.all(
+                                      color: kBlackColor, width: 0.5)),
                               child: Padding(
                                 padding: const EdgeInsets.all(10.0),
-                                child: Text("View Products",textAlign: TextAlign.center,style: TextStyle(color: kPrimaryColor,fontSize: 14,fontWeight: FontWeight.bold),),
+                                child: Text(
+                                  "View Products",
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      color: kPrimaryColor,
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.bold),
+                                ),
                               )),
                         ),
                       ],
                     ),
                   ),
-                  ...List.generate(asyncSnapshot.data.todaysProduction.length, (index) => ModelListTile(
-                    todaysProduction: asyncSnapshot.data.todaysProduction[index],
-                    customerId: customerId,
-                    customerName: customerName,
-                  ))
+                  ...List.generate(
+                      asyncSnapshot.data.todaysProduction.length,
+                      (index) => ModelListTile(
+                            todaysProduction:
+                                asyncSnapshot.data.todaysProduction[index],
+                            customerId: widget.customerId,
+                            customerName: widget.customerName,
+                            type: widget.type,
+                          ))
                 ],
               ),
             );
           }
-
         });
   }
 }
+
 class ModelListTile extends StatelessWidget {
+  final TodaysProduction todaysProduction;
+  final customerId, customerName, type;
 
-  final  TodaysProduction todaysProduction;
-  final customerId, customerName;
-
-  const ModelListTile({Key key,this.todaysProduction, this.customerId, this.customerName}) : super(key: key);
-
+  const ModelListTile(
+      {Key key,
+      this.todaysProduction,
+      this.customerId,
+      this.customerName,
+      this.type})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return    Padding(
-      padding: const EdgeInsets.only(left: 10.0,right: 10),
+    return Padding(
+      padding: const EdgeInsets.only(left: 10.0, right: 10),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -152,11 +185,17 @@ class ModelListTile extends StatelessWidget {
             child: Container(
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.zero,
-                    border: Border.all(color: kBlackColor,width: 0.5)
-                ),
+                    border: Border.all(color: kBlackColor, width: 0.5)),
                 child: Padding(
                   padding: const EdgeInsets.all(10.0),
-                  child: Text(todaysProduction.modelNo,textAlign: TextAlign.center,style: TextStyle(color: kBlackColor,fontSize: 14,fontWeight: FontWeight.bold),),
+                  child: Text(
+                    todaysProduction.modelNo,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        color: kBlackColor,
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold),
+                  ),
                 )),
           ),
           Expanded(
@@ -164,28 +203,33 @@ class ModelListTile extends StatelessWidget {
             child: Container(
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.zero,
-                    border: Border.all(color: kBlackColor,width: 0.5)
-                ),
+                    border: Border.all(color: kBlackColor, width: 0.5)),
                 child: Padding(
                   padding: const EdgeInsets.all(10.0),
                   child: GestureDetector(
-                    onTap: (){
-
-                      Navigator.push(context, MaterialPageRoute(builder: (context)=>ProductFromModelPage(
-                        customerId: customerId ,
-                        modelNo:todaysProduction.modelNo ,
-                        modelNoId:  todaysProduction.modelNoId,
-                        customerName: customerName,
-                      )));
+                    onTap: () {
+                      Navigator.push(context, MaterialPageRoute(builder: (context){
+                        return ProductFromModelPage(
+                            customerId: customerId,
+                            modelNo: todaysProduction.modelNo,
+                            modelNoId: todaysProduction.modelNoId,
+                            customerName: customerName,
+                            type: type);
+                      }));
 
                     },
                     child: Container(
                         decoration: BoxDecoration(
                             color: kPrimaryColor,
-                            borderRadius: BorderRadius.circular(20)
-                        ),
+                            borderRadius: BorderRadius.circular(20)),
                         child: Text(
-                          "View Products",textAlign: TextAlign.center,style: TextStyle(color: kWhiteColor,fontSize: 14,fontWeight: FontWeight.bold),)),
+                          "View Products",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              color: kWhiteColor,
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold),
+                        )),
                   ),
                 )),
           ),

@@ -15,9 +15,10 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 class ReadyStockFromModelPage extends StatefulWidget {
   final customerId;
   final modelNoId;
+  final type;
 
 
-  const ReadyStockFromModelPage({Key key,this.customerId,this.modelNoId}) : super(key: key);
+  const ReadyStockFromModelPage({Key key,this.customerId,this.modelNoId, this.type}) : super(key: key);
 
   @override
   _ProductFromModelPageState createState() => _ProductFromModelPageState();
@@ -109,7 +110,7 @@ class _ProductFromModelPageState extends State<ReadyStockFromModelPage> {
             itemCount: s.data.readyStockProductList.length,
             itemBuilder: (BuildContext context, int index) => GestureDetector(
               onTap: (){
-                Navigator.push(context, MaterialPageRoute(builder: (context)=>ProductFromModelDetailPage(
+                widget.type == "sales" ? {} : Navigator.push(context, MaterialPageRoute(builder: (context)=>ProductFromModelDetailPage(
                   customerId: widget.customerId,
                   productId: s.data.readyStockProductList[index].productId,
 

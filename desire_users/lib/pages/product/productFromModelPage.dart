@@ -13,9 +13,10 @@ class ProductFromModelPage extends StatefulWidget {
    final customerName;
    final modelNoId;
    final modelNo;
+   final type;
 
 
-  const ProductFromModelPage({Key key,this.customerId,this.modelNoId,this.modelNo,this.customerName}) : super(key: key);
+  const ProductFromModelPage({Key key,this.customerId,this.modelNoId,this.modelNo,this.customerName, this.type}) : super(key: key);
 
   @override
   _ProductFromModelPageState createState() => _ProductFromModelPageState();
@@ -95,7 +96,7 @@ class _ProductFromModelPageState extends State<ProductFromModelPage> {
             itemCount: s.data.data.length,
             itemBuilder: (BuildContext context, int index) => GestureDetector(
               onTap: (){
-                    Navigator.push(context, MaterialPageRoute(builder: (context)=>ProductFromModelDetailPage(
+                    widget.type == "sales" ? {} :Navigator.push(context, MaterialPageRoute(builder: (context)=>ProductFromModelDetailPage(
                       customerId: widget.customerId,
                       productId: s.data.data[index].id,
 
