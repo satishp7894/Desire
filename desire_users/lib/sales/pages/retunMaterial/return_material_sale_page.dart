@@ -1,54 +1,47 @@
-import 'package:desire_users/bloc/invoice_bloc.dart';
-import 'package:desire_users/components/default_button.dart';
-import 'package:desire_users/models/invoice_model.dart';
-import 'package:desire_users/pages/complaint/add_complaint.dart';
-import 'package:desire_users/pages/return_material/submit_return_material.dart';
+import 'package:desire_users/models/return_material_sale_model.dart';
+import 'package:desire_users/sales/bloc/return_material_sale_bloc.dart';
+import 'package:desire_users/sales/pages/retunMaterial/returnMaterialDetialSalesPage.dart';
 import 'package:desire_users/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
-import 'invoice_detail_page.dart';
+class ReturnMaterialSalePage extends StatefulWidget {
+  final salesId;
 
-class InvoiceListPage extends StatefulWidget {
-  final customerId, customerName, type;
-
-  const InvoiceListPage(
-      {Key key, this.customerId, this.customerName, this.type})
-      : super(key: key);
+  const ReturnMaterialSalePage({Key key, this.salesId}) : super(key: key);
 
   @override
-  _InvoiceListPageState createState() => _InvoiceListPageState();
+  _ReturnMaterialSalePageState createState() =>
+      _ReturnMaterialSalePageState();
 }
 
-class _InvoiceListPageState extends State<InvoiceListPage> {
-  final InvoiceBloc invoiceBloc = InvoiceBloc();
-  InvoiceModel asyncSnapshot;
+class _ReturnMaterialSalePageState extends State<ReturnMaterialSalePage> {
+  final ReturnMaterialSaleBloc returnmaterialsalebloc =
+  ReturnMaterialSaleBloc();
+  ReturnMaterialSaleModel asyncSnapshot;
   TextEditingController fromDateinput = TextEditingController();
   TextEditingController toDateinput = TextEditingController();
-  List<CustomerInvoice> cs;
+  List<ReturnMaterialList> cs;
   var toDate;
   var fromDate;
-  List<CustomerInvoice> filterDate = [];
+  List<ReturnMaterialList> filterDate = [];
 
   String customerName = "";
   String customerId = "";
   bool isVisible = false;
 
-  getUserDetails() async {
-    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    setState(() {
-      customerName = sharedPreferences.getString("Customer_name");
-      customerId = sharedPreferences.getString("customer_id");
-    });
-  }
-
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    getUserDetails();
-    invoiceBloc.fetchInvoiceDetails(widget.customerId);
+    returnmaterialsalebloc.fetchReturnmaterialList(widget.salesId);
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    returnmaterialsalebloc.dispose();
   }
 
   @override
@@ -57,7 +50,7 @@ class _InvoiceListPageState extends State<InvoiceListPage> {
       appBar: AppBar(
         backgroundColor: kWhiteColor,
         iconTheme: IconThemeData(color: kBlackColor),
-        title: Text("${widget.customerName} Invoices"),
+        title: Text("Invoices"),
         titleTextStyle: TextStyle(
             color: kBlackColor, fontSize: 18, fontWeight: FontWeight.bold),
         centerTitle: true,
@@ -84,8 +77,8 @@ class _InvoiceListPageState extends State<InvoiceListPage> {
   }
 
   Widget _body() {
-    return StreamBuilder<InvoiceModel>(
-        stream: invoiceBloc.invoiceStream,
+    return StreamBuilder<ReturnMaterialSaleModel>(
+        stream: returnmaterialsalebloc.returnMaterialStream,
         builder: (c, s) {
           if (s.connectionState != ConnectionState.active) {
             print("all connection");
@@ -117,8 +110,7 @@ class _InvoiceListPageState extends State<InvoiceListPage> {
                 "No Data Found",
               ),
             );
-          }
-          else if (s.data.customerInvoice.length == 0 ) {
+          } else if (s.data.returnMaterialList.length == 0) {
             return Container(
               height: 300,
               alignment: Alignment.center,
@@ -126,16 +118,16 @@ class _InvoiceListPageState extends State<InvoiceListPage> {
                 s.data.message,
               ),
             );
-          }else {
+          } else {
             asyncSnapshot = s.data;
-            cs = asyncSnapshot.customerInvoice;
+            cs = asyncSnapshot.returnMaterialList;
             return SingleChildScrollView(
               child: Column(
                 children: [
                   AnimatedSize(
                       duration: Duration(milliseconds: 1000),
                       child: Container(
-                        height: !isVisible ? 0.0 :null,
+                          height: !isVisible ? 0.0 : null,
                           child: Visibility(
                               visible: isVisible,
                               child: Column(
@@ -144,8 +136,8 @@ class _InvoiceListPageState extends State<InvoiceListPage> {
                                     children: [
                                       Container(
                                           width: MediaQuery.of(context)
-                                                  .size
-                                                  .width /
+                                              .size
+                                              .width /
                                               2,
                                           margin: const EdgeInsets.only(top: 5),
                                           padding: const EdgeInsets.all(10.0),
@@ -154,7 +146,7 @@ class _InvoiceListPageState extends State<InvoiceListPage> {
                                             //editing controller of this TextField
                                             decoration: InputDecoration(
                                                 prefixIcon:
-                                                    Icon(Icons.date_range),
+                                                Icon(Icons.date_range),
                                                 hintText: "Enter Start Date",
                                                 hintStyle: TextStyle(
                                                     color: kSecondaryColor,
@@ -163,13 +155,13 @@ class _InvoiceListPageState extends State<InvoiceListPage> {
                                                 labelStyle: TextStyle(
                                                     color: kPrimaryColor),
                                                 floatingLabelBehavior:
-                                                    FloatingLabelBehavior
-                                                        .always,
+                                                FloatingLabelBehavior
+                                                    .always,
                                                 focusedBorder:
-                                                    OutlineInputBorder(
-                                                        borderSide: BorderSide(
-                                                            color:
-                                                                kPrimaryColor)),
+                                                OutlineInputBorder(
+                                                    borderSide: BorderSide(
+                                                        color:
+                                                        kPrimaryColor)),
                                                 border: OutlineInputBorder(
                                                     borderSide: BorderSide(
                                                         color: kPrimaryColor))),
@@ -177,13 +169,13 @@ class _InvoiceListPageState extends State<InvoiceListPage> {
                                             //set it true, so that user will not able to edit text
                                             onTap: () async {
                                               DateTime pickedDate =
-                                                  await showDatePicker(
-                                                      context: context,
-                                                      initialDate:
-                                                          DateTime.now(),
-                                                      firstDate: DateTime(2000),
-                                                      //DateTime.now() - not to allow to choose before today.
-                                                      lastDate: DateTime(2101));
+                                              await showDatePicker(
+                                                  context: context,
+                                                  initialDate:
+                                                  DateTime.now(),
+                                                  firstDate: DateTime(2000),
+                                                  //DateTime.now() - not to allow to choose before today.
+                                                  lastDate: DateTime(2101));
 
                                               if (pickedDate != null) {
                                                 print(
@@ -203,8 +195,8 @@ class _InvoiceListPageState extends State<InvoiceListPage> {
                                           )),
                                       Container(
                                         width:
-                                            MediaQuery.of(context).size.width /
-                                                2,
+                                        MediaQuery.of(context).size.width /
+                                            2,
                                         margin: const EdgeInsets.only(top: 5),
                                         padding: EdgeInsets.all(10),
                                         child: TextField(
@@ -212,7 +204,7 @@ class _InvoiceListPageState extends State<InvoiceListPage> {
                                           //editing controller of this TextField
                                           decoration: InputDecoration(
                                               prefixIcon:
-                                                  Icon(Icons.date_range),
+                                              Icon(Icons.date_range),
                                               hintText: "Enter End Date",
                                               hintStyle: TextStyle(
                                                   color: kSecondaryColor,
@@ -221,7 +213,7 @@ class _InvoiceListPageState extends State<InvoiceListPage> {
                                               labelStyle: TextStyle(
                                                   color: kPrimaryColor),
                                               floatingLabelBehavior:
-                                                  FloatingLabelBehavior.always,
+                                              FloatingLabelBehavior.always,
                                               focusedBorder: OutlineInputBorder(
                                                   borderSide: BorderSide(
                                                       color: kPrimaryColor)),
@@ -232,11 +224,11 @@ class _InvoiceListPageState extends State<InvoiceListPage> {
                                           //set it true, so that user will not able to edit text
                                           onTap: () async {
                                             DateTime pickedDate =
-                                                await showDatePicker(
-                                                    context: context,
-                                                    initialDate: DateTime.now(),
-                                                    firstDate: DateTime(2000),
-                                                    lastDate: DateTime(2101));
+                                            await showDatePicker(
+                                                context: context,
+                                                initialDate: DateTime.now(),
+                                                firstDate: DateTime(2000),
+                                                lastDate: DateTime(2101));
 
                                             if (pickedDate != null) {
                                               print(
@@ -245,9 +237,9 @@ class _InvoiceListPageState extends State<InvoiceListPage> {
                                               setState(() {
                                                 toDate = pickedDate;
                                                 toDateinput.text = DateFormat(
-                                                        'yyyy-MM-dd')
+                                                    'yyyy-MM-dd')
                                                     .format(
-                                                        pickedDate); //set output date to TextField value.
+                                                    pickedDate); //set output date to TextField value.
                                               });
                                             } else {
                                               print("Date is not selected");
@@ -261,9 +253,9 @@ class _InvoiceListPageState extends State<InvoiceListPage> {
                                     margin: EdgeInsets.all(10),
                                     child: Row(
                                       mainAxisAlignment:
-                                          MainAxisAlignment.spaceEvenly,
+                                      MainAxisAlignment.spaceEvenly,
                                       crossAxisAlignment:
-                                          CrossAxisAlignment.center,
+                                      CrossAxisAlignment.center,
                                       children: [
                                         TextButton(
                                           style: TextButton.styleFrom(
@@ -298,7 +290,7 @@ class _InvoiceListPageState extends State<InvoiceListPage> {
                                           child: const Text(
                                             'Clear Filter',
                                             style:
-                                                TextStyle(color: Colors.white),
+                                            TextStyle(color: Colors.white),
                                           ),
                                         ),
                                       ],
@@ -309,13 +301,12 @@ class _InvoiceListPageState extends State<InvoiceListPage> {
                   ...List.generate(
                       filterDate.length > 0
                           ? filterDate.length
-                          : asyncSnapshot.customerInvoice.length,
-                      (index) => InvoicesTile(
-                          customerInvoice: filterDate.length > 0
-                              ? filterDate[index]
-                              : asyncSnapshot.customerInvoice[index],
-                          type: widget.type,
-                          customerId: widget.customerId))
+                          : asyncSnapshot.returnMaterialList.length,
+                          (index) => InvoicesTile(
+                        customerInvoice: filterDate.length > 0
+                            ? filterDate[index]
+                            : asyncSnapshot.returnMaterialList[index],
+                      ))
                 ],
               ),
             );
@@ -325,20 +316,20 @@ class _InvoiceListPageState extends State<InvoiceListPage> {
 
   void filterList() {
     filterDate.clear();
-    asyncSnapshot.customerInvoice
+    asyncSnapshot.returnMaterialList
         .map((item) => {
-              if (fromDate.isBefore(
-                      new DateFormat("yyyy-MM-dd").parse(item.invoiceDate)) &&
-                  toDate.isAfter(
-                      new DateFormat("yyyy-MM-dd").parse(item.invoiceDate)))
-                filterDate.add(item)
-            })
+      if (fromDate.isBefore(
+          new DateFormat("yyyy-MM-dd").parse(item.returnDate)) &&
+          toDate.isAfter(
+              new DateFormat("yyyy-MM-dd").parse(item.returnDate)))
+        filterDate.add(item)
+    })
         .toList();
     setState(() {
       print("filtered length >>>>" + filterDate.length.toString());
       if (filterDate.length == 0) {
         final snackBar =
-            SnackBar(content: Text('No invoice found between provided Date'));
+        SnackBar(content: Text('No invoice found between provided Date'));
         ScaffoldMessenger.of(context).showSnackBar(snackBar);
       }
     });
@@ -346,13 +337,12 @@ class _InvoiceListPageState extends State<InvoiceListPage> {
 }
 
 class InvoicesTile extends StatelessWidget {
-  final CustomerInvoice customerInvoice;
-  final type;
-  final customerId;
+  final ReturnMaterialList customerInvoice;
 
-  const InvoicesTile(
-      {Key key, this.customerInvoice, this.type, this.customerId})
-      : super(key: key);
+  const InvoicesTile({
+    Key key,
+    this.customerInvoice,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -374,39 +364,21 @@ class InvoicesTile extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Text(
-                "Invoice Date: " + customerInvoice.invoiceDate,
+                "Invoice Date: " + customerInvoice.returnDate,
                 style:
-                    TextStyle(color: kBlackColor, fontWeight: FontWeight.w500),
+                TextStyle(color: kBlackColor, fontWeight: FontWeight.w500),
               ),
               TextButton(
                   style: TextButton.styleFrom(backgroundColor: kPrimaryColor),
                   onPressed: () {
-                    if (type == 0) {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => InvoiceDetailPage(
-                                  id: customerInvoice.dispatchinvoiceid)));
-                    } else if (type == 2) {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => SubmitReturnMaterial(
-                                  id: customerInvoice.dispatchinvoiceid,
-                                  customerId: customerId,
-                                  type: 1)));
-                    } else {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => SubmitReturnMaterial(
-                                  id: customerInvoice.dispatchinvoiceid,
-                                  customerId: customerId,
-                                  type: 0)));
-                    }
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => ReturnMaterialDetailSalesPage(
+                                materialId: customerInvoice.returnMaterialId)));
                   },
                   child: Text(
-                    "View & Download Invoice",
+                    "View Retrun Material Details",
                     style: TextStyle(color: kWhiteColor),
                   ))
             ],

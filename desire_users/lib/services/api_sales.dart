@@ -2,13 +2,17 @@ import 'dart:convert';
 
 import 'package:desire_users/models/credit_list_model.dart';
 import 'package:desire_users/models/customerOrdersModel.dart';
-import 'package:desire_users/models/customer_chat_list_model.dart';
 import 'package:desire_users/models/customer_price_listing_model.dart';
+import 'package:desire_users/models/hold_orders_model.dart';
+import 'package:desire_users/models/invoice_model.dart';
 import 'package:desire_users/models/modelList_model.dart';
 import 'package:desire_users/models/new_customer_list_model.dart';
 import 'package:desire_users/models/orderDetailsByIdModel.dart';
 import 'package:desire_users/models/order_model.dart';
+import 'package:desire_users/models/pending_order_list_model.dart';
 import 'package:desire_users/models/product_list_order_model.dart';
+import 'package:desire_users/models/return_material_detail_sales_model.dart';
+import 'package:desire_users/models/return_material_sale_model.dart';
 import 'package:desire_users/models/sales_chat_detail_model.dart';
 import 'package:desire_users/models/sales_chat_list_model.dart';
 import 'package:desire_users/models/sales_customer_list_model.dart';
@@ -210,6 +214,96 @@ class ApiSales{
     print("Customer Orders List $customerOrdersModel");
 
     return customerOrdersModel;
+  }
+
+  Future<InvoiceModel> getInvoiceListSales(String salesManId) async {
+
+    var response = await http.post(Uri.parse("http://loccon.in/desiremoulding/api/SalesApiController/customerInvoiceList"),
+        body: {
+          "secretkey" : r"12!@34#$5%",
+          "salesman_id" : salesManId
+        });
+    var result = json.decode(response.body);
+    print("customer Orders List response $result");
+
+
+    InvoiceModel invoicemodel;
+    invoicemodel = (InvoiceModel.fromJson(result));
+    print("List $invoicemodel");
+
+    return invoicemodel;
+  }
+
+  Future<PendingOrderListModel> getPendingOrderListSales(String salesManId) async {
+
+    var response = await http.post(Uri.parse("http://loccon.in/desiremoulding/api/SalesApiController/customersPendingOrderList"),
+        body: {
+          "secretkey" : r"12!@34#$5%",
+          "salesman_id" : salesManId
+        });
+    var result = json.decode(response.body);
+    print("List response $result");
+
+
+    PendingOrderListModel pendingorderlistmodel;
+    pendingorderlistmodel = (PendingOrderListModel.fromJson(result));
+    print("List $pendingorderlistmodel");
+
+    return pendingorderlistmodel;
+  }
+
+  Future<HoldOrderModel> getHoldOrderListSales(String salesManId) async {
+
+    var response = await http.post(Uri.parse("http://loccon.in/desiremoulding/api/SalesApiController/customersHoldOrderList"),
+        body: {
+          "secretkey" : r"12!@34#$5%",
+          "salesman_id" : salesManId
+        });
+    var result = json.decode(response.body);
+    print("List response $result");
+
+
+    HoldOrderModel holdordermodel;
+    holdordermodel = (HoldOrderModel.fromJson(result));
+    print("List $holdordermodel");
+
+    return holdordermodel;
+  }
+
+  Future<ReturnMaterialSaleModel> getretunmaterialList(String salesManId) async {
+
+    var response = await http.post(Uri.parse("http://loccon.in/desiremoulding/api/SalesApiController/customersReturnMaterialList"),
+        body: {
+          "secretkey" : r"12!@34#$5%",
+          "salesman_id" : salesManId
+        });
+    var result = json.decode(response.body);
+    print("List response $result");
+
+
+    ReturnMaterialSaleModel returnmaterialsalemodel;
+    returnmaterialsalemodel = (ReturnMaterialSaleModel.fromJson(result));
+    print("List $returnmaterialsalemodel");
+
+    return returnmaterialsalemodel;
+  }
+
+  Future<ReturnMaterialDetailSalesModel> getretunmaterialDetail(String materialId) async {
+
+    var response = await http.post(Uri.parse("http://loccon.in/desiremoulding/api/SalesApiController/customerReturnMaterialDetails"),
+        body: {
+          "secretkey" : r"12!@34#$5%",
+          "return_material_id" : materialId
+        });
+    var result = json.decode(response.body);
+    print("List response $result");
+
+
+    ReturnMaterialDetailSalesModel returnmaterialdetailsalesmodel;
+    returnmaterialdetailsalesmodel = (ReturnMaterialDetailSalesModel.fromJson(result));
+    print("List $returnmaterialdetailsalesmodel");
+
+    return returnmaterialdetailsalesmodel;
   }
 
 

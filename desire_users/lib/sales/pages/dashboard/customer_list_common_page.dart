@@ -1,5 +1,6 @@
 import 'package:data_connection_checker/data_connection_checker.dart';
 import 'package:desire_users/models/sales_customer_list_model.dart';
+import 'package:desire_users/pages/invoice/invoice_list_page.dart';
 import 'package:desire_users/pages/ledger/customerLedgerPage.dart';
 import 'package:desire_users/pages/ready_stock/ready_stock_list.dart';
 import 'package:desire_users/sales/bloc/customer_bloc.dart';
@@ -255,7 +256,7 @@ class _CustomerListCommonPageState extends State<CustomerListCommonPage> {
                                                 height: 25,
                                                 width: 25,
                                               ),
-                                            ),
+                                            )
                                     ],
                                   ),
                                 ),
@@ -300,9 +301,11 @@ class _CustomerListCommonPageState extends State<CustomerListCommonPage> {
                                         child: Container(
                                           padding: EdgeInsets.only(right: 13.0),
                                           child: Text(
-                                            "${customerList[i].customerName}",
+                                            "${customerList[i].customerName}"
+                                            "\n"
+                                            "${customerList[i].address}",
                                             textAlign: TextAlign.left,
-                                            maxLines: 1,
+                                            maxLines: 2,
                                             overflow: TextOverflow.ellipsis,
                                             style: TextStyle(
                                                 color: kPrimaryColor,
@@ -336,7 +339,7 @@ class _CustomerListCommonPageState extends State<CustomerListCommonPage> {
                                                 height: 25,
                                                 width: 25,
                                               ),
-                                            ),
+                                            )
                                     ],
                                   ),
                                 ),
@@ -418,15 +421,10 @@ class _CustomerListCommonPageState extends State<CustomerListCommonPage> {
                 ? CustomerLedgerPage(
                     customerId: customerList[i].customerId,
                   )
-                : type == 1
-                    ? CustomerPricingPage(
-                        customerId: "${customerList[i].customerId}",
-                        customerName: "${customerList[i].customerName}",
-                        salesId: widget.salesId,
-                      )
-                    : Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (builder) => ReadyStockListView(customerId:"${customerList[i].customerId}" ,)))));
+                : CustomerPricingPage(
+                    customerId: "${customerList[i].customerId}",
+                    customerName: "${customerList[i].customerName}",
+                    salesId: widget.salesId,
+                  )));
   }
 }

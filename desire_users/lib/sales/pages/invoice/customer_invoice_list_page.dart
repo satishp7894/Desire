@@ -1,28 +1,22 @@
-import 'package:desire_users/bloc/invoice_bloc.dart';
-import 'package:desire_users/components/default_button.dart';
 import 'package:desire_users/models/invoice_model.dart';
-import 'package:desire_users/pages/complaint/add_complaint.dart';
-import 'package:desire_users/pages/return_material/submit_return_material.dart';
+import 'package:desire_users/sales/bloc/customer_invoice_sales_bloc.dart';
 import 'package:desire_users/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
-import 'invoice_detail_page.dart';
+class CustomerInvoiceListPage extends StatefulWidget {
+  final salesId;
 
-class InvoiceListPage extends StatefulWidget {
-  final customerId, customerName, type;
-
-  const InvoiceListPage(
-      {Key key, this.customerId, this.customerName, this.type})
-      : super(key: key);
+  const CustomerInvoiceListPage({Key key, this.salesId}) : super(key: key);
 
   @override
-  _InvoiceListPageState createState() => _InvoiceListPageState();
+  _CustomerInvoiceListPageState createState() =>
+      _CustomerInvoiceListPageState();
 }
 
-class _InvoiceListPageState extends State<InvoiceListPage> {
-  final InvoiceBloc invoiceBloc = InvoiceBloc();
+class _CustomerInvoiceListPageState extends State<CustomerInvoiceListPage> {
+  final CustomerInvoiceSalesBloc customerinvoicesalesbloc =
+      CustomerInvoiceSalesBloc();
   InvoiceModel asyncSnapshot;
   TextEditingController fromDateinput = TextEditingController();
   TextEditingController toDateinput = TextEditingController();
@@ -35,20 +29,18 @@ class _InvoiceListPageState extends State<InvoiceListPage> {
   String customerId = "";
   bool isVisible = false;
 
-  getUserDetails() async {
-    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    setState(() {
-      customerName = sharedPreferences.getString("Customer_name");
-      customerId = sharedPreferences.getString("customer_id");
-    });
-  }
-
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    getUserDetails();
-    invoiceBloc.fetchInvoiceDetails(widget.customerId);
+    customerinvoicesalesbloc.fetchsaleInvoiceList(widget.salesId);
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    customerinvoicesalesbloc.dispose();
   }
 
   @override
@@ -57,7 +49,7 @@ class _InvoiceListPageState extends State<InvoiceListPage> {
       appBar: AppBar(
         backgroundColor: kWhiteColor,
         iconTheme: IconThemeData(color: kBlackColor),
-        title: Text("${widget.customerName} Invoices"),
+        title: Text("Invoices"),
         titleTextStyle: TextStyle(
             color: kBlackColor, fontSize: 18, fontWeight: FontWeight.bold),
         centerTitle: true,
@@ -85,7 +77,7 @@ class _InvoiceListPageState extends State<InvoiceListPage> {
 
   Widget _body() {
     return StreamBuilder<InvoiceModel>(
-        stream: invoiceBloc.invoiceStream,
+        stream: customerinvoicesalesbloc.invoiceListStream,
         builder: (c, s) {
           if (s.connectionState != ConnectionState.active) {
             print("all connection");
@@ -117,8 +109,7 @@ class _InvoiceListPageState extends State<InvoiceListPage> {
                 "No Data Found",
               ),
             );
-          }
-          else if (s.data.customerInvoice.length == 0 ) {
+          } else if (s.data.customerInvoice.length == 0) {
             return Container(
               height: 300,
               alignment: Alignment.center,
@@ -126,7 +117,7 @@ class _InvoiceListPageState extends State<InvoiceListPage> {
                 s.data.message,
               ),
             );
-          }else {
+          } else {
             asyncSnapshot = s.data;
             cs = asyncSnapshot.customerInvoice;
             return SingleChildScrollView(
@@ -135,7 +126,7 @@ class _InvoiceListPageState extends State<InvoiceListPage> {
                   AnimatedSize(
                       duration: Duration(milliseconds: 1000),
                       child: Container(
-                        height: !isVisible ? 0.0 :null,
+                          height: !isVisible ? 0.0 : null,
                           child: Visibility(
                               visible: isVisible,
                               child: Column(
@@ -311,11 +302,10 @@ class _InvoiceListPageState extends State<InvoiceListPage> {
                           ? filterDate.length
                           : asyncSnapshot.customerInvoice.length,
                       (index) => InvoicesTile(
-                          customerInvoice: filterDate.length > 0
-                              ? filterDate[index]
-                              : asyncSnapshot.customerInvoice[index],
-                          type: widget.type,
-                          customerId: widget.customerId))
+                            customerInvoice: filterDate.length > 0
+                                ? filterDate[index]
+                                : asyncSnapshot.customerInvoice[index],
+                          ))
                 ],
               ),
             );
@@ -347,12 +337,11 @@ class _InvoiceListPageState extends State<InvoiceListPage> {
 
 class InvoicesTile extends StatelessWidget {
   final CustomerInvoice customerInvoice;
-  final type;
-  final customerId;
 
-  const InvoicesTile(
-      {Key key, this.customerInvoice, this.type, this.customerId})
-      : super(key: key);
+  const InvoicesTile({
+    Key key,
+    this.customerInvoice,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -381,29 +370,11 @@ class InvoicesTile extends StatelessWidget {
               TextButton(
                   style: TextButton.styleFrom(backgroundColor: kPrimaryColor),
                   onPressed: () {
-                    if (type == 0) {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => InvoiceDetailPage(
-                                  id: customerInvoice.dispatchinvoiceid)));
-                    } else if (type == 2) {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => SubmitReturnMaterial(
-                                  id: customerInvoice.dispatchinvoiceid,
-                                  customerId: customerId,
-                                  type: 1)));
-                    } else {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => SubmitReturnMaterial(
-                                  id: customerInvoice.dispatchinvoiceid,
-                                  customerId: customerId,
-                                  type: 0)));
-                    }
+                    // Navigator.push(
+                    //     context,
+                    //     MaterialPageRoute(
+                    //         builder: (context) => InvoiceDetailPage(
+                    //             id: customerInvoice.dispatchinvoiceid)));
                   },
                   child: Text(
                     "View & Download Invoice",
