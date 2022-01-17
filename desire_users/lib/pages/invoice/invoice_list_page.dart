@@ -293,6 +293,8 @@ class _InvoiceListPageState extends State<InvoiceListPage> {
                                               fromDateinput.clear();
                                               toDateinput.clear();
                                               filterDate.clear();
+                                              fromDate = null;
+                                              toDate = null;
                                             });
                                           },
                                           child: const Text(

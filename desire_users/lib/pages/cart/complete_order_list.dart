@@ -232,6 +232,8 @@ class _CompleteOrderListState extends State<CompleteOrderList> {
                                   fromDateinput.clear();
                                   toDateinput.clear();
                                   filterDate.clear();
+                                  fromDate = null;
+                                  toDate = null;
                                 });
                               },
                             ),

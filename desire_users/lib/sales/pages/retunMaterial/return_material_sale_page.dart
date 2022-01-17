@@ -285,6 +285,8 @@ class _ReturnMaterialSalePageState extends State<ReturnMaterialSalePage> {
                                               fromDateinput.clear();
                                               toDateinput.clear();
                                               filterDate.clear();
+                                              fromDate = null;
+                                              toDate = null;
                                             });
                                           },
                                           child: const Text(

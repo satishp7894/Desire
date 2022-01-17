@@ -4,7 +4,9 @@ import 'package:desire_users/models/credit_list_model.dart';
 import 'package:desire_users/models/customerOrdersModel.dart';
 import 'package:desire_users/models/customer_price_listing_model.dart';
 import 'package:desire_users/models/hold_orders_model.dart';
+import 'package:desire_users/models/invoice_detail_model.dart';
 import 'package:desire_users/models/invoice_model.dart';
+import 'package:desire_users/models/invoice_sale_detail_model.dart';
 import 'package:desire_users/models/modelList_model.dart';
 import 'package:desire_users/models/new_customer_list_model.dart';
 import 'package:desire_users/models/orderDetailsByIdModel.dart';
@@ -304,6 +306,24 @@ class ApiSales{
     print("List $returnmaterialdetailsalesmodel");
 
     return returnmaterialdetailsalesmodel;
+  }
+
+  Future<InvoiceDetailModel> getInvoiceSalesDetail(String invoiceId) async {
+
+    var response = await http.post(Uri.parse("http://loccon.in/desiremoulding/api/SalesApiController/customerInvoiceProductList"),
+        body: {
+          "secretkey" : r"12!@34#$5%",
+          "invoice_id" : invoiceId
+        });
+    var result = json.decode(response.body);
+    print("List response $result");
+
+
+    InvoiceDetailModel invoicedetailmodel;
+    invoicedetailmodel = (InvoiceDetailModel.fromJson(result));
+    print("List $invoicedetailmodel");
+
+    return invoicedetailmodel;
   }
 
 

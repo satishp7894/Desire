@@ -1,8 +1,11 @@
 import 'package:desire_users/models/invoice_model.dart';
+import 'package:desire_users/pages/invoice/invoice_detail_page.dart';
 import 'package:desire_users/sales/bloc/customer_invoice_sales_bloc.dart';
 import 'package:desire_users/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+
+import 'InvoiceDetailSalesPage.dart';
 
 class CustomerInvoiceListPage extends StatefulWidget {
   final salesId;
@@ -284,6 +287,10 @@ class _CustomerInvoiceListPageState extends State<CustomerInvoiceListPage> {
                                               fromDateinput.clear();
                                               toDateinput.clear();
                                               filterDate.clear();
+                                              fromDateinput.clear();
+                                              toDateinput.clear();
+                                              fromDate = null;
+                                              toDate = null;
                                             });
                                           },
                                           child: const Text(
@@ -370,11 +377,11 @@ class InvoicesTile extends StatelessWidget {
               TextButton(
                   style: TextButton.styleFrom(backgroundColor: kPrimaryColor),
                   onPressed: () {
-                    // Navigator.push(
-                    //     context,
-                    //     MaterialPageRoute(
-                    //         builder: (context) => InvoiceDetailPage(
-                    //             id: customerInvoice.dispatchinvoiceid)));
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => InvoiceDetailSalesPage(
+                                id: customerInvoice.dispatchinvoiceid)));
                   },
                   child: Text(
                     "View & Download Invoice",
