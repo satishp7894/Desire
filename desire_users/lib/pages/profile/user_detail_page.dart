@@ -15,20 +15,18 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'address_view_page.dart';
 
-
 class UserDetailPage extends StatefulWidget {
-
   final bool status;
 
   final int orderCount;
+
   const UserDetailPage({@required this.status, @required this.orderCount});
 
   @override
   _UserDetailPageState createState() => _UserDetailPageState();
 }
 
-class _UserDetailPageState extends State<UserDetailPage> with Validator{
-
+class _UserDetailPageState extends State<UserDetailPage> with Validator {
   TextEditingController companyName;
   TextEditingController name;
   TextEditingController email;
@@ -51,8 +49,7 @@ class _UserDetailPageState extends State<UserDetailPage> with Validator{
   @override
   void initState() {
     checkConnectivity();
-    if(widget.status)
-    {
+    if (widget.status) {
       getDetailsB();
     }
     companyName = TextEditingController();
@@ -72,14 +69,15 @@ class _UserDetailPageState extends State<UserDetailPage> with Validator{
     super.initState();
   }
 
-  checkConnectivity() async{
+  checkConnectivity() async {
     bool result = await DataConnectionChecker().hasConnection;
-    if(result == true) {
+    if (result == true) {
       print('YAY! Free cute dog pics!');
     } else {
       print('No internet :( Reason:');
       print(DataConnectionChecker().lastTryResults);
-      Alerts.showAlertAndBack(context, "No Internet Connection", "Please check your internet");
+      Alerts.showAlertAndBack(
+          context, "No Internet Connection", "Please check your internet");
     }
   }
 
@@ -99,7 +97,7 @@ class _UserDetailPageState extends State<UserDetailPage> with Validator{
     super.dispose();
   }
 
-  getDetailsB() async{
+  getDetailsB() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String mob = prefs.getString("Mobile_no");
     print("object $mob");
@@ -107,8 +105,7 @@ class _UserDetailPageState extends State<UserDetailPage> with Validator{
     checkBloc.getDetailsUserD(context);
   }
 
-
-  getDetails() async{
+  getDetails() async {
     prefs = await SharedPreferences.getInstance();
     id = prefs.getString("customer_id");
     companyName.text = prefs.getString("company_name");
@@ -126,53 +123,66 @@ class _UserDetailPageState extends State<UserDetailPage> with Validator{
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-        child:Scaffold(
-          appBar: AppBar(
-            title: Text("User Details"),
-            centerTitle: false,
-            elevation: 0,
-            backgroundColor:kSecondaryColor.withOpacity(0),
-            titleTextStyle: headingStyle,
-            textTheme: Theme.of(context).textTheme,
-            actions: [
-              _status ? _getEditIcon() : _getSaveCancel(),
-              SizedBox(width: 10,)
-            ],
-            leading: IconButton(icon: Icon(Icons.arrow_back, color: Colors.black,), onPressed: (){
-              Navigator.of(context).pop();
-              },),
+        child: Scaffold(
+      appBar: AppBar(
+        title: Text("User Details"),
+        centerTitle: false,
+        elevation: 0,
+        backgroundColor: kSecondaryColor.withOpacity(0),
+        titleTextStyle: headingStyle,
+        textTheme: Theme.of(context).textTheme,
+        actions: [
+          _status ? _getEditIcon() : _getSaveCancel(),
+          SizedBox(
+            width: 10,
+          )
+        ],
+        leading: IconButton(
+          icon: Icon(
+            Icons.arrow_back,
+            color: Colors.black,
           ),
-          body: _body(),
-          bottomNavigationBar: SafeArea(
-            child: Container(
-              height: 50,
-              color: kSecondaryColor,
-              child: GestureDetector(
-                child: Center(
-                  child: Text("Add Address",style: TextStyle(
-                    color: kWhiteColor,fontSize: 20
-                  ),),
-                ),
-                onTap: (){
-                  Navigator.push(context, MaterialPageRoute(builder: (builder) => AddressViewPage(userId: id, page: "detail",status: true,orderCount:widget.orderCount)));
-
-                },
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+        ),
+      ),
+      body: _body(),
+      bottomNavigationBar: SafeArea(
+        child: Container(
+          height: 50,
+          color: kSecondaryColor,
+          child: GestureDetector(
+            child: Center(
+              child: Text(
+                "Add Address",
+                style: TextStyle(color: kWhiteColor, fontSize: 20),
               ),
             ),
+            onTap: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (builder) => AddressViewPage(
+                          userId: id,
+                          page: "detail",
+                          status: true,
+                          orderCount: widget.orderCount)));
+            },
           ),
-        )
-    );
+        ),
+      ),
+    ));
   }
+
   bool _status = true;
 
-
-  Widget _body(){
+  Widget _body() {
     return SingleChildScrollView(
       physics: BouncingScrollPhysics(),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisSize: MainAxisSize.min,
         children: [
           Padding(
             padding: EdgeInsets.only(bottom: 25.0),
@@ -184,8 +194,8 @@ class _UserDetailPageState extends State<UserDetailPage> with Validator{
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: <Widget>[
                   Padding(
-                      padding: EdgeInsets.only(
-                          left: 25.0, right: 25.0, top: 25.0),
+                      padding:
+                          EdgeInsets.only(left: 25.0, right: 25.0, top: 25.0),
                       child: new Column(
                         mainAxisAlignment: MainAxisAlignment.start,
                         mainAxisSize: MainAxisSize.min,
@@ -193,14 +203,13 @@ class _UserDetailPageState extends State<UserDetailPage> with Validator{
                           new Text(
                             'Personal Information',
                             style: TextStyle(
-                                fontSize: 18.0,
-                                fontWeight: FontWeight.bold),
+                                fontSize: 18.0, fontWeight: FontWeight.bold),
                           ),
                         ],
                       )),
                   Padding(
-                      padding: EdgeInsets.only(
-                          left: 25.0, right: 25.0, top: 25.0),
+                      padding:
+                          EdgeInsets.only(left: 25.0, right: 25.0, top: 25.0),
                       child: new Row(
                         mainAxisSize: MainAxisSize.max,
                         children: <Widget>[
@@ -219,32 +228,37 @@ class _UserDetailPageState extends State<UserDetailPage> with Validator{
                         ],
                       )),
                   Padding(
-                      padding: EdgeInsets.only(
-                          left: 25.0, right: 25.0, top: 2.0),
-                      child: new Flexible(
-                        child: TextFormField(
-                          validator: validateName,
-                          onTap: (){
-                            final snackBar =
-                            SnackBar(content: Text("Contact Admin to change your company name"));
-                            ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                          },
-                          controller: companyName,
-                          decoration: const InputDecoration(
-                            hintText: "Enter Your Company Name",
-                            focusedBorder: UnderlineInputBorder(
-                              borderSide: BorderSide(color: kPrimaryColor)
-                            )
-                          ),
-                          readOnly: true,
-                          // enabled: !_status,
-                          // autofocus: !_status,
-                          // showCursor: !_status,
-                        ),
+                      padding:
+                          EdgeInsets.only(left: 25.0, right: 25.0, top: 2.0),
+                      child: Row(
+                        children: [
+                          new Flexible(
+                            child: TextFormField(
+                              validator: validateName,
+                              onTap: () {
+                                final snackBar = SnackBar(
+                                    content: Text(
+                                        "Contact Admin to change your company name"));
+                                ScaffoldMessenger.of(context)
+                                    .showSnackBar(snackBar);
+                              },
+                              controller: companyName,
+                              decoration: const InputDecoration(
+                                  hintText: "Enter Your Company Name",
+                                  focusedBorder: UnderlineInputBorder(
+                                      borderSide:
+                                          BorderSide(color: kPrimaryColor))),
+                              readOnly: true,
+                              // enabled: !_status,
+                              // autofocus: !_status,
+                              // showCursor: !_status,
+                            ),
+                          )
+                        ],
                       )),
                   Padding(
-                      padding: EdgeInsets.only(
-                          left: 25.0, right: 25.0, top: 25.0),
+                      padding:
+                          EdgeInsets.only(left: 25.0, right: 25.0, top: 25.0),
                       child: new Row(
                         mainAxisSize: MainAxisSize.max,
                         children: <Widget>[
@@ -263,8 +277,8 @@ class _UserDetailPageState extends State<UserDetailPage> with Validator{
                         ],
                       )),
                   Padding(
-                      padding: EdgeInsets.only(
-                          left: 25.0, right: 25.0, top: 2.0),
+                      padding:
+                          EdgeInsets.only(left: 25.0, right: 25.0, top: 2.0),
                       child: new Row(
                         mainAxisSize: MainAxisSize.max,
                         children: <Widget>[
@@ -283,8 +297,8 @@ class _UserDetailPageState extends State<UserDetailPage> with Validator{
                         ],
                       )),
                   Padding(
-                      padding: EdgeInsets.only(
-                          left: 25.0, right: 25.0, top: 25.0),
+                      padding:
+                          EdgeInsets.only(left: 25.0, right: 25.0, top: 25.0),
                       child: new Row(
                         mainAxisSize: MainAxisSize.max,
                         children: <Widget>[
@@ -303,8 +317,8 @@ class _UserDetailPageState extends State<UserDetailPage> with Validator{
                         ],
                       )),
                   Padding(
-                      padding: EdgeInsets.only(
-                          left: 25.0, right: 25.0, top: 2.0),
+                      padding:
+                          EdgeInsets.only(left: 25.0, right: 25.0, top: 2.0),
                       child: new Row(
                         mainAxisSize: MainAxisSize.max,
                         children: <Widget>[
@@ -317,14 +331,13 @@ class _UserDetailPageState extends State<UserDetailPage> with Validator{
                               ),
                               enabled: !_status,
                               //autofocus: !_status,
-
                             ),
                           ),
                         ],
                       )),
                   Padding(
-                      padding: EdgeInsets.only(
-                          left: 25.0, right: 25.0, top: 25.0),
+                      padding:
+                          EdgeInsets.only(left: 25.0, right: 25.0, top: 25.0),
                       child: new Row(
                         mainAxisSize: MainAxisSize.max,
                         children: <Widget>[
@@ -343,8 +356,8 @@ class _UserDetailPageState extends State<UserDetailPage> with Validator{
                         ],
                       )),
                   Padding(
-                      padding: EdgeInsets.only(
-                          left: 25.0, right: 25.0, top: 2.0),
+                      padding:
+                          EdgeInsets.only(left: 25.0, right: 25.0, top: 2.0),
                       child: new Row(
                         mainAxisSize: MainAxisSize.max,
                         children: <Widget>[
@@ -361,8 +374,8 @@ class _UserDetailPageState extends State<UserDetailPage> with Validator{
                         ],
                       )),
                   Padding(
-                      padding: EdgeInsets.only(
-                          left: 25.0, right: 25.0, top: 25.0),
+                      padding:
+                          EdgeInsets.only(left: 25.0, right: 25.0, top: 25.0),
                       child: new Row(
                         mainAxisSize: MainAxisSize.max,
                         children: <Widget>[
@@ -381,8 +394,8 @@ class _UserDetailPageState extends State<UserDetailPage> with Validator{
                         ],
                       )),
                   Padding(
-                      padding: EdgeInsets.only(
-                          left: 25.0, right: 25.0, top: 2.0),
+                      padding:
+                          EdgeInsets.only(left: 25.0, right: 25.0, top: 2.0),
                       child: new Row(
                         mainAxisSize: MainAxisSize.max,
                         children: <Widget>[
@@ -403,8 +416,8 @@ class _UserDetailPageState extends State<UserDetailPage> with Validator{
                         ],
                       )),
                   Padding(
-                      padding: EdgeInsets.only(
-                          left: 25.0, right: 25.0, top: 25.0),
+                      padding:
+                          EdgeInsets.only(left: 25.0, right: 25.0, top: 25.0),
                       child: new Row(
                         mainAxisSize: MainAxisSize.max,
                         children: <Widget>[
@@ -423,8 +436,8 @@ class _UserDetailPageState extends State<UserDetailPage> with Validator{
                         ],
                       )),
                   Padding(
-                      padding: EdgeInsets.only(
-                          left: 20.0, right: 20.0, top: 2.0),
+                      padding:
+                          EdgeInsets.only(left: 20.0, right: 20.0, top: 2.0),
                       child: new Row(
                         mainAxisSize: MainAxisSize.max,
                         children: <Widget>[
@@ -442,8 +455,8 @@ class _UserDetailPageState extends State<UserDetailPage> with Validator{
                         ],
                       )),
                   Padding(
-                      padding: EdgeInsets.only(
-                          left: 25.0, right: 25.0, top: 25.0),
+                      padding:
+                          EdgeInsets.only(left: 25.0, right: 25.0, top: 25.0),
                       child: new Row(
                         mainAxisSize: MainAxisSize.max,
                         children: <Widget>[
@@ -462,8 +475,8 @@ class _UserDetailPageState extends State<UserDetailPage> with Validator{
                         ],
                       )),
                   Padding(
-                      padding: EdgeInsets.only(
-                          left: 20.0, right: 20.0, top: 2.0),
+                      padding:
+                          EdgeInsets.only(left: 20.0, right: 20.0, top: 2.0),
                       child: new Row(
                         mainAxisSize: MainAxisSize.max,
                         children: <Widget>[
@@ -473,16 +486,16 @@ class _UserDetailPageState extends State<UserDetailPage> with Validator{
                               controller: area,
                               validator: validateRequired,
                               keyboardType: TextInputType.streetAddress,
-                              decoration: const InputDecoration(
-                                  hintText: "Enter Area"),
+                              decoration:
+                                  const InputDecoration(hintText: "Enter Area"),
                               enabled: !_status,
                             ),
                           ),
                         ],
                       )),
                   Padding(
-                      padding: EdgeInsets.only(
-                          left: 25.0, right: 25.0, top: 25.0),
+                      padding:
+                          EdgeInsets.only(left: 25.0, right: 25.0, top: 25.0),
                       child: new Row(
                         mainAxisSize: MainAxisSize.max,
                         children: <Widget>[
@@ -501,8 +514,8 @@ class _UserDetailPageState extends State<UserDetailPage> with Validator{
                         ],
                       )),
                   Padding(
-                      padding: EdgeInsets.only(
-                          left: 20.0, right: 20.0, top: 2.0),
+                      padding:
+                          EdgeInsets.only(left: 20.0, right: 20.0, top: 2.0),
                       child: new Row(
                         mainAxisSize: MainAxisSize.max,
                         children: <Widget>[
@@ -512,16 +525,16 @@ class _UserDetailPageState extends State<UserDetailPage> with Validator{
                               controller: city,
                               validator: validateRequired,
                               keyboardType: TextInputType.streetAddress,
-                              decoration: const InputDecoration(
-                                  hintText: "Enter City"),
+                              decoration:
+                                  const InputDecoration(hintText: "Enter City"),
                               enabled: !_status,
                             ),
                           ),
                         ],
                       )),
                   Padding(
-                      padding: EdgeInsets.only(
-                          left: 25.0, right: 25.0, top: 25.0),
+                      padding:
+                          EdgeInsets.only(left: 25.0, right: 25.0, top: 25.0),
                       child: new Row(
                         mainAxisSize: MainAxisSize.max,
                         children: <Widget>[
@@ -540,21 +553,24 @@ class _UserDetailPageState extends State<UserDetailPage> with Validator{
                         ],
                       )),
                   Padding(
-                      padding: EdgeInsets.only(
-                          left: 20.0, right: 20.0, top: 2.0),
+                      padding:
+                          EdgeInsets.only(left: 20.0, right: 20.0, top: 2.0),
                       child: new Row(
                         mainAxisSize: MainAxisSize.max,
                         children: <Widget>[
                           new Flexible(
                             child: Focus(
-                              onFocusChange: (v){
+                              onFocusChange: (v) {
                                 // getOtherAttributes(pincode.text);
                                 print("object focus changed rsponse $v");
-                                if(v == false){
+                                if (v == false) {
                                   if (pinCode.text.length == 6) {
                                     getOtherAttributes(pinCode.text);
                                   } else {
-                                    Alerts.showAlertAndBack(context, "Incorrect PinCode", "Enter a valid Pincode");
+                                    Alerts.showAlertAndBack(
+                                        context,
+                                        "Incorrect PinCode",
+                                        "Enter a valid Pincode");
                                   }
                                 }
                               },
@@ -563,7 +579,7 @@ class _UserDetailPageState extends State<UserDetailPage> with Validator{
                                 controller: pinCode,
                                 focusNode: _focusNode,
                                 validator: validatePinCode,
-                                onFieldSubmitted: (value){
+                                onFieldSubmitted: (value) {
                                   getOtherAttributes(value);
                                 },
                                 inputFormatters: [
@@ -580,8 +596,8 @@ class _UserDetailPageState extends State<UserDetailPage> with Validator{
                         ],
                       )),
                   Padding(
-                      padding: EdgeInsets.only(
-                          left: 25.0, right: 25.0, top: 25.0),
+                      padding:
+                          EdgeInsets.only(left: 25.0, right: 25.0, top: 25.0),
                       child: new Row(
                         mainAxisSize: MainAxisSize.max,
                         children: <Widget>[
@@ -600,8 +616,8 @@ class _UserDetailPageState extends State<UserDetailPage> with Validator{
                         ],
                       )),
                   Padding(
-                      padding: EdgeInsets.only(
-                          left: 20.0, right: 20.0, top: 2.0),
+                      padding:
+                          EdgeInsets.only(left: 20.0, right: 20.0, top: 2.0),
                       child: new Row(
                         mainAxisSize: MainAxisSize.max,
                         children: <Widget>[
@@ -631,12 +647,9 @@ class _UserDetailPageState extends State<UserDetailPage> with Validator{
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: new FloatingActionButton(
-
-        shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10)
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
         backgroundColor: kPrimaryColor,
-        onPressed: (){
+        onPressed: () {
           setState(() {
             _status = false;
           });
@@ -645,18 +658,17 @@ class _UserDetailPageState extends State<UserDetailPage> with Validator{
       ),
     );
   }
+
   Widget _getSaveCancel() {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Row(
         children: [
           new FloatingActionButton(
-
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10)
-            ),
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
             backgroundColor: kSecondaryColor,
-            onPressed: (){
+            onPressed: () {
               setState(() {
                 _status = true;
                 name.text = prefs.getString("Customer_name");
@@ -671,19 +683,25 @@ class _UserDetailPageState extends State<UserDetailPage> with Validator{
                 FocusScope.of(context).requestFocus(new FocusNode());
               });
             },
-            child: Text("Cancel",style: TextStyle(fontSize: 12),),
-          ),
-          SizedBox(width: 5,),
-          new FloatingActionButton(
-
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10)
+            child: Text(
+              "Cancel",
+              style: TextStyle(fontSize: 12),
             ),
+          ),
+          SizedBox(
+            width: 5,
+          ),
+          new FloatingActionButton(
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
             backgroundColor: kPrimaryColor,
-            onPressed: (){
+            onPressed: () {
               getUpdated();
             },
-            child: Text("Save",style: TextStyle(fontSize: 12),),
+            child: Text(
+              "Save",
+              style: TextStyle(fontSize: 12),
+            ),
           ),
         ],
       ),
@@ -702,22 +720,21 @@ class _UserDetailPageState extends State<UserDetailPage> with Validator{
               padding: EdgeInsets.only(right: 10.0),
               child: Container(
                   child: DefaultButton(
-                    text: "Save",
-                    press: (){
-                      getUpdated();
-                    },
-                  )
-          ),),),
+                text: "Save",
+                press: () {
+                  getUpdated();
+                },
+              )),
+            ),
+          ),
           Expanded(
             child: Padding(
               padding: EdgeInsets.only(left: 10.0),
               child: Container(
-                  child: DefaultButton1(
-                    text: "Cancel",
-                    press: (){
-
-                    },
-                  ),
+                child: DefaultButton1(
+                  text: "Cancel",
+                  press: () {},
+                ),
               ),
             ),
           ),
@@ -726,28 +743,32 @@ class _UserDetailPageState extends State<UserDetailPage> with Validator{
     );
   }
 
-  getUpdated() async{
-
+  getUpdated() async {
     if (_formKey.currentState.validate()) {
       _formKey.currentState.save();
-      ProgressDialog pr = ProgressDialog(context, type: ProgressDialogType.Normal,
-        isDismissible: false,);
-      pr.style(message: 'Please wait...',
-        progressWidget: Center(child: CircularProgressIndicator()),);
+      ProgressDialog pr = ProgressDialog(
+        context,
+        type: ProgressDialogType.Normal,
+        isDismissible: false,
+      );
+      pr.style(
+        message: 'Please wait...',
+        progressWidget: Center(child: CircularProgressIndicator()),
+      );
       pr.show();
-      var response = await http.post(Uri.parse(Connection.updateProfile), body: {
-
+      var response =
+          await http.post(Uri.parse(Connection.updateProfile), body: {
         'secretkey': Connection.secretKey,
-        'customer_id':id,
+        'customer_id': id,
         'name': name.text,
-        'username' : uName.text,
+        'username': uName.text,
         'email': email.text,
         'mobile': phone.text,
-        'address' : address.text,
-        'area' : area.text,
-        'City' : city.text,
-        'State' : state.text,
-        'Pincode' : pinCode.text,
+        'address': address.text,
+        'area': area.text,
+        'City': city.text,
+        'State': state.text,
+        'Pincode': pinCode.text,
       });
       var results = json.decode(response.body);
       print('response == $results  ${response.body}');
@@ -755,8 +776,8 @@ class _UserDetailPageState extends State<UserDetailPage> with Validator{
       if (results['status'] == true) {
         _status = true;
         SharedPreferences prefs = await SharedPreferences.getInstance();
-        prefs.setString("Customer_name","${name.text}");
-        prefs.setString("Email",email.text);
+        prefs.setString("Customer_name", "${name.text}");
+        prefs.setString("Email", email.text);
         prefs.setString("Mobile_no", phone.text);
         prefs.setString("User_name", uName.text);
         prefs.setString('address', address.text);
@@ -764,38 +785,53 @@ class _UserDetailPageState extends State<UserDetailPage> with Validator{
         prefs.setString('City', city.text);
         prefs.setString('State', state.text);
         prefs.setString('Pincode', pinCode.text);
-        final snackBar = SnackBar(content: Text('Profile Updated Successfully'));
+        final snackBar =
+            SnackBar(content: Text('Profile Updated Successfully'));
         ScaffoldMessenger.of(context).showSnackBar(snackBar);
-        Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => UserDetailPage(status: true, orderCount: widget.orderCount,)), (Route<dynamic> route) => false);
+        Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(
+                builder: (context) => UserDetailPage(
+                      status: true,
+                      orderCount: widget.orderCount,
+                    )),
+            (Route<dynamic> route) => false);
       } else {
         print('error in updating profile');
-        Alerts.showAlertAndBack(context, 'Error', 'Profile not Updated. Please try again later');
+        Alerts.showAlertAndBack(
+            context, 'Error', 'Profile not Updated. Please try again later');
       }
     } else {
       setState(() {
         _autoValidateMode = AutovalidateMode.always;
       });
     }
-
   }
 
-  getOtherAttributes(String pin) async{
+  getOtherAttributes(String pin) async {
     print("object pin $pin");
-    if(pin.isEmpty || pin.length > 6){
-      Alerts.showAlertAndBack(context, "Invalid Value", "Please Enter 6 digit Pincode");
+    if (pin.isEmpty || pin.length > 6) {
+      Alerts.showAlertAndBack(
+          context, "Invalid Value", "Please Enter 6 digit Pincode");
     } else {
-      ProgressDialog pr = ProgressDialog(context, type: ProgressDialogType.Normal,
-        isDismissible: false,);
-      pr.style(message: 'Please wait...',
-        progressWidget: Center(child: CircularProgressIndicator()),);
+      ProgressDialog pr = ProgressDialog(
+        context,
+        type: ProgressDialogType.Normal,
+        isDismissible: false,
+      );
+      pr.style(
+        message: 'Please wait...',
+        progressWidget: Center(child: CircularProgressIndicator()),
+      );
       pr.show();
-      var response = await http.get(Uri.parse(Connection.getAttributes+"$pin"));
+      var response =
+          await http.get(Uri.parse(Connection.getAttributes + "$pin"));
       var result = json.decode(response.body);
 
-
-      if(result[0]["Message"] == "No records found"){
+      if (result[0]["Message"] == "No records found") {
         pr.hide();
-        Alerts.showAlertAndBack(context, "Incorrect PinCode", "Enter a valid Pincode");
+        Alerts.showAlertAndBack(
+            context, "Incorrect PinCode", "Enter a valid Pincode");
       } else {
         //String cityN = result[0]["PostOffice"][0]["Division"];
         String stateN = result[0]["PostOffice"][0]["State"];
@@ -817,5 +853,4 @@ class _UserDetailPageState extends State<UserDetailPage> with Validator{
       }
     }
   }
-
 }
