@@ -35,7 +35,7 @@ class _MyDrawerState extends State<MyDrawer> {
             UserAccountsDrawerHeader(
               accountEmail: Text("production@gmail.com",style: TextStyle(color: Colors.black),),
               accountName: Text("Desire Moulding",style: TextStyle(color: Colors.black),),
-              currentAccountPicture: Image.asset("assets/images/logo.png",height: 50,width: 50,),
+              currentAccountPicture: Image.asset("assets/images/logo_new.png",height: 50,width: 50,),
               decoration: BoxDecoration(color: kPrimaryLightColor
                 ,),
             ),

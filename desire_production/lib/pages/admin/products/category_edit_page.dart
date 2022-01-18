@@ -53,7 +53,7 @@ class _CategoryEditPageState extends State<CategoryEditPage> with Validator{
               centerTitle: true,
               leading: Builder(
                 builder: (c){
-                  return IconButton(icon: Image.asset("assets/images/logo.png"), onPressed: (){
+                  return IconButton(icon: Image.asset("assets/images/logo_new.png"), onPressed: (){
                     Scaffold.of(c).openDrawer();
                   },);
                 },
