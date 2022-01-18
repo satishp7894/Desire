@@ -100,7 +100,7 @@ class _ProductSearchPageState extends State<ProductSearchPage> {
       child: SafeArea(
         child: Scaffold(
           appBar: AppBar(
-            title: Image.asset("assets/images/logo.png",height: 30,),
+            title: Image.asset("assets/images/log_new.png",height: 30,),
             centerTitle: true,
             elevation: 0,
             backgroundColor:kSecondaryColor.withOpacity(0),

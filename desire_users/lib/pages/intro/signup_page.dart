@@ -162,7 +162,7 @@ class _SignUpPageState extends State<SignUpPage> with Validator{
             Padding(
               padding: const EdgeInsets.only(top: 20.0,bottom: 10),
               child: Image.asset(
-                "assets/images/logo.png",
+                "assets/images/logo_new.png",
                 height: 80,
                 width: 80,
               ),

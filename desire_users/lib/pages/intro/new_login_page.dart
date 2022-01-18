@@ -362,7 +362,7 @@ class _NewLoginPageState extends State<NewLoginPage> {
             shrinkWrap: true,
             children: [
               Image.asset(
-                "assets/images/logo.png",
+                "assets/images/logo_new.png",
                 height: 80,
                 width: 80,
               ),

@@ -546,7 +546,7 @@ class Alerts{
       builder: (BuildContext context) {
         return AlertDialog(
           content: Container(
-            height: 120,
+            height: 130,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,

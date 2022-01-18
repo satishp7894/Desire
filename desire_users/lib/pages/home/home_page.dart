@@ -255,7 +255,7 @@ class _HomePageState extends State<HomePage> {
                     );
                   }));
                 },
-                child: Image.asset("assets/images/logo.png",height: 30,)),
+                child: Image.asset("assets/images/logo_new.png",height: 30,)),
             actions: [
               Padding(
                 padding: const EdgeInsets.only(right: 20, top: 8),
@@ -292,7 +292,7 @@ class _HomePageState extends State<HomePage> {
                   decoration: BoxDecoration(
                       color: kPrimaryColor
                   ),
-                  currentAccountPicture: Image.asset("assets/images/logo.png",height: 20,color: kWhiteColor,),
+                  currentAccountPicture: Image.asset("assets/images/logo_new.png",height: 20,),
                   accountName: Text("Name: "+widget.customerName,style: TextStyle(fontSize: 14,fontWeight: FontWeight.bold,color: kWhiteColor),),
                   accountEmail: Column(
                     mainAxisAlignment: MainAxisAlignment.start,

@@ -103,7 +103,7 @@ class _SalesLoginPageState extends State<SalesLoginPage> with Validator{
           child: SingleChildScrollView(
             child: Column(
               children: [
-                Image.asset("assets/images/logo.png",height: 80,),
+                Image.asset("assets/images/logo_new.png",height: 80,),
                 SizedBox(height: 10),
                 Text(
                   "Welcome to Desire Moulding",

@@ -108,7 +108,7 @@ class SplashScreenState extends State<SplashScreen>
         children: <Widget>[
           Center(
             child: new Image.asset(
-              'assets/images/logo.png',
+              'assets/images/splash_logo.png',
               width: animation.value * 250,
               height: animation.value * 250,
             ),

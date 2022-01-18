@@ -551,7 +551,7 @@ class _BrochurePageState extends State<BrochurePage> {
     pr.show();
     final List<dynamic> imageN =[];
     //final http.Response responseData = await http.post(Uri.parse(Connection.image+"${as.data.products[0].image}"));
-    final image = pw.MemoryImage((await rootBundle.load('assets/images/logo.png')).buffer.asUint8List(),);
+    final image = pw.MemoryImage((await rootBundle.load('assets/images/logo_new.png')).buffer.asUint8List(),);
     //final image1 = pw.MemoryImage(responseData.bodyBytes.buffer.asUint8List());
         for(int i=0; i<as.data.products.length;i++){
       File fileImage = await urlToFile(Connection.image + "${as.data.products[i].image}");
@@ -650,7 +650,7 @@ class _BrochurePageState extends State<BrochurePage> {
     pr.show();
     final List<dynamic> imageN =[];
     //final http.Response responseData = await http.post(Uri.parse(Connection.image+"${as.data.products[0].image}"));
-    final image = pw.MemoryImage((await rootBundle.load('assets/images/logo.png')).buffer.asUint8List(),);
+    final image = pw.MemoryImage((await rootBundle.load('assets/images/logo_new.png')).buffer.asUint8List(),);
     //final image1 = pw.MemoryImage(responseData.bodyBytes.buffer.asUint8List());
     for(int i=0; i<send.length;i++){
       File fileImage = await urlToFile(Connection.image + "${send[i].image}");
