@@ -116,7 +116,17 @@ class _HoldOrderListPageState extends State<HoldOrderListPage> {
                 "No Data Found",
               ),
             );
-          } else {
+          }
+          else if (s.data.holdOrder.length == 0) {
+            print("as3 empty");
+            return Container(
+              height: 300,
+              alignment: Alignment.center,
+              child: Text(
+                "No Data Found",
+              ),
+            );
+          }else {
             asyncSnapshot = s;
             return SingleChildScrollView(
               physics: AlwaysScrollableScrollPhysics(),

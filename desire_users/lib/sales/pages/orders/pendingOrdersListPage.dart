@@ -109,6 +109,15 @@ class _PendingOrderListPageState extends State<PendingOrderListPage> {
                 "No Data Found",
               ),
             );
+          }else if (s.data.pendingOrder.length == 0) {
+            print("as3 empty");
+            return Container(
+              height: 300,
+              alignment: Alignment.center,
+              child: Text(
+                "No Data Found",
+              ),
+            );
           } else {
             asyncSnapshot = s;
             return SingleChildScrollView(

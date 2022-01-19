@@ -1,8 +1,6 @@
 import 'package:data_connection_checker/data_connection_checker.dart';
 import 'package:desire_users/models/sales_customer_list_model.dart';
-import 'package:desire_users/pages/invoice/invoice_list_page.dart';
 import 'package:desire_users/pages/ledger/customerLedgerPage.dart';
-import 'package:desire_users/pages/ready_stock/ready_stock_list.dart';
 import 'package:desire_users/sales/bloc/customer_bloc.dart';
 import 'package:desire_users/sales/pages/products/customer_pricing_page_copy.dart';
 import 'package:desire_users/sales/utils_sales/alerts.dart';
