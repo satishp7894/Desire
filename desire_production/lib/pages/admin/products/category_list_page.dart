@@ -5,6 +5,7 @@ import 'package:desire_production/bloc/category_list_bloc.dart';
 import 'package:desire_production/components/default_button.dart';
 import 'package:desire_production/model/category_list_model.dart';
 import 'package:desire_production/pages/admin/products/category_edit_page.dart';
+import 'package:desire_production/pages/dashboards/admin_dashboard_page.dart';
 import 'package:desire_production/pages/dashboards/dashboard_page_admin.dart';
 import 'package:desire_production/utils/alerts.dart';
 import 'package:desire_production/utils/constants.dart';
@@ -70,7 +71,7 @@ class _CategoryListPageState extends State<CategoryListPage> with Validator{
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: (){
-        return  Navigator.pushReplacement(context, MaterialPageRoute(builder: (builder) => DashboardPageAdmin()));
+        return  Navigator.pushReplacement(context, MaterialPageRoute(builder: (builder) => AdminDashboardPage()));
       },
       child: SafeArea(
           child: Scaffold(

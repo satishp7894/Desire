@@ -122,7 +122,7 @@ class SalesListTile extends StatelessWidget {
           children: [
             CircleAvatar(
                 backgroundColor: kPrimaryColor,
-                child: Text(salesList.userId.toString(),style: TextStyle(color: kWhiteColor),)
+                child: Text(salesList.userId.toString(),style: TextStyle(color: kWhite),)
             ),
             SizedBox(width: 10,),
             Text(salesList.firstname + salesList.lastname,style: TextStyle(color: kBlackColor,fontSize: 16,fontWeight: FontWeight.bold),),

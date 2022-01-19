@@ -7,6 +7,7 @@ import 'package:desire_production/bloc/production_list_bloc.dart';
 import 'package:desire_production/bloc/production_planning_model_list_bloc.dart';
 import 'package:desire_production/model/dailyProductionAddlistModel.dart';
 import 'package:desire_production/model/product_list_model.dart';
+import 'package:desire_production/pages/dashboards/admin_dashboard_page.dart';
 import 'package:desire_production/pages/dashboards/production_dashboard_page.dart';
 import 'package:desire_production/pages/dashboards/dashboard_page_admin.dart';
 import 'package:desire_production/services/connections.dart';
@@ -66,112 +67,98 @@ class _ProductionPlanningPageState extends State<ProductionPlanningPage> {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () {
-        return widget.page == "production"
-            ? Navigator.pushAndRemoveUntil(
-                context,
-                MaterialPageRoute(
-                    builder: (builder) => DashboardPageProduction()),
-                (route) => false)
-            : Navigator.pushAndRemoveUntil(
-                context,
-                MaterialPageRoute(builder: (builder) => DashboardPageAdmin()),
-                (route) => false);
-      },
-      child: Scaffold(
-        backgroundColor: Colors.white,
-        drawer: widget.page == "production" ? MyDrawer() : DrawerAdmin(),
-        appBar: AppBar(
-          elevation: 0,
-          centerTitle: true,
-          backgroundColor: Colors.transparent,
-          leading: IconButton(
-            icon: Icon(
-              Icons.arrow_back,
-              color: Colors.black,
-            ),
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-          ),
-          /*leading: Builder(
-            builder: (c) {
-              return IconButton(
-                icon: Icon(
-                  Icons.list,
-                  color: Colors.black,
-                ),
-                onPressed: () {
-                  Scaffold.of(c).openDrawer();
-                },
-              );
-            },
-          ),*/
-          actions: [
-            PopupMenuButton(
-                icon: Icon(
-                  Icons.settings_outlined,
-                  color: Colors.black,
-                ),
-                itemBuilder: (b) => [
-                      PopupMenuItem(
-                          child: TextButton(
-                        child: Text("Generate PDF",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(color: Colors.black)),
-                        onPressed: () {
-                          print(
-                              "object search result inside pdf ${_searchResult.length}");
-                          Navigator.pop(context);
-                          _searchResult.length == 0
-                              ? generatePdf()
-                              : generatePdfSearch();
-                          _searchResult.length == 0
-                              ? savePdf()
-                              : savePdfSearch();
-                        },
-                      )),
-                      PopupMenuItem(
-                          child: TextButton(
-                        child: Text(
-                          "Log Out",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(color: Colors.black),
-                        ),
-                        onPressed: () {
-                          Alerts.showLogOut(
-                              context, "Log Out", "Are you sure?");
-                        },
-                      )),
-                    ])
-          ],
-          title: Text(
-            "Production Planning",
-            style: TextStyle(
-                color: Colors.black, fontWeight: FontWeight.bold, fontSize: 20),
-            textAlign: TextAlign.center,
-          ),
-          bottom: PreferredSize(
-            preferredSize: Size.fromHeight(50),
-            child: _searchView(),
-          ),
-        ),
-        floatingActionButton: FloatingActionButton.extended(
-          backgroundColor: kPrimaryColor,
-          onPressed: () {
-            showDialog(
-                context: context,
-                builder: (builder) => AddModelDailog(passedbloc: productBloc));
-          },
-          label: Text("Add Model"),
+    return Scaffold(
+      backgroundColor: Colors.white,
+      drawer: widget.page == "production" ? MyDrawer() : DrawerAdmin(),
+      appBar: AppBar(
+        elevation: 0,
+        centerTitle: true,
+        backgroundColor: Colors.transparent,
+        leading: IconButton(
           icon: Icon(
-            Icons.add,
-            color: Colors.white,
+            Icons.arrow_back,
+            color: Colors.black,
           ),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
         ),
-        body: _body(),
+        /*leading: Builder(
+          builder: (c) {
+            return IconButton(
+              icon: Icon(
+                Icons.list,
+                color: Colors.black,
+              ),
+              onPressed: () {
+                Scaffold.of(c).openDrawer();
+              },
+            );
+          },
+        ),*/
+        actions: [
+          PopupMenuButton(
+              icon: Icon(
+                Icons.settings_outlined,
+                color: Colors.black,
+              ),
+              itemBuilder: (b) => [
+                    PopupMenuItem(
+                        child: TextButton(
+                      child: Text("Generate PDF",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(color: Colors.black)),
+                      onPressed: () {
+                        print(
+                            "object search result inside pdf ${_searchResult.length}");
+                        Navigator.pop(context);
+                        _searchResult.length == 0
+                            ? generatePdf()
+                            : generatePdfSearch();
+                        _searchResult.length == 0
+                            ? savePdf()
+                            : savePdfSearch();
+                      },
+                    )),
+                    PopupMenuItem(
+                        child: TextButton(
+                      child: Text(
+                        "Log Out",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(color: Colors.black),
+                      ),
+                      onPressed: () {
+                        Alerts.showLogOut(
+                            context, "Log Out", "Are you sure?");
+                      },
+                    )),
+                  ])
+        ],
+        title: Text(
+          "Production Planning",
+          style: TextStyle(
+              color: Colors.black, fontWeight: FontWeight.bold, fontSize: 20),
+          textAlign: TextAlign.center,
+        ),
+        bottom: PreferredSize(
+          preferredSize: Size.fromHeight(50),
+          child: _searchView(),
+        ),
       ),
+      floatingActionButton: FloatingActionButton.extended(
+        backgroundColor: kPrimaryColor,
+        onPressed: () {
+          showDialog(
+              context: context,
+              builder: (builder) => AddModelDailog(passedbloc: productBloc));
+        },
+        label: Text("Add Model"),
+        icon: Icon(
+          Icons.add,
+          color: Colors.white,
+        ),
+      ),
+      body: _body(),
     );
   }
 

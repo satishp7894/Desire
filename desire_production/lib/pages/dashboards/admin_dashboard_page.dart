@@ -1,4 +1,9 @@
 import 'package:desire_production/pages/admin/chat/admin_chat_list_page.dart';
+import 'package:desire_production/pages/admin/customer/customer_list_page.dart';
+import 'package:desire_production/pages/admin/dispatchlist/commonSalesManListPage.dart';
+import 'package:desire_production/pages/admin/ledgerandprice/common_ledger_price_page.dart';
+import 'package:desire_production/pages/admin/sales/salesman_list_page.dart';
+import 'package:desire_production/pages/admin/todayProduction/TodayProductionPage.dart';
 import 'package:desire_production/pages/admin_dashboard_list/admin_page.dart';
 import 'package:desire_production/pages/admin_dashboard_list/product_page.dart';
 import 'package:desire_production/pages/admin_dashboard_list/production_page.dart';
@@ -289,6 +294,220 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
                  Icon(Icons.message,size: 50,color: Colors.white,),
                   SizedBox(height: 10),
                   Text("CHAT",style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold
+                  ),),
+                ],
+              ),
+            ),
+          ),
+          GestureDetector(
+            onTap: (){
+              Navigator.push(context, MaterialPageRoute(builder: (context){
+                return CommonLedgerPricePage(type: "ledger");
+              }));
+            },
+            child: Container(
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  color: kPrimaryColor,
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey,
+                      blurRadius: 5.0,
+                      spreadRadius: 2,
+                    )
+                  ]
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Icon(Icons.list_alt_rounded,size: 50,color: Colors.white,),
+                  SizedBox(height: 10),
+                  Text("Ledger",style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold
+                  ),),
+                ],
+              ),
+            ),
+          ),
+          GestureDetector(
+            onTap: (){
+              Navigator.push(context, MaterialPageRoute(builder: (context){
+                return CommonLedgerPricePage(type: "price");
+              }));
+            },
+            child: Container(
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  color: kPrimaryColor,
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey,
+                      blurRadius: 5.0,
+                      spreadRadius: 2,
+                    )
+                  ]
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Image.asset("assets/images/rupees.png",scale: 12,color: Colors.white,),
+                  SizedBox(height: 10),
+                  Text("Price List",style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold
+                  ),),
+                ],
+              ),
+            ),
+          ),
+          GestureDetector(
+            onTap: (){
+              Navigator.push(context, MaterialPageRoute(builder: (context){
+                return TodayProductionPage(type: "sales");
+              }));
+            },
+            child: Container(
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  color: kSecondaryColor,
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey,
+                      blurRadius: 5.0,
+                      spreadRadius: 2,
+                    )
+                  ]
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.today,
+                    size: 40,
+                    color: kWhite,
+                  ),
+                  SizedBox(height: 10),
+                  Text("Today's Production",style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold
+                  ),),
+                ],
+              ),
+            ),
+          ),
+          GestureDetector(
+            onTap: (){
+              Navigator.push(context, MaterialPageRoute(builder: (context){
+                return CommonSalesManListPage(type: "invoice",);
+              }));
+            },
+            child: Container(
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  color: kSecondaryColor,
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey,
+                      blurRadius: 5.0,
+                      spreadRadius: 2,
+                    )
+                  ]
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.document_scanner,
+                    size: 40,
+                    color: kWhite,
+                  ),
+                  SizedBox(height: 10),
+                  Text("Dispatch List",style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold
+                  ),),
+                ],
+              ),
+            ),
+          ),
+          GestureDetector(
+            onTap: (){
+              Navigator.push(context, MaterialPageRoute(builder: (context){
+                return CommonSalesManListPage(type: "pending",);
+              }));
+            },
+            child: Container(
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  color: kPrimaryColor,
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey,
+                      blurRadius: 5.0,
+                      spreadRadius: 2,
+                    )
+                  ]
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.pending,
+                    size: 40,
+                    color: kWhite,
+                  ),
+                  SizedBox(height: 10),
+                  Text("Pending Orders",style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold
+                  ),),
+                ],
+              ),
+            ),
+          ),
+          GestureDetector(
+            onTap: (){
+              Navigator.push(context, MaterialPageRoute(builder: (context){
+                return CommonSalesManListPage(type: "hold",);
+              }));
+            },
+            child: Container(
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  color: kPrimaryColor,
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey,
+                      blurRadius: 5.0,
+                      spreadRadius: 2,
+                    )
+                  ]
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.pause,
+                    size: 40,
+                    color: kWhite,
+                  ),
+                  SizedBox(height: 10),
+                  Text("Hold Orders",style: TextStyle(
                       color: Colors.white,
                       fontSize: 16,
                       fontWeight: FontWeight.bold

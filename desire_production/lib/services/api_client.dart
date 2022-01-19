@@ -2,6 +2,11 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:desire_production/model/InvoiceDetail.dart';
+import 'package:desire_production/model/InvoiceDetailModel.dart';
+import 'package:desire_production/model/InvoiceModel.dart';
+import 'package:desire_production/model/LedgerModel.dart';
+import 'package:desire_production/model/ProductFromModelNoModel.dart';
+import 'package:desire_production/model/TodayProductionModel.dart';
 import 'package:desire_production/model/address_model.dart';
 import 'package:desire_production/model/admin_chat_details_model.dart';
 import 'package:desire_production/model/admin_chat_list_model.dart';
@@ -20,14 +25,17 @@ import 'package:desire_production/model/dashboard_production_model.dart';
 import 'package:desire_production/model/dispatchOrderDetailsModel.dart';
 import 'package:desire_production/model/dispatch_order_warhouse_list_model.dart';
 import 'package:desire_production/model/dispatch_processing_model.dart';
+import 'package:desire_production/model/hold_orders_model.dart';
 import 'package:desire_production/model/invoices_list_Model.dart';
 import 'package:desire_production/model/kyc_model.dart';
 import 'package:desire_production/model/kyc_view_model.dart';
 import 'package:desire_production/model/modelList_model.dart';
 import 'package:desire_production/model/modelNoWiseListModel.dart';
 import 'package:desire_production/model/model_listing_model.dart';
+import 'package:desire_production/model/orderDetailsByIdModel.dart';
 import 'package:desire_production/model/order_model.dart';
 import 'package:desire_production/model/order_track_model.dart';
+import 'package:desire_production/model/pending_order_list_model.dart';
 import 'package:desire_production/model/product_list_model.dart';
 import 'package:desire_production/model/product_list_order_model.dart';
 import 'package:desire_production/model/product_model.dart';
@@ -860,5 +868,142 @@ class ApiClient {
 
       return dispatchorderwarhouselistmodel;
     }
+  }
+
+  Future<LedgerModel> getLedgerDetails(String customerId) async {
+
+    print("object userid $customerId");
+
+    var response = await http.post(Uri.parse("http://loccon.in/desiremoulding/api/UserApiController/customerLedger"), body: {
+      "secretkey" : Connection.secretKey,
+      "customer_id" : customerId
+    });
+
+    var result = json.decode(response.body);
+    print("order list response $result");
+
+    LedgerModel ledgermodel;
+    ledgermodel = LedgerModel.fromJson(result);
+    print("wishlist model Performance $ledgermodel");
+
+    return ledgermodel;
+  }
+  Future<TodayProductionModel> getTodayProduction() async {
+    var response = await http.post(Uri.parse("http://loccon.in/desiremoulding/api/UserApiController/todaysProduction"),
+        body: {
+          "secretkey" : r"12!@34#$5%",
+        }
+    );
+    var result = json.decode(response.body);
+    print("today production api  response $result");
+    TodayProductionModel todayProductionModel;
+    todayProductionModel = (TodayProductionModel.fromJson(result));
+    print("todayProductionModel api $todayProductionModel");
+
+    return todayProductionModel;
+  }
+
+  Future<ProductFromModelNoModel> getProductFromModelNo(String modelNoId,String customerId) async {
+    var response = await http.post(Uri.parse("http://loccon.in/desiremoulding/api/UserApiController/modelNoWiseProductList"), body: {
+      "secretkey" : r"12!@34#$5%",
+      "model_no_id": modelNoId,
+      // "customer_id": customerId
+    });
+    var result = json.decode(response.body);
+    print("product from model  response $result");
+
+
+    ProductFromModelNoModel productFromModelNoModel;
+    productFromModelNoModel = (ProductFromModelNoModel.fromJson(result));
+    print("product from model api $productFromModelNoModel");
+
+    return productFromModelNoModel;
+  }
+
+  Future<InvoiceModel> getInvoiceListSales(String salesManId) async {
+
+    var response = await http.post(Uri.parse("http://loccon.in/desiremoulding/api/SalesApiController/customerInvoiceList"),
+        body: {
+          "secretkey" : r"12!@34#$5%",
+          "salesman_id" : salesManId
+        });
+    var result = json.decode(response.body);
+    print("customer Orders List response $result");
+
+
+    InvoiceModel invoicemodel;
+    invoicemodel = (InvoiceModel.fromJson(result));
+    print("List $invoicemodel");
+
+    return invoicemodel;
+  }
+
+  Future<InvoiceDetailModel> getInvoiceSalesDetail(String invoiceId) async {
+
+    var response = await http.post(Uri.parse("http://loccon.in/desiremoulding/api/SalesApiController/customerInvoiceProductList"),
+        body: {
+          "secretkey" : r"12!@34#$5%",
+          "invoice_id" : invoiceId
+        });
+    var result = json.decode(response.body);
+    print("List response $result");
+
+
+    InvoiceDetailModel invoicedetailmodel;
+    invoicedetailmodel = (InvoiceDetailModel.fromJson(result));
+    print("List $invoicedetailmodel");
+
+    return invoicedetailmodel;
+  }
+
+  Future<PendingOrderListModel> getPendingOrderListSales(String salesManId) async {
+
+    var response = await http.post(Uri.parse("http://loccon.in/desiremoulding/api/SalesApiController/customersPendingOrderList"),
+        body: {
+          "secretkey" : r"12!@34#$5%",
+          "salesman_id" : salesManId
+        });
+    var result = json.decode(response.body);
+    print("List response $result");
+
+
+    PendingOrderListModel pendingorderlistmodel;
+    pendingorderlistmodel = (PendingOrderListModel.fromJson(result));
+    print("List $pendingorderlistmodel");
+
+    return pendingorderlistmodel;
+  }
+
+  Future<OrderDetailsByIdModel> getOrderdetailsbyId(String orderId) async {
+    var response = await http.post(Uri.parse("http://loccon.in/desiremoulding/api/SalesApiController/orderidBypoductdetails"), body: {
+      "secretkey" : r"12!@34#$5%",
+      "orderid":orderId
+    });
+    var result = json.decode(response.body);
+    print("customer order† response $result ${result['status']}");
+
+
+    OrderDetailsByIdModel orderDetailsByIdModel;
+    orderDetailsByIdModel = OrderDetailsByIdModel.fromJson(result);
+    print("_userModel $orderDetailsByIdModel");
+
+    return orderDetailsByIdModel;
+  }
+  Future<HoldOrderModel> getHoldOrderListSales(String salesManId) async {
+
+    var response = await http.post(Uri.parse("http://loccon.in/desiremoulding/api/SalesApiController/customersHoldOrderList"),
+        body: {
+          "secretkey" : r"12!@34#$5%",
+          "salesman_id" : salesManId
+        });
+    var result = json.decode(response.body);
+    print("List response $result");
+
+
+    HoldOrderModel holdordermodel;
+    holdordermodel = (HoldOrderModel.fromJson(result));
+    print("List $holdordermodel");
+
+    return holdordermodel;
   }
 }

@@ -64,47 +64,42 @@ class _CustomerPricingPageState extends State<CustomerPricingPage> {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: (){
-        return  Navigator.pushReplacement(context, MaterialPageRoute(builder: (builder) => CustomerListPage()));
-      },
-      child: SafeArea(
-          child: Scaffold(
-            appBar: AppBar(
-              elevation: 0,
-              backgroundColor: Colors.transparent,
-              // leading: IconButton(icon: Icon(Icons.arrow_back, color: Colors.black,), onPressed: () {
-              //   Navigator.pushReplacement(context, MaterialPageRoute(builder: (builder) => SalesHomePage()));
-              // },),
-              title: Text("Customer Pricing List", style: TextStyle(color: Colors.black), textAlign: TextAlign.center,),
-              centerTitle: true,
-              leading: Builder(
-                builder: (c){
-                  return IconButton(icon: Image.asset("assets/images/logo_new.png"), onPressed: (){
-                    Scaffold.of(c).openDrawer();
-                  },);
-                },
-              ),
-              actions: [
-                PopupMenuButton(
-                    icon: Icon(Icons.settings_outlined, color: Colors.black,),
-                    itemBuilder: (b) =>[
-                      PopupMenuItem(
-                          child: TextButton(
-                            child: Text("Log Out", textAlign: TextAlign.center,),
-                            onPressed: (){
-                              Alerts.showLogOut(context, "Log Out", "Are you sure?");
-                            },
-                          )
-                      ),
-                    ]
-                )
-              ],
+    return SafeArea(
+        child: Scaffold(
+          appBar: AppBar(
+            elevation: 0,
+            backgroundColor: Colors.transparent,
+            // leading: IconButton(icon: Icon(Icons.arrow_back, color: Colors.black,), onPressed: () {
+            //   Navigator.pushReplacement(context, MaterialPageRoute(builder: (builder) => SalesHomePage()));
+            // },),
+            title: Text("Customer Pricing List", style: TextStyle(color: Colors.black), textAlign: TextAlign.center,),
+            centerTitle: true,
+            leading: Builder(
+              builder: (c){
+                return IconButton(icon: Image.asset("assets/images/logo_new.png"), onPressed: (){
+                  Scaffold.of(c).openDrawer();
+                },);
+              },
             ),
-            drawer: DrawerAdmin(),
-            body: _body(),
-          )),
-    );
+            actions: [
+              PopupMenuButton(
+                  icon: Icon(Icons.settings_outlined, color: Colors.black,),
+                  itemBuilder: (b) =>[
+                    PopupMenuItem(
+                        child: TextButton(
+                          child: Text("Log Out", textAlign: TextAlign.center,),
+                          onPressed: (){
+                            Alerts.showLogOut(context, "Log Out", "Are you sure?");
+                          },
+                        )
+                    ),
+                  ]
+              )
+            ],
+          ),
+          drawer: DrawerAdmin(),
+          body: _body(),
+        ));
   }
 
   Widget _body(){

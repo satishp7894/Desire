@@ -150,7 +150,7 @@ class CustomerChatListTile extends StatelessWidget {
           children: [
             CircleAvatar(
                 backgroundColor: kPrimaryColor,
-                child: Text(adminConversations.convId.toString(),style: TextStyle(color: kWhiteColor),)
+                child: Text(adminConversations.convId.toString(),style: TextStyle(color: kWhite),)
             ),
             SizedBox(width: 10,),
             Text(adminConversations.convName,style: TextStyle(color: kBlackColor,fontSize: 16,fontWeight: FontWeight.bold),),

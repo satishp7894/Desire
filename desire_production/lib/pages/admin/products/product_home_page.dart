@@ -6,6 +6,7 @@ import 'package:desire_production/bloc/product_bloc.dart';
 import 'package:desire_production/model/category_model.dart';
 import 'package:desire_production/model/product_model.dart';
 import 'package:desire_production/pages/admin/customer/customer_cart_page.dart';
+import 'package:desire_production/pages/dashboards/admin_dashboard_page.dart';
 import 'package:desire_production/pages/dashboards/dashboard_page_admin.dart';
 import 'package:desire_production/utils/alerts.dart';
 import 'package:desire_production/utils/constants.dart';
@@ -87,7 +88,7 @@ class _ProductHomePageState extends State<ProductHomePage> {
       },
       child: WillPopScope(
         onWillPop: () {
-          return Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (builder) => DashboardPageAdmin()), (route) => false);
+          return Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (builder) => AdminDashboardPage()), (route) => false);
         },
         child: SafeArea(
           child: Scaffold(

@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:data_connection_checker/data_connection_checker.dart';
 import 'package:desire_production/components/default_button.dart';
 import 'package:desire_production/pages/admin/products/dimension_edit_page.dart';
+import 'package:desire_production/pages/dashboards/admin_dashboard_page.dart';
 import 'package:desire_production/pages/dashboards/dashboard_page_admin.dart';
 import 'package:desire_production/utils/alerts.dart';
 import 'package:desire_production/utils/constants.dart';
@@ -67,7 +68,7 @@ class _DimensionListPageState extends State<DimensionListPage> with Validator{
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: (){
-        return  Navigator.pushReplacement(context, MaterialPageRoute(builder: (builder) => DashboardPageAdmin()));
+        return  Navigator.pushReplacement(context, MaterialPageRoute(builder: (builder) => AdminDashboardPage()));
       },
       child: SafeArea(
           child: Scaffold(

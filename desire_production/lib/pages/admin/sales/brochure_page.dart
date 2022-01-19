@@ -4,6 +4,7 @@ import 'dart:math';
 import 'package:data_connection_checker/data_connection_checker.dart';
 import 'package:desire_production/bloc/product_list.dart';
 import 'package:desire_production/model/product_model.dart';
+import 'package:desire_production/pages/dashboards/admin_dashboard_page.dart';
 import 'package:desire_production/pages/dashboards/dashboard_page_admin.dart';
 import 'package:desire_production/services/connections.dart';
 import 'package:desire_production/utils/alerts.dart';
@@ -76,7 +77,7 @@ class _BrochurePageState extends State<BrochurePage> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: (){
-        return  Navigator.pushReplacement(context, MaterialPageRoute(builder: (builder) => DashboardPageAdmin()));
+        return  Navigator.pushReplacement(context, MaterialPageRoute(builder: (builder) => AdminDashboardPage()));
       },
       child: SafeArea(
           child: Scaffold(

@@ -156,7 +156,7 @@ class CustomerListTile extends StatelessWidget {
           children: [
             CircleAvatar(
                 backgroundColor: kPrimaryColor,
-                child: Text(customerList.customerId.toString(),style: TextStyle(color: kWhiteColor),)
+                child: Text(customerList.customerId.toString(),style: TextStyle(color: kWhite),)
             ),
             SizedBox(width: 10,),
             Text(customerList.customerName,style: TextStyle(color: kBlackColor,fontSize: 16,fontWeight: FontWeight.bold),),

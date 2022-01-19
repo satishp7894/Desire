@@ -7,6 +7,7 @@ import 'package:desire_production/pages/admin/products/product_list_page.dart';
 import 'package:desire_production/pages/admin/sales/brochure_page.dart';
 import 'package:desire_production/pages/admin/sales/customer_credit_page.dart';
 import 'package:desire_production/pages/admin/sales/salesman_list_page.dart';
+import 'package:desire_production/pages/dashboards/admin_dashboard_page.dart';
 import 'package:desire_production/pages/dashboards/production_dashboard_page.dart';
 import 'package:desire_production/pages/dashboards/dashboard_page_admin.dart';
 import 'package:desire_production/pages/production/dailyOrdersPage.dart';
@@ -53,7 +54,7 @@ class _DrawerAdminState extends State<DrawerAdmin> {
               title: Text("Dashboard", style: TextStyle(color: Colors.black,)),
               onTap: (){
                 Navigator.pop(context);
-                Navigator.push(context, MaterialPageRoute(builder: (builder) => DashboardPageAdmin()));
+                Navigator.push(context, MaterialPageRoute(builder: (builder) => AdminDashboardPage()));
               },
             ),
             const Divider(),

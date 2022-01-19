@@ -9,6 +9,7 @@ import 'package:desire_production/model/role_model.dart';
 import 'package:desire_production/model/user_model.dart';
 import 'package:desire_production/pages/admin/sales/sales_edit_page.dart';
 import 'package:desire_production/pages/admin/sales/salesman_details_page.dart';
+import 'package:desire_production/pages/dashboards/admin_dashboard_page.dart';
 import 'package:desire_production/pages/dashboards/dashboard_page_admin.dart';
 import 'package:desire_production/services/connections.dart';
 import 'package:desire_production/utils/alerts.dart';
@@ -130,7 +131,7 @@ class _AdminUserListPageState extends State<AdminUserListPage> with Validator{
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: (){
-        return  Navigator.pushReplacement(context, MaterialPageRoute(builder: (builder) => DashboardPageAdmin()));
+        return  Navigator.pushReplacement(context, MaterialPageRoute(builder: (builder) => AdminDashboardPage()));
       },
       child: SafeArea(
           child: Scaffold(
