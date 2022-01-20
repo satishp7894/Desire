@@ -121,7 +121,7 @@ class _ChatListPageState extends State<ChatListPage> {
                 "No Data Found",
               ),
             );
-          } else if (s.data.customerChat == null) {
+          } else if (s.data.customerConversations == null) {
             return Container(
               height: 300,
               alignment: Alignment.center,
@@ -137,10 +137,10 @@ class _ChatListPageState extends State<ChatListPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   ...List.generate(
-                      asyncSnapshot.data.customerChat.length,
+                      asyncSnapshot.data.customerConversations.length,
                       (index) => CustomerChatListTile(
                             customerChat:
-                                asyncSnapshot.data.customerChat[index],
+                                asyncSnapshot.data.customerConversations[index],
                             customerId: widget.customerId,
                           ))
                 ],
@@ -229,7 +229,7 @@ class _ChatListPageState extends State<ChatListPage> {
 }
 
 class CustomerChatListTile extends StatelessWidget {
-  final CustomerChat customerChat;
+  final CustomerConversations customerChat;
   final customerId;
 
   const CustomerChatListTile({

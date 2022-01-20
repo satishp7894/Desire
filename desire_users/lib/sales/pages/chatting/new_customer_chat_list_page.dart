@@ -87,10 +87,7 @@ class _NewCustomerChatListPageState extends State<NewCustomerChatListPage> {
                   ...List.generate(asyncSnapshot.data.customerList.length, (index) => CustomerChatListTile(
                     customerList: asyncSnapshot.data.customerList[index],
                     salesId: widget.salesId,
-
-
                   ))
-
                 ],
               ),
             );

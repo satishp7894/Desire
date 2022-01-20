@@ -46,7 +46,7 @@ class CustomerList {
   String kycApprove;
   String priceList;
   String remarks;
-  Null createdBy;
+  String createdBy;
   String modifiedBy;
   String created;
   String modified;
