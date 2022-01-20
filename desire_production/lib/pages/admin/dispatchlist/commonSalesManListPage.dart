@@ -3,6 +3,7 @@ import 'package:desire_production/bloc/salesman_list_bloc.dart';
 import 'package:desire_production/model/user_model.dart';
 import 'package:desire_production/pages/admin/dispatchlist/CustomerInvoiceListPage.dart';
 import 'package:desire_production/pages/admin/dispatchlist/hold_order_list_page.dart';
+import 'package:desire_production/pages/admin/orders/customerOrdersListPage.dart';
 import 'package:desire_production/pages/admin/sales/sales_customer_list_page.dart';
 import 'package:desire_production/utils/alerts.dart';
 import 'package:desire_production/utils/constants.dart';
@@ -154,9 +155,19 @@ class _CommonSalesManListPageState extends State<CommonSalesManListPage> {
                                                   ? PendingOrderListPage(
                                                       salesId: salesmanList[i]
                                                           .userId)
-                                                  : HoldOrderListPage(
-                                                      salesId: salesmanList[i]
-                                                          .userId)));
+                                                  : widget.type == "order"
+                                                      ? CustomerOrdersListPage(
+                                                          salesManId:
+                                                              salesmanList[i]
+                                                                  .userId,
+                                                          salesManName:
+                                                              salesmanList[i]
+                                                                  .username,
+                                                        )
+                                                      : HoldOrderListPage(
+                                                          salesId:
+                                                              salesmanList[i]
+                                                                  .userId)));
                                 },
                                 child: Container(
                                   //padding: EdgeInsets.only(top: 10, bottom: 10),

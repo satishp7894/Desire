@@ -144,14 +144,14 @@ class _AdminChattingPageState extends State<AdminChattingPage> {
     var response = await http.post(Uri.parse(url), body: {
       "secretkey" :Connection.secretKey,
       "sender_id": "1",
-      "receiver": customer? "3" : "2",
+      "receiver": widget.type == 3 ? "3" : "2",
       "message": _chatController.text,
       "receiver_id": widget.receiverId
 
     });
     var result = json.decode(response.body);
     print("sendMessage   response $result");
-    if(result["message"] == "Send message succefully"){
+    if(result["status"]){
 
       _chatController.clear();
     }

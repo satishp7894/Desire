@@ -50,84 +50,65 @@ class _ReadyStockListPageListPageState extends State<ReadyStockListPage> {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () {
-        return widget.page == "warHouse"
-            ? Navigator.pushAndRemoveUntil(
-                context,
-                MaterialPageRoute(
-                    builder: (builder) => DashboardPageWarehouse(
-                          page: widget.page,
-                        )),
-                (route) => false)
-            : Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                    builder: (builder) => DashboardPageWarehouse(
-                          page: widget.page,
-                        )),
-              );
-      },
-      child: Scaffold(
+    return Scaffold(
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+        iconTheme: IconThemeData(color: Colors.black),
+        elevation: 0,
+        centerTitle: true,
         backgroundColor: Colors.white,
-        appBar: AppBar(
-          iconTheme: IconThemeData(color: Colors.black),
-          elevation: 0,
-          centerTitle: true,
-          backgroundColor: Colors.white,
-          actions: [
-            PopupMenuButton(
-                icon: Icon(
-                  Icons.settings_outlined,
-                  color: Colors.black,
-                ),
-                itemBuilder: (b) => [
-                      PopupMenuItem(
-                          child: TextButton(
-                        child: Text(
-                          "Generate PDF",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(color: Colors.black),
-                        ),
-                        onPressed: () {
-                          print(
-                              "object search result inside pdf ${_searchResult.length}");
-                          Navigator.pop(context);
-                          _searchResult.length == 0
-                              ? generatePdf()
-                              : generatePdfSearch();
-                          _searchResult.length == 0
-                              ? savePdf()
-                              : savePdfSearch();
-                        },
-                      )),
-                      PopupMenuItem(
-                          child: TextButton(
-                        child: Text(
-                          "Log Out",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(color: Colors.black),
-                        ),
-                        onPressed: () {
-                          Alerts.showLogOut(
-                              context, "Log Out", "Are you sure?");
-                        },
-                      )),
-                    ])
-          ],
-          title: Text(
-            "Ready Stock List",
-            style: TextStyle(
-                color: Colors.black, fontWeight: FontWeight.bold, fontSize: 20),
-            textAlign: TextAlign.center,
-          ),
-          bottom: PreferredSize(
-            preferredSize: Size.fromHeight(50),
-            child: _searchView(),
-          ),
+        actions: [
+          PopupMenuButton(
+              icon: Icon(
+                Icons.settings_outlined,
+                color: Colors.black,
+              ),
+              itemBuilder: (b) => [
+                    PopupMenuItem(
+                        child: TextButton(
+                      child: Text(
+                        "Generate PDF",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(color: Colors.black),
+                      ),
+                      onPressed: () {
+                        print(
+                            "object search result inside pdf ${_searchResult.length}");
+                        Navigator.pop(context);
+                        _searchResult.length == 0
+                            ? generatePdf()
+                            : generatePdfSearch();
+                        _searchResult.length == 0
+                            ? savePdf()
+                            : savePdfSearch();
+                      },
+                    )),
+                    PopupMenuItem(
+                        child: TextButton(
+                      child: Text(
+                        "Log Out",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(color: Colors.black),
+                      ),
+                      onPressed: () {
+                        Alerts.showLogOut(
+                            context, "Log Out", "Are you sure?");
+                      },
+                    )),
+                  ])
+        ],
+        title: Text(
+          "Ready Stock List",
+          style: TextStyle(
+              color: Colors.black, fontWeight: FontWeight.bold, fontSize: 20),
+          textAlign: TextAlign.center,
         ),
-        body: _body(),
+        bottom: PreferredSize(
+          preferredSize: Size.fromHeight(50),
+          child: _searchView(),
+        ),
       ),
+      body: _body(),
     );
   }
 

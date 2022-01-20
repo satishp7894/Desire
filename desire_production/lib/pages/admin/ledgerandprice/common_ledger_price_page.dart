@@ -1,9 +1,9 @@
-
 import 'package:data_connection_checker/data_connection_checker.dart';
 import 'package:desire_production/bloc/customer_bloc.dart';
 import 'package:desire_production/model/sales_customer_list_model.dart';
 import 'package:desire_production/pages/admin/ledgerandprice/CustomerLedgerPage.dart';
 import 'package:desire_production/pages/admin/products/customer_pricing_page.dart';
+import 'package:desire_production/pages/warehouse/ready_stock_page.dart';
 import 'package:desire_production/utils/alerts.dart';
 import 'package:desire_production/utils/constants.dart';
 import 'package:flutter/material.dart';
@@ -141,7 +141,7 @@ class _CommonLedgerPricePageState extends State<CommonLedgerPricePage> {
                                   : status.add(true);
                               return InkWell(
                                 onTap: () {
-                                  widget.type != "price"
+                                  widget.type == "ledger"
                                       ? Navigator.push(
                                           context,
                                           MaterialPageRoute(
@@ -150,16 +150,25 @@ class _CommonLedgerPricePageState extends State<CommonLedgerPricePage> {
                                                     customerId: s.data
                                                         .customer[i].customerId,
                                                   )))
-                                      : Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (builder) =>
-                                                  CustomerPricingPage(
-                                                    customerId: customerList[i]
-                                                        .customerId,
-                                                    salesId: customerList[i]
-                                                        .salesmanID,
-                                                  )));
+                                      : widget.type == "ready"
+                                          ? Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (builder) =>
+                                                      ReadyStockListPage(
+                                                        page: "admin",
+                                                      )))
+                                          : Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (builder) =>
+                                                      CustomerPricingPage(
+                                                        customerId:
+                                                            customerList[i]
+                                                                .customerId,
+                                                        salesId: customerList[i]
+                                                            .salesmanID,
+                                                      )));
                                   ;
                                 },
                                 child: Container(
@@ -398,16 +407,25 @@ class _CommonLedgerPricePageState extends State<CommonLedgerPricePage> {
                                                     customerId: s.data
                                                         .customer[i].customerId,
                                                   )))
-                                      : Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (builder) =>
-                                                  CustomerPricingPage(
-                                                    customerId: customerList[i]
-                                                        .customerId,
-                                                    salesId: customerList[i]
-                                                        .salesmanID,
-                                                  )));
+                                      : widget.type != "ready"
+                                          ? Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (builder) =>
+                                                      CustomerPricingPage(
+                                                        customerId:
+                                                            customerList[i]
+                                                                .customerId,
+                                                        salesId: customerList[i]
+                                                            .salesmanID,
+                                                      )))
+                                          : Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (builder) =>
+                                                      ReadyStockListPage(
+                                                        page: "admin",
+                                                      )));
                                 },
                                 child: Container(
                                   //padding: EdgeInsets.only(top: 10, bottom: 10),
@@ -680,5 +698,4 @@ class _CommonLedgerPricePageState extends State<CommonLedgerPricePage> {
     print("search result length ${_searchResult.length}");
     setState(() {});
   }
-
 }

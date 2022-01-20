@@ -27,8 +27,9 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: (){
-        return Alerts.showAlertExit(context, "Exit", "Are you sure you want to exit ? ");
+      onWillPop: () {
+        return Alerts.showAlertExit(
+            context, "Exit", "Are you sure you want to exit ? ");
       },
       child: Scaffold(
         appBar: AppBar(
@@ -36,138 +37,162 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
           backgroundColor: Colors.white,
           elevation: 0.0,
           centerTitle: true,
-          title: Text("DASHBOARD",style: TextStyle(color: kPrimaryColor,fontWeight: FontWeight.bold,fontSize: 22),),
+          title: Text(
+            "DASHBOARD",
+            style: TextStyle(
+                color: kPrimaryColor,
+                fontWeight: FontWeight.bold,
+                fontSize: 22),
+          ),
           actions: [
-            IconButton(onPressed: (){
-              Alerts.showLogOut(context, "Log Out", "Are you sure?");
-
-            }, icon: Icon(Icons.logout,color: kPrimaryColor,size: 28,)),
-
+            IconButton(
+                onPressed: () {
+                  Alerts.showLogOut(context, "Log Out", "Are you sure?");
+                },
+                icon: Icon(
+                  Icons.logout,
+                  color: kPrimaryColor,
+                  size: 28,
+                )),
           ],
         ),
-
         body: adminView(),
       ),
     );
   }
 
-
-  Widget adminView(){
+  Widget adminView() {
     return Padding(
-      padding: const EdgeInsets.only(left: 10.0,right: 10,top: 20,bottom: 20),
+      padding:
+          const EdgeInsets.only(left: 10.0, right: 10, top: 20, bottom: 20),
       child: GridView(
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 2,
             crossAxisSpacing: 10,
             mainAxisSpacing: 10,
-            childAspectRatio: 4/3
-          ),
+            childAspectRatio: 4 / 3),
         physics: ClampingScrollPhysics(),
         children: [
           GestureDetector(
-            onTap: (){
-                Navigator.push(context, MaterialPageRoute(builder: (context){
-                  return AdminPage();
-                }));
+            onTap: () {
+              Navigator.push(context, MaterialPageRoute(builder: (context) {
+                return AdminPage();
+              }));
             },
             child: Container(
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                color: kPrimaryColor,
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.grey,
-                    blurRadius: 5.0,
-                    spreadRadius: 2,
-                  )
-                ]
-              ),
+                  borderRadius: BorderRadius.circular(10),
+                  color: kPrimaryColor,
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey,
+                      blurRadius: 5.0,
+                      spreadRadius: 2,
+                    )
+                  ]),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Image.asset("assets/images/admin.png",height: 60,width:60,color: Colors.white,),
-                  SizedBox(height: 10),
-                  Text("ADMIN",style: TextStyle(
+                  Image.asset(
+                    "assets/images/admin.png",
+                    height: 60,
+                    width: 60,
                     color: Colors.white,
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold
-                  ),),
+                  ),
+                  SizedBox(height: 10),
+                  Text(
+                    "ADMIN",
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold),
+                  ),
                 ],
               ),
             ),
           ),
           GestureDetector(
-            onTap: (){
-              Navigator.push(context, MaterialPageRoute(builder: (context){
+            onTap: () {
+              Navigator.push(context, MaterialPageRoute(builder: (context) {
                 return ProductPage();
               }));
-
             },
             child: Container(
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                color: kSecondaryColor,
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.grey,
-                    blurRadius: 5.0,
-                    spreadRadius: 2,
-                  )
-                ]
-              ),
+                  borderRadius: BorderRadius.circular(10),
+                  color: kSecondaryColor,
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey,
+                      blurRadius: 5.0,
+                      spreadRadius: 2,
+                    )
+                  ]),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Image.asset("assets/images/product_list.png",height: 60,width:60,color: Colors.white,),
-                  SizedBox(height: 10),
-                  Text("PRODUCTS",style: TextStyle(
+                  Image.asset(
+                    "assets/images/product_list.png",
+                    height: 60,
+                    width: 60,
                     color: Colors.white,
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold
-                  ),),
+                  ),
+                  SizedBox(height: 10),
+                  Text(
+                    "PRODUCTS",
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold),
+                  ),
                 ],
               ),
             ),
           ),
           GestureDetector(
-            onTap: (){
-              Navigator.push(context, MaterialPageRoute(builder: (context){
+            onTap: () {
+              Navigator.push(context, MaterialPageRoute(builder: (context) {
                 return SalesPage();
               }));
-
             },
             child: Container(
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                color: kSecondaryColor,
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.grey,
-                    blurRadius: 5.0,
-                    spreadRadius: 2,
-                  )
-                ]
-              ),
+                  borderRadius: BorderRadius.circular(10),
+                  color: kSecondaryColor,
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey,
+                      blurRadius: 5.0,
+                      spreadRadius: 2,
+                    )
+                  ]),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Image.asset("assets/images/salesman.png",height: 60,width:60,color: Colors.white,),
-                  SizedBox(height: 10),
-                  Text("SALES",style: TextStyle(
+                  Image.asset(
+                    "assets/images/salesman.png",
+                    height: 60,
+                    width: 60,
                     color: Colors.white,
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold
-                  ),),
+                  ),
+                  SizedBox(height: 10),
+                  Text(
+                    "SALES",
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold),
+                  ),
                 ],
               ),
             ),
           ),
           GestureDetector(
-            onTap: (){
-              Navigator.push(context, MaterialPageRoute(builder: (context){
+            onTap: () {
+              Navigator.push(context, MaterialPageRoute(builder: (context) {
                 return CustomerPage();
               }));
             },
@@ -181,31 +206,37 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
                       blurRadius: 5.0,
                       spreadRadius: 2,
                     )
-                  ]
-              ),
+                  ]),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Image.asset("assets/images/user.png",height: 60,width:60,color: Colors.white,),
+                  Image.asset(
+                    "assets/images/user.png",
+                    height: 60,
+                    width: 60,
+                    color: Colors.white,
+                  ),
                   SizedBox(height: 10),
-                  Text("CUSTOMER",style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold
-                  ),),
+                  Text(
+                    "CUSTOMER",
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold),
+                  ),
                 ],
               ),
             ),
           ),
           GestureDetector(
-            onTap: (){
-              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context){
+            onTap: () {
+              Navigator.pushReplacement(context,
+                  MaterialPageRoute(builder: (context) {
                 return DashboardPageProduction(
                   page: 'admin',
                 );
               }));
-
             },
             child: Container(
               decoration: BoxDecoration(
@@ -217,29 +248,37 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
                       blurRadius: 5.0,
                       spreadRadius: 2,
                     )
-                  ]
-              ),
+                  ]),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Image.asset("assets/images/daily_production.png",height: 60,width:60,color: Colors.white,),
+                  Image.asset(
+                    "assets/images/daily_production.png",
+                    height: 60,
+                    width: 60,
+                    color: Colors.white,
+                  ),
                   SizedBox(height: 10),
-                  Text("PRODUCTION",style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold
-                  ),),
+                  Text(
+                    "PRODUCTION",
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold),
+                  ),
                 ],
               ),
             ),
           ),
           GestureDetector(
-            onTap: (){
-              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context){
-                return DashboardPageWarehouse(page: "admin",);
+            onTap: () {
+              Navigator.pushReplacement(context,
+                  MaterialPageRoute(builder: (context) {
+                return DashboardPageWarehouse(
+                  page: "admin",
+                );
               }));
-
             },
             child: Container(
               decoration: BoxDecoration(
@@ -251,29 +290,34 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
                       blurRadius: 5.0,
                       spreadRadius: 2,
                     )
-                  ]
-              ),
+                  ]),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Image.asset("assets/images/warehouse.png",height: 60,width:60,color: Colors.white,),
+                  Image.asset(
+                    "assets/images/warehouse.png",
+                    height: 60,
+                    width: 60,
+                    color: Colors.white,
+                  ),
                   SizedBox(height: 10),
-                  Text("WAREHOUSE",style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold
-                  ),),
+                  Text(
+                    "WAREHOUSE",
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold),
+                  ),
                 ],
               ),
             ),
           ),
           GestureDetector(
-            onTap: (){
-              Navigator.push(context, MaterialPageRoute(builder: (context){
+            onTap: () {
+              Navigator.push(context, MaterialPageRoute(builder: (context) {
                 return AdminChatListPage();
               }));
-
             },
             child: Container(
               decoration: BoxDecoration(
@@ -285,26 +329,31 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
                       blurRadius: 5.0,
                       spreadRadius: 2,
                     )
-                  ]
-              ),
+                  ]),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                 Icon(Icons.message,size: 50,color: Colors.white,),
+                  Icon(
+                    Icons.message,
+                    size: 50,
+                    color: Colors.white,
+                  ),
                   SizedBox(height: 10),
-                  Text("CHAT",style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold
-                  ),),
+                  Text(
+                    "CHAT",
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold),
+                  ),
                 ],
               ),
             ),
           ),
           GestureDetector(
-            onTap: (){
-              Navigator.push(context, MaterialPageRoute(builder: (context){
+            onTap: () {
+              Navigator.push(context, MaterialPageRoute(builder: (context) {
                 return CommonLedgerPricePage(type: "ledger");
               }));
             },
@@ -318,26 +367,31 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
                       blurRadius: 5.0,
                       spreadRadius: 2,
                     )
-                  ]
-              ),
+                  ]),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Icon(Icons.list_alt_rounded,size: 50,color: Colors.white,),
+                  Icon(
+                    Icons.list_alt_rounded,
+                    size: 50,
+                    color: Colors.white,
+                  ),
                   SizedBox(height: 10),
-                  Text("Ledger",style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold
-                  ),),
+                  Text(
+                    "Ledger",
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold),
+                  ),
                 ],
               ),
             ),
           ),
           GestureDetector(
-            onTap: (){
-              Navigator.push(context, MaterialPageRoute(builder: (context){
+            onTap: () {
+              Navigator.push(context, MaterialPageRoute(builder: (context) {
                 return CommonLedgerPricePage(type: "price");
               }));
             },
@@ -351,26 +405,31 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
                       blurRadius: 5.0,
                       spreadRadius: 2,
                     )
-                  ]
-              ),
+                  ]),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Image.asset("assets/images/rupees.png",scale: 12,color: Colors.white,),
+                  Image.asset(
+                    "assets/images/rupees.png",
+                    scale: 12,
+                    color: Colors.white,
+                  ),
                   SizedBox(height: 10),
-                  Text("Price List",style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold
-                  ),),
+                  Text(
+                    "Price List",
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold),
+                  ),
                 ],
               ),
             ),
           ),
           GestureDetector(
-            onTap: (){
-              Navigator.push(context, MaterialPageRoute(builder: (context){
+            onTap: () {
+              Navigator.push(context, MaterialPageRoute(builder: (context) {
                 return TodayProductionPage(type: "sales");
               }));
             },
@@ -384,8 +443,7 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
                       blurRadius: 5.0,
                       spreadRadius: 2,
                     )
-                  ]
-              ),
+                  ]),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -396,19 +454,23 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
                     color: kWhite,
                   ),
                   SizedBox(height: 10),
-                  Text("Today's Production",style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold
-                  ),),
+                  Text(
+                    "Today's Production",
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold),
+                  ),
                 ],
               ),
             ),
           ),
           GestureDetector(
-            onTap: (){
-              Navigator.push(context, MaterialPageRoute(builder: (context){
-                return CommonSalesManListPage(type: "invoice",);
+            onTap: () {
+              Navigator.push(context, MaterialPageRoute(builder: (context) {
+                return CommonSalesManListPage(
+                  type: "invoice",
+                );
               }));
             },
             child: Container(
@@ -421,8 +483,7 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
                       blurRadius: 5.0,
                       spreadRadius: 2,
                     )
-                  ]
-              ),
+                  ]),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -433,19 +494,23 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
                     color: kWhite,
                   ),
                   SizedBox(height: 10),
-                  Text("Dispatch List",style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold
-                  ),),
+                  Text(
+                    "Dispatch List",
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold),
+                  ),
                 ],
               ),
             ),
           ),
           GestureDetector(
-            onTap: (){
-              Navigator.push(context, MaterialPageRoute(builder: (context){
-                return CommonSalesManListPage(type: "pending",);
+            onTap: () {
+              Navigator.push(context, MaterialPageRoute(builder: (context) {
+                return CommonSalesManListPage(
+                  type: "pending",
+                );
               }));
             },
             child: Container(
@@ -458,8 +523,7 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
                       blurRadius: 5.0,
                       spreadRadius: 2,
                     )
-                  ]
-              ),
+                  ]),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -470,19 +534,23 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
                     color: kWhite,
                   ),
                   SizedBox(height: 10),
-                  Text("Pending Orders",style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold
-                  ),),
+                  Text(
+                    "Pending Orders",
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold),
+                  ),
                 ],
               ),
             ),
           ),
           GestureDetector(
-            onTap: (){
-              Navigator.push(context, MaterialPageRoute(builder: (context){
-                return CommonSalesManListPage(type: "hold",);
+            onTap: () {
+              Navigator.push(context, MaterialPageRoute(builder: (context) {
+                return CommonSalesManListPage(
+                  type: "hold",
+                );
               }));
             },
             child: Container(
@@ -495,8 +563,7 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
                       blurRadius: 5.0,
                       spreadRadius: 2,
                     )
-                  ]
-              ),
+                  ]),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -507,19 +574,97 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
                     color: kWhite,
                   ),
                   SizedBox(height: 10),
-                  Text("Hold Orders",style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold
-                  ),),
+                  Text(
+                    "Hold Orders",
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold),
+                  ),
                 ],
               ),
             ),
           ),
-
+          GestureDetector(
+            onTap: () {
+              Navigator.push(context, MaterialPageRoute(builder: (context) {
+                return CommonLedgerPricePage(type: "ready");
+              }));
+            },
+            child: Container(
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  color: kSecondaryColor,
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey,
+                      blurRadius: 5.0,
+                      spreadRadius: 2,
+                    )
+                  ]),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.event_available,size: 40,
+                    color: kWhite,
+                  ),
+                  SizedBox(height: 10),
+                  Text(
+                    "Ready Stock",
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          GestureDetector(
+            onTap: () {
+              Navigator.push(context, MaterialPageRoute(builder: (context) {
+                return CommonSalesManListPage(
+                  type: "order",
+                );
+              }));
+            },
+            child: Container(
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  color: kSecondaryColor,
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey,
+                      blurRadius: 5.0,
+                      spreadRadius: 2,
+                    )
+                  ]),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Image.asset(
+                    "assets/images/production_order.png",
+                    height: 40,
+                    width: 40,
+                    color: kWhite,
+                  ),
+                  SizedBox(height: 10),
+                  Text(
+                    "Order List",
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold),
+                  ),
+                ],
+              ),
+            ),
+          ),
         ],
       ),
     );
   }
-
 }

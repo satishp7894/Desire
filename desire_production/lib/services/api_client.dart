@@ -15,6 +15,7 @@ import 'package:desire_production/model/category_list_model.dart';
 import 'package:desire_production/model/category_model.dart';
 import 'package:desire_production/model/complaint_detail_model.dart';
 import 'package:desire_production/model/credit_list_model.dart';
+import 'package:desire_production/model/customerOrdersModel.dart';
 import 'package:desire_production/model/customer_complaint_list_model.dart';
 import 'package:desire_production/model/customer_list_for_chat_model.dart';
 import 'package:desire_production/model/dailyOrderListModel.dart';
@@ -891,7 +892,7 @@ class ApiClient {
   Future<TodayProductionModel> getTodayProduction() async {
     var response = await http.post(Uri.parse("http://loccon.in/desiremoulding/api/UserApiController/todaysProduction"),
         body: {
-          "secretkey" : r"12!@34#$5%",
+          "secretkey" : Connection.secretKey,
         }
     );
     var result = json.decode(response.body);
@@ -905,7 +906,7 @@ class ApiClient {
 
   Future<ProductFromModelNoModel> getProductFromModelNo(String modelNoId,String customerId) async {
     var response = await http.post(Uri.parse("http://loccon.in/desiremoulding/api/UserApiController/modelNoWiseProductList"), body: {
-      "secretkey" : r"12!@34#$5%",
+      "secretkey" : Connection.secretKey,
       "model_no_id": modelNoId,
       // "customer_id": customerId
     });
@@ -924,7 +925,7 @@ class ApiClient {
 
     var response = await http.post(Uri.parse("http://loccon.in/desiremoulding/api/SalesApiController/customerInvoiceList"),
         body: {
-          "secretkey" : r"12!@34#$5%",
+          "secretkey" : Connection.secretKey,
           "salesman_id" : salesManId
         });
     var result = json.decode(response.body);
@@ -942,7 +943,7 @@ class ApiClient {
 
     var response = await http.post(Uri.parse("http://loccon.in/desiremoulding/api/SalesApiController/customerInvoiceProductList"),
         body: {
-          "secretkey" : r"12!@34#$5%",
+          "secretkey" : Connection.secretKey,
           "invoice_id" : invoiceId
         });
     var result = json.decode(response.body);
@@ -960,7 +961,7 @@ class ApiClient {
 
     var response = await http.post(Uri.parse("http://loccon.in/desiremoulding/api/SalesApiController/customersPendingOrderList"),
         body: {
-          "secretkey" : r"12!@34#$5%",
+          "secretkey" : Connection.secretKey,
           "salesman_id" : salesManId
         });
     var result = json.decode(response.body);
@@ -976,7 +977,7 @@ class ApiClient {
 
   Future<OrderDetailsByIdModel> getOrderdetailsbyId(String orderId) async {
     var response = await http.post(Uri.parse("http://loccon.in/desiremoulding/api/SalesApiController/orderidBypoductdetails"), body: {
-      "secretkey" : r"12!@34#$5%",
+      "secretkey" : Connection.secretKey,
       "orderid":orderId
     });
     var result = json.decode(response.body);
@@ -993,7 +994,7 @@ class ApiClient {
 
     var response = await http.post(Uri.parse("http://loccon.in/desiremoulding/api/SalesApiController/customersHoldOrderList"),
         body: {
-          "secretkey" : r"12!@34#$5%",
+          "secretkey" : Connection.secretKey,
           "salesman_id" : salesManId
         });
     var result = json.decode(response.body);
@@ -1005,5 +1006,22 @@ class ApiClient {
     print("List $holdordermodel");
 
     return holdordermodel;
+  }
+  Future<CustomerOrdersModel> getAllCustomerOrders(String salesManId) async {
+
+    var response = await http.post(Uri.parse("http://loccon.in/desiremoulding/api/SalesApiController/orderList"),
+        body: {
+          "secretkey" : r"12!@34#$5%",
+          "salesman_id" : salesManId
+        });
+    var result = json.decode(response.body);
+    print("customer Orders List response $result");
+
+
+    CustomerOrdersModel customerOrdersModel;
+    customerOrdersModel = (CustomerOrdersModel.fromJson(result));
+    print("Customer Orders List $customerOrdersModel");
+
+    return customerOrdersModel;
   }
 }
