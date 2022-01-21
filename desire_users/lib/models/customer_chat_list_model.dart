@@ -30,8 +30,8 @@ class CustomerChatListModel {
 
 class CustomerConversations {
   String conversationId;
-  String convWith;
-  int convId;
+  int convWith;
+  String convId;
   String convName;
 
   CustomerConversations(
