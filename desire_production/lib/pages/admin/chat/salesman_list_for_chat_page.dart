@@ -110,7 +110,7 @@ class SalesListTile extends StatelessWidget {
             return AdminChattingPage(
               receiverId: salesList.userId,
               receiverName: salesList.firstname + salesList.lastname,
-              type: 2,
+              type: "2",
               conversationId: "",
             );
           }));

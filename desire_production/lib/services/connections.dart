@@ -145,4 +145,10 @@ class Connection {
   static final String addCategory = ipAdmin + "addCategory";
   static final String editCategory = ipAdmin + "editCategory";
   static final String deleteCategory = ipAdmin + "deleteCategory";
+
+
+  static final String submitNewAdminUser = ipAdmin + "submitNewAdminUser";
+
+
+
 }

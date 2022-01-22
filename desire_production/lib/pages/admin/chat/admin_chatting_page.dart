@@ -28,23 +28,23 @@ class _AdminChattingPageState extends State<AdminChattingPage> {
   dynamic customer = 3;
   dynamic salesman = 2;
 
-  int conversationId;
+  String conversationId ="";
 
   newConversation(dynamic receiverId, dynamic receiver)async{
     var url = Connection.newConversation;
     var response = await http.post(Uri.parse(url), body: {
       "secretkey" : r"12!@34#$5%",
-      "sender_id": 1,
+      "sender_id": "1",
       "receiver_id": receiverId,
       "receiver": receiver
-
-
     });
     var result = json.decode(response.body);
     print("sendMessage   response $result");
-    if(result["message"] ==  "New conversation"){
+    if(result["status"]){
       print("New conversation");
-      conversationId = result["conversation_id"];
+      setState(() {
+        conversationId = result["conversation_id"];
+      });
 
     }
     else {
@@ -58,7 +58,7 @@ class _AdminChattingPageState extends State<AdminChattingPage> {
     var url = Connection.clearChat;
     var response = await http.post(Uri.parse(url), body: {
       "secretkey" : r"12!@34#$5%",
-      "conversation_id": widget.conversationId
+      "conversation_id": widget.conversationId == ""? conversationId : widget.conversationId
     });
     var result = json.decode(response.body);
     print("sendMessage   response $result");
@@ -82,7 +82,7 @@ class _AdminChattingPageState extends State<AdminChattingPage> {
     super.initState();
     newConversation(widget.receiverId,widget.type);
     timer = Timer.periodic(Duration(seconds: 1), (Timer t) =>
-        adminChatDetailsBloc.fetchAdminChatDetails(widget.conversationId == null ? conversationId : widget.conversationId)
+        adminChatDetailsBloc.fetchAdminChatDetails(widget.conversationId == "" ? conversationId : widget.conversationId)
     );
 
   }

@@ -2,6 +2,7 @@ import 'package:desire_production/pages/admin/chat/admin_chat_list_page.dart';
 import 'package:desire_production/pages/admin/dispatchlist/commonSalesManListPage.dart';
 import 'package:desire_production/pages/admin/ledgerandprice/common_ledger_price_page.dart';
 import 'package:desire_production/pages/admin/todayProduction/TodayProductionPage.dart';
+import 'package:desire_production/pages/admin/userslist/user_list_page.dart';
 import 'package:desire_production/pages/admin_dashboard_list/admin_page.dart';
 import 'package:desire_production/pages/admin_dashboard_list/customer_page.dart';
 import 'package:desire_production/pages/admin_dashboard_list/product_page.dart';
@@ -651,6 +652,45 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
                   SizedBox(height: 10),
                   Text(
                     "Order List",
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          GestureDetector(
+            onTap: () {
+              Navigator.push(context, MaterialPageRoute(builder: (context) {
+                return UserListpage();
+              }));
+            },
+            child: Container(
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  color: kPrimaryColor,
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey,
+                      blurRadius: 5.0,
+                      spreadRadius: 2,
+                    )
+                  ]),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Image.asset(
+                    "assets/images/user.png",
+                    height: 60,
+                    width: 60,
+                    color: Colors.white,
+                  ),
+                  SizedBox(height: 10),
+                  Text(
+                    "Users",
                     style: TextStyle(
                         color: Colors.white,
                         fontSize: 16,

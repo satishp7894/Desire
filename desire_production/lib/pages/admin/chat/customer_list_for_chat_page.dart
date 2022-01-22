@@ -35,7 +35,7 @@ class _CustomerListForChatPageState extends State<CustomerListForChatPage> {
     });
     var result = json.decode(response.body);
     print("sendMessage   response $result");
-    if(result["message"] ==  "New conversation"){
+    if(result["status"]){
       print("New conversation");
 
     }
@@ -143,7 +143,7 @@ class CustomerListTile extends StatelessWidget {
             return AdminChattingPage(
               receiverId: customerList.customerId,
               receiverName: customerList.customerName,
-              type: 3,
+              type: "3",
               conversationId: "",
             );
           }));

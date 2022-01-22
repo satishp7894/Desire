@@ -44,9 +44,11 @@ import 'package:desire_production/model/productionUserProfile_model.dart';
 import 'package:desire_production/model/readyStockDetailListModel.dart';
 import 'package:desire_production/model/readyStockListModel.dart';
 import 'package:desire_production/model/readyToDispatchListModel.dart';
+import 'package:desire_production/model/role_list_model.dart';
 import 'package:desire_production/model/role_model.dart';
 import 'package:desire_production/model/sales_customer_list_model.dart';
 import 'package:desire_production/model/salesman_list_for_chat_model.dart';
+import 'package:desire_production/model/user_list_model.dart';
 import 'package:desire_production/model/user_model.dart';
 import 'package:desire_production/model/warehouse_dashboard_model.dart';
 import 'package:desire_production/model/warehouse_list_model.dart';
@@ -1023,5 +1025,38 @@ class ApiClient {
     print("Customer Orders List $customerOrdersModel");
 
     return customerOrdersModel;
+  }
+  Future<UserListModel> getAllUserList() async {
+
+    var response = await http.post(Uri.parse("http://loccon.in/desiremoulding/api/AdminApiController/adminUserList"),
+        body: {
+          "secretkey" : r"12!@34#$5%",
+        });
+    var result = json.decode(response.body);
+    print("user List response $result");
+
+
+    UserListModel userlistmodel;
+    userlistmodel = (UserListModel.fromJson(result));
+    print("Customer Orders List $userlistmodel");
+
+    return userlistmodel;
+  }
+
+  Future<RoleListModel> getRoleList() async {
+
+    var response = await http.post(Uri.parse("http://loccon.in/desiremoulding/api/AdminApiController/roleList"),
+        body: {
+          "secretkey" : r"12!@34#$5%",
+        });
+    var result = json.decode(response.body);
+    print("user List response $result");
+
+
+    RoleListModel rolelistmodel;
+    rolelistmodel = (RoleListModel.fromJson(result));
+    print("Customer Orders List $rolelistmodel");
+
+    return rolelistmodel;
   }
 }
