@@ -60,7 +60,7 @@ class ApiSales{
     return customerListModel;
   }
 
-  Future<SalesChatDetailModel> getSalesChatDetails(dynamic conversationId) async {
+  Future<SalesChatDetailModel> getSalesChatDetails(String conversationId) async {
     var response = await http.post(Uri.parse("http://loccon.in/desiremoulding/api/SalesApiController/salesChatDetails"), body: {
       "secretkey" : r"12!@34#$5%",
       "conversation_id": conversationId,

@@ -11,7 +11,7 @@ class SalesChatDetailsBloc {
 
   Stream<SalesChatDetailModel> get salesChatDetailsStream => _salesChatDetailsController.stream;
 
-  fetchSalesChatDetails(dynamic conversationId) async {
+  fetchSalesChatDetails(String conversationId) async {
     try {
       final results = await _apiClient.getSalesChatDetails(conversationId);
       _salesChatDetailsController.sink.add(results);

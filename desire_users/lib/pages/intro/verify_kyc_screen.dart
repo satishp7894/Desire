@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:data_connection_checker/data_connection_checker.dart';
 import 'package:desire_users/models/verify_gst_model.dart';
+import 'package:desire_users/pages/intro/verify_kyc_screen_old.dart';
 import 'package:desire_users/sales/utils_sales/alerts.dart';
 import 'package:desire_users/sales/utils_sales/progress_dialog.dart';
 import 'package:desire_users/services/connection.dart';
@@ -219,7 +220,7 @@ class _VerifyKycScreenState extends State<VerifyKycScreen> {
             "http://loccon.in/desiremoulding/api/UserApiController/verifyGST"),
         body: {
           'secretkey': Connection.secretKey,
-          'gst_number': gstNumberController.text
+          'gst_number': gstNumberController.text.toString()
         });
 
     var results = json.decode(response.body);
@@ -233,6 +234,11 @@ class _VerifyKycScreenState extends State<VerifyKycScreen> {
         ],
       ));
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (builder) => VerifyKycScreenOld(
+                  userId: widget.userId, pagerTab: "2",)));
       //Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (builder)=>AccessoryDetailPage(product: widget.product,page: widget.page,snapshot: widget.snapshot,status: true, orderCount: widget.orderCount,)), (route) => false);
     } else {
       Alerts.showAlertAndBack(
@@ -257,7 +263,7 @@ class _VerifyKycScreenState extends State<VerifyKycScreen> {
             "http://loccon.in/desiremoulding/api/UserApiController/verifyPancard"),
         body: {
           'secretkey': Connection.secretKey,
-          'pan_number': panNumberController.text
+          'pan_number': panNumberController.text.toString()
         });
 
     var results = json.decode(response.body);
@@ -271,6 +277,11 @@ class _VerifyKycScreenState extends State<VerifyKycScreen> {
         ],
       ));
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (builder) => VerifyKycScreenOld(
+                  userId: widget.userId, pagerTab: "2",)));
       //Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (builder)=>AccessoryDetailPage(product: widget.product,page: widget.page,snapshot: widget.snapshot,status: true, orderCount: widget.orderCount,)), (route) => false);
     } else {
       Alerts.showAlertAndBack(
