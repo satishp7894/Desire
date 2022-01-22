@@ -595,7 +595,7 @@ class _UserListpageState extends State<UserListpage> {
             },
             decoration: new InputDecoration(
               border: InputBorder.none,
-              hintText: "Search Customers",
+              hintText: "Search User",
             ),
           ),
         ),
