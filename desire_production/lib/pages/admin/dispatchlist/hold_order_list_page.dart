@@ -13,9 +13,8 @@ import 'package:http/http.dart' as http;
 import 'orderDetailsByIdPage.dart';
 
 class HoldOrderListPage extends StatefulWidget {
-  final salesId;
 
-  const HoldOrderListPage({Key key, this.salesId}) : super(key: key);
+  const HoldOrderListPage({Key key}) : super(key: key);
 
   @override
   _HoldOrderListPageState createState() => _HoldOrderListPageState();
@@ -31,7 +30,7 @@ class _HoldOrderListPageState extends State<HoldOrderListPage> {
     super.initState();
     checkConnectivity();
 
-    holdorderbloc.fetchHoldOrder(widget.salesId);
+    holdorderbloc.fetchHoldOrder();
   }
 
   checkConnectivity() async {
@@ -72,7 +71,7 @@ class _HoldOrderListPageState extends State<HoldOrderListPage> {
                 context,
                 MaterialPageRoute(
                     builder: (builder) =>
-                        HoldOrderListPage(salesId: widget.salesId)));
+                        HoldOrderListPage()));
           },
           child: _body(),
         ));
@@ -132,7 +131,6 @@ class _HoldOrderListPageState extends State<HoldOrderListPage> {
                       asyncSnapshot.data.holdOrder.length,
                       (index) => ModelListTile(
                           holdOrder: asyncSnapshot.data.holdOrder[index],
-                          salesId: widget.salesId,
                           bloc: holdorderbloc))
                 ],
               ),
@@ -144,10 +142,9 @@ class _HoldOrderListPageState extends State<HoldOrderListPage> {
 
 class ModelListTile extends StatelessWidget {
   final HoldOrder holdOrder;
-  final salesId;
   final HoldOrderListBloc bloc;
 
-  const ModelListTile({Key key, this.holdOrder, this.salesId, this.bloc})
+  const ModelListTile({Key key, this.holdOrder, this.bloc})
       : super(key: key);
 
   @override
@@ -267,7 +264,7 @@ class ModelListTile extends StatelessWidget {
                     GestureDetector(
                         onTap: () {
                           unholdOrder(
-                              holdOrder.orderId, context, bloc, salesId);
+                              holdOrder.orderId, context, bloc);
                         },
                         child: Container(
                             decoration: BoxDecoration(
@@ -314,8 +311,7 @@ class ModelListTile extends StatelessWidget {
     );
   }
 
-  void unholdOrder(String orderId, BuildContext context, HoldOrderListBloc bloc,
-      salesid) async {
+  void unholdOrder(String orderId, BuildContext context, HoldOrderListBloc bloc) async {
     ProgressDialog pr = ProgressDialog(
       context,
       type: ProgressDialogType.Normal,
@@ -328,7 +324,7 @@ class ModelListTile extends StatelessWidget {
     pr.show();
     var response = await http.post(
         Uri.parse(
-            "http://loccon.in/desiremoulding/api/SalesApiController/unHoldCustomersOrder"),
+            "http://loccon.in/desiremoulding/api/AdminApiController/unHoldCustomersOrder"),
         body: {
           'secretkey': Connection.secretKey,
           'order_id': orderId,
@@ -338,7 +334,7 @@ class ModelListTile extends StatelessWidget {
     if (results['status'] == true) {
       final snackBar = SnackBar(content: Text(results['message']));
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
-      bloc.fetchHoldOrder(salesId);
+      bloc.fetchHoldOrder();
     } else {
       Alerts.showAlertAndBack(
           context, 'Failed', 'Failed to place order. Please try again later.');

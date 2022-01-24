@@ -767,9 +767,11 @@ class ApiClient {
     return dailyproductionaddlistmodel;
   }
 
-  Future<ReadyStockListModel> getReadyStockList() async {
+  Future<ReadyStockListModel> getReadyStockList(String page) async {
     var response = await http.post(
-        Uri.parse(Connection.warehouseReadyStockList),
+        Uri.parse(page == "admin"
+            ? "http://loccon.in/desiremoulding/api/AdminApiController/readyStockList"
+            : Connection.warehouseReadyStockList),
         body: {"secretkey": Connection.secretKey});
     var result = json.decode(response.body);
     print("product daily response $result");
@@ -782,15 +784,17 @@ class ApiClient {
   }
 
   Future<ReadyStockDetailListModel> getReadyStockDetailList(
-      String modelNoId) async {
+      String modelNoId, String page) async {
     var response = await http.post(
-        Uri.parse(Connection.warehouseReadyStockDetailList),
+        Uri.parse(page == "admin"
+            ? "http://loccon.in/desiremoulding/api/AdminApiController/modelNoWiseReadyStockList"
+            : Connection.warehouseReadyStockDetailList),
         body: {"secretkey": Connection.secretKey, "model_no_id": modelNoId});
     var result = json.decode(response.body);
     print("product daily response $result");
 
     ReadyStockDetailListModel productListModel;
-    productListModel = (ReadyStockDetailListModel.fromJson(result));
+    productListModel = (ReadyStockDetailListModel.fromJson(result, page));
     print("productionPlanningList $productListModel");
 
     return productListModel;
@@ -855,6 +859,7 @@ class ApiClient {
 
     return invoicedetail;
   }
+
   Future<DispatchOrderWarhouseListModel> getDispatchList(String id) async {
     var response = await http.post(
         Uri.parse(
@@ -863,7 +868,7 @@ class ApiClient {
     var result = json.decode(response.body);
     print("dispatch $result");
 
-    if(result.containsKey("data")) {
+    if (result.containsKey("data")) {
       DispatchOrderWarhouseListModel dispatchorderwarhouselistmodel;
       dispatchorderwarhouselistmodel =
           DispatchOrderWarhouseListModel.fromJson(result);
@@ -873,14 +878,14 @@ class ApiClient {
     }
   }
 
-  Future<LedgerModel> getLedgerDetails(String customerId) async {
+  Future<LedgerModel> getLedgerDetails() async {
 
-    print("object userid $customerId");
-
-    var response = await http.post(Uri.parse("http://loccon.in/desiremoulding/api/UserApiController/customerLedger"), body: {
-      "secretkey" : Connection.secretKey,
-      "customer_id" : customerId
-    });
+    var response = await http.post(
+        Uri.parse(
+            "http://loccon.in/desiremoulding/api/AdminApiController/customerLedgerList"),
+        body: {
+          "secretkey": Connection.secretKey,
+        });
 
     var result = json.decode(response.body);
     print("order list response $result");
@@ -891,12 +896,14 @@ class ApiClient {
 
     return ledgermodel;
   }
+
   Future<TodayProductionModel> getTodayProduction() async {
-    var response = await http.post(Uri.parse("http://loccon.in/desiremoulding/api/UserApiController/todaysProduction"),
+    var response = await http.post(
+        Uri.parse(
+            "http://loccon.in/desiremoulding/api/AdminApiController/todaysProduction"),
         body: {
-          "secretkey" : Connection.secretKey,
-        }
-    );
+          "secretkey": Connection.secretKey,
+        });
     var result = json.decode(response.body);
     print("today production api  response $result");
     TodayProductionModel todayProductionModel;
@@ -906,15 +913,18 @@ class ApiClient {
     return todayProductionModel;
   }
 
-  Future<ProductFromModelNoModel> getProductFromModelNo(String modelNoId,String customerId) async {
-    var response = await http.post(Uri.parse("http://loccon.in/desiremoulding/api/UserApiController/modelNoWiseProductList"), body: {
-      "secretkey" : Connection.secretKey,
-      "model_no_id": modelNoId,
-      // "customer_id": customerId
-    });
+  Future<ProductFromModelNoModel> getProductFromModelNo(
+      String modelNoId, String customerId) async {
+    var response = await http.post(
+        Uri.parse(
+            "http://loccon.in/desiremoulding/api/UserApiController/modelNoWiseProductList"),
+        body: {
+          "secretkey": Connection.secretKey,
+          "model_no_id": modelNoId,
+          // "customer_id": customerId
+        });
     var result = json.decode(response.body);
     print("product from model  response $result");
-
 
     ProductFromModelNoModel productFromModelNoModel;
     productFromModelNoModel = (ProductFromModelNoModel.fromJson(result));
@@ -923,16 +933,15 @@ class ApiClient {
     return productFromModelNoModel;
   }
 
-  Future<InvoiceModel> getInvoiceListSales(String salesManId) async {
-
-    var response = await http.post(Uri.parse("http://loccon.in/desiremoulding/api/SalesApiController/customerInvoiceList"),
+  Future<InvoiceModel> getInvoiceListSales() async {
+    var response = await http.post(
+        Uri.parse(
+            "http://loccon.in/desiremoulding/api/AdminApiController/customerInvoiceList"),
         body: {
-          "secretkey" : Connection.secretKey,
-          "salesman_id" : salesManId
+          "secretkey": Connection.secretKey,
         });
     var result = json.decode(response.body);
     print("customer Orders List response $result");
-
 
     InvoiceModel invoicemodel;
     invoicemodel = (InvoiceModel.fromJson(result));
@@ -942,15 +951,12 @@ class ApiClient {
   }
 
   Future<InvoiceDetailModel> getInvoiceSalesDetail(String invoiceId) async {
-
-    var response = await http.post(Uri.parse("http://loccon.in/desiremoulding/api/SalesApiController/customerInvoiceProductList"),
-        body: {
-          "secretkey" : Connection.secretKey,
-          "invoice_id" : invoiceId
-        });
+    var response = await http.post(
+        Uri.parse(
+            "http://loccon.in/desiremoulding/api/AdminApiController/customerInvoiceProductList"),
+        body: {"secretkey": Connection.secretKey, "invoice_id": invoiceId});
     var result = json.decode(response.body);
     print("List response $result");
-
 
     InvoiceDetailModel invoicedetailmodel;
     invoicedetailmodel = (InvoiceDetailModel.fromJson(result));
@@ -959,16 +965,15 @@ class ApiClient {
     return invoicedetailmodel;
   }
 
-  Future<PendingOrderListModel> getPendingOrderListSales(String salesManId) async {
-
-    var response = await http.post(Uri.parse("http://loccon.in/desiremoulding/api/SalesApiController/customersPendingOrderList"),
+  Future<PendingOrderListModel> getPendingOrderListSales() async {
+    var response = await http.post(
+        Uri.parse(
+            "http://loccon.in/desiremoulding/api/AdminApiController/customersPendingOrderList"),
         body: {
-          "secretkey" : Connection.secretKey,
-          "salesman_id" : salesManId
+          "secretkey": Connection.secretKey,
         });
     var result = json.decode(response.body);
     print("List response $result");
-
 
     PendingOrderListModel pendingorderlistmodel;
     pendingorderlistmodel = (PendingOrderListModel.fromJson(result));
@@ -978,13 +983,12 @@ class ApiClient {
   }
 
   Future<OrderDetailsByIdModel> getOrderdetailsbyId(String orderId) async {
-    var response = await http.post(Uri.parse("http://loccon.in/desiremoulding/api/SalesApiController/orderidBypoductdetails"), body: {
-      "secretkey" : Connection.secretKey,
-      "orderid":orderId
-    });
+    var response = await http.post(
+        Uri.parse(
+            "http://loccon.in/desiremoulding/api/SalesApiController/orderidBypoductdetails"),
+        body: {"secretkey": Connection.secretKey, "orderid": orderId});
     var result = json.decode(response.body);
     print("customer order† response $result ${result['status']}");
-
 
     OrderDetailsByIdModel orderDetailsByIdModel;
     orderDetailsByIdModel = OrderDetailsByIdModel.fromJson(result);
@@ -992,16 +996,16 @@ class ApiClient {
 
     return orderDetailsByIdModel;
   }
-  Future<HoldOrderModel> getHoldOrderListSales(String salesManId) async {
 
-    var response = await http.post(Uri.parse("http://loccon.in/desiremoulding/api/SalesApiController/customersHoldOrderList"),
+  Future<HoldOrderModel> getHoldOrderListSales() async {
+    var response = await http.post(
+        Uri.parse(
+            "http://loccon.in/desiremoulding/api/AdminApiController/customersHoldOrderList"),
         body: {
-          "secretkey" : Connection.secretKey,
-          "salesman_id" : salesManId
+          "secretkey": Connection.secretKey,
         });
     var result = json.decode(response.body);
     print("List response $result");
-
 
     HoldOrderModel holdordermodel;
     holdordermodel = (HoldOrderModel.fromJson(result));
@@ -1009,16 +1013,16 @@ class ApiClient {
 
     return holdordermodel;
   }
-  Future<CustomerOrdersModel> getAllCustomerOrders(String salesManId) async {
 
-    var response = await http.post(Uri.parse("http://loccon.in/desiremoulding/api/SalesApiController/orderList"),
+  Future<CustomerOrdersModel> getAllCustomerOrders() async {
+    var response = await http.post(
+        Uri.parse(
+            "http://loccon.in/desiremoulding/api/AdminApiController/allOrderList"),
         body: {
-          "secretkey" : r"12!@34#$5%",
-          "salesman_id" : salesManId
+          "secretkey": r"12!@34#$5%",
         });
     var result = json.decode(response.body);
     print("customer Orders List response $result");
-
 
     CustomerOrdersModel customerOrdersModel;
     customerOrdersModel = (CustomerOrdersModel.fromJson(result));
@@ -1026,15 +1030,16 @@ class ApiClient {
 
     return customerOrdersModel;
   }
-  Future<UserListModel> getAllUserList() async {
 
-    var response = await http.post(Uri.parse("http://loccon.in/desiremoulding/api/AdminApiController/adminUserList"),
+  Future<UserListModel> getAllUserList() async {
+    var response = await http.post(
+        Uri.parse(
+            "http://loccon.in/desiremoulding/api/AdminApiController/adminUserList"),
         body: {
-          "secretkey" : r"12!@34#$5%",
+          "secretkey": r"12!@34#$5%",
         });
     var result = json.decode(response.body);
     print("user List response $result");
-
 
     UserListModel userlistmodel;
     userlistmodel = (UserListModel.fromJson(result));
@@ -1044,14 +1049,14 @@ class ApiClient {
   }
 
   Future<RoleListModel> getRoleList() async {
-
-    var response = await http.post(Uri.parse("http://loccon.in/desiremoulding/api/AdminApiController/roleList"),
+    var response = await http.post(
+        Uri.parse(
+            "http://loccon.in/desiremoulding/api/AdminApiController/roleList"),
         body: {
-          "secretkey" : r"12!@34#$5%",
+          "secretkey": r"12!@34#$5%",
         });
     var result = json.decode(response.body);
     print("user List response $result");
-
 
     RoleListModel rolelistmodel;
     rolelistmodel = (RoleListModel.fromJson(result));

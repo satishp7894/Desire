@@ -12,9 +12,9 @@ class PendingOrderSalesBloc {
 
   Stream<PendingOrderListModel> get pendingOrderStream => _pendingOrderController.stream;
 
-  fetchPendingOrder(String salesId) async {
+  fetchPendingOrder() async {
     try {
-      final results = await _apiSales.getPendingOrderListSales(salesId);
+      final results = await _apiSales.getPendingOrderListSales();
       _pendingOrderController.sink.add(results);
       print("pending bloc ${results.status}");
 

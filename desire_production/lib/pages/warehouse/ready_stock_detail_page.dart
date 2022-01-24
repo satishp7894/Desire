@@ -11,11 +11,11 @@ import 'package:pdf/widgets.dart' as pw;
 import 'package:permission_handler/permission_handler.dart';
 
 class ReadyStockDetailPage extends StatefulWidget {
-  final modelNo;
   final modelNoId;
   final status;
+  final page;
   const ReadyStockDetailPage(
-      {Key key, this.modelNo, this.modelNoId, this.status})
+      {Key key, this.modelNoId, this.status, this.page})
       : super(key: key);
 
   @override
@@ -29,7 +29,7 @@ class _ReadyStockDetailPageState extends State<ReadyStockDetailPage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    modelWiseListBloc.fetchreadyStockDetailList(widget.modelNoId.toString());
+    modelWiseListBloc.fetchreadyStockDetailList(widget.modelNoId.toString(),widget.page );
   }
 
   @override
@@ -82,7 +82,7 @@ class _ReadyStockDetailPageState extends State<ReadyStockDetailPage> {
         ],
         backgroundColor: Colors.white,
         title: Text(
-          "Model No - " + widget.modelNo,
+          "Model No - " + widget.modelNoId,
           style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
@@ -126,7 +126,7 @@ class _ReadyStockDetailPageState extends State<ReadyStockDetailPage> {
           return asyncSnapshot.data.readyStockList.isEmpty
               ? Center(
                   child:
-                      Text("No Production List of ${widget.modelNo} Model No."),
+                      Text("No Production List of ${widget.modelNoId} Model No."),
                 )
               : SingleChildScrollView(
                   physics: BouncingScrollPhysics(),
@@ -156,7 +156,7 @@ class _ReadyStockDetailPageState extends State<ReadyStockDetailPage> {
             pw.Header(
               level: 5,
               child: pw.Text(
-                "Daily Order For Model No : ${widget.modelNo}",
+                "Daily Order For Model No : ${widget.modelNoId}",
                 textAlign: pw.TextAlign.center,
                 style: pw.TextStyle(
                   fontSize: 40,
@@ -296,7 +296,7 @@ class _ReadyStockDetailPageState extends State<ReadyStockDetailPage> {
       file.writeAsBytesSync(List.from(await pdf.save()));
       print("path of file open $path");
       Alerts.showAlertPdf(
-          context, 'Daily Orders - ${widget.modelNo}', 'Pdf Generated', path);
+          context, 'Daily Orders - ${widget.modelNoId}', 'Pdf Generated', path);
     }
   }
 }
@@ -319,22 +319,22 @@ class ModelWiseListTile extends StatelessWidget {
               const EdgeInsets.only(left: 10.0, right: 10, bottom: 10, top: 10),
           child: Row(
             children: [
-              Padding(
+              data.image != null ? Padding(
                 padding: const EdgeInsets.only(right: 8.0),
                 child: Image.network(
                   "$imageURL/${data.image}",
                   width: 120,
                   fit: BoxFit.cover,
                 ),
-              ),
+              ):Container(),
               Expanded(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    FieldValueSet("Model No", data.modelNo),
+                    FieldValueSet("Model No", data.modelNo != null ?  data.modelNo : ""),
                     SizedBox(width: 10),
-                    FieldValueSet("Product Name", data.productName),
+                    FieldValueSet("Product Name", data.productName != null ? data.productName : ""),
                     SizedBox(width: 10),
                     FieldValueSet("Qty", data.quantity),
                   ],

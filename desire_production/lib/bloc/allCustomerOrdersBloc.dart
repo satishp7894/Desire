@@ -12,9 +12,9 @@ class AllCustomerOrderBloc {
 
    Stream<CustomerOrdersModel> get allCustomerOrderStream => allCustomerOrderController.stream;
 
-   fetchAllCustomerOrders(String salesManId) async {
+   fetchAllCustomerOrders() async {
      try {
-       final results = await _apiClient.getAllCustomerOrders(salesManId);
+       final results = await _apiClient.getAllCustomerOrders();
        allCustomerOrderController.sink.add(results);
        print("all customer order bloc $results");
      } on Exception catch (e) {

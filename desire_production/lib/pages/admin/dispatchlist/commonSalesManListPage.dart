@@ -152,22 +152,11 @@ class _CommonSalesManListPageState extends State<CommonSalesManListPage> {
                                                       salesmanList[i].userId,
                                                 )
                                               : widget.type == "pending"
-                                                  ? PendingOrderListPage(
-                                                      salesId: salesmanList[i]
-                                                          .userId)
+                                                  ? PendingOrderListPage()
                                                   : widget.type == "order"
-                                                      ? CustomerOrdersListPage(
-                                                          salesManId:
-                                                              salesmanList[i]
-                                                                  .userId,
-                                                          salesManName:
-                                                              salesmanList[i]
-                                                                  .username,
-                                                        )
+                                                      ? CustomerOrdersListPage()
                                                       : HoldOrderListPage(
-                                                          salesId:
-                                                              salesmanList[i]
-                                                                  .userId)));
+                                                          )));
                                 },
                                 child: Container(
                                   //padding: EdgeInsets.only(top: 10, bottom: 10),

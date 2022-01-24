@@ -13,9 +13,9 @@ class CustomerInvoiceSalesBloc {
 
   Stream<InvoiceModel> get invoiceListStream => _invoicelistController.stream;
 
-  fetchsaleInvoiceList(String salesId) async {
+  fetchsaleInvoiceList() async {
     try {
-      final results = await _apiClient.getInvoiceListSales(salesId);
+      final results = await _apiClient.getInvoiceListSales();
       _invoicelistController.sink.add(results);
       print("new customer bloc $results");
     } on Exception catch (e) {

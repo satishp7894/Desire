@@ -13,9 +13,9 @@ class LedgerBloc {
 
   Stream<LedgerModel> get ledgerStream => _ledgerController.stream;
 
-  fetchLedger(String customerId) async {
+  fetchLedger() async {
     try {
-      final results = await _apiClient.getLedgerDetails(customerId);
+      final results = await _apiClient.getLedgerDetails();
       _ledgerController.sink.add(results);
       print("new accessory bloc ${results.status}");
     } on Exception catch (e) {

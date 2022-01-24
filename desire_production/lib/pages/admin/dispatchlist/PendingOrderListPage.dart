@@ -8,9 +8,8 @@ import 'package:flutter/material.dart';
 import 'orderDetailsByIdPage.dart';
 
 class PendingOrderListPage extends StatefulWidget {
-  final salesId;
 
-  const PendingOrderListPage({Key key, this.salesId}) : super(key: key);
+  const PendingOrderListPage({Key key}) : super(key: key);
 
   @override
   _PendingOrderListPageState createState() => _PendingOrderListPageState();
@@ -26,7 +25,7 @@ class _PendingOrderListPageState extends State<PendingOrderListPage> {
     super.initState();
     checkConnectivity();
 
-    pendinOrderlistBloc.fetchPendingOrder(widget.salesId);
+    pendinOrderlistBloc.fetchPendingOrder();
   }
 
   checkConnectivity() async {
@@ -67,7 +66,7 @@ class _PendingOrderListPageState extends State<PendingOrderListPage> {
                 context,
                 MaterialPageRoute(
                     builder: (builder) =>
-                        PendingOrderListPage(salesId: widget.salesId)));
+                        PendingOrderListPage()));
           },
           child: _body(),
         ));

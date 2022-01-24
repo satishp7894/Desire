@@ -1,6 +1,10 @@
 import 'package:desire_production/pages/admin/chat/admin_chat_list_page.dart';
+import 'package:desire_production/pages/admin/dispatchlist/CustomerInvoiceListPage.dart';
+import 'package:desire_production/pages/admin/dispatchlist/PendingOrderListPage.dart';
 import 'package:desire_production/pages/admin/dispatchlist/commonSalesManListPage.dart';
+import 'package:desire_production/pages/admin/dispatchlist/hold_order_list_page.dart';
 import 'package:desire_production/pages/admin/ledgerandprice/common_ledger_price_page.dart';
+import 'package:desire_production/pages/admin/orders/customerOrdersListPage.dart';
 import 'package:desire_production/pages/admin/todayProduction/TodayProductionPage.dart';
 import 'package:desire_production/pages/admin/userslist/user_list_page.dart';
 import 'package:desire_production/pages/admin_dashboard_list/admin_page.dart';
@@ -9,6 +13,7 @@ import 'package:desire_production/pages/admin_dashboard_list/product_page.dart';
 import 'package:desire_production/pages/admin_dashboard_list/sales_page.dart';
 import 'package:desire_production/pages/dashboards/dashboard_page_warhouse.dart';
 import 'package:desire_production/pages/dashboards/production_dashboard_page.dart';
+import 'package:desire_production/pages/warehouse/ready_stock_page.dart';
 import 'package:desire_production/utils/alerts.dart';
 import 'package:desire_production/utils/constants.dart';
 import 'package:flutter/material.dart';
@@ -427,7 +432,7 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
           GestureDetector(
             onTap: () {
               Navigator.push(context, MaterialPageRoute(builder: (context) {
-                return TodayProductionPage(type: "sales");
+                return TodayProductionPage();
               }));
             },
             child: Container(
@@ -465,9 +470,7 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
           GestureDetector(
             onTap: () {
               Navigator.push(context, MaterialPageRoute(builder: (context) {
-                return CommonSalesManListPage(
-                  type: "invoice",
-                );
+                return CustomerInvoiceListPage();
               }));
             },
             child: Container(
@@ -505,9 +508,7 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
           GestureDetector(
             onTap: () {
               Navigator.push(context, MaterialPageRoute(builder: (context) {
-                return CommonSalesManListPage(
-                  type: "pending",
-                );
+                return PendingOrderListPage();
               }));
             },
             child: Container(
@@ -545,9 +546,7 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
           GestureDetector(
             onTap: () {
               Navigator.push(context, MaterialPageRoute(builder: (context) {
-                return CommonSalesManListPage(
-                  type: "hold",
-                );
+                return HoldOrderListPage();
               }));
             },
             child: Container(
@@ -585,7 +584,7 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
           GestureDetector(
             onTap: () {
               Navigator.push(context, MaterialPageRoute(builder: (context) {
-                return CommonLedgerPricePage(type: "ready");
+                return ReadyStockListPage(page: "admin");
               }));
             },
             child: Container(
@@ -623,9 +622,7 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
           GestureDetector(
             onTap: () {
               Navigator.push(context, MaterialPageRoute(builder: (context) {
-                return CommonSalesManListPage(
-                  type: "order",
-                );
+                return CustomerOrdersListPage();
               }));
             },
             child: Container(

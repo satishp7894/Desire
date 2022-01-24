@@ -68,8 +68,8 @@ class Connection {
   static final String productDetails = ipUsers + "productDetails";
 
   static final String productList = ipAdmin + "allproductDetails";
-  static final String modelList = ipSales + "customerPriceList";
-  static final String editmodelList = ipSales + "submitCustomerPriceList";
+  static final String modelList = ipAdmin + "customerPriceList";
+  static final String editmodelList = ipAdmin + "submitCustomerPriceList";
 
   //categories
   static final String categoryWiseList = ipUsers + "categoryWiseProduct";

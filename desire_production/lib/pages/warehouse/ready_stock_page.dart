@@ -38,7 +38,7 @@ class _ReadyStockListPageListPageState extends State<ReadyStockListPage> {
   void initState() {
     super.initState();
     searchView = TextEditingController();
-    readyToDispatchBloc.fetchreadyStockList();
+    readyToDispatchBloc.fetchreadyStockList(widget.page);
   }
 
   @override
@@ -348,7 +348,7 @@ class _ReadyStockListPageListPageState extends State<ReadyStockListPage> {
                                                                             .black)),
                                                               ),
                                                               child: Text(
-                                                                '${s.data.readyStockList[i].modelNo}', //style: content1,
+                                                                '${s.data.readyStockList[i].modelNoId}', //style: content1,
                                                                 textAlign:
                                                                     TextAlign
                                                                         .center,
@@ -391,8 +391,8 @@ class _ReadyStockListPageListPageState extends State<ReadyStockListPage> {
                                                                         builder: (context) =>
                                                                             ReadyStockDetailPage(
                                                                               modelNoId: s.data.readyStockList[i].modelNoId,
-                                                                              modelNo: s.data.readyStockList[i].modelNo,
                                                                               status: 1,
+                                                                              page : widget.page
                                                                             )));
                                                               },
                                                               child: Container(
@@ -592,7 +592,7 @@ class _ReadyStockListPageListPageState extends State<ReadyStockListPage> {
                                                                             .black)),
                                                               ),
                                                               child: Text(
-                                                                '${_searchResult[i].modelNo}', //style: content1,
+                                                                '${_searchResult[i].modelNoId}', //style: content1,
                                                                 textAlign:
                                                                     TextAlign
                                                                         .center,

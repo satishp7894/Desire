@@ -52,13 +52,13 @@ class ReadyStockDetailListModel {
   ReadyStockDetailListModel(
       {this.status, this.message, this.readyStockList, this.productImageUrl});
 
-  ReadyStockDetailListModel.fromJson(Map<String, dynamic> json) {
+  ReadyStockDetailListModel.fromJson(Map<String, dynamic> json, String page) {
     status = json['status'];
     message = json['message'];
     productImageUrl = json['product_image_url'];
-    if (json['readyStockProductList'] != null) {
+    if (page == "admin"? json["readyStockList"] != null:json['readyStockProductList'] != null) {
       readyStockList = <ReadyStockDetailModel>[];
-      json['readyStockProductList'].forEach((v) {
+      (page == "admin"? json["readyStockList"] : json['readyStockProductList']).forEach((v) {
         readyStockList.add(new ReadyStockDetailModel.fromJson(v));
       });
     }

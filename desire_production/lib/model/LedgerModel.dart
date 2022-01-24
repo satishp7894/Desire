@@ -29,42 +29,30 @@ class LedgerModel {
 }
 
 class CustomerLedger {
-  String customerLedgerId;
-  String ledgerMonth;
-  String ledgerDate;
-  String ledgerAccount;
-  String type;
-  String debitAmount;
-  String creditAmount;
+  String accountName;
+  String totalCreditAmount;
+  String totalDebitAmount;
+  String totalAmount;
 
   CustomerLedger(
-      {this.customerLedgerId,
-        this.ledgerMonth,
-        this.ledgerDate,
-        this.ledgerAccount,
-        this.type,
-        this.debitAmount,
-        this.creditAmount});
+      {this.accountName,
+        this.totalCreditAmount,
+        this.totalDebitAmount,
+        this.totalAmount});
 
   CustomerLedger.fromJson(Map<String, dynamic> json) {
-    customerLedgerId = json['customer_ledger_id'];
-    ledgerMonth = json['ledger_month'];
-    ledgerDate = json['ledger_date'];
-    ledgerAccount = json['ledger_account'];
-    type = json['type'];
-    debitAmount = json['debit_amount'];
-    creditAmount = json['credit_amount'];
+    accountName = json['account_name'];
+    totalCreditAmount = json['total_credit_amount'];
+    totalDebitAmount = json['total_debit_amount'];
+    totalAmount = json['total_amount'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['customer_ledger_id'] = this.customerLedgerId;
-    data['ledger_month'] = this.ledgerMonth;
-    data['ledger_date'] = this.ledgerDate;
-    data['ledger_account'] = this.ledgerAccount;
-    data['type'] = this.type;
-    data['debit_amount'] = this.debitAmount;
-    data['credit_amount'] = this.creditAmount;
+    data['account_name'] = this.accountName;
+    data['total_credit_amount'] = this.totalCreditAmount;
+    data['total_debit_amount'] = this.totalDebitAmount;
+    data['total_amount'] = this.totalAmount;
     return data;
   }
 }

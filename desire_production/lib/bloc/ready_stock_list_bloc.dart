@@ -11,9 +11,9 @@ class ReadyStockListBloc {
   Stream<ReadyStockListModel> get readyStockStream =>
       _readyStockController.stream;
 
-  fetchreadyStockList() async {
+  fetchreadyStockList(String page) async {
     try {
-      final results = await _apiClient.getReadyStockList();
+      final results = await _apiClient.getReadyStockList(page);
       _readyStockController.sink.add(results);
       print("readyStock bloc ${results.status}");
     } on Exception catch (e) {

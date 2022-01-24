@@ -104,11 +104,7 @@ class _ProductFromModelPageState extends State<ProductFromModelPage> {
                   itemCount: s.data.data.length,
                   itemBuilder: (BuildContext context, int index) =>
                       GestureDetector(
-                    onTap: () {
-                      widget.type == "sales"
-                          ? {}
-                          : {};
-                    },
+                    onTap: () {},
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [

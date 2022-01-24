@@ -40,7 +40,7 @@ class _CustomerLedgerPageState extends State<CustomerLedgerPage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    ledgerBloc.fetchLedger(widget.customerId);
+    ledgerBloc.fetchLedger();
   }
 
   @override
@@ -317,8 +317,7 @@ class _CustomerLedgerPageState extends State<CustomerLedgerPage> {
                                               fromDateinput.clear();
                                               toDateinput.clear();
                                               asyncSnapshot.clear();
-                                              ledgerBloc.fetchLedger(
-                                                  widget.customerId);
+                                              ledgerBloc.fetchLedger();
                                             });
                                           },
                                           child: const Text(
@@ -408,30 +407,30 @@ class _CustomerLedgerPageState extends State<CustomerLedgerPage> {
                       pw.Row(
                           mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
                           children: [
-                            as[i].ledgerDate == null
+                            // as[i].ledgerDate == null
+                            //     ? pw.Text("N/A")
+                            //     : pw.Text(as[i].ledgerDate,
+                            //         style: pw.TextStyle(
+                            //             fontWeight: pw.FontWeight.bold)),
+                            as[i].accountName == null
                                 ? pw.Text("N/A")
-                                : pw.Text(as[i].ledgerDate,
+                                : pw.Text(as[i].accountName,
                                     style: pw.TextStyle(
                                         fontWeight: pw.FontWeight.bold)),
-                            as[i].ledgerAccount == null
-                                ? pw.Text("N/A")
-                                : pw.Text(as[i].ledgerAccount,
-                                    style: pw.TextStyle(
-                                        fontWeight: pw.FontWeight.bold)),
-                            as[i].creditAmount != ""
+                            as[i].totalCreditAmount != ""
                                 ? pw.Text(
-                                    "${as[i].creditAmount} Cr ",
+                                    "${as[i].totalCreditAmount} Cr ",
                                     style: pw.TextStyle(
                                         color: PdfColor.fromHex('#000000'),
                                         fontWeight: pw.FontWeight.bold),
-                                  )
-                                : pw.Text("${as[i].debitAmount} Dr ",
+                                  ):pw.Container(),
+                            as[i].totalDebitAmount != "" ? pw.Text("${as[i].totalDebitAmount} Dr ",
                                     style: pw.TextStyle(
                                         color: PdfColor.fromHex('#000000'),
-                                        fontWeight: pw.FontWeight.bold)),
-                            as[i].type == ""
+                                        fontWeight: pw.FontWeight.bold)):pw.Container(),
+                            as[i].totalAmount == ""
                                 ? pw.Text("")
-                                : pw.Text(as[i].type,
+                                : pw.Text(as[i].totalAmount,
                                     style: pw.TextStyle(
                                         fontWeight: pw.FontWeight.bold))
                           ]),
@@ -460,7 +459,7 @@ class _CustomerLedgerPageState extends State<CustomerLedgerPage> {
     pr.show();
     var response = await http.post(
         Uri.parse(
-            "http://loccon.in/desiremoulding/api/UserApiController/customerLedgerFilter"),
+            "http://loccon.in/desiremoulding/api/AdminApiController/customerLedgerFilter"),
         body: {
           'secretkey': Connection.secretKey,
           'customer_id': customerId,
@@ -511,105 +510,92 @@ class LedgerListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(left: 10, right: 10.0, top: 5, bottom: 5),
-      child: Container(
-        decoration: BoxDecoration(
-            color: kWhite,
-            border: Border.all(color: kSecondaryColor),
-            borderRadius: BorderRadius.circular(10)),
-        child: Padding(
-          padding: const EdgeInsets.all(10.0),
-          child: Column(
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              customerLedger.ledgerDate == null
-                                  ? Text("N/A")
-                                  : Text(customerLedger.ledgerDate,
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold)),
-                            ],
-                          ),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              customerLedger.ledgerAccount == null
-                                  ? Text("N/A")
-                                  : Text(
-                                      customerLedger.ledgerAccount,
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                  Column(
-                    children: [
-                      customerLedger.creditAmount != ""
-                          ? Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Text(
-                                  "${customerLedger.creditAmount} Cr ",
-                                  style: TextStyle(
-                                      color: Colors.green,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                              ],
-                            )
-                          : Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Text("${customerLedger.debitAmount} Dr ",
-                                    style: TextStyle(
-                                        color: Colors.red,
-                                        fontWeight: FontWeight.bold)),
-                              ],
-                            ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          customerLedger.type == ""
-                              ? Text("")
-                              : Text(customerLedger.type,
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      ))
-                        ],
-                      ),
-                    ],
-                  )
-                ],
+    return Container(
+      margin: EdgeInsets.all(10),
+      height: 80,
+
+      alignment: Alignment.centerLeft,
+      decoration: BoxDecoration(
+        color: kSecondaryColor.withOpacity(0.1),
+        borderRadius: BorderRadius.circular(15),
+      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Expanded(
+            child:  RichText(
+              overflow: TextOverflow.ellipsis,
+              maxLines: 1,
+              text: TextSpan(
+                  text: 'Name : ',
+                  style: TextStyle(
+                      color: kSecondaryColor, fontSize: 13,fontWeight: FontWeight.bold),
+                  children: <TextSpan>[
+                    TextSpan(text: customerLedger.accountName,
+                        style: TextStyle(
+                            color: kSecondaryColor, fontSize: 14,fontWeight: FontWeight.bold),
+
+                    )
+                  ]
               ),
-              SizedBox(
-                height: 10,
-              ),
-            ],
+            ),
           ),
-        ),
+          Expanded(
+            child:  RichText(
+              overflow: TextOverflow.ellipsis,
+              maxLines: 1,
+              text: TextSpan(
+                  text: 'Total Credit Amount : ',
+                  style: TextStyle(
+                      color: kSecondaryColor, fontSize: 13,fontWeight: FontWeight.bold),
+                  children: <TextSpan>[
+                    TextSpan(text: customerLedger.totalCreditAmount,
+                      style: TextStyle(
+                          color: Colors.green, fontSize: 14,fontWeight: FontWeight.bold),
+
+                    )
+                  ]
+              ),
+            ),
+          ),
+          Expanded(
+            child: RichText(
+              overflow: TextOverflow.ellipsis,
+              maxLines: 1,
+              text: TextSpan(
+                  text: 'Total Debit Amount : ',
+                  style: TextStyle(
+                      color: kSecondaryColor, fontSize: 13,fontWeight: FontWeight.bold),
+                  children: <TextSpan>[
+                    TextSpan(text: customerLedger.totalDebitAmount,
+                      style: TextStyle(
+                          color: Colors.red, fontSize: 14,fontWeight: FontWeight.bold),
+
+                    )
+                  ]
+              ),
+            ),
+          ),
+          Expanded(
+            child:  RichText(
+              overflow: TextOverflow.ellipsis,
+              maxLines: 1,
+              text: TextSpan(
+                  text: 'Total Amount : ',
+                  style: TextStyle(
+                      color: kSecondaryColor, fontSize: 13,fontWeight: FontWeight.bold),
+                  children: <TextSpan>[
+                    TextSpan(text: customerLedger.totalAmount,
+                      style: TextStyle(
+                          color: kSecondaryColor, fontSize: 14, fontWeight: FontWeight.bold),
+
+                    )
+                  ]
+              ),
+            ),
+          )
+        ],
       ),
     );
   }

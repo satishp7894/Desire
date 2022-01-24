@@ -12,9 +12,9 @@ class HoldOrderListBloc {
 
   Stream<HoldOrderModel> get holdOrderStream => _pendingOrderController.stream;
 
-  fetchHoldOrder(String salesId) async {
+  fetchHoldOrder() async {
     try {
-      final results = await _apiSales.getHoldOrderListSales(salesId);
+      final results = await _apiSales.getHoldOrderListSales();
       _pendingOrderController.sink.add(results);
       print("hold bloc ${results.status}");
 

@@ -35,7 +35,7 @@ class _CustomerInvoiceListPageState extends State<CustomerInvoiceListPage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    customerinvoicesalesbloc.fetchsaleInvoiceList(widget.salesId);
+    customerinvoicesalesbloc.fetchsaleInvoiceList();
   }
 
   @override
