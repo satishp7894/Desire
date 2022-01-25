@@ -141,35 +141,16 @@ class _CommonLedgerPricePageState extends State<CommonLedgerPricePage> {
                                   : status.add(true);
                               return InkWell(
                                 onTap: () {
-                                  widget.type == "ledger"
-                                      ? Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (builder) =>
-                                                  CustomerLedgerPage(
-                                                    customerId: s.data
-                                                        .customer[i].customerId,
-                                                  )))
-                                      : widget.type == "ready"
-                                          ? Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (builder) =>
-                                                      ReadyStockListPage(
-                                                        page: "admin",
-                                                      )))
-                                          : Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (builder) =>
-                                                      CustomerPricingPage(
-                                                        customerId:
-                                                            customerList[i]
-                                                                .customerId,
-                                                        salesId: customerList[i]
-                                                            .salesmanID,
-                                                      )));
-                                  ;
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (builder) =>
+                                              CustomerPricingPage(
+                                                customerId:
+                                                    customerList[i].customerId,
+                                                salesId:
+                                                    customerList[i].salesmanID,
+                                              )));
                                 },
                                 child: Container(
                                   //padding: EdgeInsets.only(top: 10, bottom: 10),
@@ -398,34 +379,16 @@ class _CommonLedgerPricePageState extends State<CommonLedgerPricePage> {
                                   : status.add(true);
                               return GestureDetector(
                                 onTap: () {
-                                  widget.type != "price"
-                                      ? Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (builder) =>
-                                                  CustomerLedgerPage(
-                                                    customerId: s.data
-                                                        .customer[i].customerId,
-                                                  )))
-                                      : widget.type != "ready"
-                                          ? Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (builder) =>
-                                                      CustomerPricingPage(
-                                                        customerId:
-                                                            customerList[i]
-                                                                .customerId,
-                                                        salesId: customerList[i]
-                                                            .salesmanID,
-                                                      )))
-                                          : Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (builder) =>
-                                                      ReadyStockListPage(
-                                                        page: "admin",
-                                                      )));
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (builder) =>
+                                              CustomerPricingPage(
+                                                customerId:
+                                                    customerList[i].customerId,
+                                                salesId:
+                                                    customerList[i].salesmanID,
+                                              )));
                                 },
                                 child: Container(
                                   //padding: EdgeInsets.only(top: 10, bottom: 10),

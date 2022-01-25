@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:desire_production/bloc/LedgerBloc.dart';
 import 'package:desire_production/components/default_button.dart';
 import 'package:desire_production/model/LedgerModel.dart';
+import 'package:desire_production/pages/admin/ledgerandprice/ledgerfilterpage.dart';
 import 'package:desire_production/services/connections.dart';
 import 'package:desire_production/utils/alerts.dart';
 import 'package:desire_production/utils/constants.dart';
@@ -18,9 +19,7 @@ import 'package:pdf/widgets.dart' as pw;
 import 'package:permission_handler/permission_handler.dart';
 
 class CustomerLedgerPage extends StatefulWidget {
-  final customerId;
-
-  const CustomerLedgerPage({Key key, this.customerId}) : super(key: key);
+  const CustomerLedgerPage({Key key}) : super(key: key);
 
   @override
   _CustomerLedgerPageState createState() => _CustomerLedgerPageState();
@@ -31,6 +30,9 @@ class _CustomerLedgerPageState extends State<CustomerLedgerPage> {
   List<CustomerLedger> asyncSnapshot;
   LedgerModel ledgermodel;
   bool isVisible = false;
+  TextEditingController searchView;
+  bool search = false;
+  List<CustomerLedger> _searchResult = [];
 
   List<CustomerLedger> as;
   TextEditingController fromDateinput = TextEditingController();
@@ -62,23 +64,27 @@ class _CustomerLedgerPageState extends State<CustomerLedgerPage> {
         titleTextStyle: TextStyle(color: kBlackColor, fontSize: 18.0),
         title: Text("Ledger Details"),
         centerTitle: true,
-        actions: [
-          IconButton(
-              onPressed: () {
-                setState(() {
-                  if (isVisible) {
-                    isVisible = false;
-                  } else {
-                    isVisible = true;
-                  }
-                });
-              },
-              icon: Icon(
-                Icons.filter_list,
-                size: 30,
-                color: kPrimaryColor,
-              ))
-        ],
+          bottom: PreferredSize(
+            preferredSize: Size.fromHeight(50),
+            child: _searchView(),
+          ),
+        // actions: [
+        //   IconButton(
+        //       onPressed: () {
+        //         setState(() {
+        //           if (isVisible) {
+        //             isVisible = false;
+        //           } else {
+        //             isVisible = true;
+        //           }
+        //         });
+        //       },
+        //       icon: Icon(
+        //         Icons.filter_list,
+        //         size: 30,
+        //         color: kPrimaryColor,
+        //       ))
+        // ],
       ),
       floatingActionButton: FloatingActionButton.extended(
         backgroundColor: kPrimaryColor,
@@ -290,8 +296,8 @@ class _CustomerLedgerPageState extends State<CustomerLedgerPage> {
                                             setState(() {
                                               if (fromDateinput.text != "" &&
                                                   toDateinput.text != "") {
-                                                filterLedgerList(
-                                                    widget.customerId);
+                                                // filterLedgerList(
+                                                //     widget.customerId);
                                               } else {
                                                 final snackBar = SnackBar(
                                                     content: Text(
@@ -332,15 +338,65 @@ class _CustomerLedgerPageState extends State<CustomerLedgerPage> {
                                 ],
                               )))),
                   ...List.generate(
-                      asyncSnapshot.length,
+                      _searchResult.length == 0 ?  asyncSnapshot.length : _searchResult.length,
                       (index) => LedgerListTile(
-                            customerLedger: asyncSnapshot[index],
+                            customerLedger: _searchResult.length == 0 ? asyncSnapshot[index] : _searchResult[index],
                           ))
                 ],
               ),
             );
           }
         });
+  }
+
+  Widget _searchView() {
+    return Padding(
+      padding: const EdgeInsets.only(left: 10.0,right: 10),
+      child: Container(
+        height: 50,
+        decoration: BoxDecoration(
+            border: Border.all(color: kSecondaryColor)
+
+        ),
+        child: Padding(
+          padding: const EdgeInsets.only(left: 10.0,right: 10),
+          child: TextFormField(
+            controller: searchView,
+            keyboardType: TextInputType.text,
+            textAlign: TextAlign.left,
+            onChanged: (value){
+              setState(() {
+                search = true;
+                onSearchTextChangedICD(value);
+              });
+            },
+            decoration: new InputDecoration(
+              border: InputBorder.none,
+              hintText: "Search Customers",
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  onSearchTextChangedICD(String text) async {
+    _searchResult.clear();
+    print("$text value from search");
+    if (text.isEmpty) {
+      setState(() {
+        search = false;
+      });
+      return;
+    }
+
+    asyncSnapshot.forEach((exp) {
+      if (exp.accountName.toLowerCase().contains(text.toLowerCase()))
+        _searchResult.add(exp);
+    });
+    //print("search objects ${_searchResult.first}");
+    print("search result length ${_searchResult.length}");
+    setState(() {});
   }
 
   String path;
@@ -423,11 +479,14 @@ class _CustomerLedgerPageState extends State<CustomerLedgerPage> {
                                     style: pw.TextStyle(
                                         color: PdfColor.fromHex('#000000'),
                                         fontWeight: pw.FontWeight.bold),
-                                  ):pw.Container(),
-                            as[i].totalDebitAmount != "" ? pw.Text("${as[i].totalDebitAmount} Dr ",
+                                  )
+                                : pw.Container(),
+                            as[i].totalDebitAmount != ""
+                                ? pw.Text("${as[i].totalDebitAmount} Dr ",
                                     style: pw.TextStyle(
                                         color: PdfColor.fromHex('#000000'),
-                                        fontWeight: pw.FontWeight.bold)):pw.Container(),
+                                        fontWeight: pw.FontWeight.bold))
+                                : pw.Container(),
                             as[i].totalAmount == ""
                                 ? pw.Text("")
                                 : pw.Text(as[i].totalAmount,
@@ -510,93 +569,110 @@ class LedgerListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.all(10),
-      height: 80,
-
-      alignment: Alignment.centerLeft,
-      decoration: BoxDecoration(
-        color: kSecondaryColor.withOpacity(0.1),
-        borderRadius: BorderRadius.circular(15),
-      ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Expanded(
-            child:  RichText(
-              overflow: TextOverflow.ellipsis,
-              maxLines: 1,
-              text: TextSpan(
-                  text: 'Name : ',
-                  style: TextStyle(
-                      color: kSecondaryColor, fontSize: 13,fontWeight: FontWeight.bold),
-                  children: <TextSpan>[
-                    TextSpan(text: customerLedger.accountName,
-                        style: TextStyle(
-                            color: kSecondaryColor, fontSize: 14,fontWeight: FontWeight.bold),
-
-                    )
-                  ]
-              ),
-            ),
+    return InkWell(
+        onTap: () {
+          Navigator.push(context, MaterialPageRoute(builder: (context){
+            return LedgerFilter(customerId: customerLedger.customerId);
+          }));
+        },
+        child: Container(
+          margin: EdgeInsets.all(10),
+          height: 80,
+          alignment: Alignment.centerLeft,
+          decoration: BoxDecoration(
+            color: kSecondaryColor.withOpacity(0.1),
+            borderRadius: BorderRadius.circular(15),
           ),
-          Expanded(
-            child:  RichText(
-              overflow: TextOverflow.ellipsis,
-              maxLines: 1,
-              text: TextSpan(
-                  text: 'Total Credit Amount : ',
-                  style: TextStyle(
-                      color: kSecondaryColor, fontSize: 13,fontWeight: FontWeight.bold),
-                  children: <TextSpan>[
-                    TextSpan(text: customerLedger.totalCreditAmount,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(
+                child: RichText(
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 1,
+                  text: TextSpan(
+                      text: 'Name : ',
                       style: TextStyle(
-                          color: Colors.green, fontSize: 14,fontWeight: FontWeight.bold),
-
-                    )
-                  ]
+                          color: kSecondaryColor,
+                          fontSize: 13,
+                          fontWeight: FontWeight.bold),
+                      children: <TextSpan>[
+                        TextSpan(
+                          text: customerLedger.accountName,
+                          style: TextStyle(
+                              color: kSecondaryColor,
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold),
+                        )
+                      ]),
+                ),
               ),
-            ),
+              Expanded(
+                child: RichText(
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 1,
+                  text: TextSpan(
+                      text: 'Total Credit Amount : ',
+                      style: TextStyle(
+                          color: kSecondaryColor,
+                          fontSize: 13,
+                          fontWeight: FontWeight.bold),
+                      children: <TextSpan>[
+                        TextSpan(
+                          text: customerLedger.totalCreditAmount,
+                          style: TextStyle(
+                              color: Colors.green,
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold),
+                        )
+                      ]),
+                ),
+              ),
+              Expanded(
+                child: RichText(
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 1,
+                  text: TextSpan(
+                      text: 'Total Debit Amount : ',
+                      style: TextStyle(
+                          color: kSecondaryColor,
+                          fontSize: 13,
+                          fontWeight: FontWeight.bold),
+                      children: <TextSpan>[
+                        TextSpan(
+                          text: customerLedger.totalDebitAmount,
+                          style: TextStyle(
+                              color: Colors.red,
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold),
+                        )
+                      ]),
+                ),
+              ),
+              Expanded(
+                child: RichText(
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 1,
+                  text: TextSpan(
+                      text: 'Total Amount : ',
+                      style: TextStyle(
+                          color: kSecondaryColor,
+                          fontSize: 13,
+                          fontWeight: FontWeight.bold),
+                      children: <TextSpan>[
+                        TextSpan(
+                          text: customerLedger.totalAmount,
+                          style: TextStyle(
+                              color: kSecondaryColor,
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold),
+                        )
+                      ]),
+                ),
+              )
+            ],
           ),
-          Expanded(
-            child: RichText(
-              overflow: TextOverflow.ellipsis,
-              maxLines: 1,
-              text: TextSpan(
-                  text: 'Total Debit Amount : ',
-                  style: TextStyle(
-                      color: kSecondaryColor, fontSize: 13,fontWeight: FontWeight.bold),
-                  children: <TextSpan>[
-                    TextSpan(text: customerLedger.totalDebitAmount,
-                      style: TextStyle(
-                          color: Colors.red, fontSize: 14,fontWeight: FontWeight.bold),
-
-                    )
-                  ]
-              ),
-            ),
-          ),
-          Expanded(
-            child:  RichText(
-              overflow: TextOverflow.ellipsis,
-              maxLines: 1,
-              text: TextSpan(
-                  text: 'Total Amount : ',
-                  style: TextStyle(
-                      color: kSecondaryColor, fontSize: 13,fontWeight: FontWeight.bold),
-                  children: <TextSpan>[
-                    TextSpan(text: customerLedger.totalAmount,
-                      style: TextStyle(
-                          color: kSecondaryColor, fontSize: 14, fontWeight: FontWeight.bold),
-
-                    )
-                  ]
-              ),
-            ),
-          )
-        ],
-      ),
-    );
+        ));
   }
 }

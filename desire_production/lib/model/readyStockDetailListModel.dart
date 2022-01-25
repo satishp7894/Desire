@@ -56,9 +56,9 @@ class ReadyStockDetailListModel {
     status = json['status'];
     message = json['message'];
     productImageUrl = json['product_image_url'];
-    if (page == "admin"? json["readyStockList"] != null:json['readyStockProductList'] != null) {
+    if (json['readyStockProductList'] != null) {
       readyStockList = <ReadyStockDetailModel>[];
-      (page == "admin"? json["readyStockList"] : json['readyStockProductList']).forEach((v) {
+      json['readyStockProductList'].forEach((v) {
         readyStockList.add(new ReadyStockDetailModel.fromJson(v));
       });
     }

@@ -3,6 +3,7 @@ import 'package:desire_production/pages/admin/dispatchlist/CustomerInvoiceListPa
 import 'package:desire_production/pages/admin/dispatchlist/PendingOrderListPage.dart';
 import 'package:desire_production/pages/admin/dispatchlist/commonSalesManListPage.dart';
 import 'package:desire_production/pages/admin/dispatchlist/hold_order_list_page.dart';
+import 'package:desire_production/pages/admin/ledgerandprice/CustomerLedgerPage.dart';
 import 'package:desire_production/pages/admin/ledgerandprice/common_ledger_price_page.dart';
 import 'package:desire_production/pages/admin/orders/customerOrdersListPage.dart';
 import 'package:desire_production/pages/admin/todayProduction/TodayProductionPage.dart';
@@ -356,7 +357,7 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
           GestureDetector(
             onTap: () {
               Navigator.push(context, MaterialPageRoute(builder: (context) {
-                return CommonLedgerPricePage(type: "ledger");
+                return  CustomerLedgerPage();
               }));
             },
             child: Container(

@@ -33,18 +33,20 @@ class CustomerLedger {
   String totalCreditAmount;
   String totalDebitAmount;
   String totalAmount;
+  String customerId;
 
   CustomerLedger(
       {this.accountName,
         this.totalCreditAmount,
         this.totalDebitAmount,
-        this.totalAmount});
+        this.totalAmount, this.customerId});
 
   CustomerLedger.fromJson(Map<String, dynamic> json) {
     accountName = json['account_name'];
     totalCreditAmount = json['total_credit_amount'];
     totalDebitAmount = json['total_debit_amount'];
     totalAmount = json['total_amount'];
+    customerId = json['customer_id'];
   }
 
   Map<String, dynamic> toJson() {
@@ -53,6 +55,7 @@ class CustomerLedger {
     data['total_credit_amount'] = this.totalCreditAmount;
     data['total_debit_amount'] = this.totalDebitAmount;
     data['total_amount'] = this.totalAmount;
+    data['customer_id'] = this.customerId;
     return data;
   }
 }

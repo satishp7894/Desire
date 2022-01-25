@@ -18,6 +18,7 @@ import 'package:desire_production/model/credit_list_model.dart';
 import 'package:desire_production/model/customerOrdersModel.dart';
 import 'package:desire_production/model/customer_complaint_list_model.dart';
 import 'package:desire_production/model/customer_list_for_chat_model.dart';
+import 'package:desire_production/model/customerwiseledger.dart';
 import 'package:desire_production/model/dailyOrderListModel.dart';
 import 'package:desire_production/model/dailyProductionAddlistModel.dart';
 import 'package:desire_production/model/dailyProductionListModel.dart';
@@ -1063,5 +1064,24 @@ class ApiClient {
     print("Customer Orders List $rolelistmodel");
 
     return rolelistmodel;
+  }
+  Future<CustomerWiseLedger> getCustomerWiseLedger(String customerId, String fromDateinput, String toDateinput) async {
+    var response = await http.post(
+        Uri.parse(
+            "http://loccon.in/desiremoulding/api/AdminApiController/customerLedgerFilter"),
+        body: {
+          'secretkey': Connection.secretKey,
+          'customer_id': customerId,
+          'start_date': fromDateinput,
+          'end_date': toDateinput,
+        });
+    var result = json.decode(response.body);
+    print("user List response $result");
+
+    CustomerWiseLedger customerwiseledger;
+    customerwiseledger = (CustomerWiseLedger.fromJson(result));
+    print("Customer Orders List $customerwiseledger");
+
+    return customerwiseledger;
   }
 }
