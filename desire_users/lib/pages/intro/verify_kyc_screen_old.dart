@@ -86,6 +86,7 @@ class _VerifyKycScreenOldState extends State<VerifyKycScreenOld>
         widget.aadharNumber != null &&
         widget.aadharNumber != "") {
       aadharNumberController.text = widget.aadharNumber;
+      checkboxAadhar = true;
     }
   }
 
@@ -318,7 +319,7 @@ class _VerifyKycScreenOldState extends State<VerifyKycScreenOld>
                                         ));
                                     ScaffoldMessenger.of(context)
                                         .showSnackBar(snackBar);
-                                  } else if (_aadharImage == null) {
+                                  } else if (_aadharImage == null && widget.aadharImage == null && widget.aadharImage == "") {
                                     final snackBar = SnackBar(
                                         backgroundColor: kSecondaryColor,
                                         content: Text(
@@ -510,7 +511,7 @@ class _VerifyKycScreenOldState extends State<VerifyKycScreenOld>
                 SizedBox(
                   width: 5,
                 ),
-                aadharPhoto == null
+                widget.aadharImage == null && widget.aadharImage == "" && aadharPhoto == null
                     ? Text(
                         "Please Upload your Aadhar card",
                         textAlign: TextAlign.left,
@@ -684,39 +685,33 @@ class _VerifyKycScreenOldState extends State<VerifyKycScreenOld>
       progressWidget: Center(child: CircularProgressIndicator()),
     );
     pr.show();
-    var response = await http.post(
-        Uri.parse(
-            "http://loccon.in/desiremoulding/api/UserApiController/submitAadharcard"),
-        body: {
-          'secretkey': Connection.secretKey,
-          'aadhar_number': aadharNumberController.text.toString(),
-          'customer_id': widget.userId,
-          "aadhar_image": _aadharImage.path
-        });
+    var request = http.MultipartRequest('POST', Uri.parse('http://loccon.in/desiremoulding/api/UserApiController/submitAadharcard'));
 
-    var results = json.decode(response.body);
-    print('response == $results  ${response.body}');
+    request.fields.addAll({
+      'secretkey': '12!@34#\$5%',
+      'aadhar_number': '123456789876',
+      'customer_id': '108'
+    });
+    request.files.add(await http.MultipartFile.fromPath('aadhar_image', _aadharImage.path));
+
+    http.StreamedResponse response = await request.send();
     pr.hide();
-    if (results['status'] == true) {
-      final snackBar = SnackBar(
-          content: Row(
-        children: [
-          Text(results['message']),
-        ],
-      ));
-      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+
+    if (response.statusCode == 200) {
+      print(await response.stream.bytesToString());
+
+
       Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(
               builder: (builder) => SuccessPage(
-                    userId: widget.userId,
-                  )),
-          (route) => false);
-      //Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (builder)=>AccessoryDetailPage(product: widget.product,page: widget.page,snapshot: widget.snapshot,status: true, orderCount: widget.orderCount,)), (route) => false);
-    } else {
-      Alerts.showAlertAndBack(context, "Desire", results['message']);
+                userId: widget.userId,
+              )),
+              (route) => false);
     }
-    pr.hide();
+    else {
+      print(response.reasonPhrase);
+    }
   }
 
   navigatePanPage() {

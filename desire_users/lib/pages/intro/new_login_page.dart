@@ -511,7 +511,7 @@ class _NewLoginPageState extends State<NewLoginPage> {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (builder) => SignUpPage()));
+                                  builder: (builder) => VerifyMobileNumberPage()));
                         },
                         child: Text(
                           "Register here",
