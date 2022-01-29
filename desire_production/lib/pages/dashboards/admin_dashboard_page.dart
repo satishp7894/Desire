@@ -1,4 +1,5 @@
 import 'package:desire_production/pages/admin/chat/admin_chat_list_page.dart';
+import 'package:desire_production/pages/admin/credit/customer_list_with_credit_page.dart';
 import 'package:desire_production/pages/admin/dispatchlist/CustomerInvoiceListPage.dart';
 import 'package:desire_production/pages/admin/dispatchlist/PendingOrderListPage.dart';
 import 'package:desire_production/pages/admin/dispatchlist/commonSalesManListPage.dart';
@@ -689,6 +690,82 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
                   SizedBox(height: 10),
                   Text(
                     "Users",
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          GestureDetector(
+            onTap: () {
+              Navigator.push(context, MaterialPageRoute(builder: (context) {
+                return CustomerListWithCreditPage(screenType:"credit");
+              }));
+            },
+            child: Container(
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  color: kPrimaryColor,
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey,
+                      blurRadius: 5.0,
+                      spreadRadius: 2,
+                    )
+                  ]),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.credit_card,
+                    size: 40,
+                    color: kWhite,
+                  ),
+                  SizedBox(height: 10),
+                  Text(
+                    "List With Credit",
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          GestureDetector(
+            onTap: () {
+              Navigator.push(context, MaterialPageRoute(builder: (context) {
+                return CustomerListWithCreditPage(screenType:"outstanding");
+              }));
+            },
+            child: Container(
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  color: kSecondaryColor,
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey,
+                      blurRadius: 5.0,
+                      spreadRadius: 2,
+                    )
+                  ]),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.list_sharp,
+                    size: 40,
+                    color: kWhite,
+                  ),
+                  SizedBox(height: 10),
+                  Text(
+                    "Outstanding List",
                     style: TextStyle(
                         color: Colors.white,
                         fontSize: 16,

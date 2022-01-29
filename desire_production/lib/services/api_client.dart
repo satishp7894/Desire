@@ -18,6 +18,8 @@ import 'package:desire_production/model/credit_list_model.dart';
 import 'package:desire_production/model/customerOrdersModel.dart';
 import 'package:desire_production/model/customer_complaint_list_model.dart';
 import 'package:desire_production/model/customer_list_for_chat_model.dart';
+import 'package:desire_production/model/customer_list_with_credit_model.dart';
+import 'package:desire_production/model/customer_outstanding_list_model.dart';
 import 'package:desire_production/model/customerwiseledger.dart';
 import 'package:desire_production/model/dailyOrderListModel.dart';
 import 'package:desire_production/model/dailyProductionAddlistModel.dart';
@@ -1083,5 +1085,38 @@ class ApiClient {
     print("Customer Orders List $customerwiseledger");
 
     return customerwiseledger;
+  }
+  Future<CustomerListWithCreditModel> getCustomerlistCredit() async {
+    var response = await http.post(
+        Uri.parse(
+            "http://loccon.in/desiremoulding/api/AdminApiController/customerListWithCredit"),
+        body: {
+          'secretkey': Connection.secretKey,
+        });
+    var result = json.decode(response.body);
+    print("user List response $result");
+
+    CustomerListWithCreditModel customerlistwithcreditmodel;
+    customerlistwithcreditmodel = (CustomerListWithCreditModel.fromJson(result));
+    print("Customer Orders List $customerlistwithcreditmodel");
+
+    return customerlistwithcreditmodel;
+  }
+
+  Future<CustomerOutstandingListModel> getCustomerlistOutstanding() async {
+    var response = await http.post(
+        Uri.parse(
+            "http://loccon.in/desiremoulding/api/AdminApiController/customerTotalOutstandingList"),
+        body: {
+          'secretkey': Connection.secretKey,
+        });
+    var result = json.decode(response.body);
+    print("user List response $result");
+
+    CustomerOutstandingListModel customeroutstandinglistmodel;
+    customeroutstandinglistmodel = (CustomerOutstandingListModel.fromJson(result));
+    print("Customer Orders List $customeroutstandinglistmodel");
+
+    return customeroutstandinglistmodel;
   }
 }
