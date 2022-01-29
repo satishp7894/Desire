@@ -1,6 +1,8 @@
+import 'package:data_connection_checker/data_connection_checker.dart';
 import 'package:desire_users/models/modelList_model.dart';
 import 'package:desire_users/pages/product/productFromModelPage.dart';
 import 'package:desire_users/sales/bloc/model_list_bloc.dart';
+import 'package:desire_users/sales/utils_sales/alerts.dart';
 import 'package:desire_users/utils/constants.dart';
 import 'package:flutter/material.dart';
 
@@ -21,7 +23,18 @@ class _CustomerPriceListState extends State<CustomerPriceList> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    checkConnectivity();
     modelListBloc.fetchModelList(widget.customerId);
+  }
+  checkConnectivity() async{
+    bool result = await DataConnectionChecker().hasConnection;
+    if(result == true) {
+      print('YAY! Free cute dog pics!');
+    } else {
+      print('No internet :( Reason:');
+      print(DataConnectionChecker().lastTryResults);
+      Alerts.showAlertAndBack(context, "No Internet Connection", "Please check your internet");
+    }
   }
 
   @override

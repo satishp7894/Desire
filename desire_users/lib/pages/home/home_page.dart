@@ -15,6 +15,7 @@ import 'package:desire_users/pages/cart/order_history_page.dart';
 import 'package:desire_users/pages/cart/pending_order_list.dart';
 import 'package:desire_users/pages/chatting/chat_list_page.dart';
 import 'package:desire_users/pages/complaint/add_complaint.dart';
+import 'package:desire_users/pages/credit/customer_credit_details.dart';
 import 'package:desire_users/pages/home/customer_price_list.dart';
 import 'package:desire_users/pages/home/modelFromCategoryPage.dart';
 import 'package:desire_users/pages/home/model_list_page.dart';
@@ -772,6 +773,32 @@ class _HomePageState extends State<HomePage> {
                 padding: const EdgeInsets.only(left: 10.0,right: 10,top: 5,bottom: 5),
                 child: GestureDetector(
                   onTap: (){
+                    Navigator.push(context, MaterialPageRoute(builder: (context)=>CustomerCreditDetails(customerId: widget.customerId)));
+                  },
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Icon(Icons.details,color: kPrimaryColor,),
+                      Expanded(
+                          flex: 2,
+                          child: Padding(
+                            padding: const EdgeInsets.only(left: 10.0),
+                            child: Text("Credit Details",style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold),),
+                          )),
+                      Icon(Icons.arrow_forward_ios,color: kPrimaryColor,),
+
+
+
+                    ],
+                  ),
+                ),
+              ),
+              Divider(color: kSecondaryColor,),
+              Padding(
+                padding: const EdgeInsets.only(left: 10.0,right: 10,top: 5,bottom: 5),
+                child: GestureDetector(
+                  onTap: (){
 
                     Alerts.showCustomerLogOut(context, "Logout", "Are you sure want to logout");
 
@@ -789,8 +816,6 @@ class _HomePageState extends State<HomePage> {
                             child: Text("Logout",style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold),),
                           )),
                       Icon(Icons.arrow_forward_ios,color: kPrimaryColor,),
-
-
 
                     ],
                   ),

@@ -7,6 +7,7 @@ import 'package:desire_users/models/category_model.dart';
 import 'package:desire_users/models/complete_order_list_model.dart';
 import 'package:desire_users/models/customer_chat_details_model.dart';
 import 'package:desire_users/models/customer_chat_list_model.dart';
+import 'package:desire_users/models/customer_credit_details_model.dart';
 import 'package:desire_users/models/customer_notification_list_model.dart';
 import 'package:desire_users/models/hold_orders_model.dart';
 import 'package:desire_users/models/invoice_detail_model.dart';
@@ -717,6 +718,22 @@ class ApiClient {
     print("notification from model api $customernotificationlistmodel");
 
     return customernotificationlistmodel;
+
+  }
+
+  Future<CustomerCreditDetailsModel> getCustomerCreditDetails(String customerId) async {
+    var response = await http.post(Uri.parse(Connection.customerCreditDetails), body: {
+      "secretkey" : r"12!@34#$5%",
+      "customer_id": "83",
+    });
+    var result = json.decode(response.body);
+    print("detail response $result");
+
+    CustomerCreditDetailsModel customercreditdetailsmodel;
+    customercreditdetailsmodel = (CustomerCreditDetailsModel.fromJson(result));
+    print("notification from model api $customercreditdetailsmodel");
+
+    return customercreditdetailsmodel;
 
   }
 
