@@ -702,7 +702,7 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
           GestureDetector(
             onTap: () {
               Navigator.push(context, MaterialPageRoute(builder: (context) {
-                return CustomerListWithCreditPage(screenType:"credit");
+                return CustomerListWithCreditPage(screenType:"credit", userType: "",);
               }));
             },
             child: Container(
@@ -740,7 +740,7 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
           GestureDetector(
             onTap: () {
               Navigator.push(context, MaterialPageRoute(builder: (context) {
-                return CustomerListWithCreditPage(screenType:"outstanding");
+                return CustomerListWithCreditPage(screenType:"outstanding",userType: "",);
               }));
             },
             child: Container(

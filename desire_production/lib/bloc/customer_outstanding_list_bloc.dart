@@ -13,9 +13,9 @@ class CustomerOutstandingListBloc {
 
   Stream<CustomerOutstandingListModel> get customerOutstandingListStream => _customerOutstandingListModelController.stream;
 
-  fetchCustomerOutstandingList() async {
+  fetchCustomerOutstandingList(String usertype) async {
     try {
-      final results = await _apiClient.getCustomerlistOutstanding();
+      final results = await _apiClient.getCustomerlistOutstanding(usertype);
       _customerOutstandingListModelController.sink.add(results);
     } on Exception catch (e) {
       print(e.toString());

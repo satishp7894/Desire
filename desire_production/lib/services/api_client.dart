@@ -882,7 +882,6 @@ class ApiClient {
   }
 
   Future<LedgerModel> getLedgerDetails() async {
-
     var response = await http.post(
         Uri.parse(
             "http://loccon.in/desiremoulding/api/AdminApiController/customerLedgerList"),
@@ -1067,7 +1066,9 @@ class ApiClient {
 
     return rolelistmodel;
   }
-  Future<CustomerWiseLedger> getCustomerWiseLedger(String customerId, String fromDateinput, String toDateinput) async {
+
+  Future<CustomerWiseLedger> getCustomerWiseLedger(
+      String customerId, String fromDateinput, String toDateinput) async {
     var response = await http.post(
         Uri.parse(
             "http://loccon.in/desiremoulding/api/AdminApiController/customerLedgerFilter"),
@@ -1086,6 +1087,7 @@ class ApiClient {
 
     return customerwiseledger;
   }
+
   Future<CustomerListWithCreditModel> getCustomerlistCredit() async {
     var response = await http.post(
         Uri.parse(
@@ -1097,16 +1099,19 @@ class ApiClient {
     print("user List response $result");
 
     CustomerListWithCreditModel customerlistwithcreditmodel;
-    customerlistwithcreditmodel = (CustomerListWithCreditModel.fromJson(result));
+    customerlistwithcreditmodel =
+        (CustomerListWithCreditModel.fromJson(result));
     print("Customer Orders List $customerlistwithcreditmodel");
 
     return customerlistwithcreditmodel;
   }
 
-  Future<CustomerOutstandingListModel> getCustomerlistOutstanding() async {
+  Future<CustomerOutstandingListModel> getCustomerlistOutstanding(
+      String usertype) async {
     var response = await http.post(
-        Uri.parse(
-            "http://loccon.in/desiremoulding/api/AdminApiController/customerTotalOutstandingList"),
+        Uri.parse(usertype == ""
+            ? "http://loccon.in/desiremoulding/api/AdminApiController/customerTotalOutstandingList"
+            : "http://loccon.in/desiremoulding/api/ProductionApiController/customerTotalOutstandingList"),
         body: {
           'secretkey': Connection.secretKey,
         });
@@ -1114,8 +1119,9 @@ class ApiClient {
     print("user List response $result");
 
     CustomerOutstandingListModel customeroutstandinglistmodel;
-    customeroutstandinglistmodel = (CustomerOutstandingListModel.fromJson(result));
-    print("Customer Orders List $customeroutstandinglistmodel");
+    customeroutstandinglistmodel =
+        (CustomerOutstandingListModel.fromJson(result));
+    print("Customer Orders List $usertype");
 
     return customeroutstandinglistmodel;
   }

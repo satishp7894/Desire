@@ -9,8 +9,9 @@ import 'package:flutter/material.dart';
 
 class CustomerListWithCreditPage extends StatefulWidget {
   final screenType;
+  final userType;
 
-  const CustomerListWithCreditPage({Key key, this.screenType})
+  const CustomerListWithCreditPage({Key key, this.screenType, this.userType})
       : super(key: key);
 
   @override
@@ -33,7 +34,7 @@ class _CustomerListWithCreditPageState
     if (widget.screenType == "credit") {
       creditlistbloc.fetchlistWithCredit();
     } else {
-      outstandingList.fetchCustomerOutstandingList();
+      outstandingList.fetchCustomerOutstandingList(widget.userType);
     }
   }
 
@@ -269,22 +270,19 @@ class ModelOutstandingListTile extends StatelessWidget {
             borderRadius: BorderRadius.circular(5),
           ),
           color: kWhite,
-          child: Flexible(
-            flex: 1,
-            child: Container(
-                padding: EdgeInsets.all(5),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    textWidget(outstanding.customerName, "Customer Name : "),
-                    textWidget(
-                        outstanding.totalOutstanding, "Total Outstanding : "),
-                    textWidget(
-                        outstanding.immediatePayment, "Immediate Payment : "),
-                  ],
-                )),
-          ),
+          child: Container(
+              padding: EdgeInsets.all(5),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  textWidget(outstanding.customerName, "Customer Name : "),
+                  textWidget(
+                      outstanding.totalOutstanding, "Total Outstanding : "),
+                  textWidget(
+                      outstanding.immediatePayment, "Immediate Payment : "),
+                ],
+              )),
         ));
   }
 
