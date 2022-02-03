@@ -8,6 +8,7 @@ import 'package:desire_production/pages/admin/ledgerandprice/CustomerLedgerPage.
 import 'package:desire_production/pages/admin/ledgerandprice/common_ledger_price_page.dart';
 import 'package:desire_production/pages/admin/orders/customerOrdersListPage.dart';
 import 'package:desire_production/pages/admin/todayProduction/TodayProductionPage.dart';
+import 'package:desire_production/pages/admin/todays/today_list_page.dart';
 import 'package:desire_production/pages/admin/userslist/user_list_page.dart';
 import 'package:desire_production/pages/admin_dashboard_list/admin_page.dart';
 import 'package:desire_production/pages/admin_dashboard_list/customer_page.dart';
@@ -358,7 +359,7 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
           GestureDetector(
             onTap: () {
               Navigator.push(context, MaterialPageRoute(builder: (context) {
-                return  CustomerLedgerPage();
+                return CustomerLedgerPage();
               }));
             },
             child: Container(
@@ -702,7 +703,10 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
           GestureDetector(
             onTap: () {
               Navigator.push(context, MaterialPageRoute(builder: (context) {
-                return CustomerListWithCreditPage(screenType:"credit", userType: "",);
+                return CustomerListWithCreditPage(
+                  screenType: "credit",
+                  userType: "",
+                );
               }));
             },
             child: Container(
@@ -740,7 +744,10 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
           GestureDetector(
             onTap: () {
               Navigator.push(context, MaterialPageRoute(builder: (context) {
-                return CustomerListWithCreditPage(screenType:"outstanding",userType: "",);
+                return CustomerListWithCreditPage(
+                  screenType: "outstanding",
+                  userType: "",
+                );
               }));
             },
             child: Container(
@@ -766,6 +773,44 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
                   SizedBox(height: 10),
                   Text(
                     "Outstanding List",
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          GestureDetector(
+            onTap: () {
+              Navigator.push(context, MaterialPageRoute(builder: (context) {
+                return TodayListPage();
+              }));
+            },
+            child: Container(
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  color: kSecondaryColor,
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey,
+                      blurRadius: 5.0,
+                      spreadRadius: 2,
+                    )
+                  ]),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.list,
+                    size: 40,
+                    color: kWhite,
+                  ),
+                  SizedBox(height: 10),
+                  Text(
+                    "Today's",
                     style: TextStyle(
                         color: Colors.white,
                         fontSize: 16,
