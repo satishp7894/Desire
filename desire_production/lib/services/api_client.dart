@@ -18,6 +18,8 @@ import 'package:desire_production/model/credit_list_model.dart';
 import 'package:desire_production/model/customerOrdersModel.dart';
 import 'package:desire_production/model/customer_complaint_list_model.dart';
 import 'package:desire_production/model/customer_list_for_chat_model.dart';
+import 'package:desire_production/model/customer_list_with_credit_model.dart';
+import 'package:desire_production/model/customer_outstanding_list_model.dart';
 import 'package:desire_production/model/customerwiseledger.dart';
 import 'package:desire_production/model/dailyOrderListModel.dart';
 import 'package:desire_production/model/dailyProductionAddlistModel.dart';
@@ -49,6 +51,9 @@ import 'package:desire_production/model/role_list_model.dart';
 import 'package:desire_production/model/role_model.dart';
 import 'package:desire_production/model/sales_customer_list_model.dart';
 import 'package:desire_production/model/salesman_list_for_chat_model.dart';
+import 'package:desire_production/model/today_dispatch_invoice_details_model.dart';
+import 'package:desire_production/model/today_order_details_page_model.dart';
+import 'package:desire_production/model/todays_list_model.dart';
 import 'package:desire_production/model/user_list_model.dart';
 import 'package:desire_production/model/user_model.dart';
 import 'package:desire_production/model/warehouse_dashboard_model.dart';
@@ -880,7 +885,6 @@ class ApiClient {
   }
 
   Future<LedgerModel> getLedgerDetails() async {
-
     var response = await http.post(
         Uri.parse(
             "http://loccon.in/desiremoulding/api/AdminApiController/customerLedgerList"),
@@ -1065,7 +1069,9 @@ class ApiClient {
 
     return rolelistmodel;
   }
-  Future<CustomerWiseLedger> getCustomerWiseLedger(String customerId, String fromDateinput, String toDateinput) async {
+
+  Future<CustomerWiseLedger> getCustomerWiseLedger(
+      String customerId, String fromDateinput, String toDateinput) async {
     var response = await http.post(
         Uri.parse(
             "http://loccon.in/desiremoulding/api/AdminApiController/customerLedgerFilter"),
@@ -1084,4 +1090,91 @@ class ApiClient {
 
     return customerwiseledger;
   }
+
+  Future<CustomerListWithCreditModel> getCustomerlistCredit() async {
+    var response = await http.post(
+        Uri.parse(
+            "http://loccon.in/desiremoulding/api/AdminApiController/customerListWithCredit"),
+        body: {
+          'secretkey': Connection.secretKey,
+        });
+    var result = json.decode(response.body);
+    print("user List response $result");
+
+    CustomerListWithCreditModel customerlistwithcreditmodel;
+    customerlistwithcreditmodel =
+        (CustomerListWithCreditModel.fromJson(result));
+    print("Customer Orders List $customerlistwithcreditmodel");
+
+    return customerlistwithcreditmodel;
+  }
+
+  Future<CustomerOutstandingListModel> getCustomerlistOutstanding(
+      String usertype) async {
+    var response = await http.post(
+        Uri.parse(usertype == ""
+            ? "http://loccon.in/desiremoulding/api/AdminApiController/customerTotalOutstandingList"
+            : "http://loccon.in/desiremoulding/api/ProductionApiController/customerTotalOutstandingList"),
+        body: {
+          'secretkey': Connection.secretKey,
+        });
+    var result = json.decode(response.body);
+    print("user List response $result");
+
+    CustomerOutstandingListModel customeroutstandinglistmodel;
+    customeroutstandinglistmodel =
+        (CustomerOutstandingListModel.fromJson(result));
+    print("Customer Orders List $usertype");
+
+    return customeroutstandinglistmodel;
+  }
+
+  Future<TodaysListModel> getTodayList() async {
+    var response = await http.post(
+        Uri.parse(
+            "http://loccon.in/desiremoulding/api/AdminApiController/todaysList"),
+        body: {
+          'secretkey': Connection.secretKey,
+        });
+    var result = json.decode(response.body);
+    print("user List response $result");
+
+    TodaysListModel todayslistmodel;
+    todayslistmodel = (TodaysListModel.fromJson(result));
+
+    return todayslistmodel;
+  }
+
+  Future<TodayOrderDetailsPageModel> getTodayOrderDetail() async {
+    var response = await http.post(
+        Uri.parse(
+            "http://loccon.in/desiremoulding/api/AdminApiController/todayOrdersDetails"),
+        body: {
+          'secretkey': Connection.secretKey,
+        });
+    var result = json.decode(response.body);
+    print("user List response $result");
+
+    TodayOrderDetailsPageModel todayorderdetailspagemodel;
+    todayorderdetailspagemodel = (TodayOrderDetailsPageModel.fromJson(result));
+
+    return todayorderdetailspagemodel;
+  }
+
+  Future<TodayDispatchInvoiceDetailsModel> getTodayDispatchInvoiceDetail() async {
+    var response = await http.post(
+        Uri.parse(
+            "http://loccon.in/desiremoulding/api/AdminApiController/todayDispatchInvoiceDetails"),
+        body: {
+          'secretkey': Connection.secretKey,
+        });
+    var result = json.decode(response.body);
+    print("user List response $result");
+
+    TodayDispatchInvoiceDetailsModel todaydispatchinvoicedetailsmodel;
+    todaydispatchinvoicedetailsmodel = (TodayDispatchInvoiceDetailsModel.fromJson(result));
+
+    return todaydispatchinvoicedetailsmodel;
+  }
+
 }

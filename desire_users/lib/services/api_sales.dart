@@ -17,6 +17,7 @@ import 'package:desire_users/models/return_material_detail_sales_model.dart';
 import 'package:desire_users/models/return_material_sale_model.dart';
 import 'package:desire_users/models/sales_chat_detail_model.dart';
 import 'package:desire_users/models/sales_chat_list_model.dart';
+import 'package:desire_users/models/sales_customer_credit_list_model.dart';
 import 'package:desire_users/models/sales_customer_list_model.dart';
 import 'package:desire_users/services/connection.dart';
 import 'package:desire_users/services/connection_sales.dart';
@@ -324,6 +325,24 @@ class ApiSales{
     print("List $invoicedetailmodel");
 
     return invoicedetailmodel;
+  }
+
+  Future<SalesCustomerCredirListModel> getSalesCreditList(String salesman_id) async {
+
+    var response = await http.post(Uri.parse("http://loccon.in/desiremoulding/api/SalesApiController/customerCreditList"),
+        body: {
+          "secretkey" : r"12!@34#$5%",
+          "salesman_id" : salesman_id
+        });
+    var result = json.decode(response.body);
+    print("List response $result");
+
+
+    SalesCustomerCredirListModel salescustomercredirlistmodel;
+    salescustomercredirlistmodel = (SalesCustomerCredirListModel.fromJson(result));
+    print("List $salescustomercredirlistmodel");
+
+    return salescustomercredirlistmodel;
   }
 
 

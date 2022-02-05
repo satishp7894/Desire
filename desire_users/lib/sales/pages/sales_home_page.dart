@@ -6,6 +6,7 @@ import 'package:desire_users/pages/today_production/today_production_page.dart';
 import 'package:desire_users/sales/bloc/customer_bloc.dart';
 import 'package:desire_users/sales/pages/brochure/brochure_page.dart';
 import 'package:desire_users/sales/pages/chatting/sales_chat_list.dart';
+import 'package:desire_users/sales/pages/credit/sales_customer_credit_details.dart';
 import 'package:desire_users/sales/pages/customer/add_customer_page.dart';
 import 'package:desire_users/sales/pages/customer/customer_list_page.dart';
 import 'package:desire_users/sales/pages/customerCredit/customer_credit_page.dart';
@@ -461,8 +462,10 @@ class _SalesHomePageState extends State<SalesHomePage> {
             //   return CustomerOrdersListPage(
             //     salesManId: widget.salesManId,salesManName: salesName,);
             // }));
-            Navigator.push(context, MaterialPageRoute(builder: (builder) => ReadyStockListView(type : "sales")));
-
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (builder) => ReadyStockListView(type: "sales")));
           },
           child: Padding(
             padding: const EdgeInsets.all(8.0),
@@ -549,7 +552,11 @@ class _SalesHomePageState extends State<SalesHomePage> {
           onTap: () {
             Navigator.push(context, MaterialPageRoute(builder: (context) {
               return CustomerListCommonPage(
-                  salesId: salesManId, email: salesEmail, name: salesName, type: 0,);
+                salesId: salesManId,
+                email: salesEmail,
+                name: salesName,
+                type: 0,
+              );
             }));
           },
           child: Padding(
@@ -593,7 +600,10 @@ class _SalesHomePageState extends State<SalesHomePage> {
           onTap: () {
             Navigator.push(context, MaterialPageRoute(builder: (context) {
               return CustomerListCommonPage(
-                  salesId: salesManId, email: salesEmail, name: salesName, type:1);
+                  salesId: salesManId,
+                  email: salesEmail,
+                  name: salesName,
+                  type: 1);
             }));
           },
           child: Padding(
@@ -612,7 +622,11 @@ class _SalesHomePageState extends State<SalesHomePage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Image.asset("assets/images/rupees.png",scale: 12,color: Colors.white,),
+                  Image.asset(
+                    "assets/images/rupees.png",
+                    scale: 12,
+                    color: Colors.white,
+                  ),
                   SizedBox(
                     height: 10,
                   ),
@@ -635,7 +649,12 @@ class _SalesHomePageState extends State<SalesHomePage> {
             //   return CustomerListCommonPage(
             //       salesId: salesManId, email: salesEmail, name: salesName, type:1);
             // }));
-            Navigator.push(context, MaterialPageRoute(builder: (builder) => TodayProductionPage(type: "sales",)));
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (builder) => TodayProductionPage(
+                          type: "sales",
+                        )));
           },
           child: Padding(
             padding: const EdgeInsets.all(8.0),
@@ -677,10 +696,8 @@ class _SalesHomePageState extends State<SalesHomePage> {
         GestureDetector(
           onTap: () {
             Navigator.push(context, MaterialPageRoute(builder: (context) {
-              return CustomerInvoiceListPage(
-                salesId: salesManId);
+              return CustomerInvoiceListPage(salesId: salesManId);
             }));
-
           },
           child: Padding(
             padding: const EdgeInsets.all(8.0),
@@ -722,8 +739,7 @@ class _SalesHomePageState extends State<SalesHomePage> {
         GestureDetector(
           onTap: () {
             Navigator.push(context, MaterialPageRoute(builder: (context) {
-              return PendingOrderListPage(
-                  salesId: salesManId);
+              return PendingOrderListPage(salesId: salesManId);
             }));
           },
           child: Padding(
@@ -766,8 +782,7 @@ class _SalesHomePageState extends State<SalesHomePage> {
         GestureDetector(
           onTap: () {
             Navigator.push(context, MaterialPageRoute(builder: (context) {
-              return HoldOrderListPage(
-                  salesId: salesManId);
+              return HoldOrderListPage(salesId: salesManId);
             }));
           },
           child: Padding(
@@ -810,8 +825,7 @@ class _SalesHomePageState extends State<SalesHomePage> {
         GestureDetector(
           onTap: () {
             Navigator.push(context, MaterialPageRoute(builder: (context) {
-              return ReturnMaterialSalePage(
-                  salesId: salesManId);
+              return ReturnMaterialSalePage(salesId: salesManId);
             }));
           },
           child: Padding(
@@ -840,6 +854,49 @@ class _SalesHomePageState extends State<SalesHomePage> {
                   ),
                   Text(
                     "Return Material",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 14,
+                        color: kWhiteColor),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+        GestureDetector(
+          onTap: () {
+            Navigator.push(context, MaterialPageRoute(builder: (context) {
+              return SalesCustomerCreditDetails(salemanId: salesManId);
+            }));
+          },
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Container(
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.all(Radius.circular(15)),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey,
+                      blurRadius: 5.0,
+                    ),
+                  ],
+                  color: kPrimaryColor),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.credit_card,
+                    size: 40,
+                    color: kWhiteColor,
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Text(
+                    "Credit List",
                     textAlign: TextAlign.center,
                     style: TextStyle(
                         fontWeight: FontWeight.bold,

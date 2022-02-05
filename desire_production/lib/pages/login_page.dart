@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:desire_production/pages/dashboards/admin_dashboard_page.dart';
+import 'package:desire_production/pages/dashboards/collection_dashboard_page.dart';
 import 'package:desire_production/pages/dashboards/dashboard_page_admin.dart';
 import 'package:desire_production/utils/default_button.dart';
 import 'package:desire_production/utils/keyboard_util.dart';
@@ -22,10 +23,9 @@ class LoginPage extends StatefulWidget {
   _LoginPageState createState() => _LoginPageState();
 }
 
-class _LoginPageState extends State<LoginPage> with Validator{
-
+class _LoginPageState extends State<LoginPage> with Validator {
   final _formKey = GlobalKey<FormState>();
-  AutovalidateMode _autoValidateMode  = AutovalidateMode.disabled;
+  AutovalidateMode _autoValidateMode = AutovalidateMode.disabled;
   TextEditingController email, pass;
   bool remember = false;
   bool obscure = true;
@@ -33,6 +33,7 @@ class _LoginPageState extends State<LoginPage> with Validator{
   String adminRoleId = "1";
   String productionRoleId = "4";
   String wareHouseRoleId = "5";
+  String collectionRoleId = "6";
 
   @override
   void initState() {
@@ -68,23 +69,25 @@ class _LoginPageState extends State<LoginPage> with Validator{
     // Setting OneSignal External User Id
     if (_id != '') {
       OneSignal.shared.setExternalUserId(_id);
-    } else if(prefs.getString("id") != null){
+    } else if (prefs.getString("id") != null) {
       OneSignal.shared.setExternalUserId(prefs.getString("id"));
     }
 
     OneSignal.shared.setNotificationOpenedHandler((openedResult) async {
       print("clicked happen in login page");
-      Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (c) => LoginPage()), (route) => false);
-
+      Navigator.pushAndRemoveUntil(context,
+          MaterialPageRoute(builder: (c) => LoginPage()), (route) => false);
     });
 
-    OneSignal.shared.setNotificationWillShowInForegroundHandler((OSNotificationReceivedEvent event) {
+    OneSignal.shared.setNotificationWillShowInForegroundHandler(
+        (OSNotificationReceivedEvent event) {
       // Will be called whenever a notification is received in foreground
       // Display Notification, pass null param for not displaying the notification
       event.complete(event.notification);
       this.setState(() {
-            value = "Received notification: \n${event.notification.jsonRepresentation().replaceAll("\\n", "\n")}";
-          });
+        value =
+            "Received notification: \n${event.notification.jsonRepresentation().replaceAll("\\n", "\n")}";
+      });
     });
 
     // OneSignal.shared.setNotificationReceivedHandler((OSNotification notification) {
@@ -94,12 +97,11 @@ class _LoginPageState extends State<LoginPage> with Validator{
     // });
   }
 
-
-  getPreferences() async{
+  getPreferences() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    if(prefs.getString("id") != null){
-      if(prefs.getBool('remember')){
+    if (prefs.getString("id") != null) {
+      if (prefs.getBool('remember')) {
         setState(() {
           email = TextEditingController(text: prefs.getString("email"));
           pass = TextEditingController(text: prefs.getString("show_password"));
@@ -107,14 +109,12 @@ class _LoginPageState extends State<LoginPage> with Validator{
         });
       }
     }
-
   }
-
 
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: (){
+      onWillPop: () {
         return Alerts.showExit(context, "Exit", "Are you sure?");
       },
       child: Scaffold(
@@ -123,29 +123,34 @@ class _LoginPageState extends State<LoginPage> with Validator{
     );
   }
 
-  Widget _body(){
+  Widget _body() {
     return Center(
       child: SafeArea(
         child: SizedBox(
           width: double.infinity,
           child: Padding(
-            padding:
-            EdgeInsets.symmetric(horizontal: 10),
+            padding: EdgeInsets.symmetric(horizontal: 10),
             child: SingleChildScrollView(
               child: Column(
                 children: [
-                  Image.asset("assets/images/logo_new.png",height: 120,width: 120,),
+                  Image.asset(
+                    "assets/images/logo_new.png",
+                    height: 120,
+                    width: 120,
+                  ),
                   SizedBox(height: 10),
                   Text(
                     "Welcome to Desire Moulding",
                     textAlign: TextAlign.center,
                     style: TextStyle(
-                      color:kPrimaryColor,
+                      color: kPrimaryColor,
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  SizedBox(height: 10,),
+                  SizedBox(
+                    height: 10,
+                  ),
                   Text(
                     "Sign in with your email Id and password.",
                     textAlign: TextAlign.center,
@@ -162,7 +167,7 @@ class _LoginPageState extends State<LoginPage> with Validator{
     );
   }
 
-  Widget _signInForm(){
+  Widget _signInForm() {
     return Form(
       autovalidateMode: _autoValidateMode,
       key: _formKey,
@@ -173,7 +178,7 @@ class _LoginPageState extends State<LoginPage> with Validator{
           buildPasswordFormField(),
           SizedBox(height: 20),
           Padding(
-            padding: const EdgeInsets.only(left: 10.0,right: 10),
+            padding: const EdgeInsets.only(left: 10.0, right: 10),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -195,8 +200,13 @@ class _LoginPageState extends State<LoginPage> with Validator{
                         },
                       ),
                     ),
-                    SizedBox(width: 10,),
-                    Text("Remember me",style: TextStyle(fontSize: 14),),
+                    SizedBox(
+                      width: 10,
+                    ),
+                    Text(
+                      "Remember me",
+                      style: TextStyle(fontSize: 14),
+                    ),
                   ],
                 ),
                 GestureDetector(
@@ -227,91 +237,98 @@ class _LoginPageState extends State<LoginPage> with Validator{
     );
   }
 
-
   TextFormField buildPasswordFormField() {
     return TextFormField(
       obscureText: obscure,
       controller: pass,
       validator: validateRequired,
       decoration: InputDecoration(
-        labelText: "Password",
-        hintText: "Enter your password",
-        floatingLabelBehavior: FloatingLabelBehavior.always,
-          prefixIcon: Icon(Icons.password,color: kPrimaryColor,),
-          suffixIcon: obscure == true ? GestureDetector(
-            child: Icon(Icons.visibility,color: kPrimaryColor,),
-            onTap: (){
-              setState(() {
-                obscure = false;
-              });
-            },
-          ): GestureDetector(
-            child: Icon(Icons.visibility_off,color: kPrimaryColor,),
-            onTap: (){
-              setState(() {
-                obscure = true;
-              });
-            },
+          labelText: "Password",
+          hintText: "Enter your password",
+          floatingLabelBehavior: FloatingLabelBehavior.always,
+          prefixIcon: Icon(
+            Icons.password,
+            color: kPrimaryColor,
           ),
+          suffixIcon: obscure == true
+              ? GestureDetector(
+                  child: Icon(
+                    Icons.visibility,
+                    color: kPrimaryColor,
+                  ),
+                  onTap: () {
+                    setState(() {
+                      obscure = false;
+                    });
+                  },
+                )
+              : GestureDetector(
+                  child: Icon(
+                    Icons.visibility_off,
+                    color: kPrimaryColor,
+                  ),
+                  onTap: () {
+                    setState(() {
+                      obscure = true;
+                    });
+                  },
+                ),
           hintStyle: TextStyle(fontSize: 12),
-          labelStyle: TextStyle(fontSize: 14,color: kPrimaryColor),
+          labelStyle: TextStyle(fontSize: 14, color: kPrimaryColor),
           border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(5),
-              borderSide: BorderSide(
-                  color: kSecondaryColor
-              )
-          ), focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(5),
-          borderSide: BorderSide(
-              color: kPrimaryColor
-          )
-      )
-      ),
+              borderSide: BorderSide(color: kSecondaryColor)),
+          focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(5),
+              borderSide: BorderSide(color: kPrimaryColor))),
     );
   }
+
   TextFormField buildEmailFormField() {
     return TextFormField(
       keyboardType: TextInputType.emailAddress,
       validator: validateEmail,
       controller: email,
       decoration: InputDecoration(
-        labelText: "Email",
-        hintText: "Enter your email",
-        floatingLabelBehavior: FloatingLabelBehavior.always,
-        prefixIcon: Icon(Icons.email,color: kPrimaryColor,),
-        hintStyle: TextStyle(fontSize: 12),
-        labelStyle: TextStyle(fontSize: 14,color: kPrimaryColor),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(5),
-          borderSide: BorderSide(
-            color: kSecondaryColor
-          )
-        ), focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(5),
-          borderSide: BorderSide(
-            color: kPrimaryColor
-          )
-        )
-
-      ),
+          labelText: "Email",
+          hintText: "Enter your email",
+          floatingLabelBehavior: FloatingLabelBehavior.always,
+          prefixIcon: Icon(
+            Icons.email,
+            color: kPrimaryColor,
+          ),
+          hintStyle: TextStyle(fontSize: 12),
+          labelStyle: TextStyle(fontSize: 14, color: kPrimaryColor),
+          border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(5),
+              borderSide: BorderSide(color: kSecondaryColor)),
+          focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(5),
+              borderSide: BorderSide(color: kPrimaryColor))),
     );
   }
 
-  login() async{
+  login() async {
     print("remember value $remember");
-    if (_formKey.currentState.validate()){
+    if (_formKey.currentState.validate()) {
       _formKey.currentState.save();
-      ProgressDialog pr = ProgressDialog(context, type: ProgressDialogType.Normal,
-        isDismissible: false,);
-      pr.style(message: 'Please wait...',
-        progressWidget: Center(child: CircularProgressIndicator(
+      ProgressDialog pr = ProgressDialog(
+        context,
+        type: ProgressDialogType.Normal,
+        isDismissible: false,
+      );
+      pr.style(
+        message: 'Please wait...',
+        progressWidget: Center(
+            child: CircularProgressIndicator(
           color: kPrimaryColor,
-        )),);
+        )),
+      );
       pr.show();
       var response = await http.post(Uri.parse(Connection.login), body: {
-        'emailid':email.text,
-        'password':pass.text,
-        'secretkey':Connection.secretKey
+        'emailid': email.text,
+        'password': pass.text,
+        'secretkey': Connection.secretKey
       });
       print("object ${response.body}");
 
@@ -333,7 +350,8 @@ class _LoginPageState extends State<LoginPage> with Validator{
         preferences.setString('username', userModel.user[0].username);
         preferences.setString('password', userModel.user[0].password);
         preferences.setString('show_password', pass.text);
-        preferences.setString('gender', userModel.user[0].gender);
+        preferences.setString('gender',
+            userModel.user[0].gender != null ? userModel.user[0].gender : "");
         preferences.setString('address', userModel.user[0].address);
         preferences.setString('city', userModel.user[0].city);
         preferences.setString('State', userModel.user[0].state);
@@ -344,22 +362,41 @@ class _LoginPageState extends State<LoginPage> with Validator{
         _id = userModel.user[0].userId;
 
         _initOneSignal();
-        if(userModel.user[0].roleId == adminRoleId){
-          Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (builder) => AdminDashboardPage()), (route) => false);
+        if (userModel.user[0].roleId == adminRoleId) {
+          Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(builder: (builder) => AdminDashboardPage()),
+              (route) => false);
+        } else if (userModel.user[0].roleId == productionRoleId) {
+          Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(
+                  builder: (builder) => DashboardPageProduction(
+                        page: 'production',
+                      )),
+              (route) => false);
+        } else if (userModel.user[0].roleId == wareHouseRoleId) {
+          Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(
+                  builder: (builder) => DashboardPageWarehouse(
+                        page: "warHouse",
+                      )),
+              (route) => false);
         }
-        else if(userModel.user[0].roleId == productionRoleId){
-          Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (builder) => DashboardPageProduction(page: 'production',)), (route) => false);
+        else if (userModel.user[0].roleId == collectionRoleId) {
+          Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(
+                  builder: (builder) => CollectionDashboardPage()),
+                  (route) => false);
         }
-        else if(userModel.user[0].roleId == wareHouseRoleId){
-          Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (builder) => DashboardPageWarehouse(page: "warHouse",)), (route) => false);
-        }
-
-
-      } else if(results['message'] == "Email and Password Wrong Enter"){
-        Alerts.showAlertAndBack(context, "Login Failed", "Incorrect UserName or Password");
-      }
-      else  {
-        Alerts.showAlertAndBack(context, "Login Failed", "Incorrect UserName or Password");
+      } else if (results['message'] == "Email and Password Wrong Enter") {
+        Alerts.showAlertAndBack(
+            context, "Login Failed", "Incorrect UserName or Password");
+      } else {
+        Alerts.showAlertAndBack(
+            context, "Login Failed", "Incorrect UserName or Password");
       }
     } else {
       setState(() {
@@ -367,7 +404,4 @@ class _LoginPageState extends State<LoginPage> with Validator{
       });
     }
   }
-
-
-
 }

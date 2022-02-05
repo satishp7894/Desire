@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:desire_production/pages/admin/chat/admin_chat_list_page.dart';
+import 'package:desire_production/pages/admin/credit/customer_list_with_credit_page.dart';
 import 'package:desire_production/pages/admin/dispatchlist/CustomerInvoiceListPage.dart';
 import 'package:desire_production/pages/admin/dispatchlist/PendingOrderListPage.dart';
 import 'package:desire_production/pages/admin/dispatchlist/commonSalesManListPage.dart';
@@ -9,6 +10,7 @@ import 'package:desire_production/pages/admin/ledgerandprice/CustomerLedgerPage.
 import 'package:desire_production/pages/admin/ledgerandprice/common_ledger_price_page.dart';
 import 'package:desire_production/pages/admin/orders/customerOrdersListPage.dart';
 import 'package:desire_production/pages/admin/todayProduction/TodayProductionPage.dart';
+import 'package:desire_production/pages/admin/todays/today_list_page.dart';
 import 'package:desire_production/pages/admin/userslist/user_list_page.dart';
 import 'package:desire_production/pages/admin_dashboard_list/admin_page.dart';
 import 'package:desire_production/pages/admin_dashboard_list/customer_page.dart';
@@ -711,6 +713,126 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
                     style: TextStyle(
                         color: Colors.white,
                         fontSize: 14,
+                        fontWeight: FontWeight.bold),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          GestureDetector(
+            onTap: () {
+              Navigator.push(context, MaterialPageRoute(builder: (context) {
+                return CustomerListWithCreditPage(
+                  screenType: "credit",
+                  userType: "",
+                );
+              }));
+            },
+            child: Container(
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  color: kPrimaryColor,
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey,
+                      blurRadius: 5.0,
+                      spreadRadius: 2,
+                    )
+                  ]),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.credit_card,
+                    size: 40,
+                    color: kWhite,
+                  ),
+                  SizedBox(height: 10),
+                  Text(
+                    "List With Credit",
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          GestureDetector(
+            onTap: () {
+              Navigator.push(context, MaterialPageRoute(builder: (context) {
+                return CustomerListWithCreditPage(
+                  screenType: "outstanding",
+                  userType: "",
+                );
+              }));
+            },
+            child: Container(
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  color: kSecondaryColor,
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey,
+                      blurRadius: 5.0,
+                      spreadRadius: 2,
+                    )
+                  ]),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.list_sharp,
+                    size: 40,
+                    color: kWhite,
+                  ),
+                  SizedBox(height: 10),
+                  Text(
+                    "Outstanding List",
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          GestureDetector(
+            onTap: () {
+              Navigator.push(context, MaterialPageRoute(builder: (context) {
+                return TodayListPage();
+              }));
+            },
+            child: Container(
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  color: kSecondaryColor,
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey,
+                      blurRadius: 5.0,
+                      spreadRadius: 2,
+                    )
+                  ]),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.list,
+                    size: 40,
+                    color: kWhite,
+                  ),
+                  SizedBox(height: 10),
+                  Text(
+                    "Today's",
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 16,
                         fontWeight: FontWeight.bold),
                   ),
                 ],

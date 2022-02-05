@@ -141,16 +141,18 @@ class _CommonLedgerPricePageState extends State<CommonLedgerPricePage> {
                                   : status.add(true);
                               return InkWell(
                                 onTap: () {
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (builder) =>
-                                              CustomerPricingPage(
-                                                customerId:
-                                                    customerList[i].customerId,
-                                                salesId:
-                                                    customerList[i].salesmanID,
-                                              )));
+                                  widget.type == ""
+                                      ? {}
+                                      : Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (builder) =>
+                                                  CustomerPricingPage(
+                                                    customerId: customerList[i]
+                                                        .customerId,
+                                                    salesId: customerList[i]
+                                                        .salesmanID,
+                                                  )));
                                 },
                                 child: Container(
                                   //padding: EdgeInsets.only(top: 10, bottom: 10),
@@ -379,16 +381,18 @@ class _CommonLedgerPricePageState extends State<CommonLedgerPricePage> {
                                   : status.add(true);
                               return GestureDetector(
                                 onTap: () {
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (builder) =>
-                                              CustomerPricingPage(
-                                                customerId:
-                                                    customerList[i].customerId,
-                                                salesId:
-                                                    customerList[i].salesmanID,
-                                              )));
+                                  widget.type == ""
+                                      ? {}
+                                      : Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (builder) =>
+                                                  CustomerPricingPage(
+                                                    customerId: customerList[i]
+                                                        .customerId,
+                                                    salesId: customerList[i]
+                                                        .salesmanID,
+                                                  )));
                                 },
                                 child: Container(
                                   //padding: EdgeInsets.only(top: 10, bottom: 10),
@@ -653,8 +657,7 @@ class _CommonLedgerPricePageState extends State<CommonLedgerPricePage> {
 
     customerList.forEach((exp) {
       if (exp.customerName.toLowerCase().contains(text.toLowerCase()) ||
-          exp.salesmanID.toLowerCase().contains(text.toLowerCase()) ||
-          exp.companyName.toLowerCase().contains(text.toLowerCase()))
+          exp.salesmanID.toLowerCase().contains(text.toLowerCase()))
         _searchResult.add(exp);
     });
     //print("search objects ${_searchResult.first}");
