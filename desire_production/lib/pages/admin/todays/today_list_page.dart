@@ -48,12 +48,11 @@ class _TodayListPageState extends State<TodayListPage> {
       appBar: AppBar(
         iconTheme: IconThemeData(color: Colors.black),
         backgroundColor: Colors.white,
-        elevation: 0.0,
         centerTitle: true,
         title: Text(
           "Today's",
           style: TextStyle(
-              color: kPrimaryColor, fontWeight: FontWeight.bold, fontSize: 22),
+              color: kBlackColor, fontWeight: FontWeight.bold, fontSize: 18),
         ),
       ),
       body: _body(),

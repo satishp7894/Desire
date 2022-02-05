@@ -750,10 +750,10 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
                   ),
                   SizedBox(height: 10),
                   Text(
-                    "List With Credit",
+                    "LIST WITH CREDIT",
                     style: TextStyle(
                         color: Colors.white,
-                        fontSize: 16,
+                        fontSize: 14,
                         fontWeight: FontWeight.bold),
                   ),
                 ],
@@ -791,10 +791,10 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
                   ),
                   SizedBox(height: 10),
                   Text(
-                    "Outstanding List",
+                    "OUTSTANDING LIST",
                     style: TextStyle(
                         color: Colors.white,
-                        fontSize: 16,
+                        fontSize: 14,
                         fontWeight: FontWeight.bold),
                   ),
                 ],
@@ -829,10 +829,10 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
                   ),
                   SizedBox(height: 10),
                   Text(
-                    "Today's",
+                    "TODAY'S",
                     style: TextStyle(
                         color: Colors.white,
-                        fontSize: 16,
+                        fontSize: 14,
                         fontWeight: FontWeight.bold),
                   ),
                 ],
