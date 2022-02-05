@@ -122,25 +122,22 @@ class _TodayProductionPageState extends State<TodayProductionPage> {
                                 ),
                               )),
                         ),
-                        Expanded(
-                          flex: 1,
-                          child: Container(
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.zero,
-                                  border: Border.all(
-                                      color: kBlackColor, width: 0.5)),
-                              child: Padding(
-                                padding: const EdgeInsets.all(10.0),
-                                child: Text(
-                                  "View Products",
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                      color: kPrimaryColor,
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                              )),
-                        ),
+                        Container(
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.zero,
+                                border:
+                                    Border.all(color: kBlackColor, width: 0.5)),
+                            child: Padding(
+                              padding: const EdgeInsets.all(10.0),
+                              child: Text(
+                                "View Products",
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    color: kPrimaryColor,
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                            )),
                       ],
                     ),
                   ),
@@ -199,41 +196,38 @@ class ModelListTile extends StatelessWidget {
                   ),
                 )),
           ),
-          Expanded(
-            flex: 1,
-            child: Container(
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.zero,
-                    border: Border.all(color: kBlackColor, width: 0.5)),
-                child: Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child: GestureDetector(
-                    onTap: () {
-                      Navigator.push(context, MaterialPageRoute(builder: (context){
-                        return ProductFromModelPage(
-                            customerId: customerId,
-                            modelNo: todaysProduction.modelNo,
-                            modelNoId: todaysProduction.modelNoId,
-                            customerName: customerName,
-                            type: type);
-                      }));
-
-                    },
-                    child: Container(
-                        decoration: BoxDecoration(
-                            color: kPrimaryColor,
-                            borderRadius: BorderRadius.circular(20)),
-                        child: Text(
-                          "View Products",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                              color: kWhite,
-                              fontSize: 14,
-                              fontWeight: FontWeight.bold),
-                        )),
-                  ),
-                )),
-          ),
+          Container(
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.zero,
+                  border: Border.all(color: kBlackColor, width: 0.5)),
+              child: Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: GestureDetector(
+                  onTap: () {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) {
+                      return ProductFromModelPage(
+                          customerId: customerId,
+                          modelNo: todaysProduction.modelNo,
+                          modelNoId: todaysProduction.modelNoId,
+                          customerName: customerName,
+                          type: type);
+                    }));
+                  },
+                  child: Container(
+                      decoration: BoxDecoration(
+                          color: kPrimaryColor,
+                          borderRadius: BorderRadius.circular(20)),
+                      child: Text(
+                        "View Products",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                            color: kWhite,
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold),
+                      )),
+                ),
+              )),
         ],
       ),
     );

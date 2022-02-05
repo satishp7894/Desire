@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:desire_production/pages/admin/chat/admin_chat_list_page.dart';
 import 'package:desire_production/pages/admin/dispatchlist/CustomerInvoiceListPage.dart';
 import 'package:desire_production/pages/admin/dispatchlist/PendingOrderListPage.dart';
@@ -40,6 +42,7 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
           backgroundColor: Colors.white,
           elevation: 0.0,
           centerTitle: true,
+          automaticallyImplyLeading: false,
           title: Text(
             "DASHBOARD",
             style: TextStyle(
@@ -108,7 +111,7 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
                     "ADMIN",
                     style: TextStyle(
                         color: Colors.white,
-                        fontSize: 16,
+                        fontSize: 14,
                         fontWeight: FontWeight.bold),
                   ),
                 ],
@@ -147,7 +150,7 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
                     "PRODUCTS",
                     style: TextStyle(
                         color: Colors.white,
-                        fontSize: 16,
+                        fontSize: 14,
                         fontWeight: FontWeight.bold),
                   ),
                 ],
@@ -186,7 +189,7 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
                     "SALES",
                     style: TextStyle(
                         color: Colors.white,
-                        fontSize: 16,
+                        fontSize: 14,
                         fontWeight: FontWeight.bold),
                   ),
                 ],
@@ -225,7 +228,7 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
                     "CUSTOMER",
                     style: TextStyle(
                         color: Colors.white,
-                        fontSize: 16,
+                        fontSize: 14,
                         fontWeight: FontWeight.bold),
                   ),
                 ],
@@ -234,12 +237,20 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
           ),
           GestureDetector(
             onTap: () {
-              Navigator.pushReplacement(context,
-                  MaterialPageRoute(builder: (context) {
-                return DashboardPageProduction(
-                  page: 'admin',
-                );
-              }));
+              if (Platform.isIOS) {
+                Navigator.push(context, MaterialPageRoute(builder: (context) {
+                  return DashboardPageProduction(
+                    page: 'admin',
+                  );
+                }));
+              } else {
+                Navigator.pushReplacement(context,
+                    MaterialPageRoute(builder: (context) {
+                  return DashboardPageProduction(
+                    page: 'admin',
+                  );
+                }));
+              }
             },
             child: Container(
               decoration: BoxDecoration(
@@ -267,7 +278,7 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
                     "PRODUCTION",
                     style: TextStyle(
                         color: Colors.white,
-                        fontSize: 16,
+                        fontSize: 14,
                         fontWeight: FontWeight.bold),
                   ),
                 ],
@@ -276,12 +287,20 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
           ),
           GestureDetector(
             onTap: () {
-              Navigator.pushReplacement(context,
-                  MaterialPageRoute(builder: (context) {
-                return DashboardPageWarehouse(
-                  page: "admin",
-                );
-              }));
+              if (Platform.isIOS) {
+                Navigator.push(context, MaterialPageRoute(builder: (context) {
+                  return DashboardPageWarehouse(
+                    page: "admin",
+                  );
+                }));
+              } else {
+                Navigator.pushReplacement(context,
+                    MaterialPageRoute(builder: (context) {
+                  return DashboardPageWarehouse(
+                    page: "admin",
+                  );
+                }));
+              }
             },
             child: Container(
               decoration: BoxDecoration(
@@ -309,7 +328,7 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
                     "WAREHOUSE",
                     style: TextStyle(
                         color: Colors.white,
-                        fontSize: 16,
+                        fontSize: 14,
                         fontWeight: FontWeight.bold),
                   ),
                 ],
@@ -347,7 +366,7 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
                     "CHAT",
                     style: TextStyle(
                         color: Colors.white,
-                        fontSize: 16,
+                        fontSize: 14,
                         fontWeight: FontWeight.bold),
                   ),
                 ],
@@ -357,7 +376,7 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
           GestureDetector(
             onTap: () {
               Navigator.push(context, MaterialPageRoute(builder: (context) {
-                return  CustomerLedgerPage();
+                return CustomerLedgerPage();
               }));
             },
             child: Container(
@@ -382,10 +401,10 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
                   ),
                   SizedBox(height: 10),
                   Text(
-                    "Ledger",
+                    "LEDGER",
                     style: TextStyle(
                         color: Colors.white,
-                        fontSize: 16,
+                        fontSize: 14,
                         fontWeight: FontWeight.bold),
                   ),
                 ],
@@ -420,10 +439,10 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
                   ),
                   SizedBox(height: 10),
                   Text(
-                    "Price List",
+                    "PRICE LIST",
                     style: TextStyle(
                         color: Colors.white,
-                        fontSize: 16,
+                        fontSize: 14,
                         fontWeight: FontWeight.bold),
                   ),
                 ],
@@ -458,10 +477,10 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
                   ),
                   SizedBox(height: 10),
                   Text(
-                    "Today's Production",
+                    "TODAY'S PRODUCTION",
                     style: TextStyle(
                         color: Colors.white,
-                        fontSize: 16,
+                        fontSize: 14,
                         fontWeight: FontWeight.bold),
                   ),
                 ],
@@ -496,10 +515,10 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
                   ),
                   SizedBox(height: 10),
                   Text(
-                    "Dispatch List",
+                    "DISPATCH LIST",
                     style: TextStyle(
                         color: Colors.white,
-                        fontSize: 16,
+                        fontSize: 14,
                         fontWeight: FontWeight.bold),
                   ),
                 ],
@@ -534,10 +553,10 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
                   ),
                   SizedBox(height: 10),
                   Text(
-                    "Pending Orders",
+                    "PENDING ORDERS",
                     style: TextStyle(
                         color: Colors.white,
-                        fontSize: 16,
+                        fontSize: 14,
                         fontWeight: FontWeight.bold),
                   ),
                 ],
@@ -572,10 +591,10 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
                   ),
                   SizedBox(height: 10),
                   Text(
-                    "Hold Orders",
+                    "HOLD ORDERS",
                     style: TextStyle(
                         color: Colors.white,
-                        fontSize: 16,
+                        fontSize: 14,
                         fontWeight: FontWeight.bold),
                   ),
                 ],
@@ -610,10 +629,10 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
                   ),
                   SizedBox(height: 10),
                   Text(
-                    "Ready Stock",
+                    "READY STOCK",
                     style: TextStyle(
                         color: Colors.white,
-                        fontSize: 16,
+                        fontSize: 14,
                         fontWeight: FontWeight.bold),
                   ),
                 ],
@@ -649,10 +668,10 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
                   ),
                   SizedBox(height: 10),
                   Text(
-                    "Order List",
+                    "ORDER LIST",
                     style: TextStyle(
                         color: Colors.white,
-                        fontSize: 16,
+                        fontSize: 14,
                         fontWeight: FontWeight.bold),
                   ),
                 ],
@@ -688,10 +707,10 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
                   ),
                   SizedBox(height: 10),
                   Text(
-                    "Users",
+                    "USERS",
                     style: TextStyle(
                         color: Colors.white,
-                        fontSize: 16,
+                        fontSize: 14,
                         fontWeight: FontWeight.bold),
                   ),
                 ],

@@ -364,29 +364,32 @@ class InvoicesTile extends StatelessWidget {
           SizedBox(
             height: 5,
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Text(
-                "Invoice Date: " + customerInvoice.invoiceDate,
-                style:
-                    TextStyle(color: kBlackColor, fontWeight: FontWeight.w500),
-              ),
-              TextButton(
-                  style: TextButton.styleFrom(backgroundColor: kPrimaryColor),
-                  onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => InvoiceDetailSalesPage(
-                                id: customerInvoice.dispatchinvoiceid)));
-                  },
-                  child: Text(
-                    "View & Download Invoice",
-                    style: TextStyle(color: kWhite),
-                  ))
-            ],
+          FittedBox(
+            fit: BoxFit.contain,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Text(
+                  "Invoice Date: " + customerInvoice.invoiceDate,
+                  style: TextStyle(
+                      color: kBlackColor, fontWeight: FontWeight.w500),
+                ),
+                TextButton(
+                    style: TextButton.styleFrom(backgroundColor: kPrimaryColor),
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => InvoiceDetailSalesPage(
+                                  id: customerInvoice.dispatchinvoiceid)));
+                    },
+                    child: Text(
+                      "View & Download Invoice",
+                      style: TextStyle(color: kWhite),
+                    ))
+              ],
+            ),
           ),
           SizedBox(
             height: 10,

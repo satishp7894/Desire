@@ -64,10 +64,10 @@ class _CustomerLedgerPageState extends State<CustomerLedgerPage> {
         titleTextStyle: TextStyle(color: kBlackColor, fontSize: 18.0),
         title: Text("Ledger Details"),
         centerTitle: true,
-          bottom: PreferredSize(
-            preferredSize: Size.fromHeight(50),
-            child: _searchView(),
-          ),
+        bottom: PreferredSize(
+          preferredSize: Size.fromHeight(50),
+          child: _searchView(),
+        ),
         // actions: [
         //   IconButton(
         //       onPressed: () {
@@ -338,9 +338,13 @@ class _CustomerLedgerPageState extends State<CustomerLedgerPage> {
                                 ],
                               )))),
                   ...List.generate(
-                      _searchResult.length == 0 ?  asyncSnapshot.length : _searchResult.length,
+                      _searchResult.length == 0
+                          ? asyncSnapshot.length
+                          : _searchResult.length,
                       (index) => LedgerListTile(
-                            customerLedger: _searchResult.length == 0 ? asyncSnapshot[index] : _searchResult[index],
+                            customerLedger: _searchResult.length == 0
+                                ? asyncSnapshot[index]
+                                : _searchResult[index],
                           ))
                 ],
               ),
@@ -351,20 +355,17 @@ class _CustomerLedgerPageState extends State<CustomerLedgerPage> {
 
   Widget _searchView() {
     return Padding(
-      padding: const EdgeInsets.only(left: 10.0,right: 10),
+      padding: const EdgeInsets.only(left: 10.0, right: 10),
       child: Container(
         height: 50,
-        decoration: BoxDecoration(
-            border: Border.all(color: kSecondaryColor)
-
-        ),
+        decoration: BoxDecoration(border: Border.all(color: kSecondaryColor)),
         child: Padding(
-          padding: const EdgeInsets.only(left: 10.0,right: 10),
+          padding: const EdgeInsets.only(left: 10.0, right: 10),
           child: TextFormField(
             controller: searchView,
             keyboardType: TextInputType.text,
             textAlign: TextAlign.left,
-            onChanged: (value){
+            onChanged: (value) {
               setState(() {
                 search = true;
                 onSearchTextChangedICD(value);
@@ -571,13 +572,14 @@ class LedgerListTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
         onTap: () {
-          Navigator.push(context, MaterialPageRoute(builder: (context){
+          Navigator.push(context, MaterialPageRoute(builder: (context) {
             return LedgerFilter(customerId: customerLedger.customerId);
           }));
         },
         child: Container(
-          margin: EdgeInsets.all(10),
-          height: 80,
+          margin: EdgeInsets.all(5),
+          height: 90,
+          padding: EdgeInsets.all(5),
           alignment: Alignment.centerLeft,
           decoration: BoxDecoration(
             color: kSecondaryColor.withOpacity(0.1),
