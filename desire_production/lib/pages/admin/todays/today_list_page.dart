@@ -94,7 +94,9 @@ class _TodayListPageState extends State<TodayListPage> {
                 "No Data Found",
               ),
             );
-          } else if (s.data.todayOrder.length == 0 &&
+          } else if (s.data.todayOrder != null &&
+              s.data.todayOrder.length == 0 &&
+              s.data.todayDispatchInvoice != null &&
               s.data.todayDispatchInvoice.length == 0) {
             print("as3 empty");
             return Container(
@@ -168,8 +170,16 @@ class _TodayListPageState extends State<TodayListPage> {
                                           Container(
                                               margin: EdgeInsets.only(top: 10),
                                               child: Text(
-                                                  asyncSnapshot.data
-                                                      .todayOrder[0].totalOrder,
+                                                  asyncSnapshot
+                                                              .data
+                                                              .todayOrder[0]
+                                                              .totalOrder !=
+                                                          null
+                                                      ? asyncSnapshot
+                                                          .data
+                                                          .todayOrder[0]
+                                                          .totalOrder
+                                                      : "",
                                                   style: TextStyle(
                                                       fontWeight:
                                                           FontWeight.bold,
@@ -186,9 +196,15 @@ class _TodayListPageState extends State<TodayListPage> {
                                               margin: EdgeInsets.only(top: 10),
                                               child: Text(
                                                   asyncSnapshot
-                                                      .data
-                                                      .todayOrder[0]
-                                                      .totalOrderQty,
+                                                              .data
+                                                              .todayOrder[0]
+                                                              .totalOrderQty !=
+                                                          null
+                                                      ? asyncSnapshot
+                                                          .data
+                                                          .todayOrder[0]
+                                                          .totalOrderQty
+                                                      : "",
                                                   style: TextStyle(
                                                       fontWeight:
                                                           FontWeight.bold,
@@ -205,9 +221,15 @@ class _TodayListPageState extends State<TodayListPage> {
                                               margin: EdgeInsets.only(top: 10),
                                               child: Text(
                                                   asyncSnapshot
-                                                      .data
-                                                      .todayOrder[0]
-                                                      .totalOrderAmount,
+                                                              .data
+                                                              .todayOrder[0]
+                                                              .totalOrderAmount !=
+                                                          null
+                                                      ? asyncSnapshot
+                                                          .data
+                                                          .todayOrder[0]
+                                                          .totalOrderAmount
+                                                      : "",
                                                   style: TextStyle(
                                                       fontWeight:
                                                           FontWeight.bold,
@@ -278,9 +300,16 @@ class _TodayListPageState extends State<TodayListPage> {
                                             margin: EdgeInsets.only(top: 10),
                                             child: Text(
                                                 asyncSnapshot
-                                                    .data
-                                                    .todayDispatchInvoice[0]
-                                                    .totalDispatchInvoice,
+                                                            .data
+                                                            .todayDispatchInvoice[
+                                                                0]
+                                                            .totalDispatchInvoice !=
+                                                        null
+                                                    ? asyncSnapshot
+                                                        .data
+                                                        .todayDispatchInvoice[0]
+                                                        .totalDispatchInvoice
+                                                    : "",
                                                 style: TextStyle(
                                                     fontWeight: FontWeight.bold,
                                                     color: kWhite)),
