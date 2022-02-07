@@ -71,6 +71,8 @@ dependencies:
   flutter_swiper: ^1.1.6
   multi_image_picker2: ^5.0.02
   intl: ^0.16.1
+  location: ^3.2.4
+
 
 
 
