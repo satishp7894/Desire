@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 import 'package:data_connection_checker/data_connection_checker.dart';
 import 'package:desire_users/models/sales_customer_list_model.dart';
@@ -18,12 +19,16 @@ import 'package:desire_users/sales/pages/orders/hold_order_list_page.dart';
 import 'package:desire_users/sales/pages/orders/pendingOrdersListPage.dart';
 import 'package:desire_users/sales/pages/retunMaterial/return_material_sale_page.dart';
 import 'package:desire_users/sales/utils_sales/alerts.dart';
+import 'package:desire_users/sales/utils_sales/progress_dialog.dart';
+import 'package:desire_users/services/connection.dart';
+import 'package:desire_users/services/connection_sales.dart';
 import 'package:desire_users/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'profile/sales_profile_page.dart';
 import 'package:location/location.dart';
+import 'package:http/http.dart' as http;
 
 class SalesHomePage extends StatefulWidget {
   final String salesManId;
@@ -87,6 +92,7 @@ class _SalesHomePageState extends State<SalesHomePage> {
 
     print(
         "current location ${_locationData.latitude} ${_locationData.longitude}");
+    sendCurrentSalesLocation(_locationData);
   }
 
   checkConnectivity() async {
@@ -943,5 +949,25 @@ class _SalesHomePageState extends State<SalesHomePage> {
         ),
       ],
     );
+  }
+
+  void sendCurrentSalesLocation(LocationData locationData) async {
+    var response;
+    response = await http
+        .post(Uri.parse(ConnectionSales.submitCurrentLocation), body: {
+      'secretkey': Connection.secretKey,
+      'user_id': salesManId,
+      'latitude': locationData.latitude.toString(),
+      'longitude': locationData.longitude.toString(),
+    });
+    var results = json.decode(response.cklabody);
+    print('response == $results  ${response.body}');
+    if (results['status'] == true) {
+      print(results['message']);
+      //Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (builder)=>ProductDetailPage(product: widget.product, page: widget.page, snapshot: widget.snapshot,status: false, orderCount: widget.orderCount,)), (route) => false);
+    } else {
+      Alerts.showAlertAndBack(context, "User Not Found",
+          "Please enter registered mobile no or email id");
+    }
   }
 }
