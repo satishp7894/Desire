@@ -8,6 +8,7 @@ import 'package:desire_production/pages/admin/dispatchlist/commonSalesManListPag
 import 'package:desire_production/pages/admin/dispatchlist/hold_order_list_page.dart';
 import 'package:desire_production/pages/admin/ledgerandprice/CustomerLedgerPage.dart';
 import 'package:desire_production/pages/admin/ledgerandprice/common_ledger_price_page.dart';
+import 'package:desire_production/pages/admin/location/SalesLocationList.dart';
 import 'package:desire_production/pages/admin/orders/customerOrdersListPage.dart';
 import 'package:desire_production/pages/admin/todayProduction/TodayProductionPage.dart';
 import 'package:desire_production/pages/admin/todays/today_list_page.dart';
@@ -830,6 +831,44 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
                   SizedBox(height: 10),
                   Text(
                     "TODAY'S",
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          GestureDetector(
+            onTap: () {
+              Navigator.push(context, MaterialPageRoute(builder: (context) {
+                return SalesLocationList();
+              }));
+            },
+            child: Container(
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  color: kPrimaryColor,
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey,
+                      blurRadius: 5.0,
+                      spreadRadius: 2,
+                    )
+                  ]),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.location_on,
+                    size: 40,
+                    color: kWhite,
+                  ),
+                  SizedBox(height: 10),
+                  Text(
+                    "SALES LOCATION",
                     style: TextStyle(
                         color: Colors.white,
                         fontSize: 14,

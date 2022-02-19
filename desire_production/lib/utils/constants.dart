@@ -20,6 +20,7 @@ const Color profile_info_privacy = Color(0xFFF369B7);
 const Color profile_info_general = Color(0xFFFFC85B);
 const Color profile_info_notification = Color(0xFF5DD1D3);
 const Color profile_item_color = Color(0xFFC4C5C9);
+const Color item_color = Color(0xffe09e95);
 
 const kAnimationDuration = Duration(milliseconds: 200);
 

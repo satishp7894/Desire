@@ -50,6 +50,7 @@ import 'package:desire_production/model/readyToDispatchListModel.dart';
 import 'package:desire_production/model/role_list_model.dart';
 import 'package:desire_production/model/role_model.dart';
 import 'package:desire_production/model/sales_customer_list_model.dart';
+import 'package:desire_production/model/sales_location_model.dart';
 import 'package:desire_production/model/salesman_list_for_chat_model.dart';
 import 'package:desire_production/model/today_dispatch_invoice_details_model.dart';
 import 'package:desire_production/model/today_order_details_page_model.dart';
@@ -1161,7 +1162,8 @@ class ApiClient {
     return todayorderdetailspagemodel;
   }
 
-  Future<TodayDispatchInvoiceDetailsModel> getTodayDispatchInvoiceDetail() async {
+  Future<TodayDispatchInvoiceDetailsModel>
+      getTodayDispatchInvoiceDetail() async {
     var response = await http.post(
         Uri.parse(
             "http://loccon.in/desiremoulding/api/AdminApiController/todayDispatchInvoiceDetails"),
@@ -1172,9 +1174,23 @@ class ApiClient {
     print("user List response $result");
 
     TodayDispatchInvoiceDetailsModel todaydispatchinvoicedetailsmodel;
-    todaydispatchinvoicedetailsmodel = (TodayDispatchInvoiceDetailsModel.fromJson(result));
+    todaydispatchinvoicedetailsmodel =
+        (TodayDispatchInvoiceDetailsModel.fromJson(result));
 
     return todaydispatchinvoicedetailsmodel;
   }
 
+  Future<SalesLocationModel> getSalesLocation(String salesId) async {
+    var response = await http.post(
+        Uri.parse(
+            "http://loccon.in/desiremoulding/api/AdminApiController/salesmanCurrentLocation"),
+        body: {'secretkey': Connection.secretKey, 'user_id': salesId});
+    var result = json.decode(response.body);
+    print("location $result");
+
+    SalesLocationModel saleslocationmodel;
+    saleslocationmodel = (SalesLocationModel.fromJson(result));
+
+    return saleslocationmodel;
+  }
 }
