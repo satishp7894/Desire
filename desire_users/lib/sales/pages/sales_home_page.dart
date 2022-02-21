@@ -68,7 +68,7 @@ class _SalesHomePageState extends State<SalesHomePage> {
     getSalesDetails();
 
     getLocation();
-    Timer.periodic(Duration(minutes: 30), (Timer t) => getLocation());
+    Timer.periodic(Duration(minutes: 5), (Timer t) => getLocation());
   }
 
   void getLocation() async {
