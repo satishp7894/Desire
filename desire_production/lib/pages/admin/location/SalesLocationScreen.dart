@@ -10,8 +10,9 @@ import 'package:intl/intl.dart';
 
 class SalesLocationScreen extends StatefulWidget {
   final salesId;
+  final salesName;
 
-  const SalesLocationScreen({@required this.salesId});
+  const SalesLocationScreen({@required this.salesId, @required this.salesName});
 
   @override
   _SalesLocationScreenState createState() => _SalesLocationScreenState();
@@ -54,7 +55,7 @@ class _SalesLocationScreenState extends State<SalesLocationScreen> {
         backgroundColor: Colors.white,
         iconTheme: IconThemeData(color: Colors.black),
         title: Text(
-          "Salesman Location",
+          " ${widget.salesName}'s Location",
           style: TextStyle(color: Colors.black),
           textAlign: TextAlign.center,
         ),
@@ -109,9 +110,7 @@ class _SalesLocationScreenState extends State<SalesLocationScreen> {
                 ),
               );
             }
-
             salesmanList = s.data.salesmanLocation;
-
             return Stack(
               alignment: Alignment.topRight,
               children: [
@@ -127,11 +126,27 @@ class _SalesLocationScreenState extends State<SalesLocationScreen> {
                   },
                 ),
                 Container(
+                    width: 200,
+                    height: 40,
+                    color: kPrimaryColor,
                     margin: EdgeInsets.all(10),
-                    child: Text(
-                      formatDate(salesmanList[0].locationDatetime),
-                      style:
-                          TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+                    child: Column(
+                      children: [
+                        Text(
+                          "Updated Date: ${formatDate(salesmanList[0].locationDatetime)}",
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 15,
+                              color: Colors.white),
+                        ),
+                        Text(
+                          "Updated Time: ${formatTime(salesmanList[0].locationDatetime)}",
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 15,
+                              color: Colors.white),
+                        )
+                      ],
                     ))
               ],
             );
@@ -148,8 +163,7 @@ class _SalesLocationScreenState extends State<SalesLocationScreen> {
           double.parse(salesmanList.longitude)), //position of marker
       infoWindow: InfoWindow(
         //popup info
-        title: 'Marker Title First ',
-        snippet: 'My Custom Subtitle',
+        title: '${widget.salesName} is here',
       ),
       icon: BitmapDescriptor.defaultMarker, //Icon for Marker
     ));
@@ -159,7 +173,13 @@ class _SalesLocationScreenState extends State<SalesLocationScreen> {
 
   String formatDate(String locationDatetime) {
     var parse = DateTime.parse(locationDatetime);
-    String formattedDate = DateFormat('dd-MM-yyyy – kk:mm').format(parse);
+    String formattedDate = DateFormat('dd-MM-yyyy').format(parse);
+    return formattedDate;
+  }
+
+  String formatTime(String locationDatetime) {
+    var parse = DateTime.parse(locationDatetime);
+    String formattedDate = DateFormat('kk:mm').format(parse);
     return formattedDate;
   }
 }

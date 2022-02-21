@@ -141,7 +141,9 @@ class _SalesLocationListState extends State<SalesLocationList> {
                                   Navigator.push(context,
                                       MaterialPageRoute(builder: (context) {
                                     return SalesLocationScreen(
-                                        salesId: salesmanList[i].userId);
+                                      salesId: salesmanList[i].userId,
+                                      salesName: salesmanList[i].firstname,
+                                    );
                                   }));
 
                                   //s.data.customer[i].kycStatus == "0" ? Navigator.push(context, MaterialPageRoute(builder: (builder) => CustomerKYCDetailsPage(customerId: s.data.customer[i].customerId, salesId: widget.salesId,)))  :  Navigator.of(context).push(MaterialPageRoute(builder: (_) => CustomerListPage(salesId: widget.salesId,)));
@@ -217,7 +219,8 @@ class _SalesLocationListState extends State<SalesLocationList> {
                                   Navigator.push(context,
                                       MaterialPageRoute(builder: (context) {
                                     return SalesLocationScreen(
-                                        salesId: salesmanList[i].userId);
+                                        salesId: _searchResult[i].userId,
+                                        salesName: _searchResult[i].firstname);
                                   }));
                                   //s.data.customer[i].kycStatus == "0" ? Navigator.push(context, MaterialPageRoute(builder: (builder) => CustomerKYCDetailsPage(customerId: s.data.customer[i].customerId, salesId: widget.salesId,)))  :  Navigator.of(context).push(MaterialPageRoute(builder: (_) => CustomerListPage(salesId: widget.salesId,)));
                                 },

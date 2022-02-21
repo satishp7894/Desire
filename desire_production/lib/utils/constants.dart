@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 const kPrimaryColor = Color(0xFF7a3a2b); //0xFFcea345
-const kWhiteColor = Color(0xFF976363);//0xFFFFFFFF
-const kWhite = Color(0xFFFFFFFF);//0xFFFFFFFF
+const kWhiteColor = Color(0xFF976363); //0xFFFFFFFF
+const kWhite = Color(0xFFFFFFFF); //0xFFFFFFFF
 const kBlackColor = Color(0xff000000);
 const kPrimaryLightColor = Color(0xFFBA8F89); //0xFFFFECDF
 const kPrimaryGradientColor = LinearGradient(
@@ -21,6 +21,7 @@ const Color profile_info_general = Color(0xFFFFC85B);
 const Color profile_info_notification = Color(0xFF5DD1D3);
 const Color profile_item_color = Color(0xFFC4C5C9);
 const Color item_color = Color(0xffe09e95);
+const Color white_trans = Color(0xff00FFFFFF);
 
 const kAnimationDuration = Duration(milliseconds: 200);
 
@@ -46,8 +47,7 @@ const String kPhoneNumberNullError = "Please Enter your phone number";
 const String kAddressNullError = "Please Enter your address";
 
 final otpInputDecoration = InputDecoration(
-  contentPadding:
-      EdgeInsets.symmetric(vertical: 15),
+  contentPadding: EdgeInsets.symmetric(vertical: 15),
   border: outlineInputBorder(),
   focusedBorder: outlineInputBorder(),
   enabledBorder: outlineInputBorder(),
