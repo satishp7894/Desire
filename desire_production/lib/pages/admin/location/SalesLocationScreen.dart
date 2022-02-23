@@ -110,6 +110,18 @@ class _SalesLocationScreenState extends State<SalesLocationScreen> {
                 ),
               );
             }
+            if (s.data.salesmanLocation != null &&
+                s.data.salesmanLocation.length == 0) {
+              print("as3 empty");
+              return Container(
+                height: 300,
+                alignment: Alignment.center,
+                child: Text(
+                  "No Location Found",
+                ),
+              );
+            }
+
             salesmanList = s.data.salesmanLocation;
             return Stack(
               alignment: Alignment.topRight,
@@ -126,7 +138,7 @@ class _SalesLocationScreenState extends State<SalesLocationScreen> {
                   },
                 ),
                 Container(
-                    width: 200,
+                    width: 230,
                     height: 40,
                     color: kPrimaryColor,
                     margin: EdgeInsets.all(10),
