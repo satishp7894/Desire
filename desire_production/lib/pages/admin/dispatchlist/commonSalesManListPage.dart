@@ -40,7 +40,6 @@ class _CommonSalesManListPageState extends State<CommonSalesManListPage> {
   checkConnectivity() async {
     bool result = await DataConnectionChecker().hasConnection;
     if (result == true) {
-      print('YAY! Free cute dog pics!');
     } else {
       print('No internet :( Reason:');
       print(DataConnectionChecker().lastTryResults);

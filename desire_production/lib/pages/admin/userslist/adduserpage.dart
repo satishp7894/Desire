@@ -25,6 +25,7 @@ class AddUserPage extends StatefulWidget {
 
 class _AddUserPageState extends State<AddUserPage> with Validator {
   final _formKey = GlobalKey<FormState>();
+  final _formKeyRegion = GlobalKey<FormState>();
   AutovalidateMode _autovalidateMode = AutovalidateMode.disabled;
   var txt = TextEditingController();
 
@@ -56,16 +57,21 @@ class _AddUserPageState extends State<AddUserPage> with Validator {
   String pincode;
   String city;
   String state;
-  bool mainViewVisible = true;
+
+  String regionState;
+  String regionCity;
   bool anotherViewVisible = false;
   List<CityData> cityList = [];
+
+  int userId = 0;
 
   @override
   void initState() {
     super.initState();
-    roleBloc.fetchRoleList();
-    stateBloc.fetchState();
     checkConnectivity();
+
+    stateBloc.fetchState();
+    roleBloc.fetchRoleList();
     pin = TextEditingController();
     cityText = TextEditingController();
     stateText = TextEditingController();
@@ -88,7 +94,6 @@ class _AddUserPageState extends State<AddUserPage> with Validator {
   checkConnectivity() async {
     bool result = await DataConnectionChecker().hasConnection;
     if (result == true) {
-      print('YAY! Free cute dog pics!');
     } else {
       print('No internet :( Reason:');
       print(DataConnectionChecker().lastTryResults);
@@ -106,23 +111,29 @@ class _AddUserPageState extends State<AddUserPage> with Validator {
         iconTheme: IconThemeData(color: Colors.black),
         backgroundColor: Colors.white,
         title: Text(
-          (mainViewVisible) ? "Add New User" : "Select Region",
+          (anotherViewVisible && dropdownValue == "Sales")
+              ? "Select Region"
+              : "Add New User",
           style: TextStyle(color: Colors.black),
           textAlign: TextAlign.center,
         ),
         centerTitle: true,
       ),
-      body: (mainViewVisible) ? _body() : _anotherBody(),
+      body: (anotherViewVisible && dropdownValue == "Sales")
+          ? _anotherBody()
+          : _body(),
       bottomNavigationBar: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: DefaultButton(
-            text: (mainViewVisible) ? "Add User" : "Add City",
+            text: (anotherViewVisible && dropdownValue == "Sales")
+                ? "Add Region"
+                : "Add User",
             press: () {
-              if (mainViewVisible) {
-                registerNow();
-              } else {
+              if (anotherViewVisible && dropdownValue == "Sales") {
                 viewAssignArea();
+              } else {
+                registerNow();
               }
             },
           ),
@@ -183,179 +194,203 @@ class _AddUserPageState extends State<AddUserPage> with Validator {
           }
           stateList = s.data.stateData;
 
-          return Container(
-            child: Column(
-              children: [
-                SizedBox(
-                  height: 20,
-                ),
-                TextFormField(
-                  textInputAction: TextInputAction.next,
-                  keyboardType: TextInputType.text,
-                  controller: txt,
-                  onTap: () {
-                    showDialog(
-                        context: context,
-                        barrierDismissible: false,
-                        builder: (BuildContext context) {
-                          return AlertDialog(
-                            title: Text("Select State"),
-                            content: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  setupStateDialog(stateList),
-                                  TextButton(
-                                      style: TextButton.styleFrom(
-                                          primary: kPrimaryColor,
-                                          backgroundColor: kPrimaryColor),
-                                      onPressed: () {
-                                        var selectedState = stateList
-                                            .where((x) => x.isCheck)
-                                            .map((e) => e.stateName)
-                                            .toList()
-                                            .join(",");
-                                        var listsId = stateList
-                                            .where((x) => x.isCheck)
-                                            .map((e) => e.stateId)
-                                            .toList();
-                                        // var json = jsonEncode(lists, toEncodable: (e) => e.toString());
-                                        // print(lists);
-                                        selectedStateList = stateList
-                                            .where((x) => x.isCheck)
-                                            .toList();
-                                        txt.text = selectedState;
-                                        Navigator.pop(context);
-
-                                        stateWiseCity(listsId);
-                                      },
-                                      child: Text(
-                                        "save",
-                                        style: TextStyle(color: Colors.white),
-                                      ))
-                                ]),
-                          );
-                        });
-                  },
-                  validator: validateName,
-                  decoration: InputDecoration(
-                    labelText: "State",
-                    hintText: "Select State",
-                    // If  you are using latest version of flutter then lable text and hint text shown like this
-                    // if you r using flutter less then 1.20.* then maybe this is not working properly
-                    floatingLabelBehavior: FloatingLabelBehavior.always,
-                    prefixIcon: Icon(
-                      Icons.pin_drop,
-                      color: kPrimaryColor,
-                    ),
-                    hintStyle:
-                        TextStyle(color: Color(0xff979797), fontSize: 12),
-                    labelStyle: TextStyle(color: kPrimaryColor, fontSize: 16),
-                    border: OutlineInputBorder(
-                        borderSide: BorderSide(color: Color(0xff979797))),
-                    focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: kPrimaryColor, width: 2)),
+          return Form(
+            key: _formKeyRegion,
+            autovalidateMode: _autovalidateMode,
+            child: Container(
+              child: Column(
+                children: [
+                  SizedBox(
+                    height: 20,
                   ),
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-                TextFormField(
-                  textInputAction: TextInputAction.next,
-                  controller: cityController,
-                  keyboardType: TextInputType.text,
-                  onTap: () {
-                    showDialog(
-                        context: context,
-                        barrierDismissible: false,
-                        builder: (BuildContext context) {
-                          return AlertDialog(
-                              title: Text("Select City"),
+                  TextFormField(
+                    textInputAction: TextInputAction.next,
+                    keyboardType: TextInputType.text,
+                    onSaved: (newValue) => regionState = newValue,
+                    onChanged: (value) {
+                      regionState = value;
+                    },
+                    validator: validateRegion,
+                    controller: txt,
+                    onTap: () {
+                      showDialog(
+                          context: context,
+                          barrierDismissible: false,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              title: Text("Select State"),
                               content: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  setupCityDialog(cityList),
-                                  TextButton(
-                                      style: TextButton.styleFrom(
-                                          primary: kPrimaryColor,
-                                          backgroundColor: kPrimaryColor),
-                                      onPressed: () {
-                                        var lists = cityList
-                                            .where((x) => x.isCheck)
-                                            .map((e) => e.cityName)
-                                            .toList()
-                                            .join(",");
-                                        // var json = jsonEncode(lists, toEncodable: (e) => e.toString());
-                                        // print(lists);
-                                        selectedCityList = cityList
-                                            .where((x) => x.isCheck)
-                                            .toList();
-                                        cityController.text = lists;
-                                        Navigator.pop(context);
-                                        // txt.text = lists;
-                                      },
-                                      child: Text(
-                                        "Save",
-                                        style: TextStyle(color: Colors.white),
-                                      ))
-                                ],
-                              ));
-                        });
-                  },
-                  validator: validateName,
-                  decoration: InputDecoration(
-                    labelText: "City",
-                    hintText: "Select City",
-                    // If  you are using latest version of flutter then lable text and hint text shown like this
-                    // if you r using flutter less then 1.20.* then maybe this is not working properly
-                    floatingLabelBehavior: FloatingLabelBehavior.always,
-                    prefixIcon: Icon(
-                      Icons.pin_drop,
-                      color: kPrimaryColor,
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    setupStateDialog(),
+                                    Container(
+                                        margin: EdgeInsets.only(top: 10),
+                                        child: TextButton(
+                                            style: TextButton.styleFrom(
+                                                primary: kPrimaryColor,
+                                                backgroundColor: kPrimaryColor),
+                                            onPressed: () {
+                                              var selectedState = stateList
+                                                  .where((x) => x.isCheck)
+                                                  .map((e) => e.stateName)
+                                                  .toList()
+                                                  .join(",");
+                                              var listsId = stateList
+                                                  .where((x) => x.isCheck)
+                                                  .map((e) => e.stateId)
+                                                  .toList();
+                                              // var json = jsonEncode(lists, toEncodable: (e) => e.toString());
+                                              // print(lists);
+                                              selectedStateList = stateList
+                                                  .where((x) => x.isCheck)
+                                                  .toList();
+                                              txt.text = selectedState;
+                                              Navigator.pop(context);
+
+                                              stateWiseCity(listsId);
+                                            },
+                                            child: Text(
+                                              "Submit",
+                                              style: TextStyle(
+                                                  color: Colors.white),
+                                            )))
+                                  ]),
+                            );
+                          });
+                    },
+                    decoration: InputDecoration(
+                      labelText: "State",
+                      hintText: "Select State",
+                      // If  you are using latest version of flutter then lable text and hint text shown like this
+                      // if you r using flutter less then 1.20.* then maybe this is not working properly
+                      floatingLabelBehavior: FloatingLabelBehavior.always,
+                      prefixIcon: Icon(
+                        Icons.pin_drop,
+                        color: kPrimaryColor,
+                      ),
+                      hintStyle:
+                          TextStyle(color: Color(0xff979797), fontSize: 12),
+                      labelStyle: TextStyle(color: kPrimaryColor, fontSize: 16),
+                      border: OutlineInputBorder(
+                          borderSide: BorderSide(color: Color(0xff979797))),
+                      focusedBorder: OutlineInputBorder(
+                          borderSide:
+                              BorderSide(color: kPrimaryColor, width: 2)),
                     ),
-                    hintStyle:
-                        TextStyle(color: Color(0xff979797), fontSize: 12),
-                    labelStyle: TextStyle(color: kPrimaryColor, fontSize: 16),
-                    border: OutlineInputBorder(
-                        borderSide: BorderSide(color: Color(0xff979797))),
-                    focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: kPrimaryColor, width: 2)),
                   ),
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-              ],
+                  SizedBox(
+                    height: 20,
+                  ),
+                  TextFormField(
+                    textInputAction: TextInputAction.next,
+                    controller: cityController,
+                    keyboardType: TextInputType.text,
+                    onTap: () {
+                      showDialog(
+                          context: context,
+                          barrierDismissible: false,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                                title: Text("Select City"),
+                                content: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    setupCityDialog(cityList),
+                                    TextButton(
+                                        style: TextButton.styleFrom(
+                                            primary: kPrimaryColor,
+                                            backgroundColor: kPrimaryColor),
+                                        onPressed: () {
+                                          var lists = cityList
+                                              .where((x) => x.isCheck)
+                                              .map((e) => e.cityName)
+                                              .toList()
+                                              .join(",");
+                                          // var json = jsonEncode(lists, toEncodable: (e) => e.toString());
+                                          // print(lists);
+                                          selectedCityList = cityList
+                                              .where((x) => x.isCheck)
+                                              .toList();
+                                          cityController.text = lists;
+                                          Navigator.pop(context);
+                                          // txt.text = lists;
+                                        },
+                                        child: Text(
+                                          "Submit",
+                                          style: TextStyle(color: Colors.white),
+                                        ))
+                                  ],
+                                ));
+                          });
+                    },
+                    validator: validateRegion,
+                    onSaved: (newValue) => regionCity = newValue,
+                    onChanged: (value) {
+                      regionCity = value;
+                    },
+                    decoration: InputDecoration(
+                      labelText: "City",
+                      hintText: "Select City",
+                      // If  you are using latest version of flutter then lable text and hint text shown like this
+                      // if you r using flutter less then 1.20.* then maybe this is not working properly
+                      floatingLabelBehavior: FloatingLabelBehavior.always,
+                      prefixIcon: Icon(
+                        Icons.pin_drop,
+                        color: kPrimaryColor,
+                      ),
+                      hintStyle:
+                          TextStyle(color: Color(0xff979797), fontSize: 12),
+                      labelStyle: TextStyle(color: kPrimaryColor, fontSize: 16),
+                      border: OutlineInputBorder(
+                          borderSide: BorderSide(color: Color(0xff979797))),
+                      focusedBorder: OutlineInputBorder(
+                          borderSide:
+                              BorderSide(color: kPrimaryColor, width: 2)),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                ],
+              ),
             ),
           );
         });
   }
 
-  Widget setupStateDialog(List<StateData> stateList) {
+  Widget setupStateDialog() {
     return Container(
-      height: 400.0, // Change as per your requirement
+      height: 300.0, // Change as per your requirement
       width: 300.0, // Change as per your requirement
-      child: ListView.builder(
-          shrinkWrap: true,
-          itemCount: stateList.length,
-          itemBuilder: (BuildContext context, int index) {
-            return StatefulBuilder(builder: (context, setState) {
-              return CheckboxListTile(
-                title: Text(stateList[index].stateName),
-                value: stateList[index].isCheck,
-                onChanged: (val) {
-                  setState(() {
-                    stateList[index].isCheck = val;
+      child: Column(
+        children: [
+          Container(
+            height: 300,
+            child: ListView.builder(
+                shrinkWrap: true,
+                itemCount: stateList.length,
+                itemBuilder: (BuildContext context, int index) {
+                  return StatefulBuilder(builder: (context, setState) {
+                    return CheckboxListTile(
+                      title: Text(stateList[index].stateName),
+                      value: stateList[index].isCheck,
+                      onChanged: (val) {
+                        setState(() {
+                          stateList[index].isCheck = val;
+                        });
+                      },
+                    );
                   });
-                },
-              );
-            });
-          }),
+                }),
+          )
+        ],
+      ),
     );
   }
 
   Widget setupCityDialog(List<CityData> cityList) {
     return Container(
-      height: 400.0, // Change as per your requirement
+      height: 300.0, // Change as per your requirement
       width: 300.0,
       child: ListView.builder(
           shrinkWrap: true,
@@ -937,11 +972,18 @@ class _AddUserPageState extends State<AddUserPage> with Validator {
       if (result['status'] == true) {
         // Alerts.showAlertAndBack(context, '', result['message']);
         final snackBar = SnackBar(content: Text(result['message']));
+        userId = result['user_id'];
         ScaffoldMessenger.of(context).showSnackBar(snackBar);
+
         setState(() {
-          mainViewVisible = false;
           anotherViewVisible = true;
         });
+
+        if (anotherViewVisible && dropdownValue == "Sales") {
+          stateBloc.fetchState();
+        } else {
+          Navigator.pop(context, true);
+        }
         // Navigator.pop(context, true);
         return true;
       } else {
@@ -956,46 +998,59 @@ class _AddUserPageState extends State<AddUserPage> with Validator {
   }
 
   viewAssignArea() async {
-    var val = selectedStateList.map((e) {
-      dynamic data = new Map();
-      data[e.stateId] = selectedCityList
-          .where((c) => c.stateId == e.stateId)
-          .map((e) => e.cityId)
-          .toList();
-      return data;
-    }).toList();
-    print(jsonEncode(val));
-    ProgressDialog pr = ProgressDialog(
-      context,
-      type: ProgressDialogType.Normal,
-      isDismissible: true,
-    );
-    pr.style(
-      message: 'Please wait...',
-      progressWidget: Center(child: CircularProgressIndicator()),
-    );
-    pr.show();
-    var response = await http.post(
-        Uri.parse(
-            "http://loccon.in/desiremoulding/api/AdminApiController/viewAssignArea"),
-        body: {
-          "secretkey": Connection.secretKey,
-          "sales_id": "29",
-          "assign_area": jsonEncode(val)
-        });
+    if (_formKeyRegion.currentState.validate()) {
+      _formKeyRegion.currentState.save();
+      var val = selectedStateList.map((e) {
+        dynamic data = new Map();
+        data[e.stateId] = selectedCityList
+            .where((c) => c.stateId == e.stateId)
+            .map((e) => e.cityId)
+            .toList();
+        return data;
+      }).toList();
+      print(jsonEncode(val));
+      ProgressDialog pr = ProgressDialog(
+        context,
+        type: ProgressDialogType.Normal,
+        isDismissible: true,
+      );
+      pr.style(
+        message: 'Please wait...',
+        progressWidget: Center(child: CircularProgressIndicator()),
+      );
+      pr.show();
+      var response = await http.post(
+          Uri.parse(
+              "http://loccon.in/desiremoulding/api/AdminApiController/viewAssignArea"),
+          body: {
+            "secretkey": Connection.secretKey,
+            "sales_id": userId.toString(),
+            "assign_area": jsonEncode(val)
+          });
 
-    var result = json.decode(response.body);
+      var result = json.decode(response.body);
 
-    print('results: $result');
+      print('results: $result');
 
-    pr.hide();
+      pr.hide();
 
-    if (result['status'] == true) {
-      Alerts.showAlertAndBack(context, '', result['message']);
-      return true;
-    } else {
-      Alerts.showAlertAndBack(context, 'Error SignUP', 'Try again later');
-      return false;
+      if (result['status'] == true) {
+        // Alerts.showAlertAndBack(context, '', result['message']);
+        final snackBar = SnackBar(content: Text(result['message']));
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+        Navigator.pop(context, true);
+        txt.text = "";
+        cityController.text = "";
+        return true;
+      } else {
+        Alerts.showAlertAndBack(context, 'Error SignUP', 'Try again later');
+        return false;
+      }
+    }
+    else{
+      setState(() {
+        _autovalidateMode = AutovalidateMode.always;
+      });
     }
   }
 }

@@ -1,7 +1,5 @@
-
 class Validator {
-
-  String  validateRequired(String value) {
+  String validateRequired(String value) {
     if (value.isEmpty) {
       return "This field is Required";
     }
@@ -19,10 +17,19 @@ class Validator {
     return null;
   }
 
+  String validateRegion(String value) {
+    if (value.isEmpty) {
+      return "This field is Required";
+    }
+
+    return null;
+  }
+
   String validateEmail(String value) {
-    String pattern = r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
+    String pattern =
+        r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
     RegExp regExp = RegExp(pattern);
-    if(!regExp.hasMatch(value)) {
+    if (!regExp.hasMatch(value)) {
       return "Invalid Email";
     } else {
       return null;
@@ -61,7 +68,8 @@ class Validator {
   }
 
   String validateGSTNo(String value) {
-    String pattern = r'[0-9]{2}[a-zA-Z]{5}[0-9]{4}[a-zA-Z]{1}[1-9A-Za-z]{1}[Z]{1}[0-9a-zA-Z]{1}';
+    String pattern =
+        r'[0-9]{2}[a-zA-Z]{5}[0-9]{4}[a-zA-Z]{1}[1-9A-Za-z]{1}[Z]{1}[0-9a-zA-Z]{1}';
     RegExp regExp = RegExp(pattern);
     if (!regExp.hasMatch(value)) {
       return "Invalid GST Number";
@@ -89,6 +97,4 @@ class Validator {
       return null;
     }
   }
-
-
 }
