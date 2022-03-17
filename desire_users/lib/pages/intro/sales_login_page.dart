@@ -19,17 +19,14 @@ import 'package:desire_users/services/connection_sales.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-
-
 class SalesLoginPage extends StatefulWidget {
   @override
   _SalesLoginPageState createState() => _SalesLoginPageState();
 }
 
-class _SalesLoginPageState extends State<SalesLoginPage> with Validator{
-
+class _SalesLoginPageState extends State<SalesLoginPage> with Validator {
   final _formKey = GlobalKey<FormState>();
-  AutovalidateMode _autoValidateMode  = AutovalidateMode.disabled;
+  AutovalidateMode _autoValidateMode = AutovalidateMode.disabled;
   TextEditingController email, pass;
   bool remember = false;
 
@@ -42,14 +39,15 @@ class _SalesLoginPageState extends State<SalesLoginPage> with Validator{
     pass = TextEditingController();
   }
 
-  checkConnectivity() async{
+  checkConnectivity() async {
     bool result = await DataConnectionChecker().hasConnection;
-    if(result == true) {
+    if (result == true) {
       print('YAY! Free cute dog pics!');
     } else {
       print('No internet :( Reason:');
       print(DataConnectionChecker().lastTryResults);
-      Alerts.showAlertAndBack(context, "No Internet Connection", "Please check your internet");
+      Alerts.showAlertAndBack(
+          context, "No Internet Connection", "Please check your internet");
     }
   }
 
@@ -60,24 +58,22 @@ class _SalesLoginPageState extends State<SalesLoginPage> with Validator{
     pass.dispose();
   }
 
-
-  getPreferences() async{
+  getPreferences() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    if(prefs.getString("sales_id") != null){
-      if(prefs.getBool('sales_remember')){
+    if (prefs.getString("sales_id") != null) {
+      if (prefs.getBool('sales_remember')) {
         setState(() {
           email = TextEditingController(text: prefs.getString("sales_email"));
-          pass = TextEditingController(text: prefs.getString("sales_show_password"));
+          pass = TextEditingController(
+              text: prefs.getString("sales_show_password"));
           // name.text = prefs.getString("User_name");
           // pass.text = prefs.getString("show_password");
           remember = true;
         });
       }
     }
-
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -94,7 +90,7 @@ class _SalesLoginPageState extends State<SalesLoginPage> with Validator{
     );
   }
 
-  Widget _body(){
+  Widget _body() {
     return Center(
       child: SizedBox(
         width: double.infinity,
@@ -103,7 +99,10 @@ class _SalesLoginPageState extends State<SalesLoginPage> with Validator{
           child: SingleChildScrollView(
             child: Column(
               children: [
-                Image.asset("assets/images/logo_new.png",height: 80,),
+                Image.asset(
+                  "assets/images/logo_new.png",
+                  height: 80,
+                ),
                 SizedBox(height: 10),
                 Text(
                   "Welcome to Desire Moulding",
@@ -114,10 +113,23 @@ class _SalesLoginPageState extends State<SalesLoginPage> with Validator{
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                SizedBox(height: 10,),
+                SizedBox(
+                  height: 10,
+                ),
+                Text(
+                  "Exclusive for Sales Person",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18,
+                      color: kPrimaryLightColor),
+                ),
+                Divider(height: 5,color: kPrimaryColor,),
+                SizedBox(height: 20),
                 Text(
                   "Sign in with your Sales Email-Id and Password.",
                   textAlign: TextAlign.center,
+                  style: TextStyle(fontWeight: FontWeight.bold),
                 ),
                 SizedBox(height: 20),
                 _signInForm(),
@@ -129,7 +141,7 @@ class _SalesLoginPageState extends State<SalesLoginPage> with Validator{
     );
   }
 
-  Widget _signInForm(){
+  Widget _signInForm() {
     return Form(
       autovalidateMode: _autoValidateMode,
       key: _formKey,
@@ -151,8 +163,7 @@ class _SalesLoginPageState extends State<SalesLoginPage> with Validator{
                     width: 20,
                     child: Checkbox(
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(5)
-                      ),
+                          borderRadius: BorderRadius.circular(5)),
                       visualDensity: VisualDensity.adaptivePlatformDensity,
                       value: remember ? true : false,
                       onChanged: (v) {
@@ -163,19 +174,23 @@ class _SalesLoginPageState extends State<SalesLoginPage> with Validator{
                       activeColor: kPrimaryColor,
                     ),
                   ),
-                  SizedBox(width: 5,),
+                  SizedBox(
+                    width: 5,
+                  ),
                   Text(
                     "Remember me",
                     textAlign: TextAlign.left,
-
-                    style: TextStyle(color: kSecondaryColor,fontSize: 14),
+                    style: TextStyle(color: kSecondaryColor, fontSize: 14),
                   ),
                 ],
               ),
               GestureDetector(
                   onTap: () {
-                  // Alerts.showEmailPopup(context);
-                    Navigator.push(context, MaterialPageRoute(builder: (context)=>SalesForgotPasswordPage()));
+                    // Alerts.showEmailPopup(context);
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => SalesForgotPasswordPage()));
                   },
                   child: Text(
                     "Forgot Password ?",
@@ -188,7 +203,9 @@ class _SalesLoginPageState extends State<SalesLoginPage> with Validator{
           ),
           SizedBox(height: 20),
           CupertinoButton(
-            child: Text( "Login",),
+            child: Text(
+              "Login",
+            ),
             color: kPrimaryColor,
             onPressed: () {
               if (_formKey.currentState.validate()) {
@@ -230,7 +247,6 @@ class _SalesLoginPageState extends State<SalesLoginPage> with Validator{
     );
   }
 
-
   bool obscure = true;
 
   TextFormField buildPasswordFormField() {
@@ -246,30 +262,39 @@ class _SalesLoginPageState extends State<SalesLoginPage> with Validator{
             color: kPrimaryColor,
           ),
           suffixIcon: GestureDetector(
-            onTap: (){
+            onTap: () {
               setState(() {
                 obscure = false;
               });
             },
-            child: obscure ==  true ? Icon(Icons.visibility_off,size: 25,color: kPrimaryColor,)
-                : GestureDetector(child: Icon(Icons.visibility,size: 25,color: kPrimaryColor,),
-              onTap: (){
-                setState(() {
-                  obscure = true;
-                });
-              },
-            ),
-
+            child: obscure == true
+                ? Icon(
+                    Icons.visibility_off,
+                    size: 25,
+                    color: kPrimaryColor,
+                  )
+                : GestureDetector(
+                    child: Icon(
+                      Icons.visibility,
+                      size: 25,
+                      color: kPrimaryColor,
+                    ),
+                    onTap: () {
+                      setState(() {
+                        obscure = true;
+                      });
+                    },
+                  ),
           ),
           hintText: "Enter Password",
           labelText: "Password",
           labelStyle: TextStyle(color: kPrimaryColor),
-          hintStyle: TextStyle(color: kSecondaryColor,fontSize: 12),
+          hintStyle: TextStyle(color: kSecondaryColor, fontSize: 12),
           floatingLabelBehavior: FloatingLabelBehavior.always,
-          focusedBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: kPrimaryColor)),
-          border: OutlineInputBorder(
-              borderSide: BorderSide(color: kPrimaryColor))),
+          focusedBorder:
+              OutlineInputBorder(borderSide: BorderSide(color: kPrimaryColor)),
+          border:
+              OutlineInputBorder(borderSide: BorderSide(color: kPrimaryColor))),
     );
   }
 
@@ -285,32 +310,37 @@ class _SalesLoginPageState extends State<SalesLoginPage> with Validator{
             color: kPrimaryColor,
           ),
           hintText: "Enter Email Address",
-          hintStyle: TextStyle(color: kSecondaryColor,fontSize: 12),
+          hintStyle: TextStyle(color: kSecondaryColor, fontSize: 12),
           labelText: "Email",
           labelStyle: TextStyle(color: kPrimaryColor),
           floatingLabelBehavior: FloatingLabelBehavior.always,
-          focusedBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: kPrimaryColor)),
-          border: OutlineInputBorder(
-              borderSide: BorderSide(color: kPrimaryColor))),
+          focusedBorder:
+              OutlineInputBorder(borderSide: BorderSide(color: kPrimaryColor)),
+          border:
+              OutlineInputBorder(borderSide: BorderSide(color: kPrimaryColor))),
     );
   }
 
-  login() async{
+  login() async {
     print("remember value $remember");
-    if (_formKey.currentState.validate()){
+    if (_formKey.currentState.validate()) {
       _formKey.currentState.save();
-      ProgressDialog pr = ProgressDialog(context, type: ProgressDialogType.Normal,
-        isDismissible: false,);
-      pr.style(message: 'Please wait we are logging in',
+      ProgressDialog pr = ProgressDialog(
+        context,
+        type: ProgressDialogType.Normal,
+        isDismissible: false,
+      );
+      pr.style(
+        message: 'Please wait we are logging in',
         progressWidget: CircularProgressIndicator(
           color: kPrimaryColor,
-        ),);
+        ),
+      );
       pr.show();
       var response = await http.post(Uri.parse(ConnectionSales.login), body: {
-        'emailid':email.text,
-        'password':pass.text,
-        'secretkey':ConnectionSales.secretKey
+        'emailid': email.text,
+        'password': pass.text,
+        'secretkey': ConnectionSales.secretKey
       });
       print("object ${response.body}");
 
@@ -320,9 +350,13 @@ class _SalesLoginPageState extends State<SalesLoginPage> with Validator{
       if (results['status'] == true) {
         print("user details ${results['data']}");
         print("user id ${results['data'][0]['user_id']}");
-        Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (builder) => SalesHomePage(
-          salesManId: results['data'][0]['user_id'],
-        )), (route) => false);
+        Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(
+                builder: (builder) => SalesHomePage(
+                      salesManId: results['data'][0]['user_id'],
+                    )),
+            (route) => false);
 
         SalesModel salesModel = SalesModel.fromJson(results);
         SharedPreferences preferences = await SharedPreferences.getInstance();
@@ -344,9 +378,9 @@ class _SalesLoginPageState extends State<SalesLoginPage> with Validator{
         preferences.setBool('sales_remember', remember);
         preferences.setString('sales_show_password', pass.text);
         preferences.setString('login', 'sales');
-
       } else {
-        Alerts.showAlertAndBack(context, "Login Failed", "Incorrect EmailId or Password");
+        Alerts.showAlertAndBack(
+            context, "Login Failed", "Incorrect EmailId or Password");
       }
     } else {
       setState(() {
@@ -354,5 +388,4 @@ class _SalesLoginPageState extends State<SalesLoginPage> with Validator{
       });
     }
   }
-
 }

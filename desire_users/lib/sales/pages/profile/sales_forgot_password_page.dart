@@ -72,11 +72,11 @@ class _SalesForgotPasswordPageState extends State<SalesForgotPasswordPage> with 
           ),
           Padding(
             padding: const EdgeInsets.only(bottom: 20),
-            child: Center(child: Expanded(child: Text("Forgot Your \nPassword ?",textAlign: TextAlign.center,style: TextStyle(fontSize: 32,color: kPrimaryColor),))),
+            child: Center(child: Text("Forgot Your \nPassword ?",textAlign: TextAlign.center,style: TextStyle(fontSize: 32,color: kPrimaryColor),)),
           ),
           Padding(
             padding: const EdgeInsets.only(bottom: 20),
-            child: Center(child: Expanded(child: Text("Just enter the registered email id.",textAlign: TextAlign.center,style: TextStyle(fontSize: 16,color: kBlackColor),))),
+            child: Center(child: Text("Just enter the registered email id.",textAlign: TextAlign.center,style: TextStyle(fontSize: 16,color: kBlackColor),)),
           ),
           Padding(
               padding: const EdgeInsets.only(bottom: 20,left: 20,right: 20),
