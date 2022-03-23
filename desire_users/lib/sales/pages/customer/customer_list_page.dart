@@ -929,8 +929,9 @@ class _CustomerListPageState extends State<CustomerListPage> {
     }
 
     customerList.forEach((exp) {
-      if (exp.customerName.toLowerCase().contains(text.toLowerCase()))
+      if (exp.customerName.toLowerCase().contains(text.toLowerCase())) {
         _searchResult.add(exp);
+      }
     });
     //print("search objects ${_searchResult.first}");
     print("search result length ${_searchResult.length}");

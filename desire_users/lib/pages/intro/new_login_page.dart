@@ -388,9 +388,9 @@ class _NewLoginPageState extends State<NewLoginPage> {
                         Icons.phone_android,
                         color: kPrimaryColor,
                       ),
-                      hintText: "Enter your email",
+                      hintText: "Enter your email/mobile",
                       hintStyle: TextStyle(color: kSecondaryColor,fontSize: 12),
-                      labelText: "Email",
+                      labelText: "Email/Mobile",
                       labelStyle: TextStyle(color: kPrimaryColor),
                       floatingLabelBehavior: FloatingLabelBehavior.always,
                       focusedBorder: OutlineInputBorder(
@@ -556,7 +556,7 @@ class _NewLoginPageState extends State<NewLoginPage> {
                   ],
                 ),
               ),
-              Row(
+              /*Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
@@ -594,7 +594,7 @@ class _NewLoginPageState extends State<NewLoginPage> {
                             width: 30,
                           )))),
                 ],
-              ),
+              ),*/
               Padding(
                 padding: const EdgeInsets.only(top: 10.0),
                 child: Row(

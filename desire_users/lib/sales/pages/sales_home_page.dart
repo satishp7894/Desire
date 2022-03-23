@@ -960,14 +960,14 @@ class _SalesHomePageState extends State<SalesHomePage> {
       'latitude': locationData.latitude.toString(),
       'longitude': locationData.longitude.toString(),
     });
-    var results = json.decode(response.cklabody);
+    var results = json.decode(response.body);
     print('response == $results  ${response.body}');
     if (results['status'] == true) {
       print(results['message']);
       //Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (builder)=>ProductDetailPage(product: widget.product, page: widget.page, snapshot: widget.snapshot,status: false, orderCount: widget.orderCount,)), (route) => false);
     } else {
-      Alerts.showAlertAndBack(context, "User Not Found",
-          "Please enter registered mobile no or email id");
+      Alerts.showAlertAndBack(context, "",
+          "No location found");
     }
   }
 }
