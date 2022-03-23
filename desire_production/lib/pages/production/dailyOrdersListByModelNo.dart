@@ -14,8 +14,10 @@ class DailyOrdersListByModelNumber extends StatefulWidget {
   final modelNo;
   final modelNoId;
   final status;
+  final page;
+
   const DailyOrdersListByModelNumber(
-      {Key key, this.modelNo, this.modelNoId, this.status})
+      {Key key, this.modelNo, this.modelNoId, this.status, this.page})
       : super(key: key);
 
   @override
@@ -31,7 +33,13 @@ class _DailyOrdersListByModelNumberState
   void initState() {
     // TODO: implement initState
     super.initState();
-    modelWiseListBloc.fetchModelWiseDailyOrderList(widget.modelNoId.toString());
+    if (widget.page == "daily") {
+      modelWiseListBloc
+          .fetchModelWiseDailyOrderDetails(widget.modelNoId.toString());
+    } else {
+      modelWiseListBloc
+          .fetchModelWiseDailyOrderList(widget.modelNoId.toString());
+    }
   }
 
   @override
@@ -42,6 +50,7 @@ class _DailyOrdersListByModelNumberState
   }
 
   AsyncSnapshot<ModelNoWiseListModel> asyncSnapshot;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -90,7 +99,9 @@ class _DailyOrdersListByModelNumberState
         centerTitle: true,
       ),
       body: StreamBuilder<ModelNoWiseListModel>(
-        stream: modelWiseListBloc.modelWiseDailyOrdersListStream,
+        stream: widget.page == "daily"
+            ? modelWiseListBloc.modelWiseDailyDetailsStream
+            : modelWiseListBloc.modelWiseDailyOrdersListStream,
         builder: (c, s) {
           if (s.connectionState != ConnectionState.active) {
             print("all connection");
@@ -327,6 +338,7 @@ class _DailyOrdersListByModelNumberState
 
 class ModelWiseListTile extends StatelessWidget {
   final Data data;
+
   const ModelWiseListTile({Key key, this.data}) : super(key: key);
 
   @override
@@ -343,48 +355,52 @@ class ModelWiseListTile extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    "Customer Name",
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 14,
-                        color: Colors.black),
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Text(
-                    "Product Name",
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 14,
-                        color: Colors.black),
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Text(
-                    "Quantity",
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 14,
-                        color: Colors.black),
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Text(
-                    "Stick per Box",
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 14,
-                        color: Colors.black),
-                  ),
-                ],
+              Flexible(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "Customer Name",
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 14,
+                          color: Colors.black),
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Text(
+                      "Product Name",
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 14,
+                          color: Colors.black),
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Text(
+                      "Quantity",
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 14,
+                          color: Colors.black),
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Text(
+                      "Stick per Box",
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 14,
+                          color: Colors.black),
+                    ),
+                  ],
+                ),
               ),
               SizedBox(
                 width: 10,

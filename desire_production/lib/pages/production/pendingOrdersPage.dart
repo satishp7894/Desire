@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:desire_production/bloc/daily_order_list_bloc.dart';
+import 'package:desire_production/bloc/pending_order_list_bloc.dart';
 import 'package:desire_production/model/dailyOrderListModel.dart';
 import 'package:desire_production/pages/dashboards/production_dashboard_page.dart';
 import 'package:desire_production/pages/production/dailyOrdersListByModelNo.dart';
@@ -19,16 +20,16 @@ import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:permission_handler/permission_handler.dart';
 
-class DailyOrdersPage extends StatefulWidget {
+class PendingOrdersPage extends StatefulWidget {
   final String page;
 
-  const DailyOrdersPage({@required this.page});
+  const PendingOrdersPage({@required this.page});
 
   @override
-  _DailyOrdersPageState createState() => _DailyOrdersPageState();
+  _PendingOrdersPageState createState() => _PendingOrdersPageState();
 }
 
-class _DailyOrdersPageState extends State<DailyOrdersPage> {
+class _PendingOrdersPageState extends State<PendingOrdersPage> {
   TextEditingController _controller3;
 
   List<bool> check = [];
@@ -38,6 +39,7 @@ class _DailyOrdersPageState extends State<DailyOrdersPage> {
   bool search = false;
   List<Data> _searchResult = [];
   List<Data> _order = [];
+  final PendingOrderListBloc pendingOrderListBloc = PendingOrderListBloc();
   final DailyOrderListBloc dailyOrderListBloc = DailyOrderListBloc();
 
   AsyncSnapshot<DailyOrdersListModel> as;
@@ -45,7 +47,11 @@ class _DailyOrdersPageState extends State<DailyOrdersPage> {
   @override
   void initState() {
     super.initState();
-    dailyOrderListBloc.fetchDailyOrderList();
+    if (widget.page == "daily") {
+      dailyOrderListBloc.fetchDailyOrderList();
+    } else {
+      pendingOrderListBloc.fetchPendingOrderList();
+    }
     searchView = TextEditingController();
     _controller3 = TextEditingController(text: DateTime.now().toString());
   }
@@ -53,6 +59,7 @@ class _DailyOrdersPageState extends State<DailyOrdersPage> {
   @override
   void dispose() {
     super.dispose();
+    pendingOrderListBloc.dispose();
     dailyOrderListBloc.dispose();
     searchView.dispose();
     _controller3.dispose();
@@ -85,7 +92,7 @@ class _DailyOrdersPageState extends State<DailyOrdersPage> {
           centerTitle: true,
           backgroundColor: Colors.white,
           title: Text(
-            "Daily Orders",
+            widget.page == "daily" ? "Daily Orders" : "Pending Orders",
             style: TextStyle(
                 color: Colors.black, fontWeight: FontWeight.bold, fontSize: 20),
             textAlign: TextAlign.center,
@@ -116,7 +123,7 @@ class _DailyOrdersPageState extends State<DailyOrdersPage> {
         return Navigator.pushAndRemoveUntil(
             context,
             MaterialPageRoute(
-                builder: (builder) => DailyOrdersPage(
+                builder: (builder) => PendingOrdersPage(
                       page: widget.page,
                     )),
             (route) => false);
@@ -124,7 +131,9 @@ class _DailyOrdersPageState extends State<DailyOrdersPage> {
       child: SingleChildScrollView(
         physics: AlwaysScrollableScrollPhysics(),
         child: StreamBuilder<DailyOrdersListModel>(
-            stream: dailyOrderListBloc.dailyOrderListStream,
+            stream: widget.page == "daily"
+                ? dailyOrderListBloc.dailyOrderListStream
+                : pendingOrderListBloc.dailyOrderListStream,
             builder: (c, s) {
               if (s.connectionState != ConnectionState.active) {
                 print("all connection");
@@ -172,7 +181,7 @@ class _DailyOrdersPageState extends State<DailyOrdersPage> {
                   ? Center(
                       heightFactor: 20,
                       child: Text(
-                        "No Daily Orders Available",
+                        "No Pending Orders Available",
                         style: TextStyle(
                             color: Colors.black,
                             fontSize: 18,
@@ -267,48 +276,59 @@ class _DailyOrdersPageState extends State<DailyOrdersPage> {
                                               ),
                                               alignment: Alignment.center,
                                             )),
-                                            Container(
-                                              width: 50,
-                                              alignment: Alignment.center,
-                                              decoration: BoxDecoration(
-                                                color: kPrimaryColor,
-                                                border: Border(
-                                                    top: BorderSide(
-                                                        color: Colors.black),
-                                                    right: BorderSide(
-                                                        color: Colors.black),
-                                                    bottom: BorderSide(
-                                                        color: Colors.black)),
-                                              ),
-                                              child: Checkbox(
-                                                value: checkAll,
-                                                checkColor: kPrimaryColor,
-                                                activeColor: Colors.white,
-                                                onChanged: (value) {
-                                                  setState(() {
-                                                    checkAll = value;
-                                                  });
-                                                  print(
-                                                      "object remember $checkAll");
-                                                  if (checkAll == true) {
-                                                    for (int i = 0;
-                                                        i < s.data.data.length;
-                                                        i++) {
-                                                      check[i] = true;
-                                                      send.add(s.data.data[i]
-                                                          .dailyOrderId);
-                                                    }
-                                                  } else {
-                                                    for (int i = 0;
-                                                        i < s.data.data.length;
-                                                        i++) {
-                                                      check[i] = false;
-                                                      send = [];
-                                                    }
-                                                  }
-                                                },
-                                              ),
-                                            ),
+                                            widget.page == "daily"
+                                                ? Container()
+                                                : Container(
+                                                    width: 50,
+                                                    alignment: Alignment.center,
+                                                    decoration: BoxDecoration(
+                                                      color: kPrimaryColor,
+                                                      border: Border(
+                                                          top: BorderSide(
+                                                              color:
+                                                                  Colors.black),
+                                                          right: BorderSide(
+                                                              color:
+                                                                  Colors.black),
+                                                          bottom: BorderSide(
+                                                              color: Colors
+                                                                  .black)),
+                                                    ),
+                                                    child: Checkbox(
+                                                      value: checkAll,
+                                                      checkColor: kPrimaryColor,
+                                                      activeColor: Colors.white,
+                                                      onChanged: (value) {
+                                                        setState(() {
+                                                          checkAll = value;
+                                                        });
+                                                        print(
+                                                            "object remember $checkAll");
+                                                        if (checkAll == true) {
+                                                          for (int i = 0;
+                                                              i <
+                                                                  s.data.data
+                                                                      .length;
+                                                              i++) {
+                                                            check[i] = true;
+                                                            send.add(s
+                                                                .data
+                                                                .data[i]
+                                                                .dailyOrderId);
+                                                          }
+                                                        } else {
+                                                          for (int i = 0;
+                                                              i <
+                                                                  s.data.data
+                                                                      .length;
+                                                              i++) {
+                                                            check[i] = false;
+                                                            send = [];
+                                                          }
+                                                        }
+                                                      },
+                                                    ),
+                                                  ),
                                             Expanded(
                                                 child: Container(
                                               decoration: BoxDecoration(
@@ -403,7 +423,8 @@ class _DailyOrdersPageState extends State<DailyOrdersPage> {
                                                                               Colors.black)),
                                                                 ),
                                                                 child: Text(
-                                                                  '${s.data.data[i].modelNo}', //style: content1,
+                                                                  '${s.data.data[i].modelNo}',
+                                                                  //style: content1,
                                                                   textAlign:
                                                                       TextAlign
                                                                           .center,
@@ -433,7 +454,8 @@ class _DailyOrdersPageState extends State<DailyOrdersPage> {
                                                                           .black)),
                                                             ),
                                                             child: Text(
-                                                              '${s.data.data[i].qty}', //style: content1,
+                                                              '${s.data.data[i].qty}',
+                                                              //style: content1,
                                                               textAlign:
                                                                   TextAlign
                                                                       .center,
@@ -448,48 +470,56 @@ class _DailyOrdersPageState extends State<DailyOrdersPage> {
                                                             alignment: Alignment
                                                                 .center,
                                                           )),
-                                                          Container(
-                                                            width: 50,
-                                                            alignment: Alignment
-                                                                .center,
-                                                            decoration:
-                                                                BoxDecoration(
-                                                              //color: bg,
-                                                              border: Border(
-                                                                  right: BorderSide(
-                                                                      color: Colors
-                                                                          .black),
-                                                                  bottom: BorderSide(
-                                                                      color: Colors
-                                                                          .black)),
-                                                            ),
-                                                            child: Checkbox(
-                                                              value: check[i],
-                                                              activeColor:
-                                                                  kPrimaryColor,
-                                                              onChanged:
-                                                                  (value) {
-                                                                setState(() {
-                                                                  check[i] =
-                                                                      value;
-                                                                });
-                                                                print(
-                                                                    "object remember ${check[i]}");
-                                                                if (check[i] ==
-                                                                    true) {
-                                                                  send.add(s
-                                                                      .data
-                                                                      .data[i]
-                                                                      .dailyOrderId);
-                                                                } else {
-                                                                  send.remove(s
-                                                                      .data
-                                                                      .data[i]
-                                                                      .dailyOrderId);
-                                                                }
-                                                              },
-                                                            ),
-                                                          ),
+                                                          widget.page == "daily"
+                                                              ? Container()
+                                                              : Container(
+                                                                  width: 50,
+                                                                  alignment:
+                                                                      Alignment
+                                                                          .center,
+                                                                  decoration:
+                                                                      BoxDecoration(
+                                                                    //color: bg,
+                                                                    border: Border(
+                                                                        right: BorderSide(
+                                                                            color: Colors
+                                                                                .black),
+                                                                        bottom: BorderSide(
+                                                                            color:
+                                                                                Colors.black)),
+                                                                  ),
+                                                                  child:
+                                                                      Checkbox(
+                                                                    value:
+                                                                        check[
+                                                                            i],
+                                                                    activeColor:
+                                                                        kPrimaryColor,
+                                                                    onChanged:
+                                                                        (value) {
+                                                                      setState(
+                                                                          () {
+                                                                        check[i] =
+                                                                            value;
+                                                                      });
+                                                                      print(
+                                                                          "object remember ${check[i]}");
+                                                                      if (check[
+                                                                              i] ==
+                                                                          true) {
+                                                                        send.add(s
+                                                                            .data
+                                                                            .data[i]
+                                                                            .dailyOrderId);
+                                                                      } else {
+                                                                        send.remove(s
+                                                                            .data
+                                                                            .data[i]
+                                                                            .dailyOrderId);
+                                                                      }
+                                                                    },
+                                                                  ),
+                                                                ),
                                                           Expanded(
                                                               child:
                                                                   GestureDetector(
@@ -497,15 +527,21 @@ class _DailyOrdersPageState extends State<DailyOrdersPage> {
                                                               Navigator.push(
                                                                   context,
                                                                   MaterialPageRoute(
-                                                                      builder: (context) =>
-                                                                          DailyOrdersListByModelNumber(
-                                                                            modelNoId:
-                                                                                s.data.data[i].modelNoId,
-                                                                            modelNo:
-                                                                                s.data.data[i].modelNo,
-                                                                            status:
-                                                                                1,
-                                                                          )));
+                                                                      builder: (context) => DailyOrdersListByModelNumber(
+                                                                          modelNoId: s
+                                                                              .data
+                                                                              .data[
+                                                                                  i]
+                                                                              .modelNoId,
+                                                                          modelNo: s
+                                                                              .data
+                                                                              .data[
+                                                                                  i]
+                                                                              .modelNo,
+                                                                          status:
+                                                                              1,
+                                                                          page:
+                                                                              widget.page)));
                                                             },
                                                             child: Container(
                                                               decoration:
@@ -532,7 +568,8 @@ class _DailyOrdersPageState extends State<DailyOrdersPage> {
                                                                     fontSize:
                                                                         14,
                                                                     color:
-                                                                        kPrimaryColor), //style: content1,
+                                                                        kPrimaryColor),
+                                                                //style: content1,
                                                                 textAlign:
                                                                     TextAlign
                                                                         .center,
@@ -765,7 +802,8 @@ class _DailyOrdersPageState extends State<DailyOrdersPage> {
                                                                     .black,
                                                                 fontWeight:
                                                                     FontWeight
-                                                                        .bold), //style: content1,
+                                                                        .bold),
+                                                            //style: content1,
                                                             textAlign: TextAlign
                                                                 .center,
                                                           ),
@@ -788,8 +826,10 @@ class _DailyOrdersPageState extends State<DailyOrdersPage> {
                                                         style: TextStyle(
                                                             fontSize: 12,
                                                             color: Colors.black,
-                                                            fontWeight: FontWeight
-                                                                .bold), //style: content1,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .bold),
+                                                        //style: content1,
                                                         textAlign:
                                                             TextAlign.center,
                                                       ),
@@ -839,16 +879,16 @@ class _DailyOrdersPageState extends State<DailyOrdersPage> {
                                                         Navigator.push(
                                                             context,
                                                             MaterialPageRoute(
-                                                                builder:
-                                                                    (context) =>
-                                                                        DailyOrdersListByModelNumber(
-                                                                          modelNoId:
-                                                                              _searchResult[i].modelNoId,
-                                                                          modelNo:
-                                                                              _searchResult[i].modelNo,
-                                                                          status:
-                                                                              1,
-                                                                        )));
+                                                                builder: (context) => DailyOrdersListByModelNumber(
+                                                                    modelNoId:
+                                                                        _searchResult[i]
+                                                                            .modelNoId,
+                                                                    modelNo: _searchResult[
+                                                                            i]
+                                                                        .modelNo,
+                                                                    status: 1,
+                                                                    page: widget
+                                                                        .page)));
                                                       },
                                                       child: Container(
                                                         decoration:
@@ -873,7 +913,8 @@ class _DailyOrdersPageState extends State<DailyOrdersPage> {
                                                                       .underline,
                                                               fontSize: 14,
                                                               color:
-                                                                  kPrimaryColor), //style: content1,
+                                                                  kPrimaryColor),
+                                                          //style: content1,
                                                           textAlign:
                                                               TextAlign.center,
                                                         ),
@@ -890,23 +931,26 @@ class _DailyOrdersPageState extends State<DailyOrdersPage> {
                                     ],
                                   ),
                                 ),
-                          send.length > 0
-                              ? Padding(
-                                  padding: const EdgeInsets.all(50),
-                                  child: DefaultButton(
-                                    text: "Submit",
-                                    press: () async {
-                                      sendToDailyProduction(send.toString());
-                                    },
-                                  ),
-                                )
-                              : Padding(
-                                  padding: const EdgeInsets.all(50),
-                                  child: DefaultButtonGrey(
-                                    text: "Submit",
-                                    press: () {},
-                                  ),
-                                )
+                          widget.page == "daily"
+                              ? Container()
+                              : send.length > 0
+                                  ? Padding(
+                                      padding: const EdgeInsets.all(50),
+                                      child: DefaultButton(
+                                        text: "Submit",
+                                        press: () async {
+                                          sendToDailyProduction(
+                                              send.toString());
+                                        },
+                                      ),
+                                    )
+                                  : Padding(
+                                      padding: const EdgeInsets.all(50),
+                                      child: DefaultButtonGrey(
+                                        text: "Submit",
+                                        press: () {},
+                                      ),
+                                    )
                         ],
                       ),
                     );
@@ -1116,6 +1160,7 @@ class _DailyOrdersPageState extends State<DailyOrdersPage> {
   }
 
   String path;
+
   Future savePdf() async {
     if (await _reqPer(Permission.storage)) {
       var dir = await DownloadsPathProvider.downloadsDirectory;
@@ -1294,6 +1339,7 @@ class _DailyOrdersPageState extends State<DailyOrdersPage> {
   }
 
   String path1;
+
   Future savePdfSearch() async {
     if (await _reqPer(Permission.storage)) {
       var dir = await DownloadsPathProvider.downloadsDirectory;

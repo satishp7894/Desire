@@ -4,7 +4,7 @@ import 'package:desire_production/model/product_list_model.dart';
 import 'package:desire_production/services/api_client.dart';
 
 
-class DailyOrderListBloc {
+class PendingOrderListBloc {
 
   final _apiClient = ApiClient();
 
@@ -12,9 +12,9 @@ class DailyOrderListBloc {
 
   Stream<DailyOrdersListModel> get dailyOrderListStream => _dailyOrderListController.stream;
 
-  fetchDailyOrderList() async {
+  fetchPendingOrderList() async {
     try {
-      final results = await _apiClient.getDailyOrdersList();
+      final results = await _apiClient.getProductionPendingOrderList();
       _dailyOrderListController.sink.add(results);
       print("daily production list bloc ${results.status}");
     } on Exception catch (e) {

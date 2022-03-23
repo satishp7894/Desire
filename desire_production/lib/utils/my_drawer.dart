@@ -1,5 +1,5 @@
 import 'package:desire_production/pages/dashboards/production_dashboard_page.dart';
-import 'package:desire_production/pages/production/dailyOrdersPage.dart';
+import 'package:desire_production/pages/production/pendingOrdersPage.dart';
 import 'package:desire_production/pages/production/dailyProductionListPage.dart';
 import 'package:desire_production/pages/production/production_planning_page.dart';
 import 'package:flutter/material.dart';
@@ -62,7 +62,7 @@ class _MyDrawerState extends State<MyDrawer> {
               title: Text("Daily Production", style: TextStyle(color: Colors.black,)),
               onTap: (){
                 Navigator.pop(context);
-                Navigator.push(context, MaterialPageRoute(builder: (builder) => DailyOrdersPage(page: 'production',)));
+                Navigator.push(context, MaterialPageRoute(builder: (builder) => PendingOrdersPage(page: 'production',)));
               },
             ),
             const Divider(),

@@ -11,7 +11,7 @@ import 'package:desire_production/pages/admin/products/model_list_page.dart';
 import 'package:desire_production/pages/admin/products/product_list_page.dart';
 import 'package:desire_production/pages/admin/sales/brochure_page.dart';
 import 'package:desire_production/pages/admin/sales/customer_credit_page.dart';
-import 'package:desire_production/pages/production/dailyOrdersPage.dart';
+import 'package:desire_production/pages/production/pendingOrdersPage.dart';
 import 'package:desire_production/pages/production/dailyProductionListPage.dart';
 import 'package:desire_production/pages/production/production_planning_page.dart';
 import 'package:desire_production/pages/warehouse/warehouse_list_page.dart';
@@ -885,7 +885,7 @@ class _DashboardPageAdminState extends State<DashboardPageAdmin> {
               SizedBox(height: 20,),
               GestureDetector(
                 onTap: (){
-                  Navigator.push(context, MaterialPageRoute(builder: (b) => DailyOrdersPage(page: "admin",)));
+                  Navigator.push(context, MaterialPageRoute(builder: (b) => PendingOrdersPage(page: "admin",)));
                 },
                 child: Container(
                   decoration: BoxDecoration(

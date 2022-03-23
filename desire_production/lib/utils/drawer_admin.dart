@@ -10,7 +10,7 @@ import 'package:desire_production/pages/admin/sales/salesman_list_page.dart';
 import 'package:desire_production/pages/dashboards/admin_dashboard_page.dart';
 import 'package:desire_production/pages/dashboards/production_dashboard_page.dart';
 import 'package:desire_production/pages/dashboards/dashboard_page_admin.dart';
-import 'package:desire_production/pages/production/dailyOrdersPage.dart';
+import 'package:desire_production/pages/production/pendingOrdersPage.dart';
 import 'package:desire_production/pages/production/dailyProductionListPage.dart';
 import 'package:desire_production/pages/production/production_planning_page.dart';
 import 'package:desire_production/pages/warehouse/warehouse_list_page.dart';
@@ -153,7 +153,7 @@ class _DrawerAdminState extends State<DrawerAdmin> {
               title: Text("Daily Production", style: TextStyle(color: Colors.black,)),
               onTap: (){
                 Navigator.pop(context);
-                Navigator.push(context, MaterialPageRoute(builder: (builder) => DailyOrdersPage(page: 'admin',)));
+                Navigator.push(context, MaterialPageRoute(builder: (builder) => PendingOrdersPage(page: 'admin',)));
               },
             ),
             const Divider(),

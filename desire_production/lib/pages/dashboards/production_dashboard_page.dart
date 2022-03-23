@@ -12,7 +12,7 @@ import 'package:http/http.dart' as http;
 import 'package:desire_production/bloc/dashboard_bloc.dart';
 import 'package:desire_production/bloc/product_list.dart';
 import 'package:desire_production/model/dashboard_count_model.dart';
-import 'package:desire_production/pages/production/dailyOrdersPage.dart';
+import 'package:desire_production/pages/production/pendingOrdersPage.dart';
 import 'package:desire_production/pages/production/dailyProductionListPage.dart';
 import 'package:desire_production/pages/production/production_planning_page.dart';
 import 'package:desire_production/services/connections.dart';
@@ -110,7 +110,7 @@ class _DashboardPageProductionState extends State<DashboardPageProduction> {
               SizedBox(
                 height: 20,
               ),
-              GestureDetector(
+              /*GestureDetector(
                 onTap: () {
                   Navigator.push(
                       context,
@@ -178,13 +178,13 @@ class _DashboardPageProductionState extends State<DashboardPageProduction> {
               ),
               SizedBox(
                 height: 20,
-              ),
+              ),*/
               GestureDetector(
                 onTap: () {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (b) => DailyOrdersPage(
+                          builder: (b) => PendingOrdersPage(
                                 page: widget.page,
                               )));
                 },
@@ -196,6 +196,74 @@ class _DashboardPageProductionState extends State<DashboardPageProduction> {
                         blurRadius: 5, // has the effect of softening the shadow
                         spreadRadius:
                             0, // has the effect of extending the shadow
+                      ),
+                    ],
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(
+                      5.0,
+                    ),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: <Widget>[
+                        Image.asset(
+                          "assets/images/production_order.png",
+                          color: kPrimaryColor,
+                          height: 40,
+                          width: 40,
+                        ),
+                        SizedBox(
+                          width: 10,
+                        ),
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Text(
+                              'Pending Orders',
+                              style: TextStyle(
+                                fontSize: 18.0,
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            Text(
+                              'List of Orders',
+                              style: TextStyle(
+                                fontSize: 14.0,
+                                color: profile_item_color,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: 20,
+              ),GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (b) => PendingOrdersPage(
+                            page: "daily",
+                          )));
+                },
+                child: Container(
+                  decoration: BoxDecoration(
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey,
+                        blurRadius: 5, // has the effect of softening the shadow
+                        spreadRadius:
+                        0, // has the effect of extending the shadow
                       ),
                     ],
                     color: Colors.white,
@@ -244,8 +312,7 @@ class _DashboardPageProductionState extends State<DashboardPageProduction> {
                     ),
                   ),
                 ),
-              ),
-              SizedBox(
+              ), SizedBox(
                 height: 20,
               ),
               GestureDetector(
@@ -451,7 +518,7 @@ class _DashboardPageProductionState extends State<DashboardPageProduction> {
               SizedBox(
                 height: 20,
               ),
-              GestureDetector(
+              /* GestureDetector(
                 onTap: () {},
                 child: Container(
                   decoration: BoxDecoration(
@@ -512,7 +579,7 @@ class _DashboardPageProductionState extends State<DashboardPageProduction> {
               ),
               SizedBox(
                 height: 20,
-              ),
+              ),*/
               GestureDetector(
                 onTap: () {
                   Navigator.push(
@@ -580,68 +647,71 @@ class _DashboardPageProductionState extends State<DashboardPageProduction> {
               SizedBox(
                 height: 20,
               ),
-              GestureDetector(
-                onTap: () {
-                  Alerts.showLogOut(
-                      context, "Logout", "Are you sure you want to logout");
-                },
-                child: Container(
-                  decoration: BoxDecoration(
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey,
-                        blurRadius: 5, // has the effect of softening the shadow
-                        spreadRadius:
-                            0, // has the effect of extending the shadow
-                      ),
-                    ],
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(
-                      5.0,
-                    ),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: <Widget>[
-                        Image.asset(
-                          "assets/images/logout.png",
-                          color: kPrimaryColor,
-                          height: 40,
-                          width: 40,
-                        ),
-                        SizedBox(
-                          width: 10,
-                        ),
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Text(
-                              'Logout',
-                              style: TextStyle(
-                                fontSize: 18.0,
-                                color: Colors.black,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            Text(
-                              'Production Logout',
-                              style: TextStyle(
-                                fontSize: 14.0,
-                                color: profile_item_color,
-                                fontWeight: FontWeight.bold,
-                              ),
+              widget.page == "admin"
+                  ? Container()
+                  : GestureDetector(
+                      onTap: () {
+                        Alerts.showLogOut(context, "Logout",
+                            "Are you sure you want to logout");
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey,
+                              blurRadius:
+                                  5, // has the effect of softening the shadow
+                              spreadRadius:
+                                  0, // has the effect of extending the shadow
                             ),
                           ],
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(
+                            5.0,
+                          ),
                         ),
-                      ],
+                        child: Padding(
+                          padding: const EdgeInsets.all(10.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: <Widget>[
+                              Image.asset(
+                                "assets/images/logout.png",
+                                color: kPrimaryColor,
+                                height: 40,
+                                width: 40,
+                              ),
+                              SizedBox(
+                                width: 10,
+                              ),
+                              Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: <Widget>[
+                                  Text(
+                                    'Logout',
+                                    style: TextStyle(
+                                      fontSize: 18.0,
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  Text(
+                                    'Production Logout',
+                                    style: TextStyle(
+                                      fontSize: 14.0,
+                                      color: profile_item_color,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
                     ),
-                  ),
-                ),
-              ),
               SizedBox(
                 height: 30,
               ),

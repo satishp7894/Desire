@@ -184,7 +184,20 @@ class ApiClient {
     return dailyProductionListModel;
   }
 
-  Future<DailyOrdersListModel> getDailyOrdersList() async {
+  Future<DailyOrdersListModel> getProductionPendingOrderList() async {
+    var response = await http.post(Uri.parse(Connection.productionPendingOrderList),
+        body: {"secretkey": Connection.secretKey});
+    var result = json.decode(response.body);
+    print(" daily order response $result");
+
+    DailyOrdersListModel dailyProductionListModel;
+    dailyProductionListModel = (DailyOrdersListModel.fromJson(result));
+    print("daily productListModel $dailyProductionListModel");
+
+    return dailyProductionListModel;
+  }
+
+  Future<DailyOrdersListModel> getProductionDailyOrderList() async {
     var response = await http.post(Uri.parse(Connection.dailyOrderList),
         body: {"secretkey": Connection.secretKey});
     var result = json.decode(response.body);
@@ -720,6 +733,25 @@ class ApiClient {
 
     return modelWiseDailyProductionListModel;
   }
+  Future<ModelNoWiseListModel> getModelWiseDailyOrdersDetails(
+      var modelNoId) async {
+    var response = await http.post(
+        Uri.parse(
+            "http://loccon.in/desiremoulding/api/ProductionApiController/modelNoWiseOrderDetails"),
+        body: {
+          "secretkey": Connection.secretKey,
+          "model_no_id": modelNoId,
+          "status": "1"
+        });
+    var result = json.decode(response.body);
+    print("model wise  lis† response $result ${result['data']}");
+
+    ModelNoWiseListModel modelWiseDailyProductionListModel;
+    modelWiseDailyProductionListModel = ModelNoWiseListModel.fromJson(result);
+    print("_userModel $modelWiseDailyProductionListModel");
+
+    return modelWiseDailyProductionListModel;
+  }
 
   Future<ModelNoWiseListModel> getModelWiseDailyProductionList(
       var modelNoId) async {
@@ -729,7 +761,6 @@ class ApiClient {
         body: {
           "secretkey": Connection.secretKey,
           "model_no_id": modelNoId,
-          "status": "2"
         });
     var result = json.decode(response.body);
     print("model wise  production lis† response $result ${result['data']}");

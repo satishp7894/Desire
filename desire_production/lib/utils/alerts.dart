@@ -4,7 +4,7 @@ import 'package:desire_production/pages/admin/customer/customer_order_details_pa
 import 'package:desire_production/pages/admin/customer/edit_order_page.dart';
 import 'package:desire_production/pages/admin/products/product_home_page.dart';
 import 'package:desire_production/pages/admin/sales/customer_credit_page.dart';
-import 'package:desire_production/pages/production/dailyOrdersPage.dart';
+import 'package:desire_production/pages/production/pendingOrdersPage.dart';
 import 'package:desire_production/pages/production/production_planning_page.dart';
 import 'package:desire_production/pages/warehouse/warehouse_list_page.dart';
 import 'package:desire_production/services/connections.dart';
@@ -290,7 +290,7 @@ class Alerts{
                 TextButton(
                     onPressed: ()async{
                       Navigator.of(c).pop();
-                      Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (builder) => DailyOrdersPage(page: page,)), (route) => false);                    },
+                      Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (builder) => PendingOrdersPage(page: page,)), (route) => false);                    },
                     child: Text("Okay", style: TextStyle(color: kPrimaryColor, fontSize: 18, fontWeight: FontWeight.normal), textAlign: TextAlign.center,))
               ],
             ),
