@@ -256,7 +256,7 @@ class _CustCartPageState extends State<CustCartPage> {
       'discounted_total':"234",
       'coupon_code':"12",
       'selectedAddress':"$addressId",
-      'bdOrderNote':"qwert"
+      'OrderNote':"qwert"
     });
 
     print("object response ${response.body}");

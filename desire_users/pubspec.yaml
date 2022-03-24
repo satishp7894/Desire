@@ -54,7 +54,7 @@ dependencies:
   downloads_path_provider: ^0.1.0
   permission_handler: ^5.1.0+2
   flutter_staggered_animations: ^0.1.2
-  pdf: ^3.4.2
+  pdf: ^3.7.3
   url_launcher: ^5.7.10
   package_info: ^2.0.0
   firebase_remote_config: ^0.6.0

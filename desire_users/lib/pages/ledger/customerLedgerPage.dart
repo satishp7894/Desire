@@ -387,7 +387,7 @@ class _CustomerLedgerPageState extends State<CustomerLedgerPage> {
         return <pw.Widget>[
           pw.Header(
               level: 5,
-              child: pw.Text("Ledger Detail",
+              child: pw.Text("Ledger Detail  | Desire Moulding",
                   textAlign: pw.TextAlign.center,
                   style: pw.TextStyle(
                     fontSize: 40,
@@ -395,52 +395,102 @@ class _CustomerLedgerPageState extends State<CustomerLedgerPage> {
                     fontWeight: pw.FontWeight.bold,
                   ))),
           pw.SizedBox(height: 30),
-          pw.Column(children: [
-            pw.Divider(color: PdfColor.fromHex('#4684C2'), thickness: 3),
-            pw.ListView.builder(
-                //padding: pw.EdgeInsets.only(bottom: 10),
-                itemCount: as.length,
-                itemBuilder: (c, i) {
-                  return pw.Container(
-                      child: pw.Column(
-                    children: [
-                      pw.Row(
-                          mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
-                          children: [
-                            as[i].ledgerDate == null
-                                ? pw.Text("N/A")
-                                : pw.Text(as[i].ledgerDate,
-                                    style: pw.TextStyle(
-                                        fontWeight: pw.FontWeight.bold)),
-                            as[i].ledgerAccount == null
-                                ? pw.Text("N/A")
-                                : pw.Text(as[i].ledgerAccount,
-                                    style: pw.TextStyle(
-                                        fontWeight: pw.FontWeight.bold)),
-                            as[i].creditAmount != ""
-                                ? pw.Text(
-                                    "${as[i].creditAmount} Cr ",
-                                    style: pw.TextStyle(
-                                        color: PdfColor.fromHex('#000000'),
-                                        fontWeight: pw.FontWeight.bold),
-                                  )
-                                : pw.Text("${as[i].debitAmount} Dr ",
-                                    style: pw.TextStyle(
-                                        color: PdfColor.fromHex('#000000'),
-                                        fontWeight: pw.FontWeight.bold)),
-                            as[i].type == ""
-                                ? pw.Text("")
-                                : pw.Text(as[i].type,
-                                    style: pw.TextStyle(
-                                        fontWeight: pw.FontWeight.bold))
-                          ]),
-                      pw.SizedBox(
-                        height: 10,
-                      )
-                    ],
-                  ));
-                })
-          ])
+          pw.Row(
+              mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: pw.CrossAxisAlignment.start,
+              children: [
+                pw.Container(
+                  child: pw.Text(
+                    'Date',
+                    style: pw.TextStyle(
+                        fontWeight: pw.FontWeight.bold, fontSize: 15),
+                    textAlign: pw.TextAlign.center,
+                  ),
+                  width: 50,
+                  height: 52,
+                  padding: pw.EdgeInsets.only(left: 5),
+                  alignment: pw.Alignment.center,
+                ),
+                pw.Container(
+                  child: pw.Text(
+                    'Account',
+                    style: pw.TextStyle(
+                        fontWeight: pw.FontWeight.bold, fontSize: 15),
+                    textAlign: pw.TextAlign.center,
+                  ),
+                  width: 100,
+                  height: 52,
+                  padding: pw.EdgeInsets.only(left: 10),
+                  alignment: pw.Alignment.center,
+                ),
+                pw.Container(
+                  child: pw.Text(
+                    'Amount',
+                    style: pw.TextStyle(
+                        fontWeight: pw.FontWeight.bold, fontSize: 15),
+                    textAlign: pw.TextAlign.center,
+                  ),
+                  width: 60,
+                  height: 52,
+                  alignment: pw.Alignment.center,
+                ),
+                pw.Container(
+                  child: pw.Text(
+                    'Type',
+                    style: pw.TextStyle(
+                        fontWeight: pw.FontWeight.bold, fontSize: 15),
+                    textAlign: pw.TextAlign.center,
+                  ),
+                  width: 60,
+                  height: 52,
+                  alignment: pw.Alignment.center,
+                ),
+              ]),
+          pw.ListView.builder(
+            //padding: pw.EdgeInsets.only(bottom: 10),
+              itemCount: as.length,
+              itemBuilder: (c, i) {
+                return pw.Container(
+                    color: PdfColor.fromHex('#E0F7FA'),
+                    margin: pw.EdgeInsets.only(top: 5, bottom: 5),
+                    child: pw.Column(
+                      children: [
+                        pw.Row(
+                            mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+                            children: [
+                              as[i].ledgerDate == null
+                                  ? pw.Text("N/A")
+                                  : pw.Text(as[i].ledgerDate,
+                                  style: pw.TextStyle(
+                                      fontWeight: pw.FontWeight.bold)),
+                              as[i].ledgerAccount == null
+                                  ? pw.Text("N/A")
+                                  : pw.Text(as[i].ledgerAccount,
+                                  style: pw.TextStyle(
+                                      fontWeight: pw.FontWeight.bold)),
+                              as[i].creditAmount != ""
+                                  ? pw.Text(
+                                "${as[i].creditAmount} Cr ",
+                                style: pw.TextStyle(
+                                    color: PdfColor.fromHex('#000000'),
+                                    fontWeight: pw.FontWeight.bold),
+                              )
+                                  : pw.Text("${as[i].debitAmount} Dr ",
+                                  style: pw.TextStyle(
+                                      color: PdfColor.fromHex('#000000'),
+                                      fontWeight: pw.FontWeight.bold)),
+                              as[i].type == ""
+                                  ? pw.Text("")
+                                  : pw.Text(as[i].type,
+                                  style: pw.TextStyle(
+                                      fontWeight: pw.FontWeight.bold))
+                            ]),
+                        pw.SizedBox(
+                          height: 10,
+                        )
+                      ],
+                    ));
+              })
         ];
       },
     ));

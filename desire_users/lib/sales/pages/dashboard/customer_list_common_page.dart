@@ -164,7 +164,13 @@ class _CustomerListCommonPageState extends State<CustomerListCommonPage> {
                             : status.add(true);
                         return InkWell(
                             onTap: () {
-                              callLedgerScreen(i, widget.type);
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (builder) => CustomerLedgerPage(
+                                            customerId:
+                                                _searchResult[i].customerId,
+                                          )));
                             },
                             child: Padding(
                               padding: const EdgeInsets.all(8.0),
@@ -182,47 +188,31 @@ class _CustomerListCommonPageState extends State<CustomerListCommonPage> {
                                       top: 10,
                                       bottom: 10,
                                       right: 10),
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.start,
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Flexible(
-                                            child: Container(
-                                              padding:
-                                                  EdgeInsets.only(right: 13.0),
-                                              child: Text(
-                                                "${_searchResult[i].customerName}",
-                                                textAlign: TextAlign.left,
-                                                maxLines: 1,
-                                                overflow: TextOverflow.ellipsis,
-                                                style: TextStyle(
-                                                    color: kPrimaryColor,
-                                                    fontSize: 16,
-                                                    fontWeight:
-                                                        FontWeight.bold),
-                                              ),
-                                            ),
+                                      Flexible(
+                                        child: Container(
+                                          padding: EdgeInsets.only(right: 13.0),
+                                          child: Text(
+                                            "${_searchResult[i].customerName}"
+                                            "\n"
+                                            "${_searchResult[i].address}",
+                                            textAlign: TextAlign.left,
+                                            maxLines: 2,
+                                            overflow: TextOverflow.ellipsis,
+                                            style: TextStyle(
+                                                color: kPrimaryColor,
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.bold),
                                           ),
-                                        ],
+                                        ),
                                       ),
                                       SizedBox(
                                         height: 10,
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.only(
-                                            top: 10.0, bottom: 10),
-                                        child: Divider(
-                                          color: Colors.grey,
-                                          height: 0.0,
-                                          thickness: 1,
-                                        ),
                                       ),
                                       widget.type == 0
                                           ? GestureDetector(
@@ -246,8 +236,18 @@ class _CustomerListCommonPageState extends State<CustomerListCommonPage> {
                                             )
                                           : GestureDetector(
                                               onTap: () {
-                                                callLedgerScreen(
-                                                    i, widget.type);
+                                                Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                        builder: (builder) =>
+                                                            CustomerPricingPage(
+                                                              customerId:
+                                                                  "${_searchResult[i].customerId}",
+                                                              customerName:
+                                                                  "${_searchResult[i].customerName}",
+                                                              salesId: widget
+                                                                  .salesId,
+                                                            )));
                                               },
                                               child: Image.asset(
                                                 "assets/images/rupees.png",
