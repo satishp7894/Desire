@@ -969,13 +969,13 @@ class _InvoiceDetailSalesPageState extends State<InvoiceDetailSalesPage> {
     if (await _reqPer(Permission.storage)) {
       var dir = await DownloadsPathProvider.downloadsDirectory;
       print("object directory path ${dir.path}");
-      File file = File(dir.path + "/InvoiceList.pdf");
-      path = dir.path + "/InvoiceList.pdf";
+      File file = File(dir.path + "/Invoices.pdf");
+      path = dir.path + "/Invoices.pdf";
 
       print(path);
       file.writeAsBytesSync(List.from(await pdf.save()));
       print("path of file open $path");
-      Alerts.showAlertPdf(context, 'Invoice List', 'Pdf Generated', path);
+      Alerts.showAlertPdf(context, 'Desire Moulding', 'Pdf Generated', path);
     }
   }
 
@@ -991,7 +991,7 @@ class _InvoiceDetailSalesPageState extends State<InvoiceDetailSalesPage> {
         return <pw.Widget>[
           pw.Header(
               level: 5,
-              child: pw.Text("Invoice List",
+              child: pw.Text("Invoice List | Desire Moulding",
                   textAlign: pw.TextAlign.center,
                   style: pw.TextStyle(
                     fontSize: 40,
@@ -999,144 +999,140 @@ class _InvoiceDetailSalesPageState extends State<InvoiceDetailSalesPage> {
                     fontWeight: pw.FontWeight.bold,
                   ))),
           pw.SizedBox(height: 30),
-          pw.Column(children: [
-            pw.Row(
-                mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: pw.CrossAxisAlignment.start,
-                children: [
-                  pw.Container(
-                    child: pw.Text(
-                      'Sr. No.',
-                      style: pw.TextStyle(
-                          fontWeight: pw.FontWeight.bold, fontSize: 15),
-                      textAlign: pw.TextAlign.center,
-                    ),
-                    width: 50,
-                    height: 52,
-                    padding: pw.EdgeInsets.only(left: 5),
-                    alignment: pw.Alignment.center,
+          pw.Row(
+              mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: pw.CrossAxisAlignment.start,
+              children: [
+                pw.Container(
+                  child: pw.Text(
+                    'Sr. No.',
+                    style: pw.TextStyle(
+                        fontWeight: pw.FontWeight.bold, fontSize: 15),
+                    textAlign: pw.TextAlign.center,
                   ),
-                  pw.Container(
-                    child: pw.Text(
-                      'Order Number',
-                      style: pw.TextStyle(
-                          fontWeight: pw.FontWeight.bold, fontSize: 15),
-                      textAlign: pw.TextAlign.center,
-                    ),
-                    width: 100,
-                    height: 52,
-                    padding: pw.EdgeInsets.only(left: 10),
-                    alignment: pw.Alignment.center,
+                  width: 50,
+                  height: 52,
+                  padding: pw.EdgeInsets.only(left: 5),
+                  alignment: pw.Alignment.center,
+                ),
+                pw.Container(
+                  child: pw.Text(
+                    'Order Number',
+                    style: pw.TextStyle(
+                        fontWeight: pw.FontWeight.bold, fontSize: 15),
+                    textAlign: pw.TextAlign.center,
                   ),
-                  pw.Container(
-                    child: pw.Text(
-                      'Quantity',
-                      style: pw.TextStyle(
-                          fontWeight: pw.FontWeight.bold, fontSize: 15),
-                      textAlign: pw.TextAlign.center,
-                    ),
-                    width: 60,
-                    height: 52,
-                    alignment: pw.Alignment.center,
+                  width: 100,
+                  height: 52,
+                  padding: pw.EdgeInsets.only(left: 10),
+                  alignment: pw.Alignment.center,
+                ),
+                pw.Container(
+                  child: pw.Text(
+                    'Quantity',
+                    style: pw.TextStyle(
+                        fontWeight: pw.FontWeight.bold, fontSize: 15),
+                    textAlign: pw.TextAlign.center,
                   ),
-                ]),
-            pw.Divider(color: PdfColor.fromHex('#4684C2'), thickness: 3),
-            pw.ListView.builder(
-                //padding: pw.EdgeInsets.only(bottom: 10),
-                itemCount: as.invoiceProducts.length,
-                itemBuilder: (c, i) {
-                  if (i.isEven) {
-                    return pw.Container(
-                        color: PdfColor.fromHex('#E0F7FA'),
-                        child: pw.Row(
-                          mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
-                          crossAxisAlignment: pw.CrossAxisAlignment.start,
-                          children: [
-                            pw.Container(
-                              child: pw.Text(
-                                '${i + 1}',
-                                style: pw.TextStyle(
-                                    fontWeight: pw.FontWeight.bold,
-                                    fontSize: 15),
-                                textAlign: pw.TextAlign.center,
-                              ),
-                              width: 50,
-                              height: 52,
-                              padding: pw.EdgeInsets.only(left: 5),
-                              alignment: pw.Alignment.center,
+                  width: 60,
+                  height: 52,
+                  alignment: pw.Alignment.center,
+                ),
+              ]),
+          pw.Divider(color: PdfColor.fromHex('#4684C2'), thickness: 3),
+          pw.ListView.builder(
+              //padding: pw.EdgeInsets.only(bottom: 10),
+              itemCount: as.invoiceProducts.length,
+              itemBuilder: (c, i) {
+                if (i.isEven) {
+                  return pw.Container(
+                      color: PdfColor.fromHex('#E0F7FA'),
+                      margin: pw.EdgeInsets.only(top: 5, bottom: 5),
+                      child: pw.Row(
+                        mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: pw.CrossAxisAlignment.start,
+                        children: [
+                          pw.Container(
+                            child: pw.Text(
+                              '${i + 1}',
+                              style: pw.TextStyle(
+                                  fontWeight: pw.FontWeight.bold, fontSize: 15),
+                              textAlign: pw.TextAlign.center,
                             ),
-                            pw.Container(
-                              child: pw.Text(
-                                '${as.invoiceProducts[i].modelNoId}',
-                                style: pw.TextStyle(
-                                    fontWeight: pw.FontWeight.bold,
-                                    fontSize: 15),
-                                textAlign: pw.TextAlign.center,
-                              ),
-                              width: 100,
-                              height: 52,
-                              padding: pw.EdgeInsets.only(left: 10),
-                              alignment: pw.Alignment.center,
+                            width: 50,
+                            height: 52,
+                            padding: pw.EdgeInsets.only(left: 5),
+                            alignment: pw.Alignment.center,
+                          ),
+                          pw.Container(
+                            child: pw.Text(
+                              '${as.invoiceProducts[i].modelNoId}',
+                              style: pw.TextStyle(
+                                  fontWeight: pw.FontWeight.bold, fontSize: 15),
+                              textAlign: pw.TextAlign.center,
                             ),
-                            pw.Container(
-                              child: pw.Text(
-                                '${as.invoiceProducts[i].productQuantity}',
-                                style: pw.TextStyle(
-                                    fontWeight: pw.FontWeight.bold,
-                                    fontSize: 15),
-                                textAlign: pw.TextAlign.center,
-                              ),
-                              width: 60,
-                              height: 52,
-                              alignment: pw.Alignment.center,
+                            width: 100,
+                            height: 52,
+                            padding: pw.EdgeInsets.only(left: 10),
+                            alignment: pw.Alignment.center,
+                          ),
+                          pw.Container(
+                            child: pw.Text(
+                              '${as.invoiceProducts[i].productQuantity}',
+                              style: pw.TextStyle(
+                                  fontWeight: pw.FontWeight.bold, fontSize: 15),
+                              textAlign: pw.TextAlign.center,
                             ),
-                          ],
-                        ));
-                  } else {
-                    return pw.Row(
-                      mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: pw.CrossAxisAlignment.start,
-                      children: [
-                        pw.Container(
-                          child: pw.Text(
-                            '${i + 1}',
-                            style: pw.TextStyle(
-                                fontWeight: pw.FontWeight.bold, fontSize: 15),
-                            textAlign: pw.TextAlign.center,
+                            width: 60,
+                            height: 52,
+                            alignment: pw.Alignment.center,
                           ),
-                          width: 50,
-                          height: 52,
-                          padding: pw.EdgeInsets.only(left: 5),
-                          alignment: pw.Alignment.center,
+                        ],
+                      ));
+                } else {
+                  return pw.Row(
+                    mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: pw.CrossAxisAlignment.start,
+                    children: [
+                      pw.Container(
+                        child: pw.Text(
+                          '${i + 1}',
+                          style: pw.TextStyle(
+                              fontWeight: pw.FontWeight.bold, fontSize: 15),
+                          textAlign: pw.TextAlign.center,
                         ),
-                        pw.Container(
-                          child: pw.Text(
-                            '${as.invoiceProducts[i].modelNoId}',
-                            style: pw.TextStyle(
-                                fontWeight: pw.FontWeight.bold, fontSize: 15),
-                            textAlign: pw.TextAlign.center,
-                          ),
-                          width: 100,
-                          height: 52,
-                          padding: pw.EdgeInsets.only(left: 10),
-                          alignment: pw.Alignment.center,
+                        width: 50,
+                        height: 52,
+                        padding: pw.EdgeInsets.only(left: 5),
+                        alignment: pw.Alignment.center,
+                      ),
+                      pw.Container(
+                        child: pw.Text(
+                          '${as.invoiceProducts[i].modelNoId}',
+                          style: pw.TextStyle(
+                              fontWeight: pw.FontWeight.bold, fontSize: 15),
+                          textAlign: pw.TextAlign.center,
                         ),
-                        pw.Container(
-                          child: pw.Text(
-                            '${as.invoiceProducts[i].productQuantity}',
-                            style: pw.TextStyle(
-                                fontWeight: pw.FontWeight.bold, fontSize: 15),
-                            textAlign: pw.TextAlign.center,
-                          ),
-                          width: 60,
-                          height: 52,
-                          alignment: pw.Alignment.center,
+                        width: 100,
+                        height: 52,
+                        padding: pw.EdgeInsets.only(left: 10),
+                        alignment: pw.Alignment.center,
+                      ),
+                      pw.Container(
+                        child: pw.Text(
+                          '${as.invoiceProducts[i].productQuantity}',
+                          style: pw.TextStyle(
+                              fontWeight: pw.FontWeight.bold, fontSize: 15),
+                          textAlign: pw.TextAlign.center,
                         ),
-                      ],
-                    );
-                  }
-                })
-          ])
+                        width: 60,
+                        height: 52,
+                        alignment: pw.Alignment.center,
+                      ),
+                    ],
+                  );
+                }
+              })
         ];
       },
     ));

@@ -406,13 +406,13 @@ class _CustomerLedgerPageState extends State<CustomerLedgerPage> {
     if (await _reqPer(Permission.storage)) {
       var dir = await DownloadsPathProvider.downloadsDirectory;
       print("object directory path ${dir.path}");
-      File file = File(dir.path + "/LedgerDetail.pdf");
-      path = dir.path + "/LedgerDetail.pdf";
+      File file = File(dir.path + "/Ledger.pdf");
+      path = dir.path + "/Ledger.pdf";
 
       print(path);
       file.writeAsBytesSync(List.from(await pdf.save()));
       print("path of file open $path");
-      Alerts.showAlertPdf(context, 'Ledger Detail', 'Pdf Generated', path);
+      Alerts.showAlertPdf(context, 'Desire', 'Pdf Generated', path);
     }
   }
 
@@ -444,63 +444,113 @@ class _CustomerLedgerPageState extends State<CustomerLedgerPage> {
         return <pw.Widget>[
           pw.Header(
               level: 5,
-              child: pw.Text("Ledger Detail",
+              child: pw.Text("Ledger | Desire Moulding",
                   textAlign: pw.TextAlign.center,
                   style: pw.TextStyle(
                     fontSize: 40,
                     color: PdfColor.fromHex('#4684C2'),
                     fontWeight: pw.FontWeight.bold,
                   ))),
+          pw.Row(
+              mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: pw.CrossAxisAlignment.start,
+              children: [
+                pw.Container(
+                  child: pw.Text(
+                    'Name',
+                    style: pw.TextStyle(
+                        fontWeight: pw.FontWeight.bold, fontSize: 15),
+                    textAlign: pw.TextAlign.center,
+                  ),
+                  width: 50,
+                  height: 52,
+                  padding: pw.EdgeInsets.only(left: 5),
+                  alignment: pw.Alignment.center,
+                ),
+                pw.Container(
+                  child: pw.Text(
+                    'Cr.',
+                    style: pw.TextStyle(
+                        fontWeight: pw.FontWeight.bold, fontSize: 15),
+                    textAlign: pw.TextAlign.center,
+                  ),
+                  width: 100,
+                  height: 52,
+                  padding: pw.EdgeInsets.only(left: 10),
+                  alignment: pw.Alignment.center,
+                ),
+                pw.Container(
+                  child: pw.Text(
+                    'Dr.',
+                    style: pw.TextStyle(
+                        fontWeight: pw.FontWeight.bold, fontSize: 15),
+                    textAlign: pw.TextAlign.center,
+                  ),
+                  width: 60,
+                  height: 52,
+                  alignment: pw.Alignment.center,
+                ),
+                pw.Container(
+                  child: pw.Text(
+                    'Total Amount',
+                    style: pw.TextStyle(
+                        fontWeight: pw.FontWeight.bold, fontSize: 15),
+                    textAlign: pw.TextAlign.center,
+                  ),
+                  width: 60,
+                  height: 52,
+                  alignment: pw.Alignment.center,
+                ),
+              ]),
           pw.SizedBox(height: 30),
-          pw.Column(children: [
-            pw.Divider(color: PdfColor.fromHex('#4684C2'), thickness: 3),
-            pw.ListView.builder(
-                //padding: pw.EdgeInsets.only(bottom: 10),
-                itemCount: as.length,
-                itemBuilder: (c, i) {
-                  return pw.Container(
-                      child: pw.Column(
-                    children: [
-                      pw.Row(
-                          mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
-                          children: [
-                            // as[i].ledgerDate == null
-                            //     ? pw.Text("N/A")
-                            //     : pw.Text(as[i].ledgerDate,
-                            //         style: pw.TextStyle(
-                            //             fontWeight: pw.FontWeight.bold)),
-                            as[i].accountName == null
-                                ? pw.Text("N/A")
-                                : pw.Text(as[i].accountName,
-                                    style: pw.TextStyle(
-                                        fontWeight: pw.FontWeight.bold)),
-                            as[i].totalCreditAmount != ""
-                                ? pw.Text(
-                                    "${as[i].totalCreditAmount} Cr ",
-                                    style: pw.TextStyle(
-                                        color: PdfColor.fromHex('#000000'),
-                                        fontWeight: pw.FontWeight.bold),
-                                  )
-                                : pw.Container(),
-                            as[i].totalDebitAmount != ""
-                                ? pw.Text("${as[i].totalDebitAmount} Dr ",
-                                    style: pw.TextStyle(
-                                        color: PdfColor.fromHex('#000000'),
-                                        fontWeight: pw.FontWeight.bold))
-                                : pw.Container(),
-                            as[i].totalAmount == ""
-                                ? pw.Text("")
-                                : pw.Text(as[i].totalAmount,
-                                    style: pw.TextStyle(
-                                        fontWeight: pw.FontWeight.bold))
-                          ]),
-                      pw.SizedBox(
-                        height: 10,
-                      )
-                    ],
-                  ));
-                })
-          ])
+          pw.ListView.builder(
+              //padding: pw.EdgeInsets.only(bottom: 10),
+              itemCount: as.length,
+              itemBuilder: (c, i) {
+                return pw.Container(
+                    color: PdfColor.fromHex('#E0F7FA'),
+                    margin: pw.EdgeInsets.only(top: 5, bottom: 5),
+                    child: pw.Flexible(
+                        child: pw.Column(
+                  children: [
+                    pw.Row(
+                        mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+                        children: [
+                          as[i].accountName == null
+                              ? pw.Text("N/A")
+                              : pw.Container(
+                                  width: 130,
+                                  child: pw.Text(as[i].accountName,
+                                      textAlign: pw.TextAlign.center,
+                                      overflow: pw.TextOverflow.clip,
+                                      style: pw.TextStyle(
+                                          fontWeight: pw.FontWeight.bold))),
+                          as[i].totalCreditAmount != ""
+                              ? pw.Text(
+                                  "${as[i].totalCreditAmount} Cr ",
+                                  style: pw.TextStyle(
+                                      color: PdfColor.fromHex('#000000'),
+                                      fontWeight: pw.FontWeight.bold),
+                                )
+                              : pw.Container(),
+                          as[i].totalDebitAmount != ""
+                              ? pw.Text("${as[i].totalDebitAmount} Dr ",
+                                  style: pw.TextStyle(
+                                      color: PdfColor.fromHex('#000000'),
+                                      fontWeight: pw.FontWeight.bold))
+                              : pw.Container(),
+                          as[i].totalAmount == ""
+                              ? pw.Text("")
+                              : pw.Text(as[i].totalAmount,
+                                  style: pw.TextStyle(
+                                      fontWeight: pw.FontWeight.bold))
+                        ]),
+                    pw.SizedBox(
+                      height: 10,
+                    )
+                  ],
+                )));
+              })
         ];
       },
     ));

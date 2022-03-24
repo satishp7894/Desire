@@ -38,7 +38,7 @@ class _LedgerFilterState extends State<LedgerFilter> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    ledgerBloc.fetchLedger(widget.customerId,"","");
+    ledgerBloc.fetchLedger(widget.customerId, "", "");
   }
 
   @override
@@ -119,9 +119,7 @@ class _LedgerFilterState extends State<LedgerFilter> {
                 "Error Loading Data ${s.error}",
               ),
             );
-          } else if (s.data
-              .toString()
-              .isEmpty) {
+          } else if (s.data.toString().isEmpty) {
             print("as3 empty");
             return Container(
               height: 300,
@@ -158,10 +156,9 @@ class _LedgerFilterState extends State<LedgerFilter> {
                                   Row(
                                     children: [
                                       Container(
-                                          width: MediaQuery
-                                              .of(context)
-                                              .size
-                                              .width /
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width /
                                               2,
                                           margin: const EdgeInsets.only(top: 5),
                                           padding: const EdgeInsets.all(10.0),
@@ -170,7 +167,7 @@ class _LedgerFilterState extends State<LedgerFilter> {
                                             //editing controller of this TextField
                                             decoration: InputDecoration(
                                                 prefixIcon:
-                                                Icon(Icons.date_range),
+                                                    Icon(Icons.date_range),
                                                 hintText: "Enter Start Date",
                                                 hintStyle: TextStyle(
                                                     color: kSecondaryColor,
@@ -179,13 +176,13 @@ class _LedgerFilterState extends State<LedgerFilter> {
                                                 labelStyle: TextStyle(
                                                     color: kPrimaryColor),
                                                 floatingLabelBehavior:
-                                                FloatingLabelBehavior
-                                                    .always,
+                                                    FloatingLabelBehavior
+                                                        .always,
                                                 focusedBorder:
-                                                OutlineInputBorder(
-                                                    borderSide: BorderSide(
-                                                        color:
-                                                        kPrimaryColor)),
+                                                    OutlineInputBorder(
+                                                        borderSide: BorderSide(
+                                                            color:
+                                                                kPrimaryColor)),
                                                 border: OutlineInputBorder(
                                                     borderSide: BorderSide(
                                                         color: kPrimaryColor))),
@@ -193,13 +190,13 @@ class _LedgerFilterState extends State<LedgerFilter> {
                                             //set it true, so that user will not able to edit text
                                             onTap: () async {
                                               DateTime pickedDate =
-                                              await showDatePicker(
-                                                  context: context,
-                                                  initialDate:
-                                                  DateTime.now(),
-                                                  firstDate: DateTime(2000),
-                                                  //DateTime.now() - not to allow to choose before today.
-                                                  lastDate: DateTime(2101));
+                                                  await showDatePicker(
+                                                      context: context,
+                                                      initialDate:
+                                                          DateTime.now(),
+                                                      firstDate: DateTime(2000),
+                                                      //DateTime.now() - not to allow to choose before today.
+                                                      lastDate: DateTime(2101));
 
                                               if (pickedDate != null) {
                                                 print(
@@ -218,11 +215,8 @@ class _LedgerFilterState extends State<LedgerFilter> {
                                           )),
                                       Container(
                                         width:
-                                        MediaQuery
-                                            .of(context)
-                                            .size
-                                            .width /
-                                            2,
+                                            MediaQuery.of(context).size.width /
+                                                2,
                                         margin: const EdgeInsets.only(top: 5),
                                         padding: EdgeInsets.all(10),
                                         child: TextField(
@@ -230,7 +224,7 @@ class _LedgerFilterState extends State<LedgerFilter> {
                                           //editing controller of this TextField
                                           decoration: InputDecoration(
                                               prefixIcon:
-                                              Icon(Icons.date_range),
+                                                  Icon(Icons.date_range),
                                               hintText: "Enter End Date",
                                               hintStyle: TextStyle(
                                                   color: kSecondaryColor,
@@ -239,7 +233,7 @@ class _LedgerFilterState extends State<LedgerFilter> {
                                               labelStyle: TextStyle(
                                                   color: kPrimaryColor),
                                               floatingLabelBehavior:
-                                              FloatingLabelBehavior.always,
+                                                  FloatingLabelBehavior.always,
                                               focusedBorder: OutlineInputBorder(
                                                   borderSide: BorderSide(
                                                       color: kPrimaryColor)),
@@ -250,11 +244,11 @@ class _LedgerFilterState extends State<LedgerFilter> {
                                           //set it true, so that user will not able to edit text
                                           onTap: () async {
                                             DateTime pickedDate =
-                                            await showDatePicker(
-                                                context: context,
-                                                initialDate: DateTime.now(),
-                                                firstDate: DateTime(2000),
-                                                lastDate: DateTime(2101));
+                                                await showDatePicker(
+                                                    context: context,
+                                                    initialDate: DateTime.now(),
+                                                    firstDate: DateTime(2000),
+                                                    lastDate: DateTime(2101));
 
                                             if (pickedDate != null) {
                                               print(
@@ -262,9 +256,9 @@ class _LedgerFilterState extends State<LedgerFilter> {
 
                                               setState(() {
                                                 toDateinput.text = DateFormat(
-                                                    'yyyy-MM-dd')
+                                                        'yyyy-MM-dd')
                                                     .format(
-                                                    pickedDate); //set output date to TextField value.
+                                                        pickedDate); //set output date to TextField value.
                                               });
                                             } else {
                                               print("Date is not selected");
@@ -278,9 +272,9 @@ class _LedgerFilterState extends State<LedgerFilter> {
                                     margin: EdgeInsets.all(10),
                                     child: Row(
                                       mainAxisAlignment:
-                                      MainAxisAlignment.spaceEvenly,
+                                          MainAxisAlignment.spaceEvenly,
                                       crossAxisAlignment:
-                                      CrossAxisAlignment.center,
+                                          CrossAxisAlignment.center,
                                       children: [
                                         TextButton(
                                           style: TextButton.styleFrom(
@@ -293,7 +287,10 @@ class _LedgerFilterState extends State<LedgerFilter> {
                                             setState(() {
                                               if (fromDateinput.text != "" &&
                                                   toDateinput.text != "") {
-                                                ledgerBloc.fetchLedger(widget.customerId, fromDateinput.text, toDateinput.text);
+                                                ledgerBloc.fetchLedger(
+                                                    widget.customerId,
+                                                    fromDateinput.text,
+                                                    toDateinput.text);
                                               } else {
                                                 final snackBar = SnackBar(
                                                     content: Text(
@@ -326,7 +323,7 @@ class _LedgerFilterState extends State<LedgerFilter> {
                                           child: const Text(
                                             'Clear Filter',
                                             style:
-                                            TextStyle(color: Colors.white),
+                                                TextStyle(color: Colors.white),
                                           ),
                                         ),
                                       ],
@@ -336,8 +333,7 @@ class _LedgerFilterState extends State<LedgerFilter> {
                               )))),
                   ...List.generate(
                       asyncSnapshot.length,
-                          (index) =>
-                          LedgerListTile(
+                      (index) => LedgerListTile(
                             customerLedger: asyncSnapshot[index],
                           ))
                 ],
@@ -353,13 +349,13 @@ class _LedgerFilterState extends State<LedgerFilter> {
     if (await _reqPer(Permission.storage)) {
       var dir = await DownloadsPathProvider.downloadsDirectory;
       print("object directory path ${dir.path}");
-      File file = File(dir.path + "/LedgerDetail.pdf");
-      path = dir.path + "/LedgerDetail.pdf";
+      File file = File(dir.path + "/LedgerFilter.pdf");
+      path = dir.path + "/LedgerFilter.pdf";
 
       print(path);
       file.writeAsBytesSync(List.from(await pdf.save()));
       print("path of file open $path");
-      Alerts.showAlertPdf(context, 'Ledger Detail', 'Pdf Generated', path);
+      Alerts.showAlertPdf(context, 'Desire', 'Pdf Generated', path);
     }
   }
 
@@ -391,66 +387,115 @@ class _LedgerFilterState extends State<LedgerFilter> {
         return <pw.Widget>[
           pw.Header(
               level: 5,
-              child: pw.Text("Ledger Detail",
+              child: pw.Text("Ledger Filter | Desire Moulding",
                   textAlign: pw.TextAlign.center,
                   style: pw.TextStyle(
                     fontSize: 40,
                     color: PdfColor.fromHex('#4684C2'),
                     fontWeight: pw.FontWeight.bold,
                   ))),
+          pw.Row(
+              mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: pw.CrossAxisAlignment.start,
+              children: [
+                pw.Container(
+                  child: pw.Text(
+                    'Date',
+                    style: pw.TextStyle(
+                        fontWeight: pw.FontWeight.bold, fontSize: 15),
+                    textAlign: pw.TextAlign.center,
+                  ),
+                  width: 50,
+                  height: 52,
+                  padding: pw.EdgeInsets.only(left: 5),
+                  alignment: pw.Alignment.center,
+                ),
+                pw.Container(
+                  child: pw.Text(
+                    'Account',
+                    style: pw.TextStyle(
+                        fontWeight: pw.FontWeight.bold, fontSize: 15),
+                    textAlign: pw.TextAlign.center,
+                  ),
+                  width: 100,
+                  height: 52,
+                  padding: pw.EdgeInsets.only(left: 10),
+                  alignment: pw.Alignment.center,
+                ),
+                pw.Container(
+                  child: pw.Text(
+                    'Amount',
+                    style: pw.TextStyle(
+                        fontWeight: pw.FontWeight.bold, fontSize: 15),
+                    textAlign: pw.TextAlign.center,
+                  ),
+                  width: 60,
+                  height: 52,
+                  alignment: pw.Alignment.center,
+                ),
+                pw.Container(
+                  child: pw.Text(
+                    'Type',
+                    style: pw.TextStyle(
+                        fontWeight: pw.FontWeight.bold, fontSize: 15),
+                    textAlign: pw.TextAlign.center,
+                  ),
+                  width: 60,
+                  height: 52,
+                  alignment: pw.Alignment.center,
+                ),
+              ]),
           pw.SizedBox(height: 30),
-          pw.Column(children: [
-            pw.Divider(color: PdfColor.fromHex('#4684C2'), thickness: 3),
-            pw.ListView.builder(
+          pw.ListView.builder(
               //padding: pw.EdgeInsets.only(bottom: 10),
-                itemCount: as.length,
-                itemBuilder: (c, i) {
-                  return pw.Container(
-                      child: pw.Column(
-                        children: [
-                          pw.Row(
-                              mainAxisAlignment: pw.MainAxisAlignment
-                                  .spaceBetween,
-                              children: [
-                                as[i].ledgerDate == null
-                                    ? pw.Text("N/A")
-                                    : pw.Text(as[i].ledgerDate,
-                                    style: pw.TextStyle(
-                                        fontWeight: pw.FontWeight.bold)),
-                                as[i].ledgerAccount == null
-                                    ? pw.Text("N/A")
-                                    : pw.Text(as[i].ledgerAccount,
-                                    style: pw.TextStyle(
-                                        fontWeight: pw.FontWeight.bold)),
-                                as[i].creditAmount != ""
-                                    ? pw.Text(
-                                  "${as[i].creditAmount} Cr ",
-                                  style: pw.TextStyle(
-                                      color: PdfColor.fromHex('#000000'),
-                                      fontWeight: pw.FontWeight.bold),
-                                )
-                                    : pw.Text("${as[i].debitAmount} Dr ",
-                                    style: pw.TextStyle(
-                                        color: PdfColor.fromHex('#000000'),
-                                        fontWeight: pw.FontWeight.bold)),
-                                as[i].type == ""
-                                    ? pw.Text("")
-                                    : pw.Text(as[i].type,
-                                    style: pw.TextStyle(
-                                        fontWeight: pw.FontWeight.bold))
-                              ]),
-                          pw.SizedBox(
-                            height: 10,
-                          )
-                        ],
-                      ));
-                })
-          ])
+              itemCount: as.length,
+              itemBuilder: (c, i) {
+                return pw.Container(
+                    color: PdfColor.fromHex('#E0F7FA'),
+                    margin: pw.EdgeInsets.only(top: 5, bottom: 5),
+                    child: pw.Column(
+                      children: [
+                        pw.Row(
+                            mainAxisAlignment:
+                                pw.MainAxisAlignment.spaceBetween,
+                            children: [
+                              as[i].ledgerDate == null
+                                  ? pw.Text("N/A")
+                                  : pw.Text(as[i].ledgerDate,
+                                      style: pw.TextStyle(
+                                          fontWeight: pw.FontWeight.bold)),
+                              as[i].ledgerAccount == null
+                                  ? pw.Text("N/A")
+                                  : pw.Text(as[i].ledgerAccount,
+                                      style: pw.TextStyle(
+                                          fontWeight: pw.FontWeight.bold)),
+                              as[i].creditAmount != ""
+                                  ? pw.Text(
+                                      "${as[i].creditAmount} Cr ",
+                                      style: pw.TextStyle(
+                                          color: PdfColor.fromHex('#000000'),
+                                          fontWeight: pw.FontWeight.bold),
+                                    )
+                                  : pw.Text("${as[i].debitAmount} Dr ",
+                                      style: pw.TextStyle(
+                                          color: PdfColor.fromHex('#000000'),
+                                          fontWeight: pw.FontWeight.bold)),
+                              as[i].type == ""
+                                  ? pw.Text("")
+                                  : pw.Text(as[i].type,
+                                      style: pw.TextStyle(
+                                          fontWeight: pw.FontWeight.bold))
+                            ]),
+                        pw.SizedBox(
+                          height: 10,
+                        )
+                      ],
+                    ));
+              })
         ];
       },
     ));
   }
-
 }
 
 class LedgerListTile extends StatelessWidget {
@@ -488,8 +533,8 @@ class LedgerListTile extends StatelessWidget {
                               customerLedger.ledgerDate == null
                                   ? Text("N/A")
                                   : Text(customerLedger.ledgerDate,
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold)),
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold)),
                             ],
                           ),
                           SizedBox(
@@ -502,10 +547,10 @@ class LedgerListTile extends StatelessWidget {
                               customerLedger.ledgerAccount == null
                                   ? Text("N/A")
                                   : Text(
-                                customerLedger.ledgerAccount,
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold),
-                              ),
+                                      customerLedger.ledgerAccount,
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold),
+                                    ),
                             ],
                           ),
                         ],
@@ -516,27 +561,27 @@ class LedgerListTile extends StatelessWidget {
                     children: [
                       customerLedger.creditAmount != ""
                           ? Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Text(
-                            "${customerLedger.creditAmount} Cr ",
-                            style: TextStyle(
-                                color: Colors.green,
-                                fontWeight: FontWeight.bold),
-                          ),
-                        ],
-                      )
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Text(
+                                  "${customerLedger.creditAmount} Cr ",
+                                  style: TextStyle(
+                                      color: Colors.green,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ],
+                            )
                           : Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Text("${customerLedger.debitAmount} Dr ",
-                              style: TextStyle(
-                                  color: Colors.red,
-                                  fontWeight: FontWeight.bold)),
-                        ],
-                      ),
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Text("${customerLedger.debitAmount} Dr ",
+                                    style: TextStyle(
+                                        color: Colors.red,
+                                        fontWeight: FontWeight.bold)),
+                              ],
+                            ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.end,
                         crossAxisAlignment: CrossAxisAlignment.center,
@@ -544,7 +589,7 @@ class LedgerListTile extends StatelessWidget {
                           customerLedger.type == ""
                               ? Text("")
                               : Text(customerLedger.type,
-                              style: TextStyle(fontWeight: FontWeight.bold))
+                                  style: TextStyle(fontWeight: FontWeight.bold))
                         ],
                       ),
                     ],

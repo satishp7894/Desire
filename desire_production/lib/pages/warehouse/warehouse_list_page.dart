@@ -445,7 +445,7 @@ class _WarehouseListPageState extends State<WarehouseListPage> {
             return <pw.Widget>  [
               pw.Header(
                   level: 5,
-                  child: pw.Text("Product List | Desire Moulding", textAlign: pw.TextAlign.center, style: pw.TextStyle(
+                  child: pw.Text("Warehouse List | Desire Moulding", textAlign: pw.TextAlign.center, style: pw.TextStyle(
                     fontSize: 40,
                     color: PdfColor.fromHex('#4684C2'),
                     fontWeight: pw.FontWeight.bold,
@@ -613,7 +613,7 @@ class _WarehouseListPageState extends State<WarehouseListPage> {
             return <pw.Widget>  [
               pw.Header(
                   level: 5,
-                  child: pw.Text("Product List | Desire Moulding", textAlign: pw.TextAlign.center, style: pw.TextStyle(
+                  child: pw.Text("Warehouse List | Desire Moulding", textAlign: pw.TextAlign.center, style: pw.TextStyle(
                     fontSize: 40,
                     color: PdfColor.fromHex('#4684C2'),
                     fontWeight: pw.FontWeight.bold,
