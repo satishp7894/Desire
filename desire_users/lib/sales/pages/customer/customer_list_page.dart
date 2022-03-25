@@ -924,7 +924,7 @@ class _CustomerListPageState extends State<CustomerListPage> {
     if (text.isEmpty) {
       setState(() {
         search = false;
-      });
+       });
       return;
     }
 

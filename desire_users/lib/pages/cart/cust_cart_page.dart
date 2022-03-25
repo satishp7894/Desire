@@ -50,8 +50,6 @@ class _CustCartPageState extends State<CustCartPage> {
       address = prefs.getString("add");
       addressId = prefs.getString("add_id");
     });
-    print("Address Id : "+ addressId);
-    print("address shares $address $addressId");
   }
 
   @override
