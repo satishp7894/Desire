@@ -77,13 +77,21 @@ class _PendingOrdersPageState extends State<PendingOrdersPage> {
                           page: widget.page,
                         )),
                 (route) => false)
-            : Navigator.pushAndRemoveUntil(
-                context,
-                MaterialPageRoute(
-                    builder: (builder) => DashboardPageProduction(
-                          page: widget.page,
-                        )),
-                (route) => false);
+            : widget.page == "daily"
+                ? Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(
+                        builder: (builder) => DashboardPageProduction(
+                              page: "daily",
+                            )),
+                    (route) => false)
+                : Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(
+                        builder: (builder) => DashboardPageProduction(
+                              page: widget.page,
+                            )),
+                    (route) => false);
       },
       child: Scaffold(
         backgroundColor: Colors.white,
@@ -454,7 +462,7 @@ class _PendingOrdersPageState extends State<PendingOrdersPage> {
                                                                           .black)),
                                                             ),
                                                             child: Text(
-                                                              '${s.data.data[i].qty}',
+                                                              '${s.data.data[i].qty == null ? s.data.data[i].total_qty : s.data.data[i].qty}',
                                                               //style: content1,
                                                               textAlign:
                                                                   TextAlign
@@ -1232,7 +1240,7 @@ class _PendingOrdersPageState extends State<PendingOrdersPage> {
               ]),
           pw.Divider(color: PdfColor.fromHex('#4684C2'), thickness: 3),
           pw.ListView.builder(
-            //padding: pw.EdgeInsets.only(bottom: 10),
+              //padding: pw.EdgeInsets.only(bottom: 10),
               itemCount: as.data.data.length,
               itemBuilder: (c, i) {
                 if (i.isEven) {
@@ -1246,8 +1254,7 @@ class _PendingOrdersPageState extends State<PendingOrdersPage> {
                             child: pw.Text(
                               '${i + 1}',
                               style: pw.TextStyle(
-                                  fontWeight: pw.FontWeight.bold,
-                                  fontSize: 15),
+                                  fontWeight: pw.FontWeight.bold, fontSize: 15),
                               textAlign: pw.TextAlign.center,
                             ),
                             width: 50,
@@ -1259,8 +1266,7 @@ class _PendingOrdersPageState extends State<PendingOrdersPage> {
                             child: pw.Text(
                               '${as.data.data[i].modelNo}',
                               style: pw.TextStyle(
-                                  fontWeight: pw.FontWeight.bold,
-                                  fontSize: 15),
+                                  fontWeight: pw.FontWeight.bold, fontSize: 15),
                               textAlign: pw.TextAlign.center,
                             ),
                             width: 100,
@@ -1272,8 +1278,7 @@ class _PendingOrdersPageState extends State<PendingOrdersPage> {
                             child: pw.Text(
                               '${as.data.data[i].qty}',
                               style: pw.TextStyle(
-                                  fontWeight: pw.FontWeight.bold,
-                                  fontSize: 15),
+                                  fontWeight: pw.FontWeight.bold, fontSize: 15),
                               textAlign: pw.TextAlign.center,
                             ),
                             width: 60,

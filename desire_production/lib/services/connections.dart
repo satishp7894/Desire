@@ -106,7 +106,7 @@ class Connection {
   static final String emptyCart = ipUsers + "emptyCart";
 
   //credits
-  static final String creditList = ipAdmin + "allcreditDetails";
+  static final String creditList = ipAdmin + "allCustomerCredit";
   static final String addCredits = ipAdmin + "addCredit";
   static final String creditApprove = ipAdmin + "approveNreject";
 

@@ -32,6 +32,7 @@ import 'package:desire_production/model/dispatch_processing_model.dart';
 import 'package:desire_production/model/hold_orders_model.dart';
 import 'package:desire_production/model/invoices_list_Model.dart';
 import 'package:desire_production/model/kyc_model.dart';
+import 'package:desire_production/model/kyc_pending_list_model.dart';
 import 'package:desire_production/model/kyc_view_model.dart';
 import 'package:desire_production/model/modelList_model.dart';
 import 'package:desire_production/model/modelNoWiseListModel.dart';
@@ -741,7 +742,6 @@ class ApiClient {
         body: {
           "secretkey": Connection.secretKey,
           "model_no_id": modelNoId,
-          "status": "1"
         });
     var result = json.decode(response.body);
     print("model wise  lis† response $result ${result['data']}");
@@ -761,6 +761,7 @@ class ApiClient {
         body: {
           "secretkey": Connection.secretKey,
           "model_no_id": modelNoId,
+          "status": "2"
         });
     var result = json.decode(response.body);
     print("model wise  production lis† response $result ${result['data']}");
@@ -1238,5 +1239,29 @@ class ApiClient {
     statemodel = (StateModel.fromJson(result));
 
     return statemodel;
+  }
+  Future<KycPendingListModel> getKycPending() async {
+    var response = await http.post(
+        Uri.parse(
+            "http://loccon.in/desiremoulding/api/AdminApiController/kycApprovePending"),
+        body: {'secretkey': Connection.secretKey});
+    var result = json.decode(response.body);
+
+    KycPendingListModel kycpendinglistmodel;
+    kycpendinglistmodel = (KycPendingListModel.fromJson(result));
+
+    return kycpendinglistmodel;
+  }
+  Future<KycPendingListModel> getCreditPending() async {
+    var response = await http.post(
+        Uri.parse(
+            "http://loccon.in/desiremoulding/api/AdminApiController/customerCreditPending"),
+        body: {'secretkey': Connection.secretKey});
+    var result = json.decode(response.body);
+
+    KycPendingListModel kycpendinglistmodel;
+    kycpendinglistmodel = (KycPendingListModel.fromJson(result));
+
+    return kycpendinglistmodel;
   }
 }

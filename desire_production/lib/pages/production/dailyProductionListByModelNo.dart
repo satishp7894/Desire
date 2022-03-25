@@ -40,6 +40,7 @@ class _DailyProductionListByModelNumberState
     // TODO: implement initState
     super.initState();
     modelWiseListBloc.fetchModelWiseProductionOrderList(widget.modelNoId);
+    print(widget.modelNoId + " " +widget.modelNo);
   }
 
   @override

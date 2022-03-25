@@ -21,8 +21,8 @@ class _CustomerCreditPageState extends State<CustomerCreditPage> {
   final customerBloc = CustomerCreditListBloc();
   TextEditingController searchView;
   bool search = false;
-  List<Credit> _searchResult = [];
-  List<Credit> customer = [];
+  List<AllCustomerCredit> _searchResult = [];
+  List<AllCustomerCredit> customer = [];
 
   @override
   void initState() {
@@ -100,14 +100,14 @@ class _CustomerCreditPageState extends State<CustomerCreditPage> {
               alignment: Alignment.center,
               child: Text("Error Loading Data",),);
           }
-          if (s.data.credit.isEmpty) {
+          if (s.data.allCustomerCredit.isEmpty) {
             print("as3 empty");
             return Container(height: 300,
               alignment: Alignment.center,
               child: Text("No Customers Found",),);
           }
 
-          customer = s.data.credit;
+          customer = s.data.allCustomerCredit;
           return RefreshIndicator(
             onRefresh: () {
               return Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (builder) => CustomerCreditPage()), (route) => false);
@@ -121,7 +121,7 @@ class _CustomerCreditPageState extends State<CustomerCreditPage> {
                     physics: NeverScrollableScrollPhysics(),
                     shrinkWrap: true,
                     //reverse: true,
-                    itemCount: s.data.credit.length,
+                    itemCount: s.data.allCustomerCredit.length,
                     itemBuilder: (c,i){
                       return GestureDetector(
                         onTap: (){
@@ -160,7 +160,7 @@ class _CustomerCreditPageState extends State<CustomerCreditPage> {
                                   children: [
                                     Padding(
                                         padding: EdgeInsets.symmetric(horizontal: 10),
-                                        child: Text("Name: ${s.data.credit[i].customerName}",
+                                        child: Text("Name: ${s.data.allCustomerCredit[i].customerName}",
                                           textAlign: TextAlign.center,
                                           style: TextStyle(color: Colors.black, fontSize: 16, fontWeight: FontWeight.w500),)),
                                     SizedBox(height: 10,),
@@ -172,7 +172,7 @@ class _CustomerCreditPageState extends State<CustomerCreditPage> {
                                         children: [
                                           Text("Credit Amount: ", textAlign: TextAlign.center, style: TextStyle(color: Colors.black),),
                                           SizedBox(width: 5,),
-                                          Text("${s.data.credit[i].creditAmount}", textAlign: TextAlign.center, style: TextStyle(color: Colors.black),),
+                                          Text("${s.data.allCustomerCredit[i].creditLimit}", textAlign: TextAlign.center, style: TextStyle(color: Colors.black),),
                                         ],
                                       ),),
                                     SizedBox(height: 10,),
@@ -184,18 +184,11 @@ class _CustomerCreditPageState extends State<CustomerCreditPage> {
                                         children: [
                                           Text("Credit Days: ", textAlign: TextAlign.center, style: TextStyle(color: Colors.black),),
                                           SizedBox(width: 5,),
-                                          Text("${s.data.credit[i].creditDays}", textAlign: TextAlign.center, style: TextStyle(color: Colors.black),),
+                                          Text("${s.data.allCustomerCredit[i].creditDays}", textAlign: TextAlign.center, style: TextStyle(color: Colors.black),),
                                         ],
                                       ),),
                                     SizedBox(height: 10,),
-                                    s.data.credit[i].status == "0" ? Padding(
-                                      padding: EdgeInsets.symmetric(horizontal: 10),
-                                      child: DefaultButtonSmall(
-                                          text: "Approve",
-                                          press: (){
-                                            Alerts.showCreditApprove(context, s.data.credit[i].userId);
-                                          }
-                                      ),) : Container()
+
                                   ],
                                 ),
                               ),
@@ -263,7 +256,7 @@ class _CustomerCreditPageState extends State<CustomerCreditPage> {
                                         children: [
                                           Text("Credit Amount: ", textAlign: TextAlign.center, style: TextStyle(color: Colors.black),),
                                           SizedBox(width: 5,),
-                                          Text("${_searchResult[i].creditAmount}", textAlign: TextAlign.center, style: TextStyle(color: Colors.black),),
+                                          Text("${_searchResult[i].creditLimit}", textAlign: TextAlign.center, style: TextStyle(color: Colors.black),),
                                         ],
                                       ),),
                                     SizedBox(height: 10,),
@@ -279,14 +272,6 @@ class _CustomerCreditPageState extends State<CustomerCreditPage> {
                                         ],
                                       ),),
                                     SizedBox(height: 10,),
-                                    Padding(
-                                      padding: EdgeInsets.symmetric(horizontal: 10),
-                                      child: DefaultButtonSmall(
-                                        text: "Approve",
-                                        press: (){
-                                          Alerts.showCreditApprove(context, _searchResult[i].userId);
-                                        }
-                                      ),)
                                   ],
                                 ),
                               ),

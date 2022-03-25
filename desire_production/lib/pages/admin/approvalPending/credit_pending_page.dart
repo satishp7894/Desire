@@ -1,0 +1,338 @@
+
+import 'package:data_connection_checker/data_connection_checker.dart';
+import 'package:desire_production/bloc/credit_pending_bloc.dart';
+import 'package:desire_production/bloc/kyc_pending_bloc.dart';
+import 'package:desire_production/model/kyc_pending_list_model.dart';
+import 'package:desire_production/pages/admin/customer/customer_kyc_details_page.dart';
+import 'package:desire_production/pages/admin/sales/add_credits_page.dart';
+import 'package:desire_production/utils/alerts.dart';
+import 'package:desire_production/utils/constants.dart';
+import 'package:flutter/material.dart';
+
+class CreditPendingPage extends StatefulWidget {
+
+  @override
+  _CreditPendingPageState createState() => _CreditPendingPageState();
+}
+
+class _CreditPendingPageState extends State<CreditPendingPage> {
+
+  final creditBloc = CreditPendingBloc();
+  List<bool> status = [];
+  TextEditingController searchView;
+  bool search = false;
+  List<CustomerList> _searchResult = [];
+  List<CustomerList> customerList = [];
+
+  @override
+  void initState() {
+    super.initState();
+    checkConnectivity();
+    searchView = TextEditingController();
+    creditBloc.fetchcreditPendingList();
+  }
+
+  checkConnectivity() async{
+    bool result = await DataConnectionChecker().hasConnection;
+    if(result == true) {
+    } else {
+      print('No internet :( Reason:');
+      print(DataConnectionChecker().lastTryResults);
+      Alerts.showAlertAndBack(context, "No Internet Connection", "Please check your internet");
+    }
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    searchView.dispose();
+    creditBloc.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        elevation: 0.0,
+        toolbarHeight: 50,
+        backgroundColor: Colors.white,
+        iconTheme: IconThemeData(
+            color: Colors.black
+        ),
+        title: Text("Credit Pending List", style: TextStyle(color: Colors.black), textAlign: TextAlign.center,),
+        centerTitle: true,
+        bottom: PreferredSize(
+          preferredSize: Size.fromHeight(50),
+          child: _searchView(),
+        ),
+      ),
+      body: _body(),
+    );
+  }
+
+  Widget _body(){
+    return RefreshIndicator(
+      color: kPrimaryColor,
+      onRefresh: () {
+        return Navigator.pushReplacement(context, MaterialPageRoute(builder: (builder) => CreditPendingPage()),);
+      },
+      child: StreamBuilder<KycPendingListModel>(
+          stream: creditBloc.creditStream,
+          builder: (context, s) {
+            if (s.connectionState != ConnectionState.active) {
+              print("all connection");
+              return Container(height: 300,
+                  alignment: Alignment.center,
+                  child: Center(
+                    heightFactor: 50, child: CircularProgressIndicator(
+                    color: kPrimaryColor,
+                  ),));
+            }
+            if (s.hasError) {
+              print("as3 error");
+              return Container(height: 300,
+                alignment: Alignment.center,
+                child: Text("Error Loading Data",),);
+            }
+            if (s.data
+                .toString()
+                .isEmpty) {
+              print("as3 empty");
+              return Container(height: 300,
+                alignment: Alignment.center,
+                child: Text("No Data Found",),);
+            }
+
+
+            customerList = s.data.customerList;
+
+            return SingleChildScrollView(
+              physics: AlwaysScrollableScrollPhysics(),
+              child: Padding(
+                padding: const EdgeInsets.only(top: 10.0,bottom: 10),
+                child: Column(
+                  children: [
+                    _searchResult.length == 0 ? ListView.separated(
+                      //padding: EdgeInsets.all(10),
+                      physics: NeverScrollableScrollPhysics(),
+                      shrinkWrap: true,
+                      //reverse: true,
+                      itemCount: customerList.length,
+                      itemBuilder: (c,i){
+                        return GestureDetector(
+                          onTap: (){
+                            Navigator.push(context, MaterialPageRoute(builder: (context){
+                              return AddCreditsPage(customerName: customerList[i].customerName,customerId: customerList[i].customerId);
+                            }));
+                            //s.data.customer[i].kycStatus == "0" ? Navigator.push(context, MaterialPageRoute(builder: (builder) => CustomerKYCDetailsPage(customerId: s.data.customer[i].customerId, salesId: widget.salesId,)))  :  Navigator.of(context).push(MaterialPageRoute(builder: (_) => CustomerListPage(salesId: widget.salesId,)));
+                          },
+                          child: Container(
+                            //padding: EdgeInsets.only(top: 10, bottom: 10),
+                            margin: EdgeInsets.only(left: 5, right: 5),
+                            alignment: Alignment.centerLeft,
+                            // decoration: BoxDecoration(
+                            //   //color: Color(0xFFF5F6F9),
+                            //   borderRadius: BorderRadius.circular(15),
+                            // ),
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  flex: 2,
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Padding(
+                                          padding: EdgeInsets.symmetric(horizontal: 10),
+                                          child: Text("Company Name: ${customerList[i].companyName}",
+                                            textAlign: TextAlign.left,
+                                            style: TextStyle(color: Colors.black, fontSize: 16, fontWeight: FontWeight.w500),)),
+                                      SizedBox(height: 10,),
+                                      Padding(
+                                          padding: EdgeInsets.symmetric(horizontal: 10),
+                                          child: Text("Name: ${customerList[i].customerName}",
+                                            textAlign: TextAlign.left,
+                                            style: TextStyle(color: Colors.black,),)),
+                                      SizedBox(height: 10,),
+                                      Padding(
+                                          padding: EdgeInsets.symmetric(horizontal: 10),
+                                          child: Text("Salesman: ${customerList[i].salesmanName}",
+                                            textAlign: TextAlign.left,
+                                            style: TextStyle(color: Colors.black,),)),
+                                      SizedBox(height: 10,),
+                                      Padding(
+                                          padding: EdgeInsets.symmetric(horizontal: 10),
+                                          child: Text("Pending Credit Limit: ${customerList[i].pendingCreditLimit}",
+                                            textAlign: TextAlign.left,
+                                            style: TextStyle(color: Colors.black,),)),
+
+
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
+                      }, separatorBuilder: (BuildContext context, int index) {
+                      return Divider(indent: 20, color: Colors.grey.withOpacity(.8),);
+                    },
+                    ) :
+                    ListView.separated(
+                      // padding: EdgeInsets.all(10),
+                      physics: NeverScrollableScrollPhysics(),
+                      shrinkWrap: true,
+                      //reverse: true,
+                      itemCount: _searchResult.length,
+                      itemBuilder: (c,i){
+
+                        return GestureDetector(
+                          onTap: (){
+                            Navigator.push(context, MaterialPageRoute(builder: (context){
+                              return AddCreditsPage(customerName: _searchResult[i].customerName, customerId: _searchResult[i].customerId,);
+                            }));
+                            //s.data.customer[i].kycStatus == "0" ? Navigator.push(context, MaterialPageRoute(builder: (builder) => CustomerKYCDetailsPage(customerId: s.data.customer[i].customerId, salesId: widget.salesId,)))  :  Navigator.of(context).push(MaterialPageRoute(builder: (_) => CustomerListPage(salesId: widget.salesId,)));
+                          },
+                          child: Container(
+                            //padding: EdgeInsets.only(top: 10, bottom: 10),
+                            margin: EdgeInsets.only(left: 5, right: 5),
+                            alignment: Alignment.centerLeft,
+                            // decoration: BoxDecoration(
+                            //   //color: Color(0xFFF5F6F9),
+                            //   borderRadius: BorderRadius.circular(15),
+                            // ),
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  flex: 2,
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Padding(
+                                          padding: EdgeInsets.symmetric(horizontal: 10),
+                                          child: Text("Company Name: ${_searchResult[i].companyName}",
+                                            textAlign: TextAlign.left,
+                                            style: TextStyle(color: Colors.black, fontSize: 16, fontWeight: FontWeight.w500),)),
+                                      SizedBox(height: 10,),
+                                      Padding(
+                                          padding: EdgeInsets.symmetric(horizontal: 10),
+                                          child: Text("Name: ${_searchResult[i].customerName}",
+                                            textAlign: TextAlign.left,
+                                            style: TextStyle(color: Colors.black,),)),
+                                      SizedBox(height: 10,),
+                                      Padding(
+                                          padding: EdgeInsets.symmetric(horizontal: 10),
+                                          child: Text("Salesman: ${_searchResult[i].salesmanName}",
+                                            textAlign: TextAlign.left,
+                                            style: TextStyle(color: Colors.black,),)),
+                                      SizedBox(height: 10,),
+                                      Padding(
+                                          padding: EdgeInsets.symmetric(horizontal: 10),
+                                          child: Text("Pending Credit Limit: ${_searchResult[i].pendingCreditLimit}",
+                                            textAlign: TextAlign.left,
+                                            style: TextStyle(color: Colors.black,),)),
+
+
+
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
+                      }, separatorBuilder: (BuildContext context, int index) {
+                      return Divider(indent: 20, color: Colors.grey.withOpacity(.8),);
+                    },
+                    ),
+                  ],
+                ),
+              ),
+            );
+          }
+      ),
+    );
+  }
+
+  Widget _searchView() {
+    return Padding(
+      padding: const EdgeInsets.only(left: 10.0,right: 10),
+      child: Container(
+        height: 50,
+        decoration: BoxDecoration(
+            border: Border.all(color: kSecondaryColor)
+
+        ),
+        child: Padding(
+          padding: const EdgeInsets.only(left: 10.0,right: 10),
+          child: TextFormField(
+            controller: searchView,
+            keyboardType: TextInputType.text,
+            textAlign: TextAlign.left,
+            onChanged: (value){
+              setState(() {
+                search = true;
+                onSearchTextChangedICD(value);
+              });
+            },
+            decoration: new InputDecoration(
+              border: InputBorder.none,
+              hintText: "Search Customers",
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  onSearchTextChangedICD(String text) async {
+    _searchResult.clear();
+    print("$text value from search");
+    if (text.isEmpty) {
+      setState(() {
+        search = false;
+      });
+      return;
+    }
+
+    customerList.forEach((exp) {
+      if (exp.customerName.toLowerCase().contains(text.toLowerCase()) || exp.salesmanName.toLowerCase().contains(text.toLowerCase()) || exp.companyName.toLowerCase().contains(text.toLowerCase()))
+        _searchResult.add(exp);
+    });
+    //print("search objects ${_searchResult.first}");
+    print("search result length ${_searchResult.length}");
+    setState(() {});
+  }
+
+/*updateStatusId(String status, String customerId) async {
+    // String value;
+    // status ? value = "1" : value = "0";
+    print("object request value $status $customerId");
+    ProgressDialog pr = ProgressDialog(context, type: ProgressDialogType.Normal,
+      isDismissible: false,);
+    pr.style(message: 'Please wait...',
+      progressWidget: Center(child: CircularProgressIndicator()),);
+    pr.show();
+    var response = await http.post(
+        Uri.parse(Connection.blockCustomer), body: {
+
+      'secretkey': Connection.secretKey,
+      'customer_id': '$customerId',
+      "status": status,
+
+    });
+    var results = json.decode(response.body);
+    print('response == $results  ${response.body}');
+    pr.hide();
+    if (results['status'] == true) {
+      final snackBar = SnackBar(
+          content: Text("Status Updated", textAlign: TextAlign.center,));
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => CustomerListPage()), (Route<dynamic> route) => false);
+    } else {
+      print('error deleting address');
+      Alerts.showAlertAndBack(context, 'Error', 'Address not Deleted.');
+    }
+  }*/
+}

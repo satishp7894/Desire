@@ -52,7 +52,7 @@ class ModelWiseListBloc {
   fetchModelWiseDailyOrderDetails(var modelNoId) async {
     try {
       final results =
-          await _apiClient.getModelWiseDailyProductionList(modelNoId);
+          await _apiClient.getModelWiseDailyOrdersDetails(modelNoId);
       modelWiseDailyDetailsController.sink.add(results);
       print("model bloc ${results.status}");
     } on Exception catch (e) {

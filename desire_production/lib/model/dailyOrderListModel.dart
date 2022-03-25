@@ -32,20 +32,22 @@ class Data {
   String modelNoId;
   String modelNo;
   String qty;
+  String total_qty;
   String createAt;
 
   Data(
       {this.dailyOrderId,
-        this.modelNoId,
-        this.modelNo,
-        this.qty,
-        this.createAt});
+      this.modelNoId,
+      this.modelNo,
+      this.qty,
+      this.createAt});
 
   Data.fromJson(Map<String, dynamic> json) {
     dailyOrderId = json['daily_order_id'];
     modelNoId = json['model_no_id'];
     modelNo = json['model_no'];
     qty = json['qty'];
+    total_qty = json['total_qty'];
     createAt = json['create_at'];
   }
 
@@ -55,6 +57,7 @@ class Data {
     data['model_no_id'] = this.modelNoId;
     data['model_no'] = this.modelNo;
     data['qty'] = this.qty;
+    data['total_qty'] = this.total_qty;
     data['create_at'] = this.createAt;
     return data;
   }

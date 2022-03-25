@@ -14,6 +14,7 @@ import 'package:desire_production/pages/admin/todayProduction/TodayProductionPag
 import 'package:desire_production/pages/admin/todays/today_list_page.dart';
 import 'package:desire_production/pages/admin/userslist/user_list_page.dart';
 import 'package:desire_production/pages/admin_dashboard_list/admin_page.dart';
+import 'package:desire_production/pages/admin_dashboard_list/approve_page.dart';
 import 'package:desire_production/pages/admin_dashboard_list/customer_page.dart';
 import 'package:desire_production/pages/admin_dashboard_list/product_page.dart';
 import 'package:desire_production/pages/admin_dashboard_list/sales_page.dart';
@@ -869,6 +870,44 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
                   SizedBox(height: 10),
                   Text(
                     "SALES LOCATION",
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          GestureDetector(
+            onTap: () {
+              Navigator.push(context, MaterialPageRoute(builder: (context) {
+                return ApprovePage();
+              }));
+            },
+            child: Container(
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  color: kPrimaryColor,
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey,
+                      blurRadius: 5.0,
+                      spreadRadius: 2,
+                    )
+                  ]),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.approval,
+                    size: 40,
+                    color: kWhite,
+                  ),
+                  SizedBox(height: 10),
+                  Text(
+                    "PENDING APPR0VAL",
                     style: TextStyle(
                         color: Colors.white,
                         fontSize: 14,

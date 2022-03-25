@@ -176,7 +176,7 @@ class _CustomerListPageState extends State<CustomerListPage> {
                                           SizedBox(height: 10,),
                                           Padding(
                                               padding: EdgeInsets.symmetric(horizontal: 10),
-                                              child: Text("Salesman: ${customerList[i].salesmanID}",
+                                              child: Text("Salesman: ${customerList[i].salesman_name}",
                                                 textAlign: TextAlign.left,
                                                 style: TextStyle(color: Colors.black,),)),
                                           SizedBox(height: 10,),
@@ -381,7 +381,7 @@ class _CustomerListPageState extends State<CustomerListPage> {
                                           SizedBox(height: 10,),
                                           Padding(
                                               padding: EdgeInsets.symmetric(horizontal: 10),
-                                              child: Text("Salesman: ${_searchResult[i].salesmanID}",
+                                              child: Text("Salesman: ${_searchResult[i].salesman_name}",
                                                 textAlign: TextAlign.left,
                                                 style: TextStyle(color: Colors.black,),)),
                                           SizedBox(height: 10,),
@@ -580,7 +580,7 @@ class _CustomerListPageState extends State<CustomerListPage> {
     }
 
     customerList.forEach((exp) {
-      if (exp.customerName.toLowerCase().contains(text.toLowerCase()) || exp.salesmanID.toLowerCase().contains(text.toLowerCase()) || exp.companyName.toLowerCase().contains(text.toLowerCase()))
+      if (exp.customerName.toLowerCase().contains(text.toLowerCase()) || exp.salesman_name.toLowerCase().contains(text.toLowerCase()) || exp.companyName.toLowerCase().contains(text.toLowerCase()))
         _searchResult.add(exp);
     });
     //print("search objects ${_searchResult.first}");

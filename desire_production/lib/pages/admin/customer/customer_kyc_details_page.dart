@@ -36,7 +36,6 @@ class _CustomerKYCDetailsPageState extends State<CustomerKYCDetailsPage> {
   void initState() {
     super.initState();
     checkConnectivity();
-    //getKyc();
     kycBloc.fetchKycView(widget.customerId);
   }
 
@@ -50,16 +49,6 @@ class _CustomerKYCDetailsPageState extends State<CustomerKYCDetailsPage> {
     }
   }
 
-  // getKyc() async{
-  //   SharedPreferences prefs = await  SharedPreferences.getInstance();
-  //   if(prefs.getStringList("kycDone") != null){
-  //     kyc = prefs.getStringList("kycDone");
-  //     print("object ${kyc.length}");
-  //   } else {
-  //     kyc =[];
-  //   }
-  // }
-
   @override
   void dispose() {
     super.dispose();
@@ -72,9 +61,13 @@ class _CustomerKYCDetailsPageState extends State<CustomerKYCDetailsPage> {
         child: Scaffold(
           appBar: AppBar(
             elevation: 0,
+            iconTheme: IconThemeData(
+                color: Colors.black
+            ),
             backgroundColor: Colors.transparent,
             title: Text("Customer KYC Details", style: TextStyle(color: Colors.black), textAlign: TextAlign.center,),
             centerTitle: true,
+
           ),
           body: _body(),
         ));
