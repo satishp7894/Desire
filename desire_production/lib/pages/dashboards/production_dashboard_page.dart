@@ -805,7 +805,7 @@ class _DashboardPageProductionState extends State<DashboardPageProduction> {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             Text(
-                              "Planning",
+                              "Pending Orders",
                               style: TextStyle(
                                   color: Colors.white,
                                   fontSize: 14,
@@ -815,7 +815,7 @@ class _DashboardPageProductionState extends State<DashboardPageProduction> {
                               height: 10,
                             ),
                             Text(
-                              "No Planning",
+                              "0",
                               style: TextStyle(
                                   color: Colors.white,
                                   fontSize: 14,
@@ -882,7 +882,7 @@ class _DashboardPageProductionState extends State<DashboardPageProduction> {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             Text(
-                              "Planning",
+                              "Pending Orders",
                               style: TextStyle(
                                   color: Colors.white,
                                   fontSize: 14,
@@ -892,7 +892,7 @@ class _DashboardPageProductionState extends State<DashboardPageProduction> {
                               height: 10,
                             ),
                             Text(
-                              "No Planning",
+                              "0",
                               style: TextStyle(
                                   color: Colors.white,
                                   fontSize: 14,
@@ -902,7 +902,7 @@ class _DashboardPageProductionState extends State<DashboardPageProduction> {
                         ),
                       ],
                     );
-                  } else if (s.data.data == null) {
+                  } else if (s.data == null) {
                     print("as3 empty");
                     return Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -959,7 +959,7 @@ class _DashboardPageProductionState extends State<DashboardPageProduction> {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             Text(
-                              "Planning",
+                              "Pending Orders",
                               style: TextStyle(
                                   color: Colors.white,
                                   fontSize: 14,
@@ -969,7 +969,7 @@ class _DashboardPageProductionState extends State<DashboardPageProduction> {
                               height: 10,
                             ),
                             Text(
-                              "No Planning",
+                              "0",
                               style: TextStyle(
                                   color: Colors.white,
                                   fontSize: 14,
@@ -999,7 +999,7 @@ class _DashboardPageProductionState extends State<DashboardPageProduction> {
                               height: 10,
                             ),
                             Text(
-                              "${s.data.data.dailyOrder}",
+                              "${s.data.totalDailyOrder}",
                               style: TextStyle(
                                   color: Colors.white,
                                   fontSize: 14,
@@ -1022,7 +1022,7 @@ class _DashboardPageProductionState extends State<DashboardPageProduction> {
                               height: 10,
                             ),
                             Text(
-                              "${s.data.data.dailyProduction}",
+                              "${s.data.totalProductionOrder}",
                               style: TextStyle(
                                   color: Colors.white,
                                   fontSize: 14,
@@ -1035,7 +1035,7 @@ class _DashboardPageProductionState extends State<DashboardPageProduction> {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             Text(
-                              "Planning",
+                              "Pending Orders",
                               style: TextStyle(
                                   color: Colors.white,
                                   fontSize: 14,
@@ -1045,7 +1045,7 @@ class _DashboardPageProductionState extends State<DashboardPageProduction> {
                               height: 10,
                             ),
                             Text(
-                              "No Planning",
+                              "${s.data.totalPendingOrder}",
                               style: TextStyle(
                                   color: Colors.white,
                                   fontSize: 14,

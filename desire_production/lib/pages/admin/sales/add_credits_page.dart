@@ -2,6 +2,8 @@ import 'dart:convert';
 import 'package:desire_production/bloc/customer_bloc.dart';
 import 'package:desire_production/components/custom_surfix_icon.dart';
 import 'package:desire_production/components/default_button.dart';
+import 'package:desire_production/model/credit_details_model.dart';
+import 'package:desire_production/model/credit_list_model.dart';
 import 'package:desire_production/model/sales_customer_list_model.dart';
 import 'package:desire_production/pages/admin/sales/customer_credit_page.dart';
 import 'package:desire_production/services/connections.dart';
@@ -19,9 +21,7 @@ class AddCreditsPage extends StatefulWidget {
   final String customerName;
   final String customerId;
 
-  const AddCreditsPage({
-    this.customerName,this.customerId
-  });
+  const AddCreditsPage({this.customerName, this.customerId});
 
   @override
   _AddCreditsPageState createState() => _AddCreditsPageState();
@@ -30,6 +30,10 @@ class AddCreditsPage extends StatefulWidget {
 class _AddCreditsPageState extends State<AddCreditsPage> with Validator {
   TextEditingController creditAmount, creditDays;
   final customerBloc = CustomerListBloc();
+  var customerId;
+  var customerName;
+  bool creditStatus = false;
+  int status = -1;
 
   AutovalidateMode _autoValidateMode1 = AutovalidateMode.disabled;
   final GlobalKey<FormState> _formKey1 = GlobalKey<FormState>();
@@ -45,7 +49,11 @@ class _AddCreditsPageState extends State<AddCreditsPage> with Validator {
     creditAmount = TextEditingController();
     creditDays = TextEditingController();
     print(widget.customerName);
+    if (widget.customerId != null && widget.customerId != "") {
+      customerBloc.fetchCreditDetails(widget.customerId);
+    }
     customerBloc.fetchCustomerList();
+
     custId = widget.customerId;
   }
 
@@ -60,23 +68,71 @@ class _AddCreditsPageState extends State<AddCreditsPage> with Validator {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        elevation: 0,
-        centerTitle: true,
-        backgroundColor: Colors.white,
-        iconTheme: IconThemeData(color: Colors.black),
-        title: Text(
-          "Add Credits",
-          textAlign: TextAlign.center,
-          style: TextStyle(color: Colors.black),
+        appBar: AppBar(
+          elevation: 0,
+          centerTitle: true,
+          backgroundColor: Colors.white,
+          iconTheme: IconThemeData(color: Colors.black),
+          title: Text(
+            "Add Credits",
+            textAlign: TextAlign.center,
+            style: TextStyle(color: Colors.black),
+          ),
         ),
-      ),
-      body: _body(),
-      //bottomNavigationBar: _checkoutCard(),
-    );
+        body: (widget.customerId != null && widget.customerId != "")
+            ? StreamBuilder<CreditDetailsModel>(
+                stream: customerBloc.creditDetailStream,
+                builder: (context, s) {
+                  if (s.connectionState != ConnectionState.active) {
+                    print("all connection");
+                    return Container(
+                        height: 300,
+                        alignment: Alignment.center,
+                        child: Center(
+                          heightFactor: 50,
+                          child: CircularProgressIndicator(
+                            color: kPrimaryColor,
+                          ),
+                        ));
+                  }
+                  if (s.hasError) {
+                    print("as3 error");
+                    return Container(
+                      height: 300,
+                      alignment: Alignment.center,
+                      child: Text(
+                        "Error Loading Data",
+                      ),
+                    );
+                  }
+                  if (s.data.toString().isEmpty) {
+                    print("as3 empty");
+                    return Container(
+                      height: 300,
+                      alignment: Alignment.center,
+                      child: Text(
+                        "No Data Found",
+                      ),
+                    );
+                  }
+                  var customerCreditDetails = s.data.customerCreditDetails;
+                  creditAmount.text = customerCreditDetails.creditLimit;
+                  creditDays.text = customerCreditDetails.creditDays;
+                  customerId = customerCreditDetails.customerId;
+                  customerName = customerCreditDetails.customerName;
+
+                  creditStatus = status == -1
+                      ? customerCreditDetails.creditStatus == "0"
+                          ? false
+                          : true
+                      : creditStatus;
+
+                  return _body(customerCreditDetails);
+                })
+            : _body(null));
   }
 
-  Widget _body() {
+  Widget _body(CustomerCreditDetails customerCreditDetail) {
     return StreamBuilder<SalesCustomerModel>(
         stream: customerBloc.newCustomerStream,
         builder: (context, s) {
@@ -128,6 +184,21 @@ class _AddCreditsPageState extends State<AddCreditsPage> with Validator {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
+                  Image.asset(
+                    "assets/images/add_credit.png",
+                    height: 100,
+                    width: 100,
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Text(
+                    "Give credit to your customer's",
+                    style: TextStyle(fontSize: 16),
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
                   DropdownSearch<String>(
                     validator: (v) => v == null ? "required field" : null,
                     mode: Mode.MENU,
@@ -148,7 +219,7 @@ class _AddCreditsPageState extends State<AddCreditsPage> with Validator {
                           borderRadius: BorderRadius.circular(10)),
                     ),
                     showSelectedItem: true,
-                    selectedItem: widget.customerName,
+                    selectedItem: customerName,
                     items: custList,
                     onChanged: (value) {
                       setState(() {
@@ -233,10 +304,32 @@ class _AddCreditsPageState extends State<AddCreditsPage> with Validator {
                   SizedBox(
                     height: 20,
                   ),
+                  widget.customerId != null
+                      ? Row(
+                          children: [
+                            Checkbox(
+                              value: creditStatus,
+                              onChanged: (bool value) {
+                                setState(() {
+                                  creditStatus = value;
+                                  status = 1;
+                                });
+                              },
+                            ),
+                            Text(
+                              'Approve ',
+                              style: TextStyle(fontSize: 17.0),
+                            )
+                          ],
+                        )
+                      : Container(),
+                  SizedBox(
+                    height: 20,
+                  ),
                   DefaultButton(
                     text: "Add Credits",
                     press: () {
-                      addCredits();
+                      addCredits(widget.customerName);
                     },
                   ),
                 ],
@@ -246,7 +339,7 @@ class _AddCreditsPageState extends State<AddCreditsPage> with Validator {
         });
   }
 
-  addCredits() async {
+  addCredits(String customerName) async {
     print("object values  ${creditDays.text} ${creditAmount.text} $custId");
     if (_formKey1.currentState.validate()) {
       _formKey1.currentState.save();
@@ -260,11 +353,13 @@ class _AddCreditsPageState extends State<AddCreditsPage> with Validator {
         progressWidget: Center(child: CircularProgressIndicator()),
       );
       pr.show();
-      var response = await http.post(Uri.parse(Connection.addCredits), body: {
-        'user_id': "$custId",
-        'credit_amount': "${creditAmount.text}",
+      var response = await http.post(Uri.parse(Connection.updateCredit), body: {
+        'customer_id': "$custId",
+        'credit_limit': "${creditAmount.text}",
         'credit_days': "${creditDays.text}",
-        'secretkey': "${Connection.secretKey}"
+        'credit_status':
+            customerName != null ? "${creditStatus ? "1" : "0"}" : "0",
+        'secretkey': "${Connection.secretKey}",
       });
 
       print("object ${response.body}");
@@ -272,10 +367,16 @@ class _AddCreditsPageState extends State<AddCreditsPage> with Validator {
 
       pr.hide();
       if (results['status'] == true) {
-        Navigator.pushAndRemoveUntil(
+        /* Navigator.pushAndRemoveUntil(
             context,
             MaterialPageRoute(builder: (builder) => AddCreditsPage()),
-            (route) => false);
+            (route) => false);*/
+        final snackBar = SnackBar(
+            content: Text(
+          results["message"],
+          textAlign: TextAlign.center,
+        ));
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
       } else {
         Alerts.showAlertAndBack(context, "Error", "Credit already added.");
       }

@@ -132,7 +132,7 @@ class _WarehouseListPageState extends State<WarehouseListPage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  _searchResult.length == 0 ?
+                  searchView.text.length == 0 ?
                   Container(
                     alignment: Alignment.center,
                     child: Column(
@@ -267,7 +267,15 @@ class _WarehouseListPageState extends State<WarehouseListPage> {
                       ],
                     ),
                   ) :
-                  Container(
+                  _searchResult.length == 0
+                      ? Container(
+                      alignment: Alignment.center,
+                      child: Text(
+                        "No Data Found",
+                        style: TextStyle(
+                            fontSize: 20, fontWeight: FontWeight.w800),
+                      ))
+                      :Container(
                     alignment: Alignment.center,
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,

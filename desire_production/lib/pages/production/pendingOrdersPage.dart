@@ -202,7 +202,7 @@ class _PendingOrdersPageState extends State<PendingOrdersPage> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          _searchResult.length == 0
+                          searchView.text.length == 0
                               ? Container(
                                   alignment: Alignment.center,
                                   child: Column(
@@ -596,44 +596,84 @@ class _PendingOrdersPageState extends State<PendingOrdersPage> {
                                     ],
                                   ),
                                 )
-                              : Container(
-                                  alignment: Alignment.center,
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: [
-                                      Container(
-                                        height: 40,
-                                        child: Row(
-                                          children: [
-                                            Container(
-                                              width: 50,
-                                              alignment: Alignment.center,
-                                              decoration: BoxDecoration(
-                                                color: kPrimaryColor,
-                                                border: Border(
-                                                    left: BorderSide(
-                                                        color: Colors.black),
-                                                    right: BorderSide(
-                                                        color: Colors.black),
-                                                    bottom: BorderSide(
-                                                        color: Colors.black),
-                                                    top: BorderSide(
-                                                        color: Colors.black)),
-                                              ),
-                                              child: Text(
-                                                'Sr No.',
-                                                style: TextStyle(
-                                                    color: Colors
-                                                        .white), //style: content1,
-                                                textAlign: TextAlign.center,
-                                              ),
-                                              //alignment: Alignment.center,
-                                            ),
-                                            Expanded(
-                                                flex: 2,
-                                                child: Container(
+                              : _searchResult.length == 0
+                                  ? Container(
+                                      alignment: Alignment.center,
+                                      child: Text(
+                                        "No Data Found",
+                                        style: TextStyle(
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.w800),
+                                      ))
+                                  : Container(
+                                      alignment: Alignment.center,
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: [
+                                          Container(
+                                            height: 40,
+                                            child: Row(
+                                              children: [
+                                                Container(
+                                                  width: 50,
+                                                  alignment: Alignment.center,
+                                                  decoration: BoxDecoration(
+                                                    color: kPrimaryColor,
+                                                    border: Border(
+                                                        left: BorderSide(
+                                                            color:
+                                                                Colors.black),
+                                                        right: BorderSide(
+                                                            color:
+                                                                Colors.black),
+                                                        bottom: BorderSide(
+                                                            color:
+                                                                Colors.black),
+                                                        top: BorderSide(
+                                                            color:
+                                                                Colors.black)),
+                                                  ),
+                                                  child: Text(
+                                                    'Sr No.',
+                                                    style: TextStyle(
+                                                        color: Colors
+                                                            .white), //style: content1,
+                                                    textAlign: TextAlign.center,
+                                                  ),
+                                                  //alignment: Alignment.center,
+                                                ),
+                                                Expanded(
+                                                    flex: 2,
+                                                    child: Container(
+                                                      decoration: BoxDecoration(
+                                                        color: kPrimaryColor,
+                                                        border: Border(
+                                                            right: BorderSide(
+                                                                color: Colors
+                                                                    .black),
+                                                            bottom: BorderSide(
+                                                                color: Colors
+                                                                    .black),
+                                                            top: BorderSide(
+                                                                color: Colors
+                                                                    .black)),
+                                                      ),
+                                                      child: Text(
+                                                        'Model Number',
+                                                        style: TextStyle(
+                                                            color: Colors
+                                                                .white), //style: content1,
+                                                        textAlign:
+                                                            TextAlign.center,
+                                                      ),
+                                                      alignment:
+                                                          Alignment.center,
+                                                    )),
+                                                Expanded(
+                                                    child: Container(
                                                   decoration: BoxDecoration(
                                                     color: kPrimaryColor,
                                                     border: Border(
@@ -648,7 +688,7 @@ class _PendingOrdersPageState extends State<PendingOrdersPage> {
                                                                 Colors.black)),
                                                   ),
                                                   child: Text(
-                                                    'Model Number',
+                                                    'Qty',
                                                     style: TextStyle(
                                                         color: Colors
                                                             .white), //style: content1,
@@ -656,142 +696,163 @@ class _PendingOrdersPageState extends State<PendingOrdersPage> {
                                                   ),
                                                   alignment: Alignment.center,
                                                 )),
-                                            Expanded(
-                                                child: Container(
-                                              decoration: BoxDecoration(
-                                                color: kPrimaryColor,
-                                                border: Border(
-                                                    right: BorderSide(
-                                                        color: Colors.black),
-                                                    bottom: BorderSide(
-                                                        color: Colors.black),
-                                                    top: BorderSide(
-                                                        color: Colors.black)),
-                                              ),
-                                              child: Text(
-                                                'Qty',
-                                                style: TextStyle(
-                                                    color: Colors
-                                                        .white), //style: content1,
-                                                textAlign: TextAlign.center,
-                                              ),
-                                              alignment: Alignment.center,
-                                            )),
-                                            Container(
-                                              width: 50,
-                                              alignment: Alignment.center,
-                                              decoration: BoxDecoration(
-                                                color: kPrimaryColor,
-                                                border: Border(
-                                                    top: BorderSide(
-                                                        color: Colors.black),
-                                                    right: BorderSide(
-                                                        color: Colors.black),
-                                                    bottom: BorderSide(
-                                                        color: Colors.black)),
-                                              ),
-                                              child: Checkbox(
-                                                value: checkAll,
-                                                checkColor: Colors.white,
-                                                onChanged: (value) {
-                                                  setState(() {
-                                                    checkAll = value;
-                                                  });
-                                                  print(
-                                                      "object remember $checkAll");
-                                                  if (checkAll == true) {
-                                                    for (int i = 0;
-                                                        i <
-                                                            _searchResult
-                                                                .length;
-                                                        i++) {
-                                                      check[i] = true;
-                                                      send.add(_searchResult[i]
-                                                          .dailyOrderId);
-                                                    }
-                                                  } else {
-                                                    for (int i = 0;
-                                                        i <
-                                                            _searchResult
-                                                                .length;
-                                                        i++) {
-                                                      check[i] = false;
-                                                      send = [];
-                                                    }
-                                                  }
-                                                },
-                                              ),
+                                                Container(
+                                                  width: 50,
+                                                  alignment: Alignment.center,
+                                                  decoration: BoxDecoration(
+                                                    color: kPrimaryColor,
+                                                    border: Border(
+                                                        top: BorderSide(
+                                                            color:
+                                                                Colors.black),
+                                                        right: BorderSide(
+                                                            color:
+                                                                Colors.black),
+                                                        bottom: BorderSide(
+                                                            color:
+                                                                Colors.black)),
+                                                  ),
+                                                  child: Checkbox(
+                                                    value: checkAll,
+                                                    checkColor: Colors.white,
+                                                    onChanged: (value) {
+                                                      setState(() {
+                                                        checkAll = value;
+                                                      });
+                                                      print(
+                                                          "object remember $checkAll");
+                                                      if (checkAll == true) {
+                                                        for (int i = 0;
+                                                            i <
+                                                                _searchResult
+                                                                    .length;
+                                                            i++) {
+                                                          check[i] = true;
+                                                          send.add(
+                                                              _searchResult[i]
+                                                                  .dailyOrderId);
+                                                        }
+                                                      } else {
+                                                        for (int i = 0;
+                                                            i <
+                                                                _searchResult
+                                                                    .length;
+                                                            i++) {
+                                                          check[i] = false;
+                                                          send = [];
+                                                        }
+                                                      }
+                                                    },
+                                                  ),
+                                                ),
+                                                Expanded(
+                                                    child: Container(
+                                                  decoration: BoxDecoration(
+                                                    color: kPrimaryColor,
+                                                    border: Border(
+                                                        right: BorderSide(
+                                                            color:
+                                                                Colors.black),
+                                                        bottom: BorderSide(
+                                                            color:
+                                                                Colors.black),
+                                                        top: BorderSide(
+                                                            color:
+                                                                Colors.black)),
+                                                  ),
+                                                  child: Text(
+                                                    'Details',
+                                                    style: TextStyle(
+                                                        color: Colors
+                                                            .white), //style: content1,
+                                                    textAlign: TextAlign.center,
+                                                  ),
+                                                  alignment: Alignment.center,
+                                                )),
+                                              ],
                                             ),
-                                            Expanded(
-                                                child: Container(
-                                              decoration: BoxDecoration(
-                                                color: kPrimaryColor,
-                                                border: Border(
-                                                    right: BorderSide(
-                                                        color: Colors.black),
-                                                    bottom: BorderSide(
-                                                        color: Colors.black),
-                                                    top: BorderSide(
-                                                        color: Colors.black)),
-                                              ),
-                                              child: Text(
-                                                'Details',
-                                                style: TextStyle(
-                                                    color: Colors
-                                                        .white), //style: content1,
-                                                textAlign: TextAlign.center,
-                                              ),
-                                              alignment: Alignment.center,
-                                            )),
-                                          ],
-                                        ),
-                                      ),
-                                      for (int i = 0;
-                                          i < _searchResult.length;
-                                          i++)
-                                        AnimationConfiguration.staggeredList(
-                                          position: i,
-                                          duration:
-                                              const Duration(milliseconds: 375),
-                                          child: SlideAnimation(
-                                            verticalOffset: 50.0,
-                                            child: FadeInAnimation(
-                                              child: Container(
-                                                height: 40,
-                                                child: Row(
-                                                  children: [
-                                                    Container(
-                                                      width: 50,
-                                                      alignment:
-                                                          Alignment.center,
-                                                      decoration: BoxDecoration(
-                                                        //color: bg,
-                                                        border: Border(
-                                                            left: BorderSide(
+                                          ),
+                                          for (int i = 0;
+                                              i < _searchResult.length;
+                                              i++)
+                                            AnimationConfiguration
+                                                .staggeredList(
+                                              position: i,
+                                              duration: const Duration(
+                                                  milliseconds: 375),
+                                              child: SlideAnimation(
+                                                verticalOffset: 50.0,
+                                                child: FadeInAnimation(
+                                                  child: Container(
+                                                    height: 40,
+                                                    child: Row(
+                                                      children: [
+                                                        Container(
+                                                          width: 50,
+                                                          alignment:
+                                                              Alignment.center,
+                                                          decoration:
+                                                              BoxDecoration(
+                                                            //color: bg,
+                                                            border: Border(
+                                                                left: BorderSide(
+                                                                    color: Colors
+                                                                        .black),
+                                                                right: BorderSide(
+                                                                    color: Colors
+                                                                        .black),
+                                                                bottom: BorderSide(
+                                                                    color: Colors
+                                                                        .black)),
+                                                          ),
+                                                          child: Text(
+                                                            '${i + 1}',
+                                                            style: TextStyle(
+                                                                fontSize: 12,
                                                                 color: Colors
-                                                                    .black),
-                                                            right: BorderSide(
-                                                                color: Colors
-                                                                    .black),
-                                                            bottom: BorderSide(
-                                                                color: Colors
-                                                                    .black)),
-                                                      ),
-                                                      child: Text(
-                                                        '${i + 1}',
-                                                        style: TextStyle(
-                                                            fontSize: 12,
-                                                            color: Colors.black,
-                                                            fontWeight: FontWeight
-                                                                .bold), //style: content1,
-                                                        textAlign:
-                                                            TextAlign.center,
-                                                      ),
-                                                      //alignment: Alignment.center,
-                                                    ),
-                                                    Expanded(
-                                                        flex: 2,
-                                                        child: Container(
+                                                                    .black,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold), //style: content1,
+                                                            textAlign: TextAlign
+                                                                .center,
+                                                          ),
+                                                          //alignment: Alignment.center,
+                                                        ),
+                                                        Expanded(
+                                                            flex: 2,
+                                                            child: Container(
+                                                              decoration:
+                                                                  BoxDecoration(
+                                                                border: Border(
+                                                                    right: BorderSide(
+                                                                        color: Colors
+                                                                            .black),
+                                                                    bottom: BorderSide(
+                                                                        color: Colors
+                                                                            .black)),
+                                                              ),
+                                                              child: Text(
+                                                                '${_searchResult[i].modelNo}',
+                                                                style: TextStyle(
+                                                                    fontSize:
+                                                                        12,
+                                                                    color: Colors
+                                                                        .black,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .bold),
+                                                                //style: content1,
+                                                                textAlign:
+                                                                    TextAlign
+                                                                        .center,
+                                                              ),
+                                                              alignment:
+                                                                  Alignment
+                                                                      .center,
+                                                            )),
+                                                        Expanded(
+                                                            child: Container(
                                                           decoration:
                                                               BoxDecoration(
                                                             border: Border(
@@ -803,7 +864,7 @@ class _PendingOrdersPageState extends State<PendingOrdersPage> {
                                                                         .black)),
                                                           ),
                                                           child: Text(
-                                                            '${_searchResult[i].modelNo}',
+                                                            '${_searchResult[i].qty}',
                                                             style: TextStyle(
                                                                 fontSize: 12,
                                                                 color: Colors
@@ -818,127 +879,108 @@ class _PendingOrdersPageState extends State<PendingOrdersPage> {
                                                           alignment:
                                                               Alignment.center,
                                                         )),
-                                                    Expanded(
-                                                        child: Container(
-                                                      decoration: BoxDecoration(
-                                                        border: Border(
-                                                            right: BorderSide(
-                                                                color: Colors
-                                                                    .black),
-                                                            bottom: BorderSide(
-                                                                color: Colors
-                                                                    .black)),
-                                                      ),
-                                                      child: Text(
-                                                        '${_searchResult[i].qty}',
-                                                        style: TextStyle(
-                                                            fontSize: 12,
-                                                            color: Colors.black,
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .bold),
-                                                        //style: content1,
-                                                        textAlign:
-                                                            TextAlign.center,
-                                                      ),
-                                                      alignment:
-                                                          Alignment.center,
-                                                    )),
-                                                    Container(
-                                                      width: 50,
-                                                      alignment:
-                                                          Alignment.center,
-                                                      decoration: BoxDecoration(
-                                                        //color: bg,
-                                                        border: Border(
-                                                            right: BorderSide(
-                                                                color: Colors
-                                                                    .black),
-                                                            bottom: BorderSide(
-                                                                color: Colors
-                                                                    .black)),
-                                                      ),
-                                                      child: Checkbox(
-                                                        value: check[i],
-                                                        activeColor:
-                                                            kPrimaryColor,
-                                                        onChanged: (value) {
-                                                          setState(() {
-                                                            check[i] = value;
-                                                          });
-                                                          print(
-                                                              "object remember ${check[i]}");
-                                                          if (check[i] ==
-                                                              true) {
-                                                            send.add(
-                                                                _searchResult[i]
-                                                                    .dailyOrderId);
-                                                          } else {
-                                                            send.remove(
-                                                                _searchResult[i]
-                                                                    .dailyOrderId);
-                                                          }
-                                                        },
-                                                      ),
-                                                    ),
-                                                    Expanded(
-                                                        child: GestureDetector(
-                                                      onTap: () {
-                                                        Navigator.push(
-                                                            context,
-                                                            MaterialPageRoute(
-                                                                builder: (context) => DailyOrdersListByModelNumber(
-                                                                    modelNoId:
-                                                                        _searchResult[i]
-                                                                            .modelNoId,
-                                                                    modelNo: _searchResult[
+                                                        Container(
+                                                          width: 50,
+                                                          alignment:
+                                                              Alignment.center,
+                                                          decoration:
+                                                              BoxDecoration(
+                                                            //color: bg,
+                                                            border: Border(
+                                                                right: BorderSide(
+                                                                    color: Colors
+                                                                        .black),
+                                                                bottom: BorderSide(
+                                                                    color: Colors
+                                                                        .black)),
+                                                          ),
+                                                          child: Checkbox(
+                                                            value: check[i],
+                                                            activeColor:
+                                                                kPrimaryColor,
+                                                            onChanged: (value) {
+                                                              setState(() {
+                                                                check[i] =
+                                                                    value;
+                                                              });
+                                                              print(
+                                                                  "object remember ${check[i]}");
+                                                              if (check[i] ==
+                                                                  true) {
+                                                                send.add(
+                                                                    _searchResult[
                                                                             i]
-                                                                        .modelNo,
-                                                                    status: 1,
-                                                                    page: widget
-                                                                        .page)));
-                                                      },
-                                                      child: Container(
-                                                        decoration:
-                                                            BoxDecoration(
-                                                          color: Colors.white,
-                                                          border: Border(
-                                                              right: BorderSide(
-                                                                  color: Colors
-                                                                      .black),
-                                                              bottom: BorderSide(
-                                                                  color: Colors
-                                                                      .black),
-                                                              top: BorderSide(
-                                                                  color: Colors
-                                                                      .black)),
+                                                                        .dailyOrderId);
+                                                              } else {
+                                                                send.remove(
+                                                                    _searchResult[
+                                                                            i]
+                                                                        .dailyOrderId);
+                                                              }
+                                                            },
+                                                          ),
                                                         ),
-                                                        child: Text(
-                                                          'View Details',
-                                                          style: TextStyle(
-                                                              decoration:
-                                                                  TextDecoration
-                                                                      .underline,
-                                                              fontSize: 14,
+                                                        Expanded(
+                                                            child:
+                                                                GestureDetector(
+                                                          onTap: () {
+                                                            Navigator.push(
+                                                                context,
+                                                                MaterialPageRoute(
+                                                                    builder: (context) => DailyOrdersListByModelNumber(
+                                                                        modelNoId: _searchResult[i]
+                                                                            .modelNoId,
+                                                                        modelNo:
+                                                                            _searchResult[i]
+                                                                                .modelNo,
+                                                                        status:
+                                                                            1,
+                                                                        page: widget
+                                                                            .page)));
+                                                          },
+                                                          child: Container(
+                                                            decoration:
+                                                                BoxDecoration(
                                                               color:
-                                                                  kPrimaryColor),
-                                                          //style: content1,
-                                                          textAlign:
-                                                              TextAlign.center,
-                                                        ),
-                                                        alignment:
-                                                            Alignment.center,
-                                                      ),
-                                                    )),
-                                                  ],
+                                                                  Colors.white,
+                                                              border: Border(
+                                                                  right: BorderSide(
+                                                                      color: Colors
+                                                                          .black),
+                                                                  bottom: BorderSide(
+                                                                      color: Colors
+                                                                          .black),
+                                                                  top: BorderSide(
+                                                                      color: Colors
+                                                                          .black)),
+                                                            ),
+                                                            child: Text(
+                                                              'View Details',
+                                                              style: TextStyle(
+                                                                  decoration:
+                                                                      TextDecoration
+                                                                          .underline,
+                                                                  fontSize: 14,
+                                                                  color:
+                                                                      kPrimaryColor),
+                                                              //style: content1,
+                                                              textAlign:
+                                                                  TextAlign
+                                                                      .center,
+                                                            ),
+                                                            alignment: Alignment
+                                                                .center,
+                                                          ),
+                                                        )),
+                                                      ],
+                                                    ),
+                                                  ),
                                                 ),
                                               ),
                                             ),
-                                          ),
-                                        ),
-                                    ],
-                                  ),
-                                ),
+                                        ],
+                                      ),
+                                    ),
                           widget.page == "daily"
                               ? Container()
                               : send.length > 0

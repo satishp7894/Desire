@@ -145,7 +145,7 @@ class _UserListpageState extends State<UserListpage> {
                 padding: const EdgeInsets.only(top: 10.0, bottom: 10),
                 child: Column(
                   children: [
-                    _searchResult.length == 0
+                    searchView.text.length == 0
                         ? ListView.separated(
                             //padding: EdgeInsets.all(10),
                             physics: NeverScrollableScrollPhysics(),
@@ -356,216 +356,232 @@ class _UserListpageState extends State<UserListpage> {
                               );
                             },
                           )
-                        : ListView.separated(
-                            padding: EdgeInsets.all(10),
-                            physics: NeverScrollableScrollPhysics(),
-                            shrinkWrap: true,
-                            //reverse: true,
-                            itemCount: _searchResult.length,
-                            itemBuilder: (c, i) {
-                              _searchResult[i].isActive == "0"
-                                  ? status.add(false)
-                                  : status.add(true);
-                              return GestureDetector(
-                                onTap: () {
-                                  //s.data.customer[i].kycStatus == "0" ? Navigator.push(context, MaterialPageRoute(builder: (builder) => CustomerKYCDetailsPage(customerId: s.data.customer[i].customerId, salesId: widget.salesId,)))  :  Navigator.of(context).push(MaterialPageRoute(builder: (_) => CustomerListPage(salesId: widget.salesId,)));
-                                },
-                                child: Container(
-                                  //padding: EdgeInsets.only(top: 10, bottom: 10),
-                                  margin: EdgeInsets.only(left: 5, right: 5),
-                                  alignment: Alignment.centerLeft,
-                                  // decoration: BoxDecoration(
-                                  //   //color: Color(0xFFF5F6F9),
-                                  //   borderRadius: BorderRadius.circular(15),
-                                  // ),
-                                  child: Row(
-                                    children: [
-                                      Expanded(
-                                        flex: 2,
-                                        child: Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Padding(
-                                                padding: EdgeInsets.symmetric(
-                                                    horizontal: 10),
-                                                child: Text(
-                                                  "Company Name: ${_searchResult[i].firstname}",
-                                                  textAlign: TextAlign.left,
-                                                  style: TextStyle(
-                                                      color: Colors.black,
-                                                      fontSize: 16,
-                                                      fontWeight:
-                                                          FontWeight.w500),
-                                                )),
-                                            SizedBox(
-                                              height: 10,
-                                            ),
-                                            Padding(
-                                                padding: EdgeInsets.symmetric(
-                                                    horizontal: 10),
-                                                child: Text(
-                                                  "Name: ${_searchResult[i].lastname}",
-                                                  textAlign: TextAlign.left,
-                                                  style: TextStyle(
-                                                    color: Colors.black,
+                        : _searchResult.length == 0
+                            ? Container(
+                                alignment: Alignment.center,
+                                child: Text(
+                                  "No Data Found",
+                                  style: TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.w800),
+                                ))
+                            : ListView.separated(
+                                padding: EdgeInsets.all(10),
+                                physics: NeverScrollableScrollPhysics(),
+                                shrinkWrap: true,
+                                //reverse: true,
+                                itemCount: _searchResult.length,
+                                itemBuilder: (c, i) {
+                                  _searchResult[i].isActive == "0"
+                                      ? status.add(false)
+                                      : status.add(true);
+                                  return GestureDetector(
+                                    onTap: () {
+                                      //s.data.customer[i].kycStatus == "0" ? Navigator.push(context, MaterialPageRoute(builder: (builder) => CustomerKYCDetailsPage(customerId: s.data.customer[i].customerId, salesId: widget.salesId,)))  :  Navigator.of(context).push(MaterialPageRoute(builder: (_) => CustomerListPage(salesId: widget.salesId,)));
+                                    },
+                                    child: Container(
+                                      //padding: EdgeInsets.only(top: 10, bottom: 10),
+                                      margin:
+                                          EdgeInsets.only(left: 5, right: 5),
+                                      alignment: Alignment.centerLeft,
+                                      // decoration: BoxDecoration(
+                                      //   //color: Color(0xFFF5F6F9),
+                                      //   borderRadius: BorderRadius.circular(15),
+                                      // ),
+                                      child: Row(
+                                        children: [
+                                          Expanded(
+                                            flex: 2,
+                                            child: Column(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Padding(
+                                                    padding:
+                                                        EdgeInsets.symmetric(
+                                                            horizontal: 10),
+                                                    child: Text(
+                                                      "Company Name: ${_searchResult[i].firstname}",
+                                                      textAlign: TextAlign.left,
+                                                      style: TextStyle(
+                                                          color: Colors.black,
+                                                          fontSize: 16,
+                                                          fontWeight:
+                                                              FontWeight.w500),
+                                                    )),
+                                                SizedBox(
+                                                  height: 10,
+                                                ),
+                                                Padding(
+                                                    padding:
+                                                        EdgeInsets.symmetric(
+                                                            horizontal: 10),
+                                                    child: Text(
+                                                      "Name: ${_searchResult[i].lastname}",
+                                                      textAlign: TextAlign.left,
+                                                      style: TextStyle(
+                                                        color: Colors.black,
+                                                      ),
+                                                    )),
+                                                SizedBox(
+                                                  height: 10,
+                                                ),
+                                                Padding(
+                                                    padding:
+                                                        EdgeInsets.symmetric(
+                                                            horizontal: 10),
+                                                    child: Text(
+                                                      "Salesman: ${_searchResult[i].email}",
+                                                      textAlign: TextAlign.left,
+                                                      style: TextStyle(
+                                                        color: Colors.black,
+                                                      ),
+                                                    )),
+                                                SizedBox(
+                                                  height: 10,
+                                                ),
+                                                Padding(
+                                                  padding: EdgeInsets.symmetric(
+                                                      horizontal: 10),
+                                                  child: Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment.start,
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .center,
+                                                    children: [
+                                                      Text(
+                                                        "Role: ${_searchResult[i].roleName}",
+                                                        textAlign:
+                                                            TextAlign.center,
+                                                        style: TextStyle(
+                                                            color: Colors.red,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .bold),
+                                                      ),
+                                                      SizedBox(
+                                                        width: 5,
+                                                      ),
+                                                    ],
                                                   ),
-                                                )),
-                                            SizedBox(
-                                              height: 10,
+                                                ),
+                                                SizedBox(
+                                                  height: 10,
+                                                ),
+                                              ],
                                             ),
-                                            Padding(
-                                                padding: EdgeInsets.symmetric(
-                                                    horizontal: 10),
-                                                child: Text(
-                                                  "Salesman: ${_searchResult[i].email}",
-                                                  textAlign: TextAlign.left,
-                                                  style: TextStyle(
-                                                    color: Colors.black,
-                                                  ),
-                                                )),
-                                            SizedBox(
-                                              height: 10,
-                                            ),
-                                            Padding(
-                                              padding: EdgeInsets.symmetric(
-                                                  horizontal: 10),
-                                              child: Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.start,
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.center,
-                                                children: [
-                                                  Text(
-                                                    "Role: ${_searchResult[i].roleName}",
-                                                    textAlign: TextAlign.center,
-                                                    style: TextStyle(
-                                                        color: Colors.red,
-                                                        fontWeight:
-                                                            FontWeight.bold),
-                                                  ),
-                                                  SizedBox(
-                                                    width: 5,
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                            SizedBox(
-                                              height: 10,
-                                            ),
-                                          ],
-                                        ),
+                                          ),
+                                          // Expanded(
+                                          //     child: Column(
+                                          //       mainAxisAlignment: MainAxisAlignment.start,
+                                          //       crossAxisAlignment: CrossAxisAlignment.start,
+                                          //       children: [
+                                          //         GestureDetector(
+                                          //           onTap: (){
+                                          //             Navigator.push(context, MaterialPageRoute(builder: (builder) => CustomerDetailsPage(customer: _searchResult[i])));
+                                          //           },
+                                          //           child: Container(
+                                          //             height: 30,
+                                          //             width: 20,
+                                          //             padding: EdgeInsets.zero,
+                                          //             child: Icon(Icons.preview_outlined,),),
+                                          //         ),
+                                          //         GestureDetector(
+                                          //           onTap: (){
+                                          //             Navigator.push(context, MaterialPageRoute(builder: (builder) => CustomerEditPage(customer: _searchResult[i])));
+                                          //           },
+                                          //           child: Container(
+                                          //             height: 30,
+                                          //             width: 20,
+                                          //             padding: EdgeInsets.zero,
+                                          //             child: Icon(Icons.edit_outlined),),
+                                          //         ),
+                                          //         _searchResult[i].isActive == "0" ?
+                                          //         GestureDetector(
+                                          //           onTap: (){
+                                          //             updateStatusId("1",_searchResult[i].customerId);
+                                          //           },
+                                          //           child: Container(
+                                          //             height: 30,
+                                          //             width: 20,
+                                          //             padding: EdgeInsets.zero,
+                                          //             child: Icon(Icons.block, color: kPrimaryColor,),
+                                          //           ),
+                                          //         ) :
+                                          //         GestureDetector(
+                                          //           onTap: (){
+                                          //             updateStatusId("0",_searchResult[i].customerId);
+                                          //           },
+                                          //           child: Container(
+                                          //             padding: EdgeInsets.zero,
+                                          //             height: 30,
+                                          //             width: 20,
+                                          //             child: Icon(Icons.block, color: Colors.blue,),
+                                          //           ),
+                                          //         ),
+                                          //         _searchResult[i].kycStatus == "2" && _searchResult[i].kycApprove == "0" ?
+                                          //         GestureDetector(
+                                          //           onTap: (){
+                                          //             Navigator.push(context, MaterialPageRoute(builder: (builder) => CustomerKYCDetailsPage(customerId:_searchResult[i].customerId,)));
+                                          //           },
+                                          //           child: Container(
+                                          //             height: 30,
+                                          //             width: 20,
+                                          //             padding: EdgeInsets.zero,
+                                          //             child: Icon(Icons.check_circle_outline, color: Colors.green,),),
+                                          //         ) : Container(),
+                                          //         GestureDetector(
+                                          //           onTap: (){
+                                          //             Navigator.push(context, MaterialPageRoute(builder: (builder) => CustomerOrderDetailPage(customerId: _searchResult[i].customerId, customerName:_searchResult[i].customerName,)));
+                                          //           },
+                                          //           child: Container(
+                                          //               height: 30,
+                                          //               width: 20,
+                                          //               padding: EdgeInsets.zero,
+                                          //               child: SvgPicture.asset("assets/icons/Bill Icon.svg")
+                                          //           ),
+                                          //         ),
+                                          //         GestureDetector(
+                                          //           onTap: (){
+                                          //             Navigator.push(context, MaterialPageRoute(builder: (builder) => CustomerPricingPage(customerId: _searchResult[i].customerId, salesId: _searchResult[i].salesmanID,)));
+                                          //           },
+                                          //           child: Container(
+                                          //               height: 30,
+                                          //               width: 20,
+                                          //               padding: EdgeInsets.zero,
+                                          //               child: SvgPicture.asset("assets/icons/sweetbox.svg")
+                                          //           ),
+                                          //         ),
+                                          //         GestureDetector(
+                                          //           onTap: (){
+                                          //             Navigator.push(context, MaterialPageRoute(builder: (builder) => ProductHomePage(customerId: _searchResult[i].customerId, salesId: _searchResult[i].salesmanID, customerName: _searchResult[i].customerName,)));
+                                          //           },
+                                          //           child: Container(
+                                          //               height: 30,
+                                          //               width: 20,
+                                          //               padding: EdgeInsets.zero,
+                                          //               child: SvgPicture.asset("assets/icons/Shop Icon.svg")
+                                          //           ),
+                                          //         ),
+                                          //       ],
+                                          //     )
+                                          // )
+                                        ],
                                       ),
-                                      // Expanded(
-                                      //     child: Column(
-                                      //       mainAxisAlignment: MainAxisAlignment.start,
-                                      //       crossAxisAlignment: CrossAxisAlignment.start,
-                                      //       children: [
-                                      //         GestureDetector(
-                                      //           onTap: (){
-                                      //             Navigator.push(context, MaterialPageRoute(builder: (builder) => CustomerDetailsPage(customer: _searchResult[i])));
-                                      //           },
-                                      //           child: Container(
-                                      //             height: 30,
-                                      //             width: 20,
-                                      //             padding: EdgeInsets.zero,
-                                      //             child: Icon(Icons.preview_outlined,),),
-                                      //         ),
-                                      //         GestureDetector(
-                                      //           onTap: (){
-                                      //             Navigator.push(context, MaterialPageRoute(builder: (builder) => CustomerEditPage(customer: _searchResult[i])));
-                                      //           },
-                                      //           child: Container(
-                                      //             height: 30,
-                                      //             width: 20,
-                                      //             padding: EdgeInsets.zero,
-                                      //             child: Icon(Icons.edit_outlined),),
-                                      //         ),
-                                      //         _searchResult[i].isActive == "0" ?
-                                      //         GestureDetector(
-                                      //           onTap: (){
-                                      //             updateStatusId("1",_searchResult[i].customerId);
-                                      //           },
-                                      //           child: Container(
-                                      //             height: 30,
-                                      //             width: 20,
-                                      //             padding: EdgeInsets.zero,
-                                      //             child: Icon(Icons.block, color: kPrimaryColor,),
-                                      //           ),
-                                      //         ) :
-                                      //         GestureDetector(
-                                      //           onTap: (){
-                                      //             updateStatusId("0",_searchResult[i].customerId);
-                                      //           },
-                                      //           child: Container(
-                                      //             padding: EdgeInsets.zero,
-                                      //             height: 30,
-                                      //             width: 20,
-                                      //             child: Icon(Icons.block, color: Colors.blue,),
-                                      //           ),
-                                      //         ),
-                                      //         _searchResult[i].kycStatus == "2" && _searchResult[i].kycApprove == "0" ?
-                                      //         GestureDetector(
-                                      //           onTap: (){
-                                      //             Navigator.push(context, MaterialPageRoute(builder: (builder) => CustomerKYCDetailsPage(customerId:_searchResult[i].customerId,)));
-                                      //           },
-                                      //           child: Container(
-                                      //             height: 30,
-                                      //             width: 20,
-                                      //             padding: EdgeInsets.zero,
-                                      //             child: Icon(Icons.check_circle_outline, color: Colors.green,),),
-                                      //         ) : Container(),
-                                      //         GestureDetector(
-                                      //           onTap: (){
-                                      //             Navigator.push(context, MaterialPageRoute(builder: (builder) => CustomerOrderDetailPage(customerId: _searchResult[i].customerId, customerName:_searchResult[i].customerName,)));
-                                      //           },
-                                      //           child: Container(
-                                      //               height: 30,
-                                      //               width: 20,
-                                      //               padding: EdgeInsets.zero,
-                                      //               child: SvgPicture.asset("assets/icons/Bill Icon.svg")
-                                      //           ),
-                                      //         ),
-                                      //         GestureDetector(
-                                      //           onTap: (){
-                                      //             Navigator.push(context, MaterialPageRoute(builder: (builder) => CustomerPricingPage(customerId: _searchResult[i].customerId, salesId: _searchResult[i].salesmanID,)));
-                                      //           },
-                                      //           child: Container(
-                                      //               height: 30,
-                                      //               width: 20,
-                                      //               padding: EdgeInsets.zero,
-                                      //               child: SvgPicture.asset("assets/icons/sweetbox.svg")
-                                      //           ),
-                                      //         ),
-                                      //         GestureDetector(
-                                      //           onTap: (){
-                                      //             Navigator.push(context, MaterialPageRoute(builder: (builder) => ProductHomePage(customerId: _searchResult[i].customerId, salesId: _searchResult[i].salesmanID, customerName: _searchResult[i].customerName,)));
-                                      //           },
-                                      //           child: Container(
-                                      //               height: 30,
-                                      //               width: 20,
-                                      //               padding: EdgeInsets.zero,
-                                      //               child: SvgPicture.asset("assets/icons/Shop Icon.svg")
-                                      //           ),
-                                      //         ),
-                                      //       ],
-                                      //     )
-                                      // )
-                                    ],
-                                  ),
-                                ),
-                              );
-                            },
-                            separatorBuilder:
-                                (BuildContext context, int index) {
-                              return Divider(
-                                indent: 20,
-                                color: Colors.grey.withOpacity(.8),
-                              );
-                            },
-                          ),
+                                    ),
+                                  );
+                                },
+                                separatorBuilder:
+                                    (BuildContext context, int index) {
+                                  return Divider(
+                                    indent: 20,
+                                    color: Colors.grey.withOpacity(.8),
+                                  );
+                                },
+                              ),
                   ],
                 ),
               ),

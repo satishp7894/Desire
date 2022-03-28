@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:desire_production/pages/admin/chat/admin_chat_list_page.dart';
+import 'package:desire_production/pages/admin/chat/customer_sales_chat_track.dart';
 import 'package:desire_production/pages/admin/credit/customer_list_with_credit_page.dart';
 import 'package:desire_production/pages/admin/dispatchlist/CustomerInvoiceListPage.dart';
 import 'package:desire_production/pages/admin/dispatchlist/PendingOrderListPage.dart';
@@ -908,6 +909,45 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
                   SizedBox(height: 10),
                   Text(
                     "PENDING APPR0VAL",
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          GestureDetector(
+            onTap: () {
+              Navigator.push(context, MaterialPageRoute(builder: (context) {
+                return CustomerSalesChatTrack();
+              }));
+            },
+            child: Container(
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  color: kPrimaryColor,
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey,
+                      blurRadius: 5.0,
+                      spreadRadius: 2,
+                    )
+                  ]),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.track_changes,
+                    size: 40,
+                    color: kWhite,
+                  ),
+                  SizedBox(height: 10),
+                  Text(
+                    "TRACK SALES AND CUSTOMER CHAT",
+                    textAlign: TextAlign.center,
                     style: TextStyle(
                         color: Colors.white,
                         fontSize: 14,

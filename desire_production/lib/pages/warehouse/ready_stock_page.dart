@@ -166,7 +166,7 @@ class _ReadyStockListPageListPageState extends State<ReadyStockListPage> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              _searchResult.length == 0
+                              searchView.text.length == 0
                                   ? Container(
                                       alignment: Alignment.center,
                                       child: Column(
@@ -251,7 +251,7 @@ class _ReadyStockListPageListPageState extends State<ReadyStockListPage> {
                                                                     .black)),
                                                       ),
                                                       child: Text(
-                                                          'quantity', //style: content1,
+                                                          'Qty', //style: content1,
                                                           textAlign:
                                                               TextAlign.center,
                                                           style: TextStyle(
@@ -438,202 +438,298 @@ class _ReadyStockListPageListPageState extends State<ReadyStockListPage> {
                                         ],
                                       ),
                                     )
-                                  : Container(
-                                      alignment: Alignment.center,
-                                      child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.center,
-                                        children: [
-                                          Container(
-                                            height: 40,
-                                            child: Row(
-                                              children: [
-                                                Expanded(
-                                                  child: Container(
-                                                    width: 50,
-                                                    alignment: Alignment.center,
-                                                    decoration: BoxDecoration(
-                                                      color: kPrimaryColor,
-                                                      border: Border(
-                                                          left: BorderSide(
-                                                              color:
-                                                                  Colors.black),
-                                                          right: BorderSide(
-                                                              color:
-                                                                  Colors.black),
-                                                          bottom: BorderSide(
-                                                              color:
-                                                                  Colors.black),
-                                                          top: BorderSide(
-                                                              color: Colors
-                                                                  .black)),
-                                                    ),
-                                                    child: Text(
-                                                        'Sr No.', //style: content1,
-                                                        textAlign:
-                                                            TextAlign.center,
-                                                        style: TextStyle(
-                                                            color:
-                                                                Colors.white)),
-                                                    //alignment: Alignment.center,
-                                                  ),
-                                                ),
-                                                Expanded(
-                                                    flex: 2,
-                                                    child: Container(
-                                                      decoration: BoxDecoration(
-                                                        color: kPrimaryColor,
-                                                        border: Border(
-                                                            right: BorderSide(
-                                                                color: Colors
-                                                                    .black),
-                                                            bottom: BorderSide(
-                                                                color: Colors
-                                                                    .black),
-                                                            top: BorderSide(
-                                                                color: Colors
-                                                                    .black)),
-                                                      ),
-                                                      child: Text(
-                                                          'Model No', //style: content1,
-                                                          textAlign:
-                                                              TextAlign.center,
-                                                          style: TextStyle(
-                                                              color: Colors
-                                                                  .white)),
-                                                      alignment:
-                                                          Alignment.center,
-                                                    )),
-                                                Expanded(
-                                                    flex: 2,
-                                                    child: Container(
-                                                      decoration: BoxDecoration(
-                                                        color: kPrimaryColor,
-                                                        border: Border(
-                                                            right: BorderSide(
-                                                                color: Colors
-                                                                    .black),
-                                                            bottom: BorderSide(
-                                                                color: Colors
-                                                                    .black),
-                                                            top: BorderSide(
-                                                                color: Colors
-                                                                    .black)),
-                                                      ),
-                                                      child: Text(
-                                                          'Qty', //style: content1,
-                                                          textAlign:
-                                                              TextAlign.center,
-                                                          style: TextStyle(
-                                                              color: Colors
-                                                                  .white)),
-                                                      alignment:
-                                                          Alignment.center,
-                                                    )),
-                                              ],
-                                            ),
-                                          ),
-                                          for (int i = 0;
-                                              i < _searchResult.length;
-                                              i++)
-                                            AnimationConfiguration
-                                                .staggeredList(
-                                              position: i,
-                                              duration: const Duration(
-                                                  milliseconds: 375),
-                                              child: SlideAnimation(
-                                                verticalOffset: 50.0,
-                                                child: FadeInAnimation(
-                                                  child: Container(
-                                                    height: 50,
-                                                    child: Row(
-                                                      children: [
-                                                        Expanded(
-                                                          child: Container(
-                                                            alignment: Alignment
+                                  : _searchResult.length == 0
+                                      ? Container(
+                                          alignment: Alignment.center,
+                                          child: Text(
+                                            "No Data Found",
+                                            style: TextStyle(
+                                                fontSize: 20,
+                                                fontWeight: FontWeight.w800),
+                                          ))
+                                      : Container(
+                                          alignment: Alignment.center,
+                                          child: Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
+                                            children: [
+                                              Container(
+                                                height: 40,
+                                                child: Row(
+                                                  children: [
+                                                    Expanded(
+                                                      child: Container(
+                                                        width: 50,
+                                                        alignment:
+                                                            Alignment.center,
+                                                        decoration:
+                                                            BoxDecoration(
+                                                          color: kPrimaryColor,
+                                                          border: Border(
+                                                              left: BorderSide(
+                                                                  color: Colors
+                                                                      .black),
+                                                              right: BorderSide(
+                                                                  color: Colors
+                                                                      .black),
+                                                              bottom: BorderSide(
+                                                                  color: Colors
+                                                                      .black),
+                                                              top: BorderSide(
+                                                                  color: Colors
+                                                                      .black)),
+                                                        ),
+                                                        child: Text(
+                                                            'Sr No.', //style: content1,
+                                                            textAlign: TextAlign
                                                                 .center,
-                                                            decoration:
-                                                                BoxDecoration(
-                                                              //color: bg,
-                                                              border: Border(
-                                                                  left: BorderSide(
-                                                                      color: Colors
-                                                                          .black),
-                                                                  right: BorderSide(
-                                                                      color: Colors
-                                                                          .black),
-                                                                  bottom: BorderSide(
-                                                                      color: Colors
-                                                                          .black)),
-                                                            ),
-                                                            child: Text(
-                                                              '${i + 1}', //style: content1,
+                                                            style: TextStyle(
+                                                                color: Colors
+                                                                    .white)),
+                                                        //alignment: Alignment.center,
+                                                      ),
+                                                    ),
+                                                    Expanded(
+                                                        flex: 2,
+                                                        child: Container(
+                                                          decoration:
+                                                              BoxDecoration(
+                                                            color:
+                                                                kPrimaryColor,
+                                                            border: Border(
+                                                                right: BorderSide(
+                                                                    color: Colors
+                                                                        .black),
+                                                                bottom: BorderSide(
+                                                                    color: Colors
+                                                                        .black),
+                                                                top: BorderSide(
+                                                                    color: Colors
+                                                                        .black)),
+                                                          ),
+                                                          child: Text(
+                                                              'Model No', //style: content1,
                                                               textAlign:
                                                                   TextAlign
                                                                       .center,
-                                                            ),
-                                                            //alignment: Alignment.center,
+                                                              style: TextStyle(
+                                                                  color: Colors
+                                                                      .white)),
+                                                          alignment:
+                                                              Alignment.center,
+                                                        )),
+                                                    Expanded(
+                                                        flex: 2,
+                                                        child: Container(
+                                                          decoration:
+                                                              BoxDecoration(
+                                                            color:
+                                                                kPrimaryColor,
+                                                            border: Border(
+                                                                right: BorderSide(
+                                                                    color: Colors
+                                                                        .black),
+                                                                bottom: BorderSide(
+                                                                    color: Colors
+                                                                        .black),
+                                                                top: BorderSide(
+                                                                    color: Colors
+                                                                        .black)),
                                                           ),
+                                                          child: Text(
+                                                              'Qty', //style: content1,
+                                                              textAlign:
+                                                                  TextAlign
+                                                                      .center,
+                                                              style: TextStyle(
+                                                                  color: Colors
+                                                                      .white)),
+                                                          alignment:
+                                                              Alignment.center,
+                                                        )),
+                                                    Expanded(
+                                                        flex: 2,
+                                                        child: Container(
+                                                          decoration: BoxDecoration(
+                                                            color: kPrimaryColor,
+                                                            border: Border(
+                                                                right: BorderSide(
+                                                                    color: Colors
+                                                                        .black),
+                                                                bottom: BorderSide(
+                                                                    color: Colors
+                                                                        .black),
+                                                                top: BorderSide(
+                                                                    color: Colors
+                                                                        .black)),
+                                                          ),
+                                                          child: Text(
+                                                              '', //style: content1,
+                                                              textAlign:
+                                                              TextAlign.center,
+                                                              style: TextStyle(
+                                                                  color: Colors
+                                                                      .white)),
+                                                          alignment:
+                                                          Alignment.center,
+                                                        )),
+                                                  ],
+                                                ),
+                                              ),
+                                              for (int i = 0;
+                                                  i < _searchResult.length;
+                                                  i++)
+                                                AnimationConfiguration
+                                                    .staggeredList(
+                                                  position: i,
+                                                  duration: const Duration(
+                                                      milliseconds: 375),
+                                                  child: SlideAnimation(
+                                                    verticalOffset: 50.0,
+                                                    child: FadeInAnimation(
+                                                      child: Container(
+                                                        height: 50,
+                                                        child: Row(
+                                                          children: [
+                                                            Expanded(
+                                                              child: Container(
+                                                                alignment:
+                                                                    Alignment
+                                                                        .center,
+                                                                decoration:
+                                                                    BoxDecoration(
+                                                                  //color: bg,
+                                                                  border: Border(
+                                                                      left: BorderSide(
+                                                                          color: Colors
+                                                                              .black),
+                                                                      right: BorderSide(
+                                                                          color: Colors
+                                                                              .black),
+                                                                      bottom: BorderSide(
+                                                                          color:
+                                                                              Colors.black)),
+                                                                ),
+                                                                child: Text(
+                                                                  '${i + 1}', //style: content1,
+                                                                  textAlign:
+                                                                      TextAlign
+                                                                          .center,
+                                                                ),
+                                                                //alignment: Alignment.center,
+                                                              ),
+                                                            ),
+                                                            Expanded(
+                                                                flex: 2,
+                                                                child:
+                                                                    Container(
+                                                                  decoration:
+                                                                      BoxDecoration(
+                                                                    border: Border(
+                                                                        right: BorderSide(
+                                                                            color: Colors
+                                                                                .black),
+                                                                        bottom: BorderSide(
+                                                                            color:
+                                                                                Colors.black)),
+                                                                  ),
+                                                                  child: Text(
+                                                                    '${_searchResult[i].modelNoId}',
+                                                                    //style: content1,
+                                                                    textAlign:
+                                                                        TextAlign
+                                                                            .center,
+                                                                  ),
+                                                                  alignment:
+                                                                      Alignment
+                                                                          .center,
+                                                                )),
+                                                            Expanded(
+                                                                flex: 2,
+                                                                child:
+                                                                    Container(
+                                                                  decoration:
+                                                                      BoxDecoration(
+                                                                    border: Border(
+                                                                        right: BorderSide(
+                                                                            color: Colors
+                                                                                .black),
+                                                                        bottom: BorderSide(
+                                                                            color:
+                                                                                Colors.black)),
+                                                                  ),
+                                                                  child: Text(
+                                                                    '${_searchResult[i].quantity}',
+                                                                    //style: content1,
+                                                                    textAlign:
+                                                                        TextAlign
+                                                                            .center,
+                                                                  ),
+                                                                  alignment:
+                                                                      Alignment
+                                                                          .center,
+                                                                )),
+                                                            Expanded(
+                                                                flex: 2,
+                                                                child:
+                                                                GestureDetector(
+                                                                  onTap: () {
+                                                                    Navigator.push(
+                                                                        context,
+                                                                        MaterialPageRoute(
+                                                                            builder: (context) => ReadyStockDetailPage(
+                                                                                modelNoId:
+                                                                                _searchResult[i].modelNoId,
+                                                                                status: 1,
+                                                                                page: widget.page)));
+                                                                  },
+                                                                  child: Container(
+                                                                    decoration:
+                                                                    BoxDecoration(
+                                                                      color: Colors
+                                                                          .white,
+                                                                      border: Border(
+                                                                          right: BorderSide(
+                                                                              color: Colors
+                                                                                  .black),
+                                                                          bottom: BorderSide(
+                                                                              color: Colors
+                                                                                  .black),
+                                                                          top: BorderSide(
+                                                                              color:
+                                                                              Colors.black)),
+                                                                    ),
+                                                                    child: Text(
+                                                                      'View Details',
+                                                                      style: TextStyle(
+                                                                          decoration:
+                                                                          TextDecoration
+                                                                              .underline,
+                                                                          fontSize:
+                                                                          14,
+                                                                          color:
+                                                                          kPrimaryColor),
+                                                                      //style: content1,
+                                                                      textAlign:
+                                                                      TextAlign
+                                                                          .center,
+                                                                    ),
+                                                                    alignment:
+                                                                    Alignment
+                                                                        .center,
+                                                                  ),
+                                                                ))
+                                                          ],
                                                         ),
-                                                        Expanded(
-                                                            flex: 2,
-                                                            child: Container(
-                                                              decoration:
-                                                                  BoxDecoration(
-                                                                border: Border(
-                                                                    right: BorderSide(
-                                                                        color: Colors
-                                                                            .black),
-                                                                    bottom: BorderSide(
-                                                                        color: Colors
-                                                                            .black)),
-                                                              ),
-                                                              child: Text(
-                                                                '${_searchResult[i].modelNoId}',
-                                                                //style: content1,
-                                                                textAlign:
-                                                                    TextAlign
-                                                                        .center,
-                                                              ),
-                                                              alignment:
-                                                                  Alignment
-                                                                      .center,
-                                                            )),
-                                                        Expanded(
-                                                            flex: 2,
-                                                            child: Container(
-                                                              decoration:
-                                                                  BoxDecoration(
-                                                                border: Border(
-                                                                    right: BorderSide(
-                                                                        color: Colors
-                                                                            .black),
-                                                                    bottom: BorderSide(
-                                                                        color: Colors
-                                                                            .black)),
-                                                              ),
-                                                              child: Text(
-                                                                '${_searchResult[i].quantity}',
-                                                                //style: content1,
-                                                                textAlign:
-                                                                    TextAlign
-                                                                        .center,
-                                                              ),
-                                                              alignment:
-                                                                  Alignment
-                                                                      .center,
-                                                            )),
-                                                      ],
+                                                      ),
                                                     ),
                                                   ),
                                                 ),
-                                              ),
-                                            ),
-                                        ],
-                                      ),
-                                    ),
+                                            ],
+                                          ),
+                                        ),
                             ],
                           );
                   }
@@ -1039,7 +1135,7 @@ class _ReadyStockListPageListPageState extends State<ReadyStockListPage> {
     }
 
     _list.forEach((exp) {
-      if (exp.modelNo.contains(text)) _searchResult.add(exp);
+      if (exp.modelNoId.contains(text)) _searchResult.add(exp);
     });
     //print("search objects ${_searchResult.first}");
     print("search result length ${_searchResult.length}");

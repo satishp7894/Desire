@@ -124,7 +124,7 @@ class _SalesLocationListState extends State<SalesLocationList> {
                 padding: const EdgeInsets.only(top: 10.0, bottom: 10),
                 child: Column(
                   children: [
-                    _searchResult.length == 0
+                    searchView.text.length == 0
                         ? ListView.separated(
                             //padding: EdgeInsets.all(10),
                             physics: NeverScrollableScrollPhysics(),
@@ -169,7 +169,7 @@ class _SalesLocationListState extends State<SalesLocationList> {
                                                 padding: EdgeInsets.symmetric(
                                                     horizontal: 10),
                                                 child: Text(
-                                                  "Name: ${salesmanList[i].firstname} ${salesmanList[i].lastname}",
+                                                  "FullName: ${salesmanList[i].firstname} ${salesmanList[i].lastname}",
                                                   textAlign: TextAlign.left,
                                                   style: TextStyle(
                                                       color: Colors.black,
@@ -204,80 +204,92 @@ class _SalesLocationListState extends State<SalesLocationList> {
                               );
                             },
                           )
-                        : ListView.separated(
-                            physics: NeverScrollableScrollPhysics(),
-                            shrinkWrap: true,
-                            //reverse: true,
-                            itemCount: _searchResult.length,
-                            itemBuilder: (c, i) {
-                              _searchResult[i].isActive == "0"
-                                  ? status.add(false)
-                                  : status.add(true);
-                              return GestureDetector(
-                                onTap: () {
-                                  Navigator.push(context,
-                                      MaterialPageRoute(builder: (context) {
-                                    return SalesLocationScreen(
-                                        salesId: _searchResult[i].userId,
-                                        salesName: _searchResult[i].firstname);
-                                  }));
-                                  //s.data.customer[i].kycStatus == "0" ? Navigator.push(context, MaterialPageRoute(builder: (builder) => CustomerKYCDetailsPage(customerId: s.data.customer[i].customerId, salesId: widget.salesId,)))  :  Navigator.of(context).push(MaterialPageRoute(builder: (_) => CustomerListPage(salesId: widget.salesId,)));
-                                },
-                                child: Container(
-                                  alignment: Alignment.centerLeft,
-                                  decoration: BoxDecoration(
-                                    //color: Color(0xFFF5F6F9),
-                                    borderRadius: BorderRadius.circular(15),
-                                  ),
-                                  child: Row(
-                                    children: [
-                                      Expanded(
-                                        flex: 2,
-                                        child: Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Padding(
-                                                padding: EdgeInsets.symmetric(
-                                                    horizontal: 10),
-                                                child: Text(
-                                                  "Name: ${_searchResult[i].firstname} ${_searchResult[i].lastname}",
-                                                  textAlign: TextAlign.left,
-                                                  style: TextStyle(
-                                                      color: Colors.black,
-                                                      fontSize: 16,
-                                                      fontWeight:
-                                                          FontWeight.w500),
-                                                )),
-                                            SizedBox(
-                                              height: 10,
-                                            ),
-                                            Padding(
-                                                padding: EdgeInsets.symmetric(
-                                                    horizontal: 10),
-                                                child: Text(
-                                                  "Email : ${_searchResult[i].email}",
-                                                  style: TextStyle(
-                                                      color: Colors.black),
-                                                )),
-                                          ],
-                                        ),
+                        : _searchResult.length == 0
+                            ? Container(
+                                alignment: Alignment.center,
+                                child: Text(
+                                  "No Data Found",
+                                  style: TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.w800),
+                                ))
+                            : ListView.separated(
+                                physics: NeverScrollableScrollPhysics(),
+                                shrinkWrap: true,
+                                //reverse: true,
+                                itemCount: _searchResult.length,
+                                itemBuilder: (c, i) {
+                                  _searchResult[i].isActive == "0"
+                                      ? status.add(false)
+                                      : status.add(true);
+                                  return GestureDetector(
+                                    onTap: () {
+                                      Navigator.push(context,
+                                          MaterialPageRoute(builder: (context) {
+                                        return SalesLocationScreen(
+                                            salesId: _searchResult[i].userId,
+                                            salesName:
+                                                _searchResult[i].firstname);
+                                      }));
+                                      //s.data.customer[i].kycStatus == "0" ? Navigator.push(context, MaterialPageRoute(builder: (builder) => CustomerKYCDetailsPage(customerId: s.data.customer[i].customerId, salesId: widget.salesId,)))  :  Navigator.of(context).push(MaterialPageRoute(builder: (_) => CustomerListPage(salesId: widget.salesId,)));
+                                    },
+                                    child: Container(
+                                      alignment: Alignment.centerLeft,
+                                      decoration: BoxDecoration(
+                                        //color: Color(0xFFF5F6F9),
+                                        borderRadius: BorderRadius.circular(15),
                                       ),
-                                    ],
-                                  ),
-                                ),
-                              );
-                            },
-                            separatorBuilder:
-                                (BuildContext context, int index) {
-                              return Divider(
-                                indent: 20,
-                                color: Colors.grey.withOpacity(.8),
-                              );
-                            },
-                          ),
+                                      child: Row(
+                                        children: [
+                                          Expanded(
+                                            flex: 2,
+                                            child: Column(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Padding(
+                                                    padding:
+                                                        EdgeInsets.symmetric(
+                                                            horizontal: 10),
+                                                    child: Text(
+                                                      "FullName: ${_searchResult[i].firstname} ${_searchResult[i].lastname}",
+                                                      textAlign: TextAlign.left,
+                                                      style: TextStyle(
+                                                          color: Colors.black,
+                                                          fontSize: 16,
+                                                          fontWeight:
+                                                              FontWeight.w500),
+                                                    )),
+                                                SizedBox(
+                                                  height: 10,
+                                                ),
+                                                Padding(
+                                                    padding:
+                                                        EdgeInsets.symmetric(
+                                                            horizontal: 10),
+                                                    child: Text(
+                                                      "Email : ${_searchResult[i].email}",
+                                                      style: TextStyle(
+                                                          color: Colors.black),
+                                                    )),
+                                              ],
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  );
+                                },
+                                separatorBuilder:
+                                    (BuildContext context, int index) {
+                                  return Divider(
+                                    indent: 20,
+                                    color: Colors.grey.withOpacity(.8),
+                                  );
+                                },
+                              ),
                   ],
                 ),
               ),
@@ -325,9 +337,9 @@ class _SalesLocationListState extends State<SalesLocationList> {
     }
 
     salesmanList.forEach((exp) {
-      if (exp.firstname.toLowerCase().contains(text.toLowerCase()) ||
-          exp.lastname.toLowerCase().contains(text.toLowerCase()))
-        _searchResult.add(exp);
+      if ((exp.firstname + " " + exp.lastname)
+          .toLowerCase()
+          .contains(text.toLowerCase())) _searchResult.add(exp);
     });
     //print("search objects ${_searchResult.first}");
     print("search result length ${_searchResult.length}");

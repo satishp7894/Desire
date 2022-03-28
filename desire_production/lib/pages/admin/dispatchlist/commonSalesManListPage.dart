@@ -128,7 +128,7 @@ class _CommonSalesManListPageState extends State<CommonSalesManListPage> {
                 padding: const EdgeInsets.only(top: 10.0, bottom: 10),
                 child: Column(
                   children: [
-                    _searchResult.length == 0
+                    searchView.text.length == 0
                         ? ListView.separated(
                             //padding: EdgeInsets.all(10),
                             physics: NeverScrollableScrollPhysics(),
@@ -154,8 +154,7 @@ class _CommonSalesManListPageState extends State<CommonSalesManListPage> {
                                                   ? PendingOrderListPage()
                                                   : widget.type == "order"
                                                       ? CustomerOrdersListPage()
-                                                      : HoldOrderListPage(
-                                                          )));
+                                                      : HoldOrderListPage()));
                                 },
                                 child: Container(
                                   //padding: EdgeInsets.only(top: 10, bottom: 10),
@@ -376,202 +375,221 @@ class _CommonSalesManListPageState extends State<CommonSalesManListPage> {
                               );
                             },
                           )
-                        : ListView.separated(
-                            padding: EdgeInsets.all(10),
-                            physics: NeverScrollableScrollPhysics(),
-                            shrinkWrap: true,
-                            //reverse: true,
-                            itemCount: _searchResult.length,
-                            itemBuilder: (c, i) {
-                              _searchResult[i].isActive == "0"
-                                  ? status.add(false)
-                                  : status.add(true);
-                              return GestureDetector(
-                                onTap: () {},
-                                child: Container(
-                                  padding: EdgeInsets.only(top: 20, bottom: 10),
-                                  margin: EdgeInsets.only(top: 5, bottom: 5),
-                                  alignment: Alignment.centerLeft,
-                                  decoration: BoxDecoration(
-                                    //color: Color(0xFFF5F6F9),
-                                    borderRadius: BorderRadius.circular(15),
-                                  ),
-                                  child: Row(
-                                    children: [
-                                      SizedBox(
-                                        width: 80,
-                                        height: 80,
-                                        child: AspectRatio(
-                                          aspectRatio: 0.88,
-                                          child: Container(
-                                            padding: EdgeInsets.all(10),
-                                            decoration: BoxDecoration(
-                                              color: Color(0xFFF5F6F9),
-                                              borderRadius:
-                                                  BorderRadius.circular(15),
-                                            ),
-                                            child: Icon(
-                                              Icons.person_outline,
-                                              color: Colors.black,
-                                            ),
-                                          ),
-                                        ),
+                        : _searchResult.length == 0
+                            ? Container(
+                                alignment: Alignment.center,
+                                child: Text(
+                                  "No Data Found",
+                                  style: TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.w800),
+                                ))
+                            : ListView.separated(
+                                padding: EdgeInsets.all(10),
+                                physics: NeverScrollableScrollPhysics(),
+                                shrinkWrap: true,
+                                //reverse: true,
+                                itemCount: _searchResult.length,
+                                itemBuilder: (c, i) {
+                                  _searchResult[i].isActive == "0"
+                                      ? status.add(false)
+                                      : status.add(true);
+                                  return GestureDetector(
+                                    onTap: () {},
+                                    child: Container(
+                                      padding:
+                                          EdgeInsets.only(top: 20, bottom: 10),
+                                      margin:
+                                          EdgeInsets.only(top: 5, bottom: 5),
+                                      alignment: Alignment.centerLeft,
+                                      decoration: BoxDecoration(
+                                        //color: Color(0xFFF5F6F9),
+                                        borderRadius: BorderRadius.circular(15),
                                       ),
-                                      Expanded(
-                                        flex: 2,
-                                        child: Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Padding(
-                                                padding: EdgeInsets.symmetric(
-                                                    horizontal: 10),
-                                                child: Text(
-                                                  "Name: ${_searchResult[i].firstname} ${_searchResult[i].lastname}",
-                                                  textAlign: TextAlign.left,
-                                                  style: TextStyle(
-                                                      color: Colors.black,
-                                                      fontSize: 16,
-                                                      fontWeight:
-                                                          FontWeight.w500),
-                                                )),
-                                            SizedBox(
-                                              height: 10,
-                                            ),
-                                            Padding(
-                                              padding: EdgeInsets.symmetric(
-                                                  horizontal: 10),
-                                              child: Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.start,
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.center,
-                                                children: [
-                                                  Text(
-                                                    "Status: ",
-                                                    textAlign: TextAlign.center,
-                                                    style: TextStyle(
-                                                        color: Colors.black),
-                                                  ),
-                                                  SizedBox(
-                                                    width: 5,
-                                                  ),
-                                                  _searchResult[i].isActive ==
-                                                          "0"
-                                                      ? Text(
-                                                          "Blocked",
-                                                          textAlign:
-                                                              TextAlign.center,
-                                                          style: TextStyle(
-                                                            color: Colors
-                                                                .redAccent,
-                                                          ),
-                                                        )
-                                                      : Text(
-                                                          "Active",
-                                                          textAlign:
-                                                              TextAlign.center,
-                                                          style: TextStyle(
-                                                              color:
-                                                                  Colors.green),
-                                                        ),
-                                                ],
+                                      child: Row(
+                                        children: [
+                                          SizedBox(
+                                            width: 80,
+                                            height: 80,
+                                            child: AspectRatio(
+                                              aspectRatio: 0.88,
+                                              child: Container(
+                                                padding: EdgeInsets.all(10),
+                                                decoration: BoxDecoration(
+                                                  color: Color(0xFFF5F6F9),
+                                                  borderRadius:
+                                                      BorderRadius.circular(15),
+                                                ),
+                                                child: Icon(
+                                                  Icons.person_outline,
+                                                  color: Colors.black,
+                                                ),
                                               ),
                                             ),
-                                            SizedBox(
-                                              height: 10,
+                                          ),
+                                          Expanded(
+                                            flex: 2,
+                                            child: Column(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Padding(
+                                                    padding:
+                                                        EdgeInsets.symmetric(
+                                                            horizontal: 10),
+                                                    child: Text(
+                                                      "Name: ${_searchResult[i].firstname} ${_searchResult[i].lastname}",
+                                                      textAlign: TextAlign.left,
+                                                      style: TextStyle(
+                                                          color: Colors.black,
+                                                          fontSize: 16,
+                                                          fontWeight:
+                                                              FontWeight.w500),
+                                                    )),
+                                                SizedBox(
+                                                  height: 10,
+                                                ),
+                                                Padding(
+                                                  padding: EdgeInsets.symmetric(
+                                                      horizontal: 10),
+                                                  child: Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment.start,
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .center,
+                                                    children: [
+                                                      Text(
+                                                        "Status: ",
+                                                        textAlign:
+                                                            TextAlign.center,
+                                                        style: TextStyle(
+                                                            color:
+                                                                Colors.black),
+                                                      ),
+                                                      SizedBox(
+                                                        width: 5,
+                                                      ),
+                                                      _searchResult[i]
+                                                                  .isActive ==
+                                                              "0"
+                                                          ? Text(
+                                                              "Blocked",
+                                                              textAlign:
+                                                                  TextAlign
+                                                                      .center,
+                                                              style: TextStyle(
+                                                                color: Colors
+                                                                    .redAccent,
+                                                              ),
+                                                            )
+                                                          : Text(
+                                                              "Active",
+                                                              textAlign:
+                                                                  TextAlign
+                                                                      .center,
+                                                              style: TextStyle(
+                                                                  color: Colors
+                                                                      .green),
+                                                            ),
+                                                    ],
+                                                  ),
+                                                ),
+                                                SizedBox(
+                                                  height: 10,
+                                                ),
+                                                Padding(
+                                                    padding:
+                                                        EdgeInsets.symmetric(
+                                                            horizontal: 10),
+                                                    child: Text(
+                                                      "Email : ${_searchResult[i].email}",
+                                                      style: TextStyle(
+                                                          color: Colors.black),
+                                                    )),
+                                              ],
                                             ),
-                                            Padding(
-                                                padding: EdgeInsets.symmetric(
-                                                    horizontal: 10),
-                                                child: Text(
-                                                  "Email : ${_searchResult[i].email}",
-                                                  style: TextStyle(
-                                                      color: Colors.black),
-                                                )),
-                                          ],
-                                        ),
+                                          ),
+                                          // Expanded(
+                                          //     flex: 1,
+                                          //     child: Column(
+                                          //       mainAxisAlignment:
+                                          //           MainAxisAlignment.center,
+                                          //       crossAxisAlignment:
+                                          //           CrossAxisAlignment.start,
+                                          //       children: [
+                                          //         IconButton(
+                                          //             icon:
+                                          //                 Icon(Icons.edit_outlined),
+                                          //             onPressed: () {
+                                          //               Navigator.push(
+                                          //                   context,
+                                          //                   MaterialPageRoute(
+                                          //                       builder: (builder) =>
+                                          //                           SalesEditPage(
+                                          //                             salesman:
+                                          //                                 salesmanList[
+                                          //                                     i],
+                                          //                             userId: '2',
+                                          //                           )));
+                                          //             }),
+                                          //         _searchResult[i].isActive == "0"
+                                          //             ? IconButton(
+                                          //                 icon: Icon(
+                                          //                   Icons.block,
+                                          //                   color: kPrimaryColor,
+                                          //                 ),
+                                          //                 onPressed: () {
+                                          //                   //updateStatusId("1",_searchResult[i].userId);
+                                          //                 })
+                                          //             : IconButton(
+                                          //                 icon: Icon(
+                                          //                   Icons.block,
+                                          //                   color: Colors.blue,
+                                          //                 ),
+                                          //                 onPressed: () {
+                                          //                   //updateStatusId("0",_searchResult[i].userId);
+                                          //                 }),
+                                          //         GestureDetector(
+                                          //           onTap: () {
+                                          //             Navigator.push(
+                                          //                 context,
+                                          //                 MaterialPageRoute(
+                                          //                     builder: (builder) =>
+                                          //                         SalesCustomerListPage(
+                                          //                             salesId:
+                                          //                                 salesmanList[
+                                          //                                         i]
+                                          //                                     .userId)));
+                                          //           },
+                                          //           child: Container(
+                                          //             height: 30,
+                                          //             width: 20,
+                                          //             padding: EdgeInsets.zero,
+                                          //             child: SvgPicture.asset(
+                                          //               "assets/icons/custList.svg",
+                                          //               color: kPrimaryColor,
+                                          //               width: 30,
+                                          //             ),
+                                          //           ),
+                                          //         ),
+                                          //       ],
+                                          //     )),
+                                        ],
                                       ),
-                                      // Expanded(
-                                      //     flex: 1,
-                                      //     child: Column(
-                                      //       mainAxisAlignment:
-                                      //           MainAxisAlignment.center,
-                                      //       crossAxisAlignment:
-                                      //           CrossAxisAlignment.start,
-                                      //       children: [
-                                      //         IconButton(
-                                      //             icon:
-                                      //                 Icon(Icons.edit_outlined),
-                                      //             onPressed: () {
-                                      //               Navigator.push(
-                                      //                   context,
-                                      //                   MaterialPageRoute(
-                                      //                       builder: (builder) =>
-                                      //                           SalesEditPage(
-                                      //                             salesman:
-                                      //                                 salesmanList[
-                                      //                                     i],
-                                      //                             userId: '2',
-                                      //                           )));
-                                      //             }),
-                                      //         _searchResult[i].isActive == "0"
-                                      //             ? IconButton(
-                                      //                 icon: Icon(
-                                      //                   Icons.block,
-                                      //                   color: kPrimaryColor,
-                                      //                 ),
-                                      //                 onPressed: () {
-                                      //                   //updateStatusId("1",_searchResult[i].userId);
-                                      //                 })
-                                      //             : IconButton(
-                                      //                 icon: Icon(
-                                      //                   Icons.block,
-                                      //                   color: Colors.blue,
-                                      //                 ),
-                                      //                 onPressed: () {
-                                      //                   //updateStatusId("0",_searchResult[i].userId);
-                                      //                 }),
-                                      //         GestureDetector(
-                                      //           onTap: () {
-                                      //             Navigator.push(
-                                      //                 context,
-                                      //                 MaterialPageRoute(
-                                      //                     builder: (builder) =>
-                                      //                         SalesCustomerListPage(
-                                      //                             salesId:
-                                      //                                 salesmanList[
-                                      //                                         i]
-                                      //                                     .userId)));
-                                      //           },
-                                      //           child: Container(
-                                      //             height: 30,
-                                      //             width: 20,
-                                      //             padding: EdgeInsets.zero,
-                                      //             child: SvgPicture.asset(
-                                      //               "assets/icons/custList.svg",
-                                      //               color: kPrimaryColor,
-                                      //               width: 30,
-                                      //             ),
-                                      //           ),
-                                      //         ),
-                                      //       ],
-                                      //     )),
-                                    ],
-                                  ),
-                                ),
-                              );
-                            },
-                            separatorBuilder:
-                                (BuildContext context, int index) {
-                              return Divider(
-                                indent: 20,
-                                color: Colors.grey.withOpacity(.8),
-                              );
-                            },
-                          ),
+                                    ),
+                                  );
+                                },
+                                separatorBuilder:
+                                    (BuildContext context, int index) {
+                                  return Divider(
+                                    indent: 20,
+                                    color: Colors.grey.withOpacity(.8),
+                                  );
+                                },
+                              ),
                   ],
                 ),
               ),

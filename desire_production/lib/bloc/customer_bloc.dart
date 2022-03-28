@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:desire_production/model/credit_details_model.dart';
 import 'package:desire_production/model/sales_customer_list_model.dart';
 import 'package:desire_production/services/api_client.dart';
 
@@ -26,8 +27,25 @@ class CustomerListBloc {
     }
   }
 
+  final _creditDetailController = StreamController<CreditDetailsModel>.broadcast();
+
+  Stream<CreditDetailsModel> get creditDetailStream => _creditDetailController.stream;
+
+  fetchCreditDetails(String customerId) async {
+    try {
+      final results = await _apiClient.getCreditDetails(customerId);
+      _creditDetailController.sink.add(results);
+      print("detail $results");
+    } on Exception catch (e) {
+      print(e.toString());
+      _creditDetailController.sink.addError(
+          "something went wrong ${e.toString()}");
+    }
+  }
+
   dispose() {
     _newCustomerController.close();
+    _creditDetailController.close();
   }
 
 }

@@ -14,12 +14,15 @@ import 'package:desire_production/model/cart_model.dart';
 import 'package:desire_production/model/category_list_model.dart';
 import 'package:desire_production/model/category_model.dart';
 import 'package:desire_production/model/complaint_detail_model.dart';
+import 'package:desire_production/model/credit_details_model.dart';
 import 'package:desire_production/model/credit_list_model.dart';
 import 'package:desire_production/model/customerOrdersModel.dart';
 import 'package:desire_production/model/customer_complaint_list_model.dart';
 import 'package:desire_production/model/customer_list_for_chat_model.dart';
 import 'package:desire_production/model/customer_list_with_credit_model.dart';
 import 'package:desire_production/model/customer_outstanding_list_model.dart';
+import 'package:desire_production/model/customer_sale_chat_details.dart';
+import 'package:desire_production/model/customer_sales_chat_track_model.dart';
 import 'package:desire_production/model/customerwiseledger.dart';
 import 'package:desire_production/model/dailyOrderListModel.dart';
 import 'package:desire_production/model/dailyProductionAddlistModel.dart';
@@ -143,7 +146,7 @@ class ApiClient {
   Future<ProductionDashBoardModel> getProductionDashboardCount() async {
     var response = await http.post(
         Uri.parse(
-            "http://loccon.in/desiremoulding/api/ProductionApiController/poductionDashoard"),
+            "http://loccon.in/desiremoulding/api/ProductionApiController/poductionDashboard"),
         body: {"secretkey": Connection.secretKey});
     var result = json.decode(response.body);
     print("kyc response $result");
@@ -186,7 +189,8 @@ class ApiClient {
   }
 
   Future<DailyOrdersListModel> getProductionPendingOrderList() async {
-    var response = await http.post(Uri.parse(Connection.productionPendingOrderList),
+    var response = await http.post(
+        Uri.parse(Connection.productionPendingOrderList),
         body: {"secretkey": Connection.secretKey});
     var result = json.decode(response.body);
     print(" daily order response $result");
@@ -734,6 +738,7 @@ class ApiClient {
 
     return modelWiseDailyProductionListModel;
   }
+
   Future<ModelNoWiseListModel> getModelWiseDailyOrdersDetails(
       var modelNoId) async {
     var response = await http.post(
@@ -1240,6 +1245,7 @@ class ApiClient {
 
     return statemodel;
   }
+
   Future<KycPendingListModel> getKycPending() async {
     var response = await http.post(
         Uri.parse(
@@ -1252,6 +1258,7 @@ class ApiClient {
 
     return kycpendinglistmodel;
   }
+
   Future<KycPendingListModel> getCreditPending() async {
     var response = await http.post(
         Uri.parse(
@@ -1263,5 +1270,50 @@ class ApiClient {
     kycpendinglistmodel = (KycPendingListModel.fromJson(result));
 
     return kycpendinglistmodel;
+  }
+
+  Future<CreditDetailsModel> getCreditDetails(String customerId) async {
+    var response = await http.post(
+        Uri.parse(
+            "http://loccon.in/desiremoulding/api/AdminApiController/customerCreditDetails"),
+        body: {
+          'secretkey': Connection.secretKey,
+          'customer_id': customerId,
+        });
+    var result = json.decode(response.body);
+
+    CreditDetailsModel creditdetailsmodel;
+    creditdetailsmodel = (CreditDetailsModel.fromJson(result));
+
+    return creditdetailsmodel;
+  }
+  Future<CustomerSalesChatTrackModel> getchatlistcustomerSales() async {
+    var response = await http.post(
+        Uri.parse(
+            "http://loccon.in/desiremoulding/api/AdminApiController/salesmanCustomerConversationsList"),
+        body: {
+          'secretkey': Connection.secretKey,
+        });
+    var result = json.decode(response.body);
+
+    CustomerSalesChatTrackModel customersaleschattrackmodel;
+    customersaleschattrackmodel = (CustomerSalesChatTrackModel.fromJson(result));
+
+    return customersaleschattrackmodel;
+  }
+  Future<CustomerSaleChatDetailsModel> getchatDetailscustomerSales(String convId) async {
+    var response = await http.post(
+        Uri.parse(
+            "http://loccon.in/desiremoulding/api/AdminApiController/salesmanCustomerConversationDetails"),
+        body: {
+          'secretkey': Connection.secretKey,
+          'conversation_id':convId
+        });
+    var result = json.decode(response.body);
+
+    CustomerSaleChatDetailsModel customersalechatdetailsmodel;
+    customersalechatdetailsmodel = (CustomerSaleChatDetailsModel.fromJson(result));
+
+    return customersalechatdetailsmodel;
   }
 }

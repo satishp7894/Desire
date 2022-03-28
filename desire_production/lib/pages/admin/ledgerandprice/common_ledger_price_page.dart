@@ -127,7 +127,7 @@ class _CommonLedgerPricePageState extends State<CommonLedgerPricePage> {
                 padding: const EdgeInsets.only(top: 10.0, bottom: 10),
                 child: Column(
                   children: [
-                    _searchResult.length == 0
+                    searchView.text.length == 0
                         ? ListView.separated(
                             //padding: EdgeInsets.all(10),
                             physics: NeverScrollableScrollPhysics(),
@@ -222,7 +222,7 @@ class _CommonLedgerPricePageState extends State<CommonLedgerPricePage> {
                                                 padding: EdgeInsets.symmetric(
                                                     horizontal: 10),
                                                 child: Text(
-                                                  "Salesman: ${customerList[i].salesmanID}",
+                                                  "Salesman: ${customerList[i].salesman_name}",
                                                   textAlign: TextAlign.left,
                                                   style: TextStyle(
                                                     color: Colors.black,
@@ -368,175 +368,246 @@ class _CommonLedgerPricePageState extends State<CommonLedgerPricePage> {
                               );
                             },
                           )
-                        : ListView.separated(
-                            padding: EdgeInsets.all(10),
-                            physics: NeverScrollableScrollPhysics(),
-                            shrinkWrap: true,
-                            //reverse: true,
-                            itemCount: _searchResult.length,
-                            itemBuilder: (c, i) {
-                              _searchResult[i].isActive == "0"
-                                  ? status.add(false)
-                                  : status.add(true);
-                              return GestureDetector(
-                                onTap: () {
-                                  widget.type == ""
-                                      ? {}
-                                      : Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (builder) =>
-                                                  CustomerPricingPage(
-                                                    customerId: customerList[i]
-                                                        .customerId,
-                                                    salesId: customerList[i]
-                                                        .salesmanID,
-                                                  )));
-                                },
-                                child: Container(
-                                  //padding: EdgeInsets.only(top: 10, bottom: 10),
-                                  margin: EdgeInsets.only(left: 5, right: 5),
-                                  alignment: Alignment.centerLeft,
-                                  // decoration: BoxDecoration(
-                                  //   //color: Color(0xFFF5F6F9),
-                                  //   borderRadius: BorderRadius.circular(15),
-                                  // ),
-                                  child: Row(
-                                    children: [
-                                      SizedBox(
-                                        width: 80,
-                                        height: 80,
-                                        child: AspectRatio(
-                                          aspectRatio: 0.88,
-                                          child: Container(
-                                            padding: EdgeInsets.all(10),
-                                            decoration: BoxDecoration(
-                                              color: Color(0xFFF5F6F9),
-                                              borderRadius:
-                                                  BorderRadius.circular(15),
-                                            ),
-                                            child: Icon(
-                                              Icons.person_outline,
-                                              color: Colors.black,
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                      Expanded(
-                                        flex: 2,
-                                        child: Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Padding(
-                                                padding: EdgeInsets.symmetric(
-                                                    horizontal: 10),
-                                                child: Text(
-                                                  "Company Name: ${_searchResult[i].companyName}",
-                                                  textAlign: TextAlign.left,
-                                                  style: TextStyle(
-                                                      color: Colors.black,
-                                                      fontSize: 16,
-                                                      fontWeight:
-                                                          FontWeight.w500),
-                                                )),
-                                            SizedBox(
-                                              height: 10,
-                                            ),
-                                            Padding(
-                                                padding: EdgeInsets.symmetric(
-                                                    horizontal: 10),
-                                                child: Text(
-                                                  "Name: ${_searchResult[i].customerName}",
-                                                  textAlign: TextAlign.left,
-                                                  style: TextStyle(
-                                                    color: Colors.black,
-                                                  ),
-                                                )),
-                                            SizedBox(
-                                              height: 10,
-                                            ),
-                                            Padding(
-                                                padding: EdgeInsets.symmetric(
-                                                    horizontal: 10),
-                                                child: Text(
-                                                  "Salesman: ${_searchResult[i].salesmanID}",
-                                                  textAlign: TextAlign.left,
-                                                  style: TextStyle(
-                                                    color: Colors.black,
-                                                  ),
-                                                )),
-                                            SizedBox(
-                                              height: 10,
-                                            ),
-                                            Padding(
-                                              padding: EdgeInsets.symmetric(
-                                                  horizontal: 10),
-                                              child: Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.start,
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.center,
-                                                children: [
-                                                  Text(
-                                                    "Status: ",
-                                                    textAlign: TextAlign.center,
-                                                    style: TextStyle(
-                                                        color: Colors.black),
-                                                  ),
-                                                  SizedBox(
-                                                    width: 5,
-                                                  ),
-                                                  _searchResult[i].isActive ==
-                                                          "0"
-                                                      ? Text(
-                                                          "Blocked",
-                                                          textAlign:
-                                                              TextAlign.center,
-                                                          style: TextStyle(
-                                                            color: Colors
-                                                                .redAccent,
-                                                          ),
-                                                        )
-                                                      : Text(
-                                                          "Active",
-                                                          textAlign:
-                                                              TextAlign.center,
-                                                          style: TextStyle(
-                                                              color:
-                                                                  Colors.green),
-                                                        ),
-                                                ],
+                        : _searchResult.length == 0
+                            ? Container(
+                                alignment: Alignment.center,
+                                child: Text(
+                                  "No Data Found",
+                                  style: TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.w800),
+                                ))
+                            : ListView.separated(
+                                padding: EdgeInsets.all(10),
+                                physics: NeverScrollableScrollPhysics(),
+                                shrinkWrap: true,
+                                //reverse: true,
+                                itemCount: _searchResult.length,
+                                itemBuilder: (c, i) {
+                                  _searchResult[i].isActive == "0"
+                                      ? status.add(false)
+                                      : status.add(true);
+                                  return GestureDetector(
+                                    onTap: () {
+                                      widget.type == ""
+                                          ? {}
+                                          : Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (builder) =>
+                                                      CustomerPricingPage(
+                                                        customerId:
+                                                            customerList[i]
+                                                                .customerId,
+                                                        salesId: customerList[i]
+                                                            .salesmanID,
+                                                      )));
+                                    },
+                                    child: Container(
+                                      //padding: EdgeInsets.only(top: 10, bottom: 10),
+                                      margin:
+                                          EdgeInsets.only(left: 5, right: 5),
+                                      alignment: Alignment.centerLeft,
+                                      // decoration: BoxDecoration(
+                                      //   //color: Color(0xFFF5F6F9),
+                                      //   borderRadius: BorderRadius.circular(15),
+                                      // ),
+                                      child: Row(
+                                        children: [
+                                          SizedBox(
+                                            width: 80,
+                                            height: 80,
+                                            child: AspectRatio(
+                                              aspectRatio: 0.88,
+                                              child: Container(
+                                                padding: EdgeInsets.all(10),
+                                                decoration: BoxDecoration(
+                                                  color: Color(0xFFF5F6F9),
+                                                  borderRadius:
+                                                      BorderRadius.circular(15),
+                                                ),
+                                                child: Icon(
+                                                  Icons.person_outline,
+                                                  color: Colors.black,
+                                                ),
                                               ),
                                             ),
-                                            SizedBox(
-                                              height: 10,
-                                            ),
-                                            _searchResult[i].kycStatus == "0"
-                                                ? Padding(
+                                          ),
+                                          Expanded(
+                                            flex: 2,
+                                            child: Column(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Padding(
                                                     padding:
                                                         EdgeInsets.symmetric(
                                                             horizontal: 10),
                                                     child: Text(
-                                                      "KYC Status : Docs not Uploaded",
+                                                      "Company Name: ${_searchResult[i].companyName}",
+                                                      textAlign: TextAlign.left,
                                                       style: TextStyle(
-                                                          color: Colors.black),
-                                                    ))
-                                                : Padding(
-                                                    padding:
-                                                        EdgeInsets.symmetric(
-                                                            horizontal: 10),
-                                                    child: Text(
-                                                      "KYC Status : Docs Uploaded",
-                                                      style: TextStyle(
-                                                          color: Colors.black),
+                                                          color: Colors.black,
+                                                          fontSize: 16,
+                                                          fontWeight:
+                                                              FontWeight.w500),
                                                     )),
-                                            _searchResult[i].kycStatus == "2"
-                                                ? _searchResult[i].kycApprove ==
+                                                SizedBox(
+                                                  height: 10,
+                                                ),
+                                                Padding(
+                                                    padding:
+                                                        EdgeInsets.symmetric(
+                                                            horizontal: 10),
+                                                    child: Text(
+                                                      "Name: ${_searchResult[i].customerName}",
+                                                      textAlign: TextAlign.left,
+                                                      style: TextStyle(
+                                                        color: Colors.black,
+                                                      ),
+                                                    )),
+                                                SizedBox(
+                                                  height: 10,
+                                                ),
+                                                Padding(
+                                                    padding:
+                                                        EdgeInsets.symmetric(
+                                                            horizontal: 10),
+                                                    child: Text(
+                                                      "Salesman: ${_searchResult[i].salesman_name}",
+                                                      textAlign: TextAlign.left,
+                                                      style: TextStyle(
+                                                        color: Colors.black,
+                                                      ),
+                                                    )),
+                                                SizedBox(
+                                                  height: 10,
+                                                ),
+                                                Padding(
+                                                  padding: EdgeInsets.symmetric(
+                                                      horizontal: 10),
+                                                  child: Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment.start,
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .center,
+                                                    children: [
+                                                      Text(
+                                                        "Status: ",
+                                                        textAlign:
+                                                            TextAlign.center,
+                                                        style: TextStyle(
+                                                            color:
+                                                                Colors.black),
+                                                      ),
+                                                      SizedBox(
+                                                        width: 5,
+                                                      ),
+                                                      _searchResult[i]
+                                                                  .isActive ==
+                                                              "0"
+                                                          ? Text(
+                                                              "Blocked",
+                                                              textAlign:
+                                                                  TextAlign
+                                                                      .center,
+                                                              style: TextStyle(
+                                                                color: Colors
+                                                                    .redAccent,
+                                                              ),
+                                                            )
+                                                          : Text(
+                                                              "Active",
+                                                              textAlign:
+                                                                  TextAlign
+                                                                      .center,
+                                                              style: TextStyle(
+                                                                  color: Colors
+                                                                      .green),
+                                                            ),
+                                                    ],
+                                                  ),
+                                                ),
+                                                SizedBox(
+                                                  height: 10,
+                                                ),
+                                                _searchResult[i].kycStatus ==
                                                         "0"
                                                     ? Padding(
+                                                        padding: EdgeInsets
+                                                            .symmetric(
+                                                                horizontal: 10),
+                                                        child: Text(
+                                                          "KYC Status : Docs not Uploaded",
+                                                          style: TextStyle(
+                                                              color:
+                                                                  Colors.black),
+                                                        ))
+                                                    : Padding(
+                                                        padding: EdgeInsets
+                                                            .symmetric(
+                                                                horizontal: 10),
+                                                        child: Text(
+                                                          "KYC Status : Docs Uploaded",
+                                                          style: TextStyle(
+                                                              color:
+                                                                  Colors.black),
+                                                        )),
+                                                _searchResult[i].kycStatus ==
+                                                        "2"
+                                                    ? _searchResult[i]
+                                                                .kycApprove ==
+                                                            "0"
+                                                        ? Padding(
+                                                            padding: EdgeInsets
+                                                                .symmetric(
+                                                                    horizontal:
+                                                                        10,
+                                                                    vertical:
+                                                                        10),
+                                                            child: Text(
+                                                              "KYC Pending",
+                                                              style: TextStyle(
+                                                                  color: Colors
+                                                                      .yellow
+                                                                      .shade700),
+                                                            ),
+                                                          )
+                                                        : _searchResult[i]
+                                                                    .kycApprove ==
+                                                                "1"
+                                                            ? Padding(
+                                                                padding: EdgeInsets
+                                                                    .symmetric(
+                                                                        horizontal:
+                                                                            10,
+                                                                        vertical:
+                                                                            10),
+                                                                child: Text(
+                                                                  "KYC Done",
+                                                                  style: TextStyle(
+                                                                      color: Colors
+                                                                          .greenAccent),
+                                                                ),
+                                                              )
+                                                            : Padding(
+                                                                padding: EdgeInsets
+                                                                    .symmetric(
+                                                                        horizontal:
+                                                                            10,
+                                                                        vertical:
+                                                                            10),
+                                                                child: Text(
+                                                                  "KYC Rejected",
+                                                                  style: TextStyle(
+                                                                      color: Colors
+                                                                          .redAccent),
+                                                                ),
+                                                              )
+                                                    : Padding(
                                                         padding: EdgeInsets
                                                             .symmetric(
                                                                 horizontal: 10,
@@ -549,65 +620,22 @@ class _CommonLedgerPricePageState extends State<CommonLedgerPricePage> {
                                                                   .shade700),
                                                         ),
                                                       )
-                                                    : _searchResult[i]
-                                                                .kycApprove ==
-                                                            "1"
-                                                        ? Padding(
-                                                            padding: EdgeInsets
-                                                                .symmetric(
-                                                                    horizontal:
-                                                                        10,
-                                                                    vertical:
-                                                                        10),
-                                                            child: Text(
-                                                              "KYC Done",
-                                                              style: TextStyle(
-                                                                  color: Colors
-                                                                      .greenAccent),
-                                                            ),
-                                                          )
-                                                        : Padding(
-                                                            padding: EdgeInsets
-                                                                .symmetric(
-                                                                    horizontal:
-                                                                        10,
-                                                                    vertical:
-                                                                        10),
-                                                            child: Text(
-                                                              "KYC Rejected",
-                                                              style: TextStyle(
-                                                                  color: Colors
-                                                                      .redAccent),
-                                                            ),
-                                                          )
-                                                : Padding(
-                                                    padding:
-                                                        EdgeInsets.symmetric(
-                                                            horizontal: 10,
-                                                            vertical: 10),
-                                                    child: Text(
-                                                      "KYC Pending",
-                                                      style: TextStyle(
-                                                          color: Colors
-                                                              .yellow.shade700),
-                                                    ),
-                                                  )
-                                          ],
-                                        ),
+                                              ],
+                                            ),
+                                          ),
+                                        ],
                                       ),
-                                    ],
-                                  ),
-                                ),
-                              );
-                            },
-                            separatorBuilder:
-                                (BuildContext context, int index) {
-                              return Divider(
-                                indent: 20,
-                                color: Colors.grey.withOpacity(.8),
-                              );
-                            },
-                          ),
+                                    ),
+                                  );
+                                },
+                                separatorBuilder:
+                                    (BuildContext context, int index) {
+                                  return Divider(
+                                    indent: 20,
+                                    color: Colors.grey.withOpacity(.8),
+                                  );
+                                },
+                              ),
                   ],
                 ),
               ),
@@ -656,7 +684,7 @@ class _CommonLedgerPricePageState extends State<CommonLedgerPricePage> {
 
     customerList.forEach((exp) {
       if (exp.customerName.toLowerCase().contains(text.toLowerCase()) ||
-          exp.salesmanID.toLowerCase().contains(text.toLowerCase()))
+          exp.salesman_name.toLowerCase().contains(text.toLowerCase()) || exp.companyName.toLowerCase().contains(text.toLowerCase()))
         _searchResult.add(exp);
     });
     //print("search objects ${_searchResult.first}");

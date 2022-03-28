@@ -1,42 +1,32 @@
 class ProductionDashBoardModel {
   bool status;
   String message;
-  Data data;
+  int totalDailyOrder;
+  int totalPendingOrder;
+  int totalProductionOrder;
 
-  ProductionDashBoardModel({this.status, this.message, this.data});
+  ProductionDashBoardModel(
+      {this.status,
+        this.message,
+        this.totalDailyOrder,
+        this.totalPendingOrder,
+        this.totalProductionOrder});
 
   ProductionDashBoardModel.fromJson(Map<String, dynamic> json) {
     status = json['status'];
     message = json['message'];
-    data = json['data'] != null ? new Data.fromJson(json['data']) : null;
+    totalDailyOrder = json['totalDailyOrder'];
+    totalPendingOrder = json['totalPendingOrder'];
+    totalProductionOrder = json['totalProductionOrder'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['status'] = this.status;
     data['message'] = this.message;
-    if (this.data != null) {
-      data['data'] = this.data.toJson();
-    }
-    return data;
-  }
-}
-
-class Data {
-  String dailyOrder;
-  String dailyProduction;
-
-  Data({this.dailyOrder, this.dailyProduction});
-
-  Data.fromJson(Map<String, dynamic> json) {
-    dailyOrder = json['dailyOrder'];
-    dailyProduction = json['dailyProduction'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['dailyOrder'] = this.dailyOrder;
-    data['dailyProduction'] = this.dailyProduction;
+    data['totalDailyOrder'] = this.totalDailyOrder;
+    data['totalPendingOrder'] = this.totalPendingOrder;
+    data['totalProductionOrder'] = this.totalProductionOrder;
     return data;
   }
 }

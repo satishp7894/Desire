@@ -18,6 +18,7 @@ import 'package:permission_handler/permission_handler.dart';
 
 class InvoicesListPage extends StatefulWidget {
   final String page;
+
   const InvoicesListPage({@required this.page});
 
   @override
@@ -36,6 +37,7 @@ class _InvoicesListPageState extends State<InvoicesListPage> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    searchView = TextEditingController();
     modelWiseListBloc.fetchinvoicesList();
   }
 
@@ -47,6 +49,7 @@ class _InvoicesListPageState extends State<InvoicesListPage> {
   }
 
   AsyncSnapshot<InvoicesListModel> asyncSnapshot;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -102,9 +105,7 @@ class _InvoicesListPageState extends State<InvoicesListPage> {
           backgroundColor: kPrimaryColor,
           onPressed: () {
             showDialog(
-                context: context,
-                builder: (builder) =>
-                    AddInvoiceDailog());
+                context: context, builder: (builder) => AddInvoiceDailog());
           },
           label: Text("Add Invoice")),
       body: StreamBuilder<InvoicesListModel>(
@@ -150,15 +151,32 @@ class _InvoicesListPageState extends State<InvoicesListPage> {
                 )
               : SingleChildScrollView(
                   physics: BouncingScrollPhysics(),
-                  child: Column(
-                    children: [
-                      ...List.generate(
-                          asyncSnapshot.data.data.length,
-                          (index) => ModelWiseListTile(
-                              data: asyncSnapshot.data.data[index],
-                              url: asyncSnapshot.data.invoicePDFPath))
-                    ],
-                  ),
+                  child: searchView.text.length == 0
+                      ? Column(
+                          children: [
+                            ...List.generate(
+                                _list.length,
+                                (index) =>
+                                    ModelWiseListTile(data: _list[index]))
+                          ],
+                        )
+                      : _searchResult.length == 0
+                          ? Container(
+                              alignment: Alignment.center,
+                              margin: EdgeInsets.only(top: 10),
+                              child: Text(
+                                "No Data Found",
+                                style: TextStyle(
+                                    fontSize: 20, fontWeight: FontWeight.w800),
+                              ))
+                          : Column(
+                              children: [
+                                ...List.generate(
+                                    _searchResult.length,
+                                    (index) => ModelWiseListTile(
+                                        data: _searchResult[index]))
+                              ],
+                            ),
                 );
         },
       ),
@@ -216,7 +234,9 @@ class _InvoicesListPageState extends State<InvoicesListPage> {
     }
 
     _list.forEach((exp) {
-      if (exp.invoiceNumber.contains(text)) _searchResult.add(exp);
+      if (exp.invoiceNumber.toLowerCase().contains(text.toLowerCase()) ||
+          exp.customerName.toLowerCase().contains(text.toLowerCase()))
+        _searchResult.add(exp);
     });
     //print("search objects ${_searchResult.first}");
     print("search result length ${_searchResult.length}");
@@ -380,8 +400,8 @@ class _InvoicesListPageState extends State<InvoicesListPage> {
 
 class ModelWiseListTile extends StatelessWidget {
   final InvoiceInfo data;
-  final String url;
-  const ModelWiseListTile({Key key, this.data, this.url}) : super(key: key);
+
+  const ModelWiseListTile({Key key, this.data}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -402,14 +422,6 @@ class ModelWiseListTile extends StatelessWidget {
                 left: 10.0, right: 10, bottom: 10, top: 10),
             child: Row(
               children: [
-                // Padding(
-                //   padding: const EdgeInsets.only(right: 8.0),
-                //   child: Image.network(
-                //     "$url/${data.invoiceFile}",
-                //     width: 120,
-                //     fit: BoxFit.cover,
-                //   ),
-                // ),
                 Expanded(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
@@ -455,7 +467,6 @@ Widget FieldValueSet(String title, String value) {
   );
 }
 
-
 class AddInvoiceDailog extends StatefulWidget {
   @override
   _AddInvoiceDailogState createState() => _AddInvoiceDailogState();
@@ -496,8 +507,8 @@ class _AddInvoiceDailogState extends State<AddInvoiceDailog> {
                   return AddNewInvoiceOrderPage(_chosenValue);
                 }));
               } else {
-                Alerts.showAlertAndBack(
-                    context, "Something went wrong", "Please select customer name");
+                Alerts.showAlertAndBack(context, "Something went wrong",
+                    "Please select customer name");
               }
             },
           ),

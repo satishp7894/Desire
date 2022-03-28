@@ -107,7 +107,7 @@ class Connection {
 
   //credits
   static final String creditList = ipAdmin + "allCustomerCredit";
-  static final String addCredits = ipAdmin + "addCredit";
+  static final String updateCredit = ipAdmin + "updateCredit";
   static final String creditApprove = ipAdmin + "approveNreject";
 
   //orders
@@ -149,6 +149,7 @@ class Connection {
 
 
   static final String submitNewAdminUser = ipAdmin + "submitNewAdminUser";
+  static final String approveCredits = ipAdmin + "approveCredits";
 
 
 

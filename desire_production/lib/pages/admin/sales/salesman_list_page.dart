@@ -124,7 +124,7 @@ class _SalesManListPageState extends State<SalesManListPage> {
                 padding: const EdgeInsets.only(top: 10.0, bottom: 10),
                 child: Column(
                   children: [
-                    _searchResult.length == 0
+                    searchView.text.length == 0
                         ? ListView.builder(
                             physics: NeverScrollableScrollPhysics(),
                             shrinkWrap: true,
@@ -346,189 +346,247 @@ class _SalesManListPageState extends State<SalesManListPage> {
                               );
                             },
                           )
-                        : ListView.builder(
-                            physics: NeverScrollableScrollPhysics(),
-                            shrinkWrap: true,
-                            //reverse: true,
-                            itemCount: _searchResult.length,
-                            itemBuilder: (c, i) {
-                              _searchResult[i].isActive == "0"
-                                  ? status.add(false)
-                                  : status.add(true);
-                              return GestureDetector(
-                                onTap: () {
-                                  //s.data.customer[i].kycStatus == "0" ? Navigator.push(context, MaterialPageRoute(builder: (builder) => CustomerKYCDetailsPage(customerId: s.data.customer[i].customerId, salesId: widget.salesId,)))  :  Navigator.of(context).push(MaterialPageRoute(builder: (_) => CustomerListPage(salesId: widget.salesId,)));
-                                },
-                                child: Container(
-                                  height: 150,
-                                  margin: EdgeInsets.all(5),
-                                  alignment: Alignment.centerLeft,
-                                  decoration: BoxDecoration(
-                                      border: Border.all(
-                                          color: kPrimaryColor, width: 0.3),
-                                      color: Colors.white,
-                                      borderRadius: BorderRadius.circular(5),
-                                      boxShadow: [
-                                        BoxShadow(
-                                          color: Colors.grey,
-                                          blurRadius: 5.0,
-                                          spreadRadius: 1,
-                                        )
-                                      ]),
-                                  child: Column(
-                                    children: [
-                                      Expanded(
-                                        flex: 2,
-                                        child: Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Padding(
-                                                padding: EdgeInsets.symmetric(
-                                                    horizontal: 10),
-                                                child: Text(
-                                                  "Name: ${_searchResult[i].firstname} ${_searchResult[i].lastname}",
-                                                  textAlign: TextAlign.left,
-                                                  style: TextStyle(
-                                                      color: kPrimaryColor,
-                                                      fontSize: 16,
-                                                      fontWeight:
-                                                          FontWeight.w500),
-                                                )),
-                                            SizedBox(
-                                              height: 10,
-                                            ),
-                                            Padding(
-                                              padding: EdgeInsets.symmetric(
-                                                  horizontal: 10),
-                                              child: Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.start,
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.center,
-                                                children: [
-                                                  Text(
-                                                    "Status: ",
-                                                    textAlign: TextAlign.center,
-                                                    style: TextStyle(
-                                                        color: kPrimaryColor),
-                                                  ),
-                                                  SizedBox(
-                                                    width: 5,
-                                                  ),
-                                                  _searchResult[i].isActive ==
-                                                          "0"
-                                                      ? Text(
-                                                          "Blocked",
-                                                          textAlign:
-                                                              TextAlign.center,
-                                                          style: TextStyle(
-                                                            color: Colors
-                                                                .redAccent,
-                                                          ),
-                                                        )
-                                                      : Text(
-                                                          "Active",
-                                                          textAlign:
-                                                              TextAlign.center,
-                                                          style: TextStyle(
-                                                              color:
-                                                                  Colors.green),
-                                                        ),
-                                                ],
-                                              ),
-                                            ),
-                                            SizedBox(
-                                              height: 10,
-                                            ),
-                                            Padding(
-                                                padding: EdgeInsets.symmetric(
-                                                    horizontal: 10),
-                                                child: Text(
-                                                  "Email : ${_searchResult[i].email}",
-                                                  style: TextStyle(
-                                                      color: kPrimaryColor),
-                                                )),
-                                          ],
-                                        ),
-                                      ),
-                                      Divider(
-                                        color: kPrimaryColor,
-                                        height: 2,
-                                      ),
-                                      Expanded(
-                                          flex: 1,
-                                          child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceAround,
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              IconButton(
-                                                  icon:
-                                                      Icon(Icons.edit_outlined),
-                                                  onPressed: () {
-                                                    Navigator.push(
-                                                        context,
-                                                        MaterialPageRoute(
-                                                            builder: (builder) =>
-                                                                SalesEditPage(
-                                                                  salesman:
-                                                                      salesmanList[
-                                                                          i],
-                                                                  userId: '2',
-                                                                )));
-                                                  }),
-                                              _searchResult[i].isActive == "0"
-                                                  ? IconButton(
-                                                      icon: Icon(
-                                                        Icons.block,
-                                                        color: kPrimaryColor,
+                        : _searchResult.length == 0
+                            ? Container(
+                                alignment: Alignment.center,
+                                child: Text(
+                                  "No Data Found",
+                                  style: TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.w800),
+                                ))
+                            : ListView.builder(
+                                physics: NeverScrollableScrollPhysics(),
+                                shrinkWrap: true,
+                                //reverse: true,
+                                itemCount: _searchResult.length,
+                                itemBuilder: (c, i) {
+                                  _searchResult[i].isActive == "0"
+                                      ? status.add(false)
+                                      : status.add(true);
+                                  return GestureDetector(
+                                    onTap: () {
+                                      //s.data.customer[i].kycStatus == "0" ? Navigator.push(context, MaterialPageRoute(builder: (builder) => CustomerKYCDetailsPage(customerId: s.data.customer[i].customerId, salesId: widget.salesId,)))  :  Navigator.of(context).push(MaterialPageRoute(builder: (_) => CustomerListPage(salesId: widget.salesId,)));
+                                    },
+                                    child: Container(
+                                      height: 150,
+                                      margin: EdgeInsets.all(5),
+                                      alignment: Alignment.centerLeft,
+                                      decoration: BoxDecoration(
+                                          border: Border.all(
+                                              color: kPrimaryColor, width: 0.3),
+                                          color: Colors.white,
+                                          borderRadius:
+                                              BorderRadius.circular(5),
+                                          boxShadow: [
+                                            BoxShadow(
+                                              color: Colors.grey,
+                                              blurRadius: 5.0,
+                                              spreadRadius: 1,
+                                            )
+                                          ]),
+                                      child: Column(
+                                        children: [
+                                          Expanded(
+                                            flex: 2,
+                                            child: Column(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Padding(
+                                                    padding:
+                                                        EdgeInsets.symmetric(
+                                                            horizontal: 10),
+                                                    child: Text(
+                                                      "Name: ${_searchResult[i].firstname} ${_searchResult[i].lastname}",
+                                                      textAlign: TextAlign.left,
+                                                      style: TextStyle(
+                                                          color: kPrimaryColor,
+                                                          fontSize: 16,
+                                                          fontWeight:
+                                                              FontWeight.w500),
+                                                    )),
+                                                SizedBox(
+                                                  height: 10,
+                                                ),
+                                                Padding(
+                                                  padding: EdgeInsets.symmetric(
+                                                      horizontal: 10),
+                                                  child: Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment.start,
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .center,
+                                                    children: [
+                                                      Text(
+                                                        "Status: ",
+                                                        textAlign:
+                                                            TextAlign.center,
+                                                        style: TextStyle(
+                                                            color:
+                                                                kPrimaryColor),
                                                       ),
-                                                      onPressed: () {
-                                                        //updateStatusId("1",_searchResult[i].userId);
-                                                      })
-                                                  : IconButton(
-                                                      icon: Icon(
-                                                        Icons.block,
-                                                        color: Colors.blue,
+                                                      SizedBox(
+                                                        width: 5,
                                                       ),
-                                                      onPressed: () {
-                                                        //updateStatusId("0",_searchResult[i].userId);
-                                                      }),
-                                              GestureDetector(
-                                                onTap: () {
-                                                  Navigator.push(
-                                                      context,
-                                                      MaterialPageRoute(
-                                                          builder: (builder) =>
-                                                              SalesCustomerListPage(
-                                                                  salesId:
-                                                                      salesmanList[
-                                                                              i]
-                                                                          .userId)));
-                                                },
-                                                child: Container(
-                                                  height: 30,
-                                                  width: 20,
-                                                  padding: EdgeInsets.zero,
-                                                  child: SvgPicture.asset(
-                                                    "assets/icons/custList.svg",
-                                                    color: kPrimaryColor,
-                                                    width: 30,
+                                                      _searchResult[i]
+                                                                  .isActive ==
+                                                              "0"
+                                                          ? Text(
+                                                              "Blocked",
+                                                              textAlign:
+                                                                  TextAlign
+                                                                      .center,
+                                                              style: TextStyle(
+                                                                color: Colors
+                                                                    .redAccent,
+                                                              ),
+                                                            )
+                                                          : Text(
+                                                              "Active",
+                                                              textAlign:
+                                                                  TextAlign
+                                                                      .center,
+                                                              style: TextStyle(
+                                                                  color: Colors
+                                                                      .green),
+                                                            ),
+                                                    ],
                                                   ),
                                                 ),
-                                              ),
-                                            ],
-                                          )),
-                                    ],
-                                  ),
-                                ),
-                              );
-                            },
-                          ),
+                                                SizedBox(
+                                                  height: 10,
+                                                ),
+                                                Padding(
+                                                    padding:
+                                                        EdgeInsets.symmetric(
+                                                            horizontal: 10),
+                                                    child: Text(
+                                                      "Email : ${_searchResult[i].email}",
+                                                      style: TextStyle(
+                                                          color: kPrimaryColor),
+                                                    )),
+                                              ],
+                                            ),
+                                          ),
+                                          Divider(
+                                            color: kPrimaryColor,
+                                            height: 2,
+                                          ),
+                                          Container(
+                                            child: Expanded(
+                                                child: Row(
+                                                  mainAxisAlignment:
+                                                  MainAxisAlignment.spaceAround,
+                                                  crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                                  children: [
+                                                    GestureDetector(
+                                                      onTap: () {
+                                                        Navigator.push(
+                                                            context,
+                                                            MaterialPageRoute(
+                                                                builder: (builder) =>
+                                                                    SalesmanDetailsPage(
+                                                                      salesman:
+                                                                      salesmanList[
+                                                                      i],
+                                                                    )));
+                                                      },
+                                                      child: Container(
+                                                        height: 30,
+                                                        width: 20,
+                                                        padding: EdgeInsets.zero,
+                                                        child: Icon(
+                                                          Icons.preview_outlined,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    GestureDetector(
+                                                      onTap: () {
+                                                        Navigator.push(
+                                                            context,
+                                                            MaterialPageRoute(
+                                                                builder: (builder) =>
+                                                                    SalesEditPage(
+                                                                      salesman:
+                                                                      _searchResult[
+                                                                      i],
+                                                                      userId: '2',
+                                                                    )));
+                                                      },
+                                                      child: Container(
+                                                        height: 30,
+                                                        width: 20,
+                                                        padding: EdgeInsets.zero,
+                                                        child:
+                                                        Icon(Icons.edit_outlined),
+                                                      ),
+                                                    ),
+                                                    _searchResult[i].isActive == "0"
+                                                        ? GestureDetector(
+                                                      onTap: () {
+                                                        //updateStatusId("1",salesmanList[i].userId);
+                                                      },
+                                                      child: Container(
+                                                        height: 30,
+                                                        width: 20,
+                                                        padding: EdgeInsets.zero,
+                                                        child: Icon(
+                                                          Icons.block,
+                                                          color: kPrimaryColor,
+                                                        ),
+                                                      ),
+                                                    )
+                                                        : GestureDetector(
+                                                      onTap: () {
+                                                        //updateStatusId("0",salesmanList[i].userId);
+                                                      },
+                                                      child: Container(
+                                                        padding: EdgeInsets.zero,
+                                                        height: 30,
+                                                        width: 20,
+                                                        child: Icon(
+                                                          Icons.block,
+                                                          color: Colors.blue,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    GestureDetector(
+                                                      onTap: () {
+                                                        Navigator.push(
+                                                            context,
+                                                            MaterialPageRoute(
+                                                                builder: (builder) =>
+                                                                    SalesCustomerListPage(
+                                                                        salesId:
+                                                                        _searchResult[
+                                                                        i]
+                                                                            .userId)));
+                                                      },
+                                                      child: Container(
+                                                        height: 30,
+                                                        width: 20,
+                                                        padding: EdgeInsets.zero,
+                                                        child: SvgPicture.asset(
+                                                          "assets/icons/custList.svg",
+                                                          color: kPrimaryColor,
+                                                          width: 30,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                )),
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                  );
+                                },
+                              ),
                   ],
                 ),
               ),
