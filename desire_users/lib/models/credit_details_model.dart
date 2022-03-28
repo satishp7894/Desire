@@ -1,57 +1,51 @@
-class CreditListModel {
+class CreditDetailsModel {
   bool status;
-  String message;
-  List<CreditList> creditList;
+  CustomerCreditDetails customerCreditDetails;
 
-  CreditListModel({this.status, this.message, this.creditList});
+  CreditDetailsModel({this.status, this.customerCreditDetails});
 
-  CreditListModel.fromJson(Map<String, dynamic> json) {
+  CreditDetailsModel.fromJson(Map<String, dynamic> json) {
     status = json['status'];
-    message = json['message'];
-    if (json['creditList'] != null) {
-      creditList = new List<CreditList>();
-      json['creditList'].forEach((v) {
-        creditList.add(new CreditList.fromJson(v));
-      });
-    }
+    customerCreditDetails = json['customerCreditDetails'] != null
+        ? new CustomerCreditDetails.fromJson(json['customerCreditDetails'])
+        : null;
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['status'] = this.status;
-    data['message'] = this.message;
-    if (this.creditList != null) {
-      data['creditList'] = this.creditList.map((v) => v.toJson()).toList();
+    if (this.customerCreditDetails != null) {
+      data['customerCreditDetails'] = this.customerCreditDetails.toJson();
     }
     return data;
   }
 }
 
-class CreditList {
+class CustomerCreditDetails {
   String creditId;
   String customerId;
   String customerName;
   String creditLimit;
-  String pendingCreditLimit;
   String creditDays;
+  String pendingCreditLimit;
   String creditStatus;
 
-  CreditList(
+  CustomerCreditDetails(
       {this.creditId,
         this.customerId,
         this.customerName,
         this.creditLimit,
-        this.pendingCreditLimit,
         this.creditDays,
+        this.pendingCreditLimit,
         this.creditStatus});
 
-  CreditList.fromJson(Map<String, dynamic> json) {
+  CustomerCreditDetails.fromJson(Map<String, dynamic> json) {
     creditId = json['credit_id'];
     customerId = json['customer_id'];
     customerName = json['Customer_name'];
     creditLimit = json['credit_limit'];
-    pendingCreditLimit = json['pending_credit_limit'];
     creditDays = json['credit_days'];
+    pendingCreditLimit = json['pending_credit_limit'];
     creditStatus = json['credit_status'];
   }
 
@@ -61,8 +55,8 @@ class CreditList {
     data['customer_id'] = this.customerId;
     data['Customer_name'] = this.customerName;
     data['credit_limit'] = this.creditLimit;
-    data['pending_credit_limit'] = this.pendingCreditLimit;
     data['credit_days'] = this.creditDays;
+    data['pending_credit_limit'] = this.pendingCreditLimit;
     data['credit_status'] = this.creditStatus;
     return data;
   }

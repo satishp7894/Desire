@@ -173,7 +173,7 @@ class _CustCartPageState extends State<CustCartPage> {
 
                    child: Column(
                children: [
-                   addressView(),
+                   // addressView(),
                    ...List.generate(asyncSnapshot.data.data.length, (index) => CartItemsTile(
                      cart: asyncSnapshot.data.data[index],
                      customerId: widget.customerId,
@@ -253,8 +253,8 @@ class _CustCartPageState extends State<CustCartPage> {
       'order_amount':"$totalAmount",
       'discounted_total':"234",
       'coupon_code':"12",
-      'selectedAddress':"$addressId",
-      'OrderNote':"qwert"
+      // 'selectedAddress':"$addressId",
+      'OrderNote':"Desire"
     });
 
     print("object response ${response.body}");

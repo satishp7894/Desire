@@ -24,7 +24,7 @@ class ConnectionSales {
   static String checkOut = ip + "addOrder";
 
   //credits
-  static String creditList = ip + "creditlist";
+  static String creditList = ip + "customerCreditList";
 
   //customer pricing
   static String customerPriceList = ip + "customerPriceList";

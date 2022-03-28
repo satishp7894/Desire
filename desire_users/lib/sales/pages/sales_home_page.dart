@@ -272,8 +272,7 @@ class _SalesHomePageState extends State<SalesHomePage> {
         GestureDetector(
           onTap: () {
             Navigator.push(context, MaterialPageRoute(builder: (context) {
-              return CustomerCreditPage(
-                  salesId: salesManId, email: salesEmail, name: salesName);
+              return SalesCustomerCreditDetails(salemanId: salesManId);
             }));
           },
           child: Padding(
@@ -904,49 +903,49 @@ class _SalesHomePageState extends State<SalesHomePage> {
             ),
           ),
         ),
-        GestureDetector(
-          onTap: () {
-            Navigator.push(context, MaterialPageRoute(builder: (context) {
-              return SalesCustomerCreditDetails(salemanId: salesManId);
-            }));
-          },
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Container(
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(15)),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey,
-                      blurRadius: 5.0,
-                    ),
-                  ],
-                  color: kPrimaryColor),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Icon(
-                    Icons.credit_card,
-                    size: 40,
-                    color: kWhiteColor,
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Text(
-                    "Credit List",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 14,
-                        color: kWhiteColor),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
+        // GestureDetector(
+        //   onTap: () {
+        //     /*Navigator.push(context, MaterialPageRoute(builder: (context) {
+        //       return SalesCustomerCreditDetails(salemanId: salesManId);
+        //     }));*/
+        //   },
+        //   child: Padding(
+        //     padding: const EdgeInsets.all(8.0),
+        //     child: Container(
+        //       decoration: BoxDecoration(
+        //           borderRadius: BorderRadius.all(Radius.circular(15)),
+        //           boxShadow: [
+        //             BoxShadow(
+        //               color: Colors.grey,
+        //               blurRadius: 5.0,
+        //             ),
+        //           ],
+        //           color: kPrimaryColor),
+        //       child: Column(
+        //         mainAxisAlignment: MainAxisAlignment.center,
+        //         crossAxisAlignment: CrossAxisAlignment.center,
+        //         children: [
+        //           Icon(
+        //             Icons.credit_card,
+        //             size: 40,
+        //             color: kWhiteColor,
+        //           ),
+        //           SizedBox(
+        //             height: 10,
+        //           ),
+        //           Text(
+        //             "Credit List",
+        //             textAlign: TextAlign.center,
+        //             style: TextStyle(
+        //                 fontWeight: FontWeight.bold,
+        //                 fontSize: 14,
+        //                 color: kWhiteColor),
+        //           ),
+        //         ],
+        //       ),
+        //     ),
+        //   ),
+        // ),
       ],
     );
   }

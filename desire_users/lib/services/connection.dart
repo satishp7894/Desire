@@ -64,7 +64,7 @@ static String categoryWiseModelNo = "http://loccon.in/desiremoulding/api/UserApi
 
   //invoice
   static final String getInvoice = ip+"customerInvoiceList";
-  static final String addCredits = ip+"addCredit";
+  static final String updateCredit = salesIp+"updateCredit";
 
 
   static final String verifyMobileNumber = ip+"customermobilecheck";

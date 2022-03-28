@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:desire_users/models/credit_details_model.dart';
 import 'package:desire_users/models/credit_list_model.dart';
 import 'package:desire_users/models/customerOrdersModel.dart';
 import 'package:desire_users/models/customer_price_listing_model.dart';
@@ -343,6 +344,21 @@ class ApiSales{
     print("List $salescustomercredirlistmodel");
 
     return salescustomercredirlistmodel;
+  }
+  Future<CreditDetailsModel> getCreditDetails(String customerId) async {
+    var response = await http.post(
+        Uri.parse(
+            "http://loccon.in/desiremoulding/api/SalesApiController/customerCreditDetails"),
+        body: {
+          'secretkey': Connection.secretKey,
+          'customer_id': customerId,
+        });
+    var result = json.decode(response.body);
+
+    CreditDetailsModel creditdetailsmodel;
+    creditdetailsmodel = (CreditDetailsModel.fromJson(result));
+
+    return creditdetailsmodel;
   }
 
 

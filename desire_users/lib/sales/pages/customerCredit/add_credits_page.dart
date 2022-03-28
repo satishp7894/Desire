@@ -1,6 +1,8 @@
 import 'dart:convert';
+import 'package:desire_users/models/credit_details_model.dart';
 import 'package:desire_users/models/sales_customer_list_model.dart';
 import 'package:desire_users/sales/bloc/customer_bloc.dart';
+import 'package:desire_users/sales/pages/credit/sales_customer_credit_details.dart';
 import 'package:desire_users/sales/pages/customerCredit/customer_credit_page.dart';
 import 'package:desire_users/sales/utils_sales/alerts.dart';
 import 'package:desire_users/services/connection.dart';
@@ -16,23 +18,20 @@ import 'package:desire_users/utils/validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-
 class AddCreditsPage extends StatefulWidget {
-
   final String salesId;
   final String name;
   final String email;
+  final String custId;
 
-  const AddCreditsPage({@required this.salesId, @required this.name, @required this.email});
-
-
+  const AddCreditsPage(
+      {@required this.salesId, this.name, this.email, this.custId});
 
   @override
   _AddCreditsPageState createState() => _AddCreditsPageState();
 }
 
-class _AddCreditsPageState extends State<AddCreditsPage> with Validator{
-
+class _AddCreditsPageState extends State<AddCreditsPage> with Validator {
   TextEditingController creditAmount, creditDays;
   final customerBloc = CustomerListBloc();
 
@@ -42,15 +41,20 @@ class _AddCreditsPageState extends State<AddCreditsPage> with Validator{
   String customer;
   String custId;
   List<String> custList = ["Please select"];
+  var customerId;
+  var customerName;
   List<UserModel> customerList = [];
-
 
   @override
   void initState() {
     super.initState();
     creditAmount = TextEditingController();
     creditDays = TextEditingController();
+    if (widget.custId != null && widget.custId != "") {
+      custId = widget.custId;
 
+      customerBloc.fetchCreditDetails(widget.custId);
+    }
     customerBloc.fetchCustomerList(widget.salesId);
   }
 
@@ -62,198 +66,307 @@ class _AddCreditsPageState extends State<AddCreditsPage> with Validator{
     customerBloc.dispose();
   }
 
-
-
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () {
-        return Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (builder) => CustomerCreditPage(salesId: widget.salesId, name: widget.name, email: widget.email)), (route) => false);
+        Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(
+                builder: (builder) => SalesCustomerCreditDetails(
+                  salemanId: widget.salesId,
+                )),
+                (route) => false);
+        // return Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (builder) => CustomerCreditPage(salesId: widget.salesId, name: widget.name, email: widget.email)), (route) => false);
       },
       child: SafeArea(
           child: Scaffold(
-            appBar: AppBar(
-              elevation: 0,
-              centerTitle: true,
-              backgroundColor: Colors.transparent,
-              leading: IconButton(icon: Icon(Icons.arrow_back, color: Colors.black,), onPressed: (){
-                Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (builder) => CustomerCreditPage(salesId: widget.salesId, name: widget.name, email: widget.email)), (route) => false);
-                },),
-              title: Text(
-                "Add Credit",
-                textAlign: TextAlign.center,
-                style: TextStyle(color: Colors.black),
-              ),
+        appBar: AppBar(
+          elevation: 0,
+          centerTitle: true,
+          backgroundColor: Colors.transparent,
+          leading: IconButton(
+            icon: Icon(
+              Icons.arrow_back,
+              color: Colors.black,
             ),
-            body: _body(),
-            //bottomNavigationBar: _checkoutCard(),
-          )),
-    );
-  }
-
-
-  Widget _body(){
-    return StreamBuilder<SalesCustomerModel>(
-      stream: customerBloc.newCustomerStream,
-      builder: (context, s) {
-
-        if (s.connectionState != ConnectionState.active) {
-          print("all connection");
-          return Container(height: 300,
-              alignment: Alignment.center,
-              child: Center(
-                heightFactor: 50, child: CircularProgressIndicator(
-                color: kPrimaryColor,
-              ),));
-        }
-        if (s.hasError) {
-          print("as3 error");
-          return Container(height: 300,
-            alignment: Alignment.center,
-            child: Text("Error Loading Data",),);
-        }
-        if (s.data
-            .toString()
-            .isEmpty) {
-          print("as3 empty");
-          return Container(height: 300,
-            alignment: Alignment.center,
-            child: Text("No Data Found",),);
-        }
-
-        for(int i=0; i< s.data.customer.length; i++){
-          custList.add(s.data.customer[i].customerName);
-        }
-        customerList = s.data.customer;
-
-        return Container(
-          alignment: Alignment.center,
-          padding: EdgeInsets.all(20),
-          child: Form(
-            autovalidateMode: _autoValidateMode1,
-            key: _formKey1,
-            child: SingleChildScrollView(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Image.asset("assets/images/add_credit.png",height: 100,width: 100,),
-                  SizedBox(height: 20,),
-                  Text("Give credit to your customer's",style: TextStyle(fontSize: 16),),
-                  SizedBox(height: 20,),
-                  DropdownSearch<String>(
-
-                       validator: (v) => v == null ? "required field" : null,
-                       mode: Mode.MENU,
-                      dropdownSearchDecoration: InputDecoration(
-                      contentPadding: EdgeInsets.only(left: 30, right: 20, top: 5, bottom: 5),
-                      alignLabelWithHint: true,
-                      hintText: "Please Select Customer",
-                      labelStyle: TextStyle(color: kPrimaryColor),
-                      hintStyle: TextStyle(color: Colors.black45),
-                      focusedErrorBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.red), borderRadius: BorderRadius.circular(10)),
-                      enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.black), borderRadius: BorderRadius.circular(10)),
-                      focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: kPrimaryColor), borderRadius: BorderRadius.circular(10)),
-                    ),
-                    showSelectedItem: true,
-                    items: custList,
-                    onChanged: (value){
-                      setState(() {
-                        customer = value;
-                      });
-                      print("customer selected: $customer");
-                      for(int i =0; i<customerList.length; i++){
-                        if(customerList[i].customerName == customer){
-                          setState(() {
-                            custId = customerList[i].customerId;
-                          });
-                        }
-                      }
-                      print("object customer id $custId");
-                    },
-                    //selectedItem: "Please Select your Area",
-                  ),
-                  SizedBox(height: 20,),
-                  TextFormField(
-                    textInputAction: TextInputAction.done,
-                    textAlign: TextAlign.center,
-                    validator: validateRequired,
-                    controller: creditAmount,
-                    keyboardType: TextInputType.number,
-                    inputFormatters: [
-                      FilteringTextInputFormatter.digitsOnly,
-                      LengthLimitingTextInputFormatter(8),
-                    ],
-                    scrollPadding: EdgeInsets.zero,
-                    decoration: InputDecoration(
-                      contentPadding: EdgeInsets.zero,
-                      hintText: "Enter your Credit Amount",
-                      hintStyle: TextStyle(color: Colors.black45),
-                      floatingLabelBehavior: FloatingLabelBehavior.always,
-                      suffixIcon: CustomSuffixIcon(svgIcon: "assets/icons/Cash.svg"),
-                      enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.black), borderRadius: BorderRadius.circular(10)),
-                      focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: kPrimaryColor), borderRadius: BorderRadius.circular(10)),
-                      focusedErrorBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.red), borderRadius: BorderRadius.circular(10)),
-                    ),
-                  ),
-                  SizedBox(height: 20,),
-                  TextFormField(
-                    textInputAction: TextInputAction.done,
-                    textAlign: TextAlign.center,
-                    validator: validateRequired,
-                    controller: creditDays,
-                    keyboardType: TextInputType.number,
-                    inputFormatters: [
-                      FilteringTextInputFormatter.digitsOnly,
-                      LengthLimitingTextInputFormatter(3),
-                    ],
-                    scrollPadding: EdgeInsets.zero,
-                    decoration: InputDecoration(
-                      contentPadding: EdgeInsets.zero,
-                      hintText: "Enter your Credit Days",
-                      hintStyle: TextStyle(color: Colors.black45),
-                      floatingLabelBehavior: FloatingLabelBehavior.always,
-                      suffixIcon: CustomSuffixIcon(svgIcon: "assets/icons/clock.svg"),
-                      enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.black), borderRadius: BorderRadius.circular(10)),
-                      focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: kPrimaryColor), borderRadius: BorderRadius.circular(10)),
-                      focusedErrorBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.red), borderRadius: BorderRadius.circular(10)),
-                    ),
-                  ),
-                  SizedBox(height: 20,),
-                  DefaultButton(
-                    text: "Add Credits",
-                    press: () {
-                      addCredits();
-                    },
-                  ),
-                ],
-              ),
-            ),
+            onPressed: () {
+              Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(
+                      builder: (builder) => SalesCustomerCreditDetails(
+                            salemanId: widget.salesId,
+                          )),
+                  (route) => false);
+            },
           ),
-        );
-      }
+          title: Text(
+            "Add Credit",
+            textAlign: TextAlign.center,
+            style: TextStyle(color: Colors.black),
+          ),
+        ),
+        body: (widget.custId != null && widget.custId != "")
+            ? StreamBuilder<CreditDetailsModel>(
+                stream: customerBloc.creditDetailStream,
+                builder: (context, s) {
+                  if (s.connectionState != ConnectionState.active) {
+                    print("all connection");
+                    return Container(
+                        height: 300,
+                        alignment: Alignment.center,
+                        child: Center(
+                          heightFactor: 50,
+                          child: CircularProgressIndicator(
+                            color: kPrimaryColor,
+                          ),
+                        ));
+                  }
+                  if (s.hasError) {
+                    print("as3 error");
+                    return Container(
+                      height: 300,
+                      alignment: Alignment.center,
+                      child: Text(
+                        "Error Loading Data",
+                      ),
+                    );
+                  }
+                  if (s.data.toString().isEmpty) {
+                    print("as3 empty");
+                    return Container(
+                      height: 300,
+                      alignment: Alignment.center,
+                      child: Text(
+                        "No Data Found",
+                      ),
+                    );
+                  }
+                  var customerCreditDetails = s.data.customerCreditDetails;
+                  creditAmount.text = customerCreditDetails.creditLimit;
+                  creditDays.text = customerCreditDetails.creditDays;
+                  customerId = customerCreditDetails.customerId;
+                  customerName = customerCreditDetails.customerName;
+
+                  return _body(customerCreditDetails);
+                })
+            : _body(null),
+        //bottomNavigationBar: _checkoutCard(),
+      )),
     );
   }
 
+  Widget _body(CustomerCreditDetails customerCreditDetail) {
+    return StreamBuilder<SalesCustomerModel>(
+        stream: customerBloc.newCustomerStream,
+        builder: (context, s) {
+          if (s.connectionState != ConnectionState.active) {
+            print("all connection");
+            return Container(
+                height: 300,
+                alignment: Alignment.center,
+                child: Center(
+                  heightFactor: 50,
+                  child: CircularProgressIndicator(
+                    color: kPrimaryColor,
+                  ),
+                ));
+          }
+          if (s.hasError) {
+            print("as3 error");
+            return Container(
+              height: 300,
+              alignment: Alignment.center,
+              child: Text(
+                "Error Loading Data",
+              ),
+            );
+          }
+          if (s.data.toString().isEmpty) {
+            print("as3 empty");
+            return Container(
+              height: 300,
+              alignment: Alignment.center,
+              child: Text(
+                "No Data Found",
+              ),
+            );
+          }
 
-  addCredits() async{
+          for (int i = 0; i < s.data.customer.length; i++) {
+            custList.add(s.data.customer[i].customerName);
+          }
+          customerList = s.data.customer;
 
+          return Container(
+            alignment: Alignment.center,
+            padding: EdgeInsets.all(20),
+            child: Form(
+              autovalidateMode: _autoValidateMode1,
+              key: _formKey1,
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Image.asset(
+                      "assets/images/add_credit.png",
+                      height: 100,
+                      width: 100,
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    Text(
+                      "Give credit to your customer's",
+                      style: TextStyle(fontSize: 16),
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    DropdownSearch<String>(
+                      validator: (v) => v == null ? "required field" : null,
+                      mode: Mode.MENU,
+                      dropdownSearchDecoration: InputDecoration(
+                        contentPadding: EdgeInsets.only(
+                            left: 30, right: 20, top: 5, bottom: 5),
+                        alignLabelWithHint: true,
+                        hintText: "Please Select Customer",
+                        labelStyle: TextStyle(color: kPrimaryColor),
+                        hintStyle: TextStyle(color: Colors.black45),
+                        focusedErrorBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.red),
+                            borderRadius: BorderRadius.circular(10)),
+                        enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.black),
+                            borderRadius: BorderRadius.circular(10)),
+                        focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: kPrimaryColor),
+                            borderRadius: BorderRadius.circular(10)),
+                      ),
+                      showSelectedItem: true,
+                      items: custList,
+                      selectedItem: customerName,
+                      onChanged: (value) {
+                        setState(() {
+                          customer = value;
+                        });
+                        print("customer selected: $customer");
+                        for (int i = 0; i < customerList.length; i++) {
+                          if (customerList[i].customerName == customer) {
+                            setState(() {
+                              custId = customerList[i].customerId;
+                            });
+                          }
+                        }
+                        print("object customer id $custId");
+                      },
+                      //selectedItem: "Please Select your Area",
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    TextFormField(
+                      textInputAction: TextInputAction.done,
+                      textAlign: TextAlign.center,
+                      validator: validateRequired,
+                      controller: creditAmount,
+                      keyboardType: TextInputType.number,
+                      inputFormatters: [
+                        FilteringTextInputFormatter.digitsOnly,
+                        LengthLimitingTextInputFormatter(8),
+                      ],
+                      scrollPadding: EdgeInsets.zero,
+                      decoration: InputDecoration(
+                        contentPadding: EdgeInsets.zero,
+                        hintText: "Enter your Credit Amount",
+                        hintStyle: TextStyle(color: Colors.black45),
+                        floatingLabelBehavior: FloatingLabelBehavior.always,
+                        suffixIcon:
+                            CustomSuffixIcon(svgIcon: "assets/icons/Cash.svg"),
+                        enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.black),
+                            borderRadius: BorderRadius.circular(10)),
+                        focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: kPrimaryColor),
+                            borderRadius: BorderRadius.circular(10)),
+                        focusedErrorBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.red),
+                            borderRadius: BorderRadius.circular(10)),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    TextFormField(
+                      textInputAction: TextInputAction.done,
+                      textAlign: TextAlign.center,
+                      validator: validateRequired,
+                      controller: creditDays,
+                      keyboardType: TextInputType.number,
+                      inputFormatters: [
+                        FilteringTextInputFormatter.digitsOnly,
+                        LengthLimitingTextInputFormatter(3),
+                      ],
+                      scrollPadding: EdgeInsets.zero,
+                      decoration: InputDecoration(
+                        contentPadding: EdgeInsets.zero,
+                        hintText: "Enter your Credit Days",
+                        hintStyle: TextStyle(color: Colors.black45),
+                        floatingLabelBehavior: FloatingLabelBehavior.always,
+                        suffixIcon:
+                            CustomSuffixIcon(svgIcon: "assets/icons/clock.svg"),
+                        enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.black),
+                            borderRadius: BorderRadius.circular(10)),
+                        focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: kPrimaryColor),
+                            borderRadius: BorderRadius.circular(10)),
+                        focusedErrorBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.red),
+                            borderRadius: BorderRadius.circular(10)),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    DefaultButton(
+                      text: "Add Credits",
+                      press: () {
+                        addCredits();
+                      },
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          );
+        });
+  }
+
+  addCredits() async {
     print("object values  ${creditDays.text} ${creditAmount.text} $custId");
 
-    if (_formKey1.currentState.validate()){
+    if (_formKey1.currentState.validate()) {
       _formKey1.currentState.save();
-      ProgressDialog pr = ProgressDialog(context, type: ProgressDialogType.Normal,
-        isDismissible: false,);
-      pr.style(message: 'Please wait...',
-        progressWidget: Center(child: CircularProgressIndicator(
+      ProgressDialog pr = ProgressDialog(
+        context,
+        type: ProgressDialogType.Normal,
+        isDismissible: false,
+      );
+      pr.style(
+        message: 'Please wait...',
+        progressWidget: Center(
+            child: CircularProgressIndicator(
           color: kPrimaryColor,
-        )),);
+        )),
+      );
       pr.show();
-      var response = await http.post(Uri.parse(Connection.addCredits), body: {
-        'user_id':"$custId",
-        'credit_amount':"${creditAmount.text}",
-        'credit_days':"${creditDays.text}",
-        'secretkey':"${ConnectionSales.secretKey}"
+      var response = await http.post(Uri.parse(Connection.updateCredit), body: {
+        'customer_id': "$custId",
+        'credit_limit': "${creditAmount.text}",
+        'credit_days': "${creditDays.text}",
+        'secretkey': "${ConnectionSales.secretKey}"
       });
 
       print("object ${response.body}");
@@ -261,7 +374,13 @@ class _AddCreditsPageState extends State<AddCreditsPage> with Validator{
 
       pr.hide();
       if (results['status'] == true) {
-        Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (builder) => AddCreditsPage(salesId: widget.salesId, name: widget.name, email: widget.email,)), (route) => false);
+        final snackBar = SnackBar(
+            content: Text(
+              results["message"],
+              textAlign: TextAlign.center,
+            ));
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+        Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (builder) => AddCreditsPage(salesId: widget.salesId, custId: widget.custId,)), (route) => false);
       } else {
         Alerts.showAlertAndBack(context, "Error", "Credit already added.");
       }
@@ -271,5 +390,4 @@ class _AddCreditsPageState extends State<AddCreditsPage> with Validator{
       });
     }
   }
-
 }

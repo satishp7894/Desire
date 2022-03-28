@@ -29,8 +29,8 @@ class _CustomerCreditPageState extends State<CustomerCreditPage> {
   final customerBloc = CustomerCreditListBloc();
   TextEditingController searchView;
   bool search = false;
-  List<Credit> _searchResult = [];
-  List<Credit> customer = [];
+  List<CreditList> _searchResult = [];
+  List<CreditList> customer = [];
 
   @override
   void initState() {
@@ -109,14 +109,14 @@ class _CustomerCreditPageState extends State<CustomerCreditPage> {
               alignment: Alignment.center,
               child: Text("Error Loading Data",),);
           }
-          if (s.data.credit.isEmpty) {
+          if (s.data.creditList.isEmpty) {
             print("as3 empty");
             return Container(height: 300,
               alignment: Alignment.center,
               child: Text("No Customers Found",),);
           }
 
-          customer = s.data.credit;
+          customer = s.data.creditList;
           return RefreshIndicator(
             color: kPrimaryColor,
             onRefresh: () {
@@ -131,7 +131,7 @@ class _CustomerCreditPageState extends State<CustomerCreditPage> {
                     physics: NeverScrollableScrollPhysics(),
                     shrinkWrap: true,
                     //reverse: true,
-                    itemCount: s.data.credit.length,
+                    itemCount: s.data.creditList.length,
                     itemBuilder: (c,i){
                       return GestureDetector(
                         onTap: (){
@@ -171,7 +171,7 @@ class _CustomerCreditPageState extends State<CustomerCreditPage> {
                                   children: [
                                     Padding(
                                         padding: EdgeInsets.symmetric(horizontal: 10),
-                                        child: Text("Name: ${s.data.credit[i].customerName}",
+                                        child: Text("Name: ${s.data.creditList[i].customerName}",
                                           textAlign: TextAlign.center,
                                           style: TextStyle(color: Colors.black, fontSize: 16, fontWeight: FontWeight.bold),)),
                                     SizedBox(height: 10,),
@@ -183,7 +183,7 @@ class _CustomerCreditPageState extends State<CustomerCreditPage> {
                                         children: [
                                           Text("Credit Amount: ", textAlign: TextAlign.center, style: TextStyle(color: Colors.black),),
                                           SizedBox(width: 5,),
-                                          Text("${s.data.credit[i].creditAmount}", textAlign: TextAlign.center, style: TextStyle(color:kPrimaryColor),),
+                                          Text("${s.data.creditList[i].creditLimit}", textAlign: TextAlign.center, style: TextStyle(color:kPrimaryColor),),
                                         ],
                                       ),),
                                     SizedBox(height: 10,),
@@ -195,7 +195,7 @@ class _CustomerCreditPageState extends State<CustomerCreditPage> {
                                         children: [
                                           Text("Credit Days: ", textAlign: TextAlign.center, style: TextStyle(color: Colors.black),),
                                           SizedBox(width: 5,),
-                                          Text("${s.data.credit[i].creditDays}", textAlign: TextAlign.center, style: TextStyle(color: kPrimaryColor),),
+                                          Text("${s.data.creditList[i].creditDays}", textAlign: TextAlign.center, style: TextStyle(color: kPrimaryColor),),
                                         ],
                                       ),),
                                     SizedBox(height: 10,),
@@ -267,7 +267,7 @@ class _CustomerCreditPageState extends State<CustomerCreditPage> {
                                         children: [
                                           Text("Credit Amount: ", textAlign: TextAlign.center, style: TextStyle(color: Colors.black),),
                                           SizedBox(width: 5,),
-                                          Text("${_searchResult[i].creditAmount}", textAlign: TextAlign.center, style: TextStyle(color: kPrimaryColor),),
+                                          Text("${_searchResult[i].creditLimit}", textAlign: TextAlign.center, style: TextStyle(color: kPrimaryColor),),
                                         ],
                                       ),),
                                     SizedBox(height: 10,),

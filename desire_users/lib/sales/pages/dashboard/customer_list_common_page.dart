@@ -154,114 +154,8 @@ class _CustomerListCommonPageState extends State<CustomerListCommonPage> {
             physics: BouncingScrollPhysics(),
             shrinkWrap: true,
             children: [
-              _searchResult.length != 0
+              searchView.text.length == 0
                   ? ListView.builder(
-                      shrinkWrap: true,
-                      itemCount: _searchResult.length,
-                      itemBuilder: (c, i) {
-                        _searchResult[i].isActive == "0"
-                            ? status.add(false)
-                            : status.add(true);
-                        return InkWell(
-                            onTap: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (builder) => CustomerLedgerPage(
-                                            customerId:
-                                                _searchResult[i].customerId,
-                                          )));
-                            },
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Container(
-                                decoration: BoxDecoration(
-                                    color: kWhiteColor,
-                                    borderRadius: BorderRadius.circular(10),
-                                    boxShadow: [
-                                      BoxShadow(
-                                          color: Colors.grey, blurRadius: 5)
-                                    ]),
-                                child: Padding(
-                                  padding: const EdgeInsets.only(
-                                      left: 10.0,
-                                      top: 10,
-                                      bottom: 10,
-                                      right: 10),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Flexible(
-                                        child: Container(
-                                          padding: EdgeInsets.only(right: 13.0),
-                                          child: Text(
-                                            "${_searchResult[i].customerName}"
-                                            "\n"
-                                            "${_searchResult[i].address}",
-                                            textAlign: TextAlign.left,
-                                            maxLines: 2,
-                                            overflow: TextOverflow.ellipsis,
-                                            style: TextStyle(
-                                                color: kPrimaryColor,
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.bold),
-                                          ),
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        height: 10,
-                                      ),
-                                      widget.type == 0
-                                          ? GestureDetector(
-                                              onTap: () {
-                                                Navigator.push(
-                                                    context,
-                                                    MaterialPageRoute(
-                                                        builder: (builder) =>
-                                                            CustomerLedgerPage(
-                                                              customerId:
-                                                                  _searchResult[
-                                                                          i]
-                                                                      .customerId,
-                                                            )));
-                                              },
-                                              child: Image.asset(
-                                                "assets/images/ledger.png",
-                                                height: 30,
-                                                width: 30,
-                                              ),
-                                            )
-                                          : GestureDetector(
-                                              onTap: () {
-                                                Navigator.push(
-                                                    context,
-                                                    MaterialPageRoute(
-                                                        builder: (builder) =>
-                                                            CustomerPricingPage(
-                                                              customerId:
-                                                                  "${_searchResult[i].customerId}",
-                                                              customerName:
-                                                                  "${_searchResult[i].customerName}",
-                                                              salesId: widget
-                                                                  .salesId,
-                                                            )));
-                                              },
-                                              child: Image.asset(
-                                                "assets/images/rupees.png",
-                                                height: 25,
-                                                width: 25,
-                                              ),
-                                            )
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ));
-                      })
-                  : ListView.builder(
                       physics: BouncingScrollPhysics(),
                       shrinkWrap: true,
                       itemCount: customerList.length,
@@ -344,6 +238,123 @@ class _CustomerListCommonPageState extends State<CustomerListCommonPage> {
                               ),
                             ));
                       })
+                  : _searchResult.length == 0
+                      ? Container(
+                          alignment: Alignment.center,
+                          child: Text(
+                            "No Data Found",
+                            style: TextStyle(
+                                fontSize: 20, fontWeight: FontWeight.w800),
+                          ))
+                      : ListView.builder(
+                          shrinkWrap: true,
+                          itemCount: _searchResult.length,
+                          itemBuilder: (c, i) {
+                            _searchResult[i].isActive == "0"
+                                ? status.add(false)
+                                : status.add(true);
+                            return InkWell(
+                                onTap: () {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (builder) =>
+                                              CustomerLedgerPage(
+                                                customerId:
+                                                    _searchResult[i].customerId,
+                                              )));
+                                },
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                        color: kWhiteColor,
+                                        borderRadius: BorderRadius.circular(10),
+                                        boxShadow: [
+                                          BoxShadow(
+                                              color: Colors.grey, blurRadius: 5)
+                                        ]),
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(
+                                          left: 10.0,
+                                          top: 10,
+                                          bottom: 10,
+                                          right: 10),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Flexible(
+                                            child: Container(
+                                              padding:
+                                                  EdgeInsets.only(right: 13.0),
+                                              child: Text(
+                                                "${_searchResult[i].customerName}"
+                                                "\n"
+                                                "${_searchResult[i].address}",
+                                                textAlign: TextAlign.left,
+                                                maxLines: 2,
+                                                overflow: TextOverflow.ellipsis,
+                                                style: TextStyle(
+                                                    color: kPrimaryColor,
+                                                    fontSize: 16,
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              ),
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            height: 10,
+                                          ),
+                                          widget.type == 0
+                                              ? GestureDetector(
+                                                  onTap: () {
+                                                    Navigator.push(
+                                                        context,
+                                                        MaterialPageRoute(
+                                                            builder: (builder) =>
+                                                                CustomerLedgerPage(
+                                                                  customerId:
+                                                                      _searchResult[
+                                                                              i]
+                                                                          .customerId,
+                                                                )));
+                                                  },
+                                                  child: Image.asset(
+                                                    "assets/images/ledger.png",
+                                                    height: 30,
+                                                    width: 30,
+                                                  ),
+                                                )
+                                              : GestureDetector(
+                                                  onTap: () {
+                                                    Navigator.push(
+                                                        context,
+                                                        MaterialPageRoute(
+                                                            builder: (builder) =>
+                                                                CustomerPricingPage(
+                                                                  customerId:
+                                                                      "${_searchResult[i].customerId}",
+                                                                  customerName:
+                                                                      "${_searchResult[i].customerName}",
+                                                                  salesId: widget
+                                                                      .salesId,
+                                                                )));
+                                                  },
+                                                  child: Image.asset(
+                                                    "assets/images/rupees.png",
+                                                    height: 25,
+                                                    width: 25,
+                                                  ),
+                                                )
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ));
+                          })
             ],
           );
         },
