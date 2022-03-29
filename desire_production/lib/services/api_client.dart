@@ -10,6 +10,7 @@ import 'package:desire_production/model/TodayProductionModel.dart';
 import 'package:desire_production/model/address_model.dart';
 import 'package:desire_production/model/admin_chat_details_model.dart';
 import 'package:desire_production/model/admin_chat_list_model.dart';
+import 'package:desire_production/model/all_dimensions_model.dart';
 import 'package:desire_production/model/cart_model.dart';
 import 'package:desire_production/model/category_list_model.dart';
 import 'package:desire_production/model/category_model.dart';
@@ -1287,6 +1288,7 @@ class ApiClient {
 
     return creditdetailsmodel;
   }
+
   Future<CustomerSalesChatTrackModel> getchatlistcustomerSales() async {
     var response = await http.post(
         Uri.parse(
@@ -1297,23 +1299,39 @@ class ApiClient {
     var result = json.decode(response.body);
 
     CustomerSalesChatTrackModel customersaleschattrackmodel;
-    customersaleschattrackmodel = (CustomerSalesChatTrackModel.fromJson(result));
+    customersaleschattrackmodel =
+        (CustomerSalesChatTrackModel.fromJson(result));
 
     return customersaleschattrackmodel;
   }
-  Future<CustomerSaleChatDetailsModel> getchatDetailscustomerSales(String convId) async {
+
+  Future<CustomerSaleChatDetailsModel> getchatDetailscustomerSales(
+      String convId) async {
     var response = await http.post(
         Uri.parse(
             "http://loccon.in/desiremoulding/api/AdminApiController/salesmanCustomerConversationDetails"),
-        body: {
-          'secretkey': Connection.secretKey,
-          'conversation_id':convId
-        });
+        body: {'secretkey': Connection.secretKey, 'conversation_id': convId});
     var result = json.decode(response.body);
 
     CustomerSaleChatDetailsModel customersalechatdetailsmodel;
-    customersalechatdetailsmodel = (CustomerSaleChatDetailsModel.fromJson(result));
+    customersalechatdetailsmodel =
+        (CustomerSaleChatDetailsModel.fromJson(result));
 
     return customersalechatdetailsmodel;
+  }
+
+  Future<AllDimensionsModel> getAllDimensions() async {
+    var response = await http.post(
+        Uri.parse(
+            "http://loccon.in/desiremoulding/api/AdminApiController/allDimension"),
+        body: {
+          'secretkey': Connection.secretKey,
+        });
+    var result = json.decode(response.body);
+
+    AllDimensionsModel alldimensionsmodel;
+    alldimensionsmodel = (AllDimensionsModel.fromJson(result));
+
+    return alldimensionsmodel;
   }
 }
