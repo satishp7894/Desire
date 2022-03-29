@@ -154,7 +154,7 @@ class _AddNewInvoiceOrderPageState extends State<AddNewInvoiceOrderPage> {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
-                                  _searchResultWarhouse.length == 0
+                                  searchViewController.text.length == 0
                                       ? Container(
                                           alignment: Alignment.center,
                                           child: Column(
@@ -599,7 +599,17 @@ class _AddNewInvoiceOrderPageState extends State<AddNewInvoiceOrderPage> {
                                             ],
                                           ),
                                         )
-                                      : Container(
+                                      : _searchResultWarhouse.length == 0
+                                      ? Container(
+                                      margin: EdgeInsets.only(top: 10),
+                                      alignment: Alignment.center,
+                                      child: Text(
+                                        "No Data Found",
+                                        style: TextStyle(
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.w800),
+                                      ))
+                                      :Container(
                                           alignment: Alignment.center,
                                           child: Column(
                                             mainAxisAlignment:
