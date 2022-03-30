@@ -1175,7 +1175,7 @@ class _SendNotificationDialogState extends State<SendNotificationDialog> {
                                 borderSide: BorderSide(color: Colors.blue),
                                 borderRadius: BorderRadius.circular(30)),
                           ),
-                          showSelectedItem: true,
+                          showSelectedItems: true,
                           items: productList,
                           onChanged: (value) {
                             setState(() {
@@ -1290,7 +1290,7 @@ class _SendNotificationDialogState extends State<SendNotificationDialog> {
                                 borderSide: BorderSide(color: Colors.blue),
                                 borderRadius: BorderRadius.circular(30)),
                           ),
-                          showSelectedItem: true,
+                          showSelectedItems: true,
                           items: productList,
                           onChanged: (value) {
                             setState(() {

@@ -10,7 +10,9 @@ import 'package:desire_production/model/TodayProductionModel.dart';
 import 'package:desire_production/model/address_model.dart';
 import 'package:desire_production/model/admin_chat_details_model.dart';
 import 'package:desire_production/model/admin_chat_list_model.dart';
+import 'package:desire_production/model/all_category.dart';
 import 'package:desire_production/model/all_dimensions_model.dart';
+import 'package:desire_production/model/all_model_list_model.dart';
 import 'package:desire_production/model/cart_model.dart';
 import 'package:desire_production/model/category_list_model.dart';
 import 'package:desire_production/model/category_model.dart';
@@ -1333,5 +1335,35 @@ class ApiClient {
     alldimensionsmodel = (AllDimensionsModel.fromJson(result));
 
     return alldimensionsmodel;
+  }
+
+  Future<AllModellistModel> getAllModel() async {
+    var response = await http.post(
+        Uri.parse(
+            "http://loccon.in/desiremoulding/api/AdminApiController/allModelNo"),
+        body: {
+          'secretkey': Connection.secretKey,
+        });
+    var result = json.decode(response.body);
+
+    AllModellistModel allModellistModel;
+    allModellistModel = (AllModellistModel.fromJson(result));
+
+    return allModellistModel;
+  }
+
+  Future<AllCategory> getAllCategory() async {
+    var response = await http.post(
+        Uri.parse(
+            "http://loccon.in/desiremoulding/api/AdminApiController/allCategory"),
+        body: {
+          'secretkey': Connection.secretKey,
+        });
+    var result = json.decode(response.body);
+
+    AllCategory allCategory;
+    allCategory = (AllCategory.fromJson(result));
+
+    return allCategory;
   }
 }

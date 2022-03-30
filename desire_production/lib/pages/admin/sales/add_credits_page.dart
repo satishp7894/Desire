@@ -218,7 +218,7 @@ class _AddCreditsPageState extends State<AddCreditsPage> with Validator {
                           borderSide: BorderSide(color: kPrimaryColor),
                           borderRadius: BorderRadius.circular(10)),
                     ),
-                    showSelectedItem: true,
+                    showSelectedItems: true,
                     selectedItem: customerName,
                     items: custList,
                     onChanged: (value) {

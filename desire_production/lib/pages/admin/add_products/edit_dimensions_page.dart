@@ -250,7 +250,11 @@ class _EditDimensionsPageState extends State<EditDimensionsPage>
         'dimensions_height': height.text,
         'dimensions_width': width.text
       });
-      request.files.add(await http.MultipartFile.fromPath('image', filepath));
+      if(filepath != "") {
+        request.files.add(await http.MultipartFile.fromPath('image', filepath));
+      }else{
+        request.files.add(await http.MultipartFile.fromPath('image', ''));
+      }
 
       request.send().then((response) async {
         pr.hide();
@@ -258,7 +262,14 @@ class _EditDimensionsPageState extends State<EditDimensionsPage>
           var dimension = await response.stream.bytesToString();
           var decode = json.decode(dimension);
           var msg = decode["message"];
-          Alerts.showAlertAndBack(context, "Success", msg);
+          // Alerts.showAlertAndBack(context, "Success", msg);
+          final snackBar = SnackBar(
+              content: Text(
+                msg,
+                textAlign: TextAlign.start,
+              ));
+          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+          Navigator.pop(context, true);
         } else {
           Alerts.showAlertAndBack(
               context, "Something Went Wrong", await response.reasonPhrase);
@@ -305,7 +316,13 @@ class _EditDimensionsPageState extends State<EditDimensionsPage>
           var dimension = await response.stream.bytesToString();
           var decode = json.decode(dimension);
           var msg = decode["message"];
-          Alerts.showAlertAndBack(context, "Success", msg);
+          final snackBar = SnackBar(
+              content: Text(
+                msg,
+                textAlign: TextAlign.start,
+              ));
+          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+          Navigator.pop(context, true);
         } else {
           Alerts.showAlertAndBack(
               context, "Something Went Wrong", await response.reasonPhrase);

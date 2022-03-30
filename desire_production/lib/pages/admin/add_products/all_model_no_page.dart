@@ -2,7 +2,9 @@ import 'dart:convert';
 
 import 'package:desire_production/bloc/add_products_bloc.dart';
 import 'package:desire_production/model/all_dimensions_model.dart';
+import 'package:desire_production/model/all_model_list_model.dart';
 import 'package:desire_production/pages/admin/add_products/edit_dimensions_page.dart';
+import 'package:desire_production/pages/admin/add_products/edit_model_page.dart';
 import 'package:desire_production/services/connections.dart';
 import 'package:desire_production/utils/alerts.dart';
 import 'package:desire_production/utils/constants.dart';
@@ -10,24 +12,24 @@ import 'package:desire_production/utils/progress_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
-class AllDimensionsPage extends StatefulWidget {
+class AllModelNoPage extends StatefulWidget {
   @override
-  _allDimensionsPageState createState() => _allDimensionsPageState();
+  _allModelNoPageState createState() => _allModelNoPageState();
 }
 
-class _allDimensionsPageState extends State<AllDimensionsPage> {
+class _allModelNoPageState extends State<AllModelNoPage> {
   AddProductsBloc addProductsBloc = AddProductsBloc();
-  AsyncSnapshot<AllDimensionsModel> asyncSnapshot;
-  List<AllDimension> _searchResult = [];
-  List<AllDimension> allDimesion = [];
+  AsyncSnapshot<AllModellistModel> asyncSnapshot;
+  List<AllModel> _searchResult = [];
+  List<AllModel> allModel = [];
   TextEditingController searchView;
   bool search = false;
 
   @override
   void initState() {
     super.initState();
+    addProductsBloc.fetchAllModel();
     searchView = TextEditingController();
-    addProductsBloc.fetchAllDimensions();
   }
 
   @override
@@ -43,7 +45,7 @@ class _allDimensionsPageState extends State<AllDimensionsPage> {
           elevation: 0.0,
           iconTheme: IconThemeData(color: Colors.black),
           title: Text(
-            "All Dimensions",
+            "All Model",
             style: TextStyle(color: Colors.black),
           ),
           centerTitle: true,
@@ -55,11 +57,11 @@ class _allDimensionsPageState extends State<AllDimensionsPage> {
         child: FloatingActionButton.extended(
           onPressed: () {
             Navigator.push(context, MaterialPageRoute(builder: (context) {
-              return EditDimensionsPage();
+              return EditModelPage();
             }));
           },
           label: Text(
-            "Add Dimension",
+            "Add Model",
           ),
           icon: Icon(Icons.add),
           backgroundColor: kPrimaryColor,
@@ -70,8 +72,8 @@ class _allDimensionsPageState extends State<AllDimensionsPage> {
   }
 
   Widget _body() {
-    return StreamBuilder<AllDimensionsModel>(
-        stream: addProductsBloc.newAccessoryStream,
+    return StreamBuilder<AllModellistModel>(
+        stream: addProductsBloc.allModelStream,
         builder: (c, s) {
           if (s.connectionState != ConnectionState.active) {
             print("all connection");
@@ -105,7 +107,7 @@ class _allDimensionsPageState extends State<AllDimensionsPage> {
             );
           } else {
             asyncSnapshot = s;
-            allDimesion = asyncSnapshot.data.data;
+            allModel = asyncSnapshot.data.data;
             return SingleChildScrollView(
               child: searchView.text.length == 0
                   ? Container(
@@ -115,10 +117,9 @@ class _allDimensionsPageState extends State<AllDimensionsPage> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           ...List.generate(
-                              allDimesion.length,
+                              allModel.length,
                               (index) => AllDimensionsListTile(
-                                    allDimension: allDimesion[index],
-                                    imgPath: asyncSnapshot.data.imagePath,
+                                    allModel: allModel[index],
                                     addProductBloc: addProductsBloc,
                                   ))
                         ],
@@ -133,21 +134,20 @@ class _allDimensionsPageState extends State<AllDimensionsPage> {
                                 fontSize: 20, fontWeight: FontWeight.w800),
                           ))
                       : Container(
-                margin: EdgeInsets.only(bottom: 100),
-                        child: Column(
+                          margin: EdgeInsets.only(bottom: 100),
+                          child: Column(
                             mainAxisAlignment: MainAxisAlignment.start,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               ...List.generate(
                                   _searchResult.length,
                                   (index) => AllDimensionsListTile(
-                                        allDimension: _searchResult[index],
-                                        imgPath: asyncSnapshot.data.imagePath,
+                                        allModel: _searchResult[index],
                                         addProductBloc: addProductsBloc,
                                       ))
                             ],
                           ),
-                      ),
+                        ),
             );
           }
         });
@@ -173,7 +173,7 @@ class _allDimensionsPageState extends State<AllDimensionsPage> {
             },
             decoration: new InputDecoration(
               border: InputBorder.none,
-              hintText: "Search Dimension",
+              hintText: "Search Model",
             ),
           ),
         ),
@@ -191,8 +191,8 @@ class _allDimensionsPageState extends State<AllDimensionsPage> {
       return;
     }
 
-    allDimesion.forEach((exp) {
-      if (exp.size.toLowerCase().contains(text.toLowerCase()))
+    allModel.forEach((exp) {
+      if (exp.modelNo.toLowerCase().contains(text.toLowerCase()))
         _searchResult.add(exp);
     });
 
@@ -203,25 +203,25 @@ class _allDimensionsPageState extends State<AllDimensionsPage> {
 }
 
 class AllDimensionsListTile extends StatelessWidget {
-  final AllDimension allDimension;
-  final String imgPath;
+  final AllModel allModel;
   final AddProductsBloc addProductBloc;
 
-  const AllDimensionsListTile(
-      {Key key, this.allDimension, this.imgPath, this.addProductBloc})
+  const AllDimensionsListTile({Key key, this.allModel, this.addProductBloc})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return Padding(
         padding: const EdgeInsets.all(10.0),
         child: GestureDetector(
           onTap: () {
             Navigator.push(context, MaterialPageRoute(builder: (context) {
-              return EditDimensionsPage(
-                dimensionId: allDimension.dimensionsId,
-                dmSize: allDimension.size,
-                image: imgPath + allDimension.image,
+              return EditModelPage(
+                modelNo: allModel.modelNo,
+                customerPrice: allModel.customerPrice,
+                salesPrice: allModel.salesPrice,
+                distributorPrice: allModel.distributorPrice,
+                model_no_id: allModel.modelNoId,
               );
             })).then((val) => val ? _fetchList() : null);
           },
@@ -229,19 +229,13 @@ class AllDimensionsListTile extends StatelessWidget {
             elevation: 5,
             margin: EdgeInsets.zero,
             child: Container(
-              height: 80,
+              height: 100,
               padding: EdgeInsets.all(5),
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(5),
                   border: Border.all(width: 1, color: kPrimaryColor)),
               child: Row(
                 children: [
-                  FadeInImage.assetNetwork(
-                    placeholder: "assets/images/dimensions.png",
-                    image: imgPath + allDimension.image,
-                    width: 50,
-                    height: 50,
-                  ),
                   Flexible(
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -256,12 +250,12 @@ class AllDimensionsListTile extends StatelessWidget {
                                   maxLines: 2,
                                   overflow: TextOverflow.ellipsis,
                                   text: TextSpan(
-                                    text: "Size : ",
+                                    text: "Model No : ",
                                     style: TextStyle(
                                         color: kBlackColor, fontSize: 15),
                                     children: <TextSpan>[
                                       TextSpan(
-                                          text: allDimension.size,
+                                          text: allModel.modelNo,
                                           style: TextStyle(
                                               color: Colors.black,
                                               fontWeight: FontWeight.w800)),
@@ -272,12 +266,44 @@ class AllDimensionsListTile extends StatelessWidget {
                                   maxLines: 2,
                                   overflow: TextOverflow.ellipsis,
                                   text: TextSpan(
-                                    text: "Size in inch : ",
+                                    text: "Customer Price : ",
                                     style: TextStyle(
                                         color: kBlackColor, fontSize: 15),
                                     children: <TextSpan>[
                                       TextSpan(
-                                          text: allDimension.sizeInch,
+                                          text: allModel.customerPrice,
+                                          style: TextStyle(
+                                              color: Colors.black,
+                                              fontWeight: FontWeight.w800)),
+                                    ],
+                                  ),
+                                ),
+                                RichText(
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
+                                  text: TextSpan(
+                                    text: "Sales Price : ",
+                                    style: TextStyle(
+                                        color: kBlackColor, fontSize: 15),
+                                    children: <TextSpan>[
+                                      TextSpan(
+                                          text: allModel.salesPrice,
+                                          style: TextStyle(
+                                              color: Colors.black,
+                                              fontWeight: FontWeight.w800)),
+                                    ],
+                                  ),
+                                ),
+                                RichText(
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
+                                  text: TextSpan(
+                                    text: "Distributor Price : ",
+                                    style: TextStyle(
+                                        color: kBlackColor, fontSize: 15),
+                                    children: <TextSpan>[
+                                      TextSpan(
+                                          text: allModel.distributorPrice,
                                           style: TextStyle(
                                               color: Colors.black,
                                               fontWeight: FontWeight.w800)),
@@ -288,8 +314,8 @@ class AllDimensionsListTile extends StatelessWidget {
                             )),
                         IconButton(
                             onPressed: () {
-                              deleteItem(allDimension.dimensionsId, context,
-                                  addProductBloc);
+                              deleteItem(
+                                  allModel.modelNoId, context, addProductBloc);
                             },
                             icon: Icon(
                               Icons.delete,
@@ -305,7 +331,7 @@ class AllDimensionsListTile extends StatelessWidget {
         ));
   }
 
-  deleteItem(String dimensionId, BuildContext context,
+  deleteItem(String modelNoId, BuildContext context,
       AddProductsBloc addProductBloc) async {
     ProgressDialog pr = ProgressDialog(
       context,
@@ -320,19 +346,19 @@ class AllDimensionsListTile extends StatelessWidget {
     var response;
     response = await http.post(
         Uri.parse(
-            "http://loccon.in/desiremoulding/api/AdminApiController/deleteDimension"),
+            "http://loccon.in/desiremoulding/api/AdminApiController/deleteModelNo"),
         body: {
           'secretkey': Connection.secretKey,
-          'dimensions_id': dimensionId,
+          'model_no_id': modelNoId,
         });
     var results = json.decode(response.body);
     print('response == $results  ${response.body}');
     pr.hide();
     if (results['status'] == true) {
-      Alerts.showAlertAndBack(context, "User Not Found", results['message']);
-      addProductBloc.fetchAllDimensions();
+      Alerts.showAlertAndBack(context, "success", results['message']);
+      addProductBloc.fetchAllModel();
     } else {
-      Alerts.showAlertAndBack(context, "User Not Found", results['message']);
+      Alerts.showAlertAndBack(context, "Error", results['message']);
     }
   }
 

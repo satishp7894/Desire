@@ -820,7 +820,7 @@ class _AddUserPageState extends State<AddUserPage> with Validator {
                         // enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.black),),
                         // focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.blue), ),
                       ),
-                      showSelectedItem: true,
+                      showSelectedItems: true,
                       items: salesmanName,
                       onChanged: (value) {
                         setState(() {

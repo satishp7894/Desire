@@ -1367,7 +1367,7 @@ class _AdminUserListPageState extends State<AdminUserListPage> with Validator {
                             borderSide: BorderSide(color: Colors.blue),
                             borderRadius: BorderRadius.circular(10)),
                       ),
-                      showSelectedItem: true,
+                      showSelectedItems: true,
                       items: role,
                       onChanged: (value) {
                         print("customer selected: $value");
