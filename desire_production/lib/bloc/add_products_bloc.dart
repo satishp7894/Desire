@@ -3,6 +3,8 @@ import 'dart:async';
 import 'package:desire_production/model/all_category.dart';
 import 'package:desire_production/model/all_dimensions_model.dart';
 import 'package:desire_production/model/all_model_list_model.dart';
+import 'package:desire_production/model/all_product_list_model.dart';
+import 'package:desire_production/model/all_profile_model.dart';
 import 'package:desire_production/model/product_model.dart';
 import 'package:desire_production/services/api_client.dart';
 
@@ -73,12 +75,45 @@ class AddProductsBloc {
           "something went wrong ${e.toString()}");
     }
   }
+  final _allProductController = StreamController<AllProductListModel>.broadcast();
+
+  Stream<AllProductListModel> get allProductStream => _allProductController.stream;
+
+  fetchAllProducts() async {
+    try {
+      final results = await _apiClient.getAllProduct();
+      _allProductController.sink.add(results);
+      print("new accessory bloc ${results.status}");
+    } on Exception catch (e) {
+      print(e.toString());
+      _allProductController.sink.addError(
+          "something went wrong ${e.toString()}");
+    }
+  }
+
+  final _allProfileController = StreamController<AllProfileModel>.broadcast();
+
+  Stream<AllProfileModel> get allProfileStream => _allProfileController.stream;
+
+  fetchAllProfile() async {
+    try {
+      final results = await _apiClient.getAllProfile();
+      _allProfileController.sink.add(results);
+      print("new accessory bloc ${results.status}");
+    } on Exception catch (e) {
+      print(e.toString());
+      _allProfileController.sink.addError(
+          "something went wrong ${e.toString()}");
+    }
+  }
 
   dispose() {
     _editDimensionsController.close();
     _allDimensionsController.close();
     _allModelssController.close();
     _allCategoryController.close();
+    _allProductController.close();
+    _allProfileController.close();
   }
 
 }

@@ -2,8 +2,9 @@ import 'dart:convert';
 
 import 'package:desire_production/bloc/add_products_bloc.dart';
 import 'package:desire_production/components/default_button.dart';
-import 'package:desire_production/model/all_category.dart';
 import 'package:desire_production/model/all_dimensions_model.dart';
+import 'package:desire_production/model/all_model_list_model.dart';
+import 'package:desire_production/model/all_profile_model.dart';
 import 'package:desire_production/services/connections.dart';
 import 'package:desire_production/utils/alerts.dart';
 import 'package:desire_production/utils/constants.dart';
@@ -11,72 +12,64 @@ import 'package:desire_production/utils/keyboard_util.dart';
 import 'package:desire_production/utils/progress_dialog.dart';
 import 'package:desire_production/utils/validator.dart';
 import 'package:dropdown_search/dropdown_search.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
-class EditModelPage extends StatefulWidget {
+class EditProductPage extends StatefulWidget {
   final modelNo;
-  final String customerPrice;
-  final String salesPrice;
-  final String distributorPrice;
-  final String model_no_id;
+  final String profile;
+  final String productName;
+  final String productId;
 
-  const EditModelPage(
-      {Key key,
-      this.modelNo,
-      this.customerPrice,
-      this.salesPrice,
-      this.distributorPrice,
-      this.model_no_id})
+  const EditProductPage(
+      {Key key, this.modelNo, this.profile, this.productName, this.productId})
       : super(key: key);
 
   @override
-  _EditModelPageState createState() => _EditModelPageState();
+  _EditProductPageState createState() => _EditProductPageState();
 }
 
-class _EditModelPageState extends State<EditModelPage> with Validator {
+class _EditProductPageState extends State<EditProductPage> with Validator {
   AddProductsBloc addProductsBloc = AddProductsBloc();
-  AsyncSnapshot<AllCategory> asyncSnapshot;
-  AsyncSnapshot<AllDimensionsModel> asyncSnapshotDimension;
+  AsyncSnapshot<AllModellistModel> asyncSnapshot;
+  AsyncSnapshot<AllProfileModel> asyncSnapshotProfile;
   final _formKey = GlobalKey<FormState>();
   AutovalidateMode _autoValidateMode = AutovalidateMode.disabled;
-  TextEditingController modelNo, perBox, cPrice, sPrice, dPrice;
-  var fileName = '';
-  var filepath = "";
-  List<String> category = ["Select your Category"];
-  List<Category> categoryList = [];
-  List<String> categoryId = [];
-  List<String> dimesion = ["Select your Category"];
-  List<AllDimension> dimesionList = [];
-  String dimesionId;
+  TextEditingController pName, hsn, remarks;
+  List<String> filepath = [];
+  List<String> model = ["Select your Model"];
+  List<AllModel> modelList = [];
+  String modelId;
+  List<String> profile = ["Select your Profile"];
+  List<AllProfile> profileList = [];
+  String profileId;
+  String profileVal;
+  String modelVal;
+  bool access = false;
   bool future = false;
-  bool newModel = false;
   bool best = false;
+  bool newProduct = false;
 
   @override
   void initState() {
     super.initState();
-    addProductsBloc.fetchAllDimensions();
-    addProductsBloc.fetchAllCategory();
-    modelNo = TextEditingController();
-    perBox = TextEditingController();
-    cPrice = TextEditingController();
-    sPrice = TextEditingController();
-    dPrice = TextEditingController();
-    modelNo.text = widget.modelNo;
-    cPrice.text = widget.customerPrice;
-    sPrice.text = widget.salesPrice;
-    dPrice.text = widget.distributorPrice;
+    if (modelList.length == 0 && profileList.length == 0) {
+      addProductsBloc.fetchAllModel();
+      addProductsBloc.fetchAllProfile();
+    }
+    pName = TextEditingController();
+    hsn = TextEditingController();
+    remarks = TextEditingController();
+    pName.text = widget.productName;
   }
 
   @override
   void dispose() {
     super.dispose();
-    modelNo.dispose();
-    perBox.dispose();
-    cPrice.dispose();
-    sPrice.dispose();
-    dPrice.dispose();
+    pName.dispose();
+    hsn.dispose();
+    remarks.dispose();
     addProductsBloc.dispose();
   }
 
@@ -89,15 +82,15 @@ class _EditModelPageState extends State<EditModelPage> with Validator {
         iconTheme: IconThemeData(color: Colors.black),
         title: Text(
           (widget.modelNo != null && widget.modelNo != "")
-              ? "Edit Model"
-              : "Add Model",
+              ? "Edit Product"
+              : "Add Product",
           style: TextStyle(color: Colors.black),
         ),
         centerTitle: true,
         backgroundColor: Colors.white,
       ),
-      body: StreamBuilder<AllCategory>(
-          stream: addProductsBloc.allCategoryStream,
+      body: StreamBuilder<AllModellistModel>(
+          stream: addProductsBloc.allModelStream,
           builder: (c, s) {
             if (s.connectionState != ConnectionState.active) {
               print("all connection");
@@ -132,9 +125,18 @@ class _EditModelPageState extends State<EditModelPage> with Validator {
             } else {
               asyncSnapshot = s;
               // allModel = asyncSnapshot.data.data;
-              categoryList = s.data.data;
+              modelList = s.data.data;
               for (int i = 0; i < s.data.data.length; i++) {
-                category.add(s.data.data[i].categoryName);
+                model.add(s.data.data[i].modelNo);
+              }
+              if (modelList.length > 0) {
+                for (int i = 0; i < modelList.length; i++) {
+                  if (modelList[i].modelNo == widget.modelNo) {
+                    // setState(() {
+                    modelId = modelList[i].modelNoId;
+                    // });
+                  }
+                }
               }
               return SingleChildScrollView(child: _body());
             }
@@ -143,8 +145,8 @@ class _EditModelPageState extends State<EditModelPage> with Validator {
   }
 
   Widget _body() {
-    return StreamBuilder<AllDimensionsModel>(
-        stream: addProductsBloc.allDimensionStream,
+    return StreamBuilder<AllProfileModel>(
+        stream: addProductsBloc.allProfileStream,
         builder: (c, s) {
           if (s.connectionState != ConnectionState.active) {
             print("all connection");
@@ -177,11 +179,20 @@ class _EditModelPageState extends State<EditModelPage> with Validator {
               ),
             );
           } else {
-            asyncSnapshotDimension = s;
+            asyncSnapshotProfile = s;
             // allModel = asyncSnapshot.data.data;
-            dimesionList = s.data.data;
+            profileList = s.data.data;
             for (int i = 0; i < s.data.data.length; i++) {
-              dimesion.add(s.data.data[i].size);
+              profile.add(s.data.data[i].profileNo);
+            }
+            if (profileList.length > 0) {
+              for (int i = 0; i < profileList.length; i++) {
+                if (profileList[i].profileNo == widget.profile) {
+                  // setState(() {
+                  profileId = profileList[i].profileNoId;
+                  // });
+                }
+              }
             }
             return Form(
               autovalidateMode: _autoValidateMode,
@@ -190,109 +201,16 @@ class _EditModelPageState extends State<EditModelPage> with Validator {
                 children: <Widget>[
                   Padding(
                     padding: EdgeInsets.all(15),
-                    child: TextFormField(
-                      controller: modelNo,
-                      validator: validateRequired,
-                      keyboardType: TextInputType.number,
-                      decoration: InputDecoration(
-                          labelText: 'Model No.',
-                          hintText: 'Enter Model No.',
-                          floatingLabelBehavior: FloatingLabelBehavior.always,
-                          border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(5),
-                              borderSide: BorderSide(color: kSecondaryColor)),
-                          focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(5),
-                              borderSide: BorderSide(color: kPrimaryColor))),
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.all(15),
-                    child: TextFormField(
-                      controller: perBox,
-                      validator: validateRequired,
-                      keyboardType: TextInputType.number,
-                      decoration: InputDecoration(
-                        border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(5),
-                            borderSide: BorderSide(color: kSecondaryColor)),
-                        focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(5),
-                            borderSide: BorderSide(color: kPrimaryColor)),
-                        labelText: 'Per Box Stick',
-                        hintText: 'Enter per box stick',
-                        floatingLabelBehavior: FloatingLabelBehavior.always,
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.all(15),
-                    child: TextFormField(
-                      controller: cPrice,
-                      keyboardType: TextInputType.number,
-                      validator: validateRequired,
-                      decoration: InputDecoration(
-                        border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(5),
-                            borderSide: BorderSide(color: kSecondaryColor)),
-                        focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(5),
-                            borderSide: BorderSide(color: kPrimaryColor)),
-                        labelText: 'Customer Price',
-                        hintText: 'Enter customer price',
-                        floatingLabelBehavior: FloatingLabelBehavior.always,
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.all(15),
-                    child: TextFormField(
-                      controller: sPrice,
-                      keyboardType: TextInputType.number,
-                      validator: validateRequired,
-                      decoration: InputDecoration(
-                        border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(5),
-                            borderSide: BorderSide(color: kSecondaryColor)),
-                        focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(5),
-                            borderSide: BorderSide(color: kPrimaryColor)),
-                        labelText: 'Sales Price',
-                        hintText: 'Enter sales price',
-                        floatingLabelBehavior: FloatingLabelBehavior.always,
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.all(15),
-                    child: TextFormField(
-                      controller: dPrice,
-                      keyboardType: TextInputType.number,
-                      validator: validateRequired,
-                      decoration: InputDecoration(
-                        border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(5),
-                            borderSide: BorderSide(color: kSecondaryColor)),
-                        focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(5),
-                            borderSide: BorderSide(color: kPrimaryColor)),
-                        labelText: 'Distributor Price',
-                        hintText: 'Enter distributor price',
-                        floatingLabelBehavior: FloatingLabelBehavior.always,
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.all(15),
-                    child: DropdownSearch<String>.multiSelection(
+                    child: DropdownSearch<String>(
                       validator: (v) => v == null ? "required field" : null,
                       mode: Mode.BOTTOM_SHEET,
                       showSearchBox: true,
+                      selectedItem: widget.modelNo,
                       dropdownSearchDecoration: InputDecoration(
                         contentPadding: EdgeInsets.only(
                             left: 30, right: 20, top: 5, bottom: 5),
                         alignLabelWithHint: true,
-                        hintText: "Please Select Category",
+                        hintText: "Please Select Model",
                         hintStyle: TextStyle(color: Colors.black45),
                         focusedErrorBorder: OutlineInputBorder(
                             borderSide: BorderSide(color: Colors.red),
@@ -305,12 +223,13 @@ class _EditModelPageState extends State<EditModelPage> with Validator {
                             borderRadius: BorderRadius.circular(10)),
                       ),
                       showSelectedItems: true,
-                      items: category,
+                      items: model,
                       onChanged: (value) {
-                        for (int i = 0; i < categoryList.length; i++) {
-                          if (categoryList[i].categoryName == value[i]) {
+                        for (int i = 0; i < modelList.length; i++) {
+                          if (modelList[i].modelNo == value) {
                             setState(() {
-                              categoryId.add(categoryList[i].categoryId);
+                              modelId = modelList[i].modelNoId;
+                              modelVal = value;
                             });
                           }
                         }
@@ -324,11 +243,12 @@ class _EditModelPageState extends State<EditModelPage> with Validator {
                       validator: (v) => v == null ? "required field" : null,
                       mode: Mode.BOTTOM_SHEET,
                       showSearchBox: true,
+                      selectedItem: widget.profile,
                       dropdownSearchDecoration: InputDecoration(
                         contentPadding: EdgeInsets.only(
                             left: 30, right: 20, top: 5, bottom: 5),
                         alignLabelWithHint: true,
-                        hintText: "Please Select Dimension",
+                        hintText: "Please Select Profile",
                         hintStyle: TextStyle(color: Colors.black45),
                         focusedErrorBorder: OutlineInputBorder(
                             borderSide: BorderSide(color: Colors.red),
@@ -341,18 +261,82 @@ class _EditModelPageState extends State<EditModelPage> with Validator {
                             borderRadius: BorderRadius.circular(10)),
                       ),
                       showSelectedItems: true,
-                      items: dimesion,
+                      items: profile,
                       onChanged: (value) {
-                        for (int i = 0; i < dimesionList.length; i++) {
-                          if (dimesionList[i].size == value) {
+                        for (int i = 0; i < profileList.length; i++) {
+                          if (profileList[i].profileNo == value) {
                             setState(() {
-                              dimesionId =
-                                  dimesionList[i].dimensionsId.toString();
+                              profileId = profileList[i].profileNoId;
+                              pName.text = '${value} - ${modelVal}';
                             });
                           }
                         }
                       },
                       //selectedItem: "Please Select your Area",
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.all(15),
+                    child: TextFormField(
+                      controller: pName,
+                      validator: validateRequired,
+                      keyboardType: TextInputType.text,
+                      decoration: InputDecoration(
+                          labelText: 'Product Name.',
+                          hintText: 'Enter Product Name.',
+                          floatingLabelBehavior: FloatingLabelBehavior.always,
+                          border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(5),
+                              borderSide: BorderSide(color: kSecondaryColor)),
+                          focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(5),
+                              borderSide: BorderSide(color: kPrimaryColor))),
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.all(15),
+                    child: TextFormField(
+                      controller: hsn,
+                      validator: validateRequired,
+                      keyboardType: TextInputType.text,
+                      decoration: InputDecoration(
+                          labelText: 'HSN/SAC.',
+                          hintText: 'Enter HSN/SAC.',
+                          floatingLabelBehavior: FloatingLabelBehavior.always,
+                          border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(5),
+                              borderSide: BorderSide(color: kSecondaryColor)),
+                          focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(5),
+                              borderSide: BorderSide(color: kPrimaryColor))),
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.all(15),
+                    child: DefaultButton(
+                      text: "Choose File",
+                      press: () {
+                        filePicker();
+                      },
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.all(15),
+                    child: TextFormField(
+                      controller: remarks,
+                      validator: validateRequired,
+                      keyboardType: TextInputType.text,
+                      maxLines: 4,
+                      decoration: InputDecoration(
+                          labelText: 'Remarks ',
+                          hintText: 'Enter Remarks.',
+                          floatingLabelBehavior: FloatingLabelBehavior.always,
+                          border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(5),
+                              borderSide: BorderSide(color: kSecondaryColor)),
+                          focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(5),
+                              borderSide: BorderSide(color: kPrimaryColor))),
                     ),
                   ),
                   Padding(
@@ -362,25 +346,37 @@ class _EditModelPageState extends State<EditModelPage> with Validator {
                           Row(
                             children: [
                               Checkbox(
+                                  value: access,
+                                  onChanged: (v) {
+                                    setState(() {
+                                      access = v;
+                                    });
+                                  }),
+                              Text("Accessories Product")
+                            ],
+                          ),
+                          Row(
+                            children: [
+                              Checkbox(
                                   value: future,
                                   onChanged: (v) {
                                     setState(() {
                                       future = v;
                                     });
                                   }),
-                              Text("Future Model No.")
+                              Text("Future Product")
                             ],
                           ),
                           Row(
                             children: [
                               Checkbox(
-                                  value: newModel,
+                                  value: newProduct,
                                   onChanged: (v) {
                                     setState(() {
-                                      newModel = v;
+                                      newProduct = v;
                                     });
                                   }),
-                              Text("New Model No.")
+                              Text("new Product")
                             ],
                           ),
                           Row(
@@ -403,9 +399,9 @@ class _EditModelPageState extends State<EditModelPage> with Validator {
                       text: "Save",
                       press: () {
                         KeyboardUtil.hideKeyboard(context);
-                        (widget.modelNo != null && widget.modelNo != "")
+                        (widget.productId != null && widget.productId != "")
                             ? EditModel()
-                            : AddModel();
+                            : null;
                       },
                     ),
                   ),
@@ -416,14 +412,33 @@ class _EditModelPageState extends State<EditModelPage> with Validator {
         });
   }
 
+  void filePicker() async {
+    FilePickerResult result = await FilePicker.platform.pickFiles(
+        allowMultiple: true,
+        type: FileType.custom,
+        allowedExtensions: ['jpg', 'png', "jpeg"]);
+
+    if (result != null) {
+      List<PlatformFile> file = result.files;
+
+      setState(() {
+        for (int i = 0; i <= file.length; i++) {
+          filepath.add(file[i].path);
+        }
+      });
+      print("File count " + filepath.length.toString());
+    } else {
+      // User canceled the picker
+    }
+  }
+
   EditModel() async {
     if (_formKey.currentState.validate()) {
       _formKey.currentState.save();
-
       ProgressDialog pr = ProgressDialog(
         context,
         type: ProgressDialogType.Normal,
-        isDismissible: false,
+        isDismissible: true,
       );
       pr.style(
         message: 'Please wait...',
@@ -433,14 +448,78 @@ class _EditModelPageState extends State<EditModelPage> with Validator {
         )),
       );
       pr.show();
+      var request = await http.MultipartRequest(
+          "post",
+          Uri.parse(
+              "http://loccon.in/desiremoulding/api/AdminApiController/editProduct"));
+      request.fields.addAll({
+        'secretkey': Connection.secretKey,
+        "product_id": widget.productId,
+        "product_name": widget.productName,
+        "profile_no_id": profileId,
+        "model_no_id": modelId,
+        "hsn_sac": hsn.text,
+        "remarks": remarks.text,
+        "accessories_product": access ? "1" : "0",
+        "future_product": future ? "1" : "0",
+        "new_product": newProduct ? "1" : "0",
+        "best_seller": best ? "1" : "0",
+      });
+      for (int i = 0; i <= filepath.length; i++) {
+        request.files
+            .add(await http.MultipartFile.fromPath('image[]', filepath[i]));
+      }
+
+      request.send().then((response) async {
+        pr.hide();
+        if (response.statusCode == 200) {
+          var dimension = await response.stream.bytesToString();
+          var decode = json.decode(dimension);
+          var msg = decode["message"];
+          // Alerts.showAlertAndBack(context, "Success", msg);
+          final snackBar = SnackBar(
+              content: Text(
+            msg,
+            textAlign: TextAlign.start,
+          ));
+          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+          Navigator.pop(context, true);
+        } else {
+          Alerts.showAlertAndBack(
+              context, "Something Went Wrong", await response.reasonPhrase);
+        }
+      });
+    } else {
+      setState(() {
+        _autoValidateMode = AutovalidateMode.always;
+      });
+    }
+  }
+
+/*AddModel() async {
+    if (_formKey.currentState.validate()) {
+      _formKey.currentState.save();
+
+      ProgressDialog pr = ProgressDialog(
+        context,
+        type: ProgressDialogType.Normal,
+        isDismissible: true,
+      );
+      pr.style(
+        message: 'Please wait...',
+        progressWidget: Center(
+            child: CircularProgressIndicator(
+              color: kPrimaryColor,
+            )),
+      );
+      pr.show();
       var response;
       response = await http.post(
           Uri.parse(
-              "http://loccon.in/desiremoulding/api/AdminApiController/editModelNo"),
+              "http://loccon.in/desiremoulding/api/AdminApiController/addModelNo"),
           body: {
             'secretkey': Connection.secretKey,
-            "model_no": widget.modelNo,
-            "model_no_id": widget.model_no_id,
+            "model_no": modelNo.text,
             "box_per_stick": perBox.text,
             "product_category": categoryId.toString(),
             "dimension": dimesionId,
@@ -470,63 +549,7 @@ class _EditModelPageState extends State<EditModelPage> with Validator {
         _autoValidateMode = AutovalidateMode.always;
       });
     }
-    print(categoryId);
-  }
-
-  AddModel() async {
-    if (_formKey.currentState.validate()) {
-      _formKey.currentState.save();
-
-      ProgressDialog pr = ProgressDialog(
-        context,
-        type: ProgressDialogType.Normal,
-        isDismissible: true,
-      );
-      pr.style(
-        message: 'Please wait...',
-        progressWidget: Center(
-            child: CircularProgressIndicator(
-          color: kPrimaryColor,
-        )),
-      );
-      pr.show();
-      var response;
-      response = await http.post(
-          Uri.parse(
-              "http://loccon.in/desiremoulding/api/AdminApiController/addModelNo"),
-          body: {
-            'secretkey': Connection.secretKey,
-            "model_no": modelNo.text,
-            "box_per_stick": perBox.text,
-            "product_category": categoryId.toString(),
-            "dimension": dimesionId,
-            "customer_price": cPrice.text,
-            "sales_price": sPrice.text,
-            "distributor_price": dPrice.text,
-            "future_model_no": future ? "1" : "0",
-            "new_model_no": newModel ? "1" : "0",
-            "best_seller": best ? "1" : "0",
-          });
-      var results = json.decode(response.body);
-      print('response == $results  ${response.body}');
-      pr.hide();
-      if (results['status'] == true) {
-        final snackBar = SnackBar(
-            content: Text(
-          response['message'],
-          textAlign: TextAlign.start,
-        ));
-        ScaffoldMessenger.of(context).showSnackBar(snackBar);
-        Navigator.pop(context, true);
-      } else {
-        Alerts.showAlertAndBack(context, "Error", results['message']);
-      }
-    } else {
-      setState(() {
-        _autoValidateMode = AutovalidateMode.always;
-      });
-    }
-  }
+  }*/
 }
 
 class AllDimensionsListTile extends StatelessWidget {

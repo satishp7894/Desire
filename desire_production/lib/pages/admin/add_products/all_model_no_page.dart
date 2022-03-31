@@ -109,45 +109,33 @@ class _allModelNoPageState extends State<AllModelNoPage> {
             asyncSnapshot = s;
             allModel = asyncSnapshot.data.data;
             return SingleChildScrollView(
-              child: searchView.text.length == 0
-                  ? Container(
-                      margin: EdgeInsets.only(bottom: 100),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          ...List.generate(
-                              allModel.length,
-                              (index) => AllDimensionsListTile(
-                                    allModel: allModel[index],
-                                    addProductBloc: addProductsBloc,
-                                  ))
-                        ],
-                      ),
-                    )
+              child:  searchView.text.length == 0
+                  ? ListView.builder(
+                  itemCount: 10,
+                  shrinkWrap: true,
+                  itemBuilder: (BuildContext context, int index) {
+                    return AllDimensionsListTile(
+                      addProductBloc: addProductsBloc,
+                      allModel: allModel[index],
+                    );
+                  })
                   : _searchResult.length == 0
-                      ? Container(
-                          alignment: Alignment.center,
-                          child: Text(
-                            "No Data Found",
-                            style: TextStyle(
-                                fontSize: 20, fontWeight: FontWeight.w800),
-                          ))
-                      : Container(
-                          margin: EdgeInsets.only(bottom: 100),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              ...List.generate(
-                                  _searchResult.length,
-                                  (index) => AllDimensionsListTile(
-                                        allModel: _searchResult[index],
-                                        addProductBloc: addProductsBloc,
-                                      ))
-                            ],
-                          ),
-                        ),
+                  ? Container(
+                  alignment: Alignment.center,
+                  child: Text(
+                    "No Data Found",
+                    style: TextStyle(
+                        fontSize: 20, fontWeight: FontWeight.w800),
+                  ))
+                  : ListView.builder(
+                  itemCount: _searchResult.length,
+                  shrinkWrap: true,
+                  itemBuilder: (BuildContext context, int index) {
+                    return AllDimensionsListTile(
+                      addProductBloc: addProductsBloc,
+                      allModel: _searchResult[index],
+                    );
+                  }),
             );
           }
         });
@@ -235,95 +223,91 @@ class AllDimensionsListTile extends StatelessWidget {
                   borderRadius: BorderRadius.circular(5),
                   border: Border.all(width: 1, color: kPrimaryColor)),
               child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Flexible(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Container(
-                            margin: EdgeInsets.only(left: 10, right: 10),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                RichText(
-                                  maxLines: 2,
-                                  overflow: TextOverflow.ellipsis,
-                                  text: TextSpan(
-                                    text: "Model No : ",
-                                    style: TextStyle(
-                                        color: kBlackColor, fontSize: 15),
-                                    children: <TextSpan>[
-                                      TextSpan(
-                                          text: allModel.modelNo,
-                                          style: TextStyle(
-                                              color: Colors.black,
-                                              fontWeight: FontWeight.w800)),
-                                    ],
-                                  ),
-                                ),
-                                RichText(
-                                  maxLines: 2,
-                                  overflow: TextOverflow.ellipsis,
-                                  text: TextSpan(
-                                    text: "Customer Price : ",
-                                    style: TextStyle(
-                                        color: kBlackColor, fontSize: 15),
-                                    children: <TextSpan>[
-                                      TextSpan(
-                                          text: allModel.customerPrice,
-                                          style: TextStyle(
-                                              color: Colors.black,
-                                              fontWeight: FontWeight.w800)),
-                                    ],
-                                  ),
-                                ),
-                                RichText(
-                                  maxLines: 2,
-                                  overflow: TextOverflow.ellipsis,
-                                  text: TextSpan(
-                                    text: "Sales Price : ",
-                                    style: TextStyle(
-                                        color: kBlackColor, fontSize: 15),
-                                    children: <TextSpan>[
-                                      TextSpan(
-                                          text: allModel.salesPrice,
-                                          style: TextStyle(
-                                              color: Colors.black,
-                                              fontWeight: FontWeight.w800)),
-                                    ],
-                                  ),
-                                ),
-                                RichText(
-                                  maxLines: 2,
-                                  overflow: TextOverflow.ellipsis,
-                                  text: TextSpan(
-                                    text: "Distributor Price : ",
-                                    style: TextStyle(
-                                        color: kBlackColor, fontSize: 15),
-                                    children: <TextSpan>[
-                                      TextSpan(
-                                          text: allModel.distributorPrice,
-                                          style: TextStyle(
-                                              color: Colors.black,
-                                              fontWeight: FontWeight.w800)),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            )),
-                        IconButton(
-                            onPressed: () {
-                              deleteItem(
-                                  allModel.modelNoId, context, addProductBloc);
-                            },
-                            icon: Icon(
-                              Icons.delete,
-                              color: Colors.red,
-                            ))
-                      ],
+                    child: Container(
+                        margin: EdgeInsets.only(left: 10, right: 10),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            RichText(
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                              text: TextSpan(
+                                text: "Model No : ",
+                                style:
+                                    TextStyle(color: kBlackColor, fontSize: 15),
+                                children: <TextSpan>[
+                                  TextSpan(
+                                      text: allModel.modelNo,
+                                      style: TextStyle(
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.w800)),
+                                ],
+                              ),
+                            ),
+                            RichText(
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                              text: TextSpan(
+                                text: "Customer Price : ",
+                                style:
+                                    TextStyle(color: kBlackColor, fontSize: 15),
+                                children: <TextSpan>[
+                                  TextSpan(
+                                      text: allModel.customerPrice,
+                                      style: TextStyle(
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.w800)),
+                                ],
+                              ),
+                            ),
+                            RichText(
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                              text: TextSpan(
+                                text: "Sales Price : ",
+                                style:
+                                    TextStyle(color: kBlackColor, fontSize: 15),
+                                children: <TextSpan>[
+                                  TextSpan(
+                                      text: allModel.salesPrice,
+                                      style: TextStyle(
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.w800)),
+                                ],
+                              ),
+                            ),
+                            RichText(
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                              text: TextSpan(
+                                text: "Distributor Price : ",
+                                style:
+                                    TextStyle(color: kBlackColor, fontSize: 15),
+                                children: <TextSpan>[
+                                  TextSpan(
+                                      text: allModel.distributorPrice,
+                                      style: TextStyle(
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.w800)),
+                                ],
+                              ),
+                            ),
+                          ],
+                        )),
+                  ),
+                  IconButton(
+                    onPressed: () {
+                      deleteItem(allModel.modelNoId, context, addProductBloc);
+                    },
+                    icon: Icon(
+                      Icons.delete,
+                      color: Colors.red,
                     ),
-                  )
+                  ),
                 ],
               ),
             ),

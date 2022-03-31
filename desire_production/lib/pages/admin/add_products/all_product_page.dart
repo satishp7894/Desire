@@ -2,7 +2,9 @@ import 'dart:convert';
 
 import 'package:desire_production/bloc/add_products_bloc.dart';
 import 'package:desire_production/model/all_dimensions_model.dart';
+import 'package:desire_production/model/all_product_list_model.dart';
 import 'package:desire_production/pages/admin/add_products/edit_dimensions_page.dart';
+import 'package:desire_production/pages/admin/add_products/edit_product_page.dart';
 import 'package:desire_production/services/connections.dart';
 import 'package:desire_production/utils/alerts.dart';
 import 'package:desire_production/utils/constants.dart';
@@ -10,16 +12,16 @@ import 'package:desire_production/utils/progress_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
-class AllDimensionsPage extends StatefulWidget {
+class AllProductPage extends StatefulWidget {
   @override
-  _allDimensionsPageState createState() => _allDimensionsPageState();
+  _allProductPageState createState() => _allProductPageState();
 }
 
-class _allDimensionsPageState extends State<AllDimensionsPage> {
+class _allProductPageState extends State<AllProductPage> {
   AddProductsBloc addProductsBloc = AddProductsBloc();
-  AsyncSnapshot<AllDimensionsModel> asyncSnapshot;
-  List<AllDimension> _searchResult = [];
-  List<AllDimension> allDimesion = [];
+  AsyncSnapshot<AllProductListModel> asyncSnapshot;
+  List<AllProduct> _searchResult = [];
+  List<AllProduct> allProduct = [];
   TextEditingController searchView;
   bool search = false;
 
@@ -27,7 +29,7 @@ class _allDimensionsPageState extends State<AllDimensionsPage> {
   void initState() {
     super.initState();
     searchView = TextEditingController();
-    addProductsBloc.fetchAllDimensions();
+    addProductsBloc.fetchAllProducts();
   }
 
   @override
@@ -43,7 +45,7 @@ class _allDimensionsPageState extends State<AllDimensionsPage> {
           elevation: 0.0,
           iconTheme: IconThemeData(color: Colors.black),
           title: Text(
-            "All Dimensions",
+            "All Products",
             style: TextStyle(color: Colors.black),
           ),
           centerTitle: true,
@@ -55,11 +57,11 @@ class _allDimensionsPageState extends State<AllDimensionsPage> {
         child: FloatingActionButton.extended(
           onPressed: () {
             Navigator.push(context, MaterialPageRoute(builder: (context) {
-              return EditDimensionsPage();
+              return EditProductPage();
             }));
           },
           label: Text(
-            "Add Dimension",
+            "Add Product",
           ),
           icon: Icon(Icons.add),
           backgroundColor: kPrimaryColor,
@@ -70,8 +72,8 @@ class _allDimensionsPageState extends State<AllDimensionsPage> {
   }
 
   Widget _body() {
-    return StreamBuilder<AllDimensionsModel>(
-        stream: addProductsBloc.newAccessoryStream,
+    return StreamBuilder<AllProductListModel>(
+        stream: addProductsBloc.allProductStream,
         builder: (c, s) {
           if (s.connectionState != ConnectionState.active) {
             print("all connection");
@@ -105,17 +107,17 @@ class _allDimensionsPageState extends State<AllDimensionsPage> {
             );
           } else {
             asyncSnapshot = s;
-            allDimesion = asyncSnapshot.data.data;
+            allProduct = asyncSnapshot.data.data;
             return SingleChildScrollView(
               child: searchView.text.length == 0
                   ? ListView.builder(
-                      itemCount: allDimesion.length,
+                      itemCount: 10,
                       shrinkWrap: true,
                       itemBuilder: (BuildContext context, int index) {
                         return AllDimensionsListTile(
                           addProductBloc: addProductsBloc,
-                          imgPath: asyncSnapshot.data.imagePath,
-                          allDimension: allDimesion[index],
+                          imgPath: asyncSnapshot.data.productImagePath,
+                          allProduct: allProduct[index],
                         );
                       })
                   : _searchResult.length == 0
@@ -132,7 +134,8 @@ class _allDimensionsPageState extends State<AllDimensionsPage> {
                           itemBuilder: (BuildContext context, int index) {
                             return AllDimensionsListTile(
                               addProductBloc: addProductsBloc,
-                              allDimension: _searchResult[index],
+                              imgPath: asyncSnapshot.data.productImagePath,
+                              allProduct: _searchResult[index],
                             );
                           }),
             );
@@ -160,7 +163,7 @@ class _allDimensionsPageState extends State<AllDimensionsPage> {
             },
             decoration: new InputDecoration(
               border: InputBorder.none,
-              hintText: "Search Dimension",
+              hintText: "Search Product",
             ),
           ),
         ),
@@ -178,7 +181,7 @@ class _allDimensionsPageState extends State<AllDimensionsPage> {
       return;
     }
 
-    allDimesion.forEach((exp) {
+    allProduct.forEach((exp) {
       if (exp.size.toLowerCase().contains(text.toLowerCase()))
         _searchResult.add(exp);
     });
@@ -190,12 +193,12 @@ class _allDimensionsPageState extends State<AllDimensionsPage> {
 }
 
 class AllDimensionsListTile extends StatelessWidget {
-  final AllDimension allDimension;
+  final AllProduct allProduct;
   final String imgPath;
   final AddProductsBloc addProductBloc;
 
   const AllDimensionsListTile(
-      {Key key, this.allDimension, this.imgPath, this.addProductBloc})
+      {Key key, this.allProduct, this.imgPath, this.addProductBloc})
       : super(key: key);
 
   @override
@@ -204,19 +207,15 @@ class AllDimensionsListTile extends StatelessWidget {
         padding: const EdgeInsets.all(10.0),
         child: GestureDetector(
           onTap: () {
-            Navigator.push(context, MaterialPageRoute(builder: (context) {
-              return EditDimensionsPage(
-                dimensionId: allDimension.dimensionsId,
-                dmSize: allDimension.size,
-                image: imgPath + allDimension.image,
-              );
+             Navigator.push(context, MaterialPageRoute(builder: (context) {
+              return EditProductPage(modelNo: allProduct.modelNo,profile: allProduct.profileNo,productName: allProduct.productName,productId: allProduct.id,);
             })).then((val) => val ? _fetchList() : null);
           },
           child: Card(
             elevation: 5,
             margin: EdgeInsets.zero,
             child: Container(
-              height: 80,
+              height: 100,
               padding: EdgeInsets.all(5),
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(5),
@@ -224,12 +223,7 @@ class AllDimensionsListTile extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  FadeInImage.assetNetwork(
-                    placeholder: "assets/images/dimensions.png",
-                    image: imgPath + allDimension.image,
-                    width: 50,
-                    height: 50,
-                  ),
+
                   Flexible(
                     child: Container(
                         margin: EdgeInsets.only(left: 10, right: 10),
@@ -241,12 +235,12 @@ class AllDimensionsListTile extends StatelessWidget {
                               maxLines: 2,
                               overflow: TextOverflow.ellipsis,
                               text: TextSpan(
-                                text: "Size : ",
+                                text: "Product Name : ",
                                 style:
                                     TextStyle(color: kBlackColor, fontSize: 15),
                                 children: <TextSpan>[
                                   TextSpan(
-                                      text: allDimension.size,
+                                      text: allProduct.productName,
                                       style: TextStyle(
                                           color: Colors.black,
                                           fontWeight: FontWeight.w800)),
@@ -257,12 +251,28 @@ class AllDimensionsListTile extends StatelessWidget {
                               maxLines: 2,
                               overflow: TextOverflow.ellipsis,
                               text: TextSpan(
-                                text: "Size in inch : ",
+                                text: "Profile : ",
                                 style:
                                     TextStyle(color: kBlackColor, fontSize: 15),
                                 children: <TextSpan>[
                                   TextSpan(
-                                      text: allDimension.sizeInch,
+                                      text: allProduct.profileNo,
+                                      style: TextStyle(
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.w800)),
+                                ],
+                              ),
+                            ),
+                            RichText(
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                              text: TextSpan(
+                                text: "Model : ",
+                                style:
+                                    TextStyle(color: kBlackColor, fontSize: 15),
+                                children: <TextSpan>[
+                                  TextSpan(
+                                      text: allProduct.modelNo,
                                       style: TextStyle(
                                           color: Colors.black,
                                           fontWeight: FontWeight.w800)),
@@ -274,8 +284,8 @@ class AllDimensionsListTile extends StatelessWidget {
                   ),
                   IconButton(
                       onPressed: () {
-                        deleteItem(
-                            allDimension.dimensionsId, context, addProductBloc);
+                        deleteItem(allProduct.id, context,
+                                  addProductBloc);
                       },
                       icon: Icon(
                         Icons.delete,
@@ -288,7 +298,7 @@ class AllDimensionsListTile extends StatelessWidget {
         ));
   }
 
-  deleteItem(String dimensionId, BuildContext context,
+  deleteItem(String productId, BuildContext context,
       AddProductsBloc addProductBloc) async {
     ProgressDialog pr = ProgressDialog(
       context,
@@ -303,19 +313,19 @@ class AllDimensionsListTile extends StatelessWidget {
     var response;
     response = await http.post(
         Uri.parse(
-            "http://loccon.in/desiremoulding/api/AdminApiController/deleteDimension"),
+            "http://loccon.in/desiremoulding/api/AdminApiController/deleteProduct"),
         body: {
           'secretkey': Connection.secretKey,
-          'dimensions_id': dimensionId,
+          'product_id': productId,
         });
     var results = json.decode(response.body);
     print('response == $results  ${response.body}');
     pr.hide();
     if (results['status'] == true) {
-      Alerts.showAlertAndBack(context, "User Not Found", results['message']);
-      addProductBloc.fetchAllDimensions();
+      Alerts.showAlertAndBack(context, "Success", results['message']);
+      addProductBloc.fetchAllProducts();
     } else {
-      Alerts.showAlertAndBack(context, "User Not Found", results['message']);
+      Alerts.showAlertAndBack(context, "Error", results['message']);
     }
   }
 

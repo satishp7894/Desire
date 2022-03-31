@@ -32,18 +32,25 @@ class CustomerSalesChatTrackModel {
 class SalesCustomerConversations {
   String conversationId;
   String convWith;
+  String salesId;
+  String customerId;
 
-  SalesCustomerConversations({this.conversationId, this.convWith});
+  SalesCustomerConversations(
+      {this.conversationId, this.convWith, this.salesId, this.customerId});
 
   SalesCustomerConversations.fromJson(Map<String, dynamic> json) {
     conversationId = json['conversation_id'];
     convWith = json['conv_with'];
+    salesId = json['sales_id'];
+    customerId = json['customer_id'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['conversation_id'] = this.conversationId;
     data['conv_with'] = this.convWith;
+    data['sales_id'] = this.salesId;
+    data['customer_id'] = this.customerId;
     return data;
   }
 }

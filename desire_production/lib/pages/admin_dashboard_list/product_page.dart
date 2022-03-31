@@ -1,5 +1,7 @@
+import 'package:desire_production/model/all_product_list_model.dart';
 import 'package:desire_production/pages/admin/add_products/all_dimensions_page.dart';
 import 'package:desire_production/pages/admin/add_products/all_model_no_page.dart';
+import 'package:desire_production/pages/admin/add_products/all_product_page.dart';
 import 'package:desire_production/pages/admin/products/model_list_page.dart';
 import 'package:desire_production/utils/constants.dart';
 import 'package:flutter/material.dart';
@@ -188,7 +190,9 @@ class _ProductPageState extends State<ProductPage> {
           SizedBox(height: 10,),
           GestureDetector(
             onTap: (){
-
+              Navigator.push(context, MaterialPageRoute(builder: (context){
+                return AllProductPage();
+              }));
             },
             child: Container(
               decoration: BoxDecoration(

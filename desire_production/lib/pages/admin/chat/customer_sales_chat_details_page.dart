@@ -6,13 +6,18 @@ import 'package:flutter/material.dart';
 
 class CustomerSalesChatDetailsPage extends StatefulWidget {
   final convId;
-  const CustomerSalesChatDetailsPage({Key key, this.convId}) : super(key: key);
+  final senderId;
+
+  const CustomerSalesChatDetailsPage({Key key, this.convId, this.senderId})
+      : super(key: key);
 
   @override
-  _CustomerSalesChatDetailsPageState createState() => _CustomerSalesChatDetailsPageState();
+  _CustomerSalesChatDetailsPageState createState() =>
+      _CustomerSalesChatDetailsPageState();
 }
 
-class _CustomerSalesChatDetailsPageState extends State<CustomerSalesChatDetailsPage> {
+class _CustomerSalesChatDetailsPageState
+    extends State<CustomerSalesChatDetailsPage> {
   final customerSalesChatBloc = CustomerSalesChatBloc();
   AsyncSnapshot<CustomerSaleChatDetailsModel> asyncSnapshot;
 
@@ -84,18 +89,15 @@ class _CustomerSalesChatDetailsPageState extends State<CustomerSalesChatDetailsP
           } else {
             asyncSnapshot = s;
             return SingleChildScrollView(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  ...List.generate(
-                      asyncSnapshot.data.salesCustomerChat.length,
-                          (index) => CustomerChatListTile(
-                            salesCustomerChat: asyncSnapshot.data.salesCustomerChat[index],
-                      ))
-                ],
-              ),
-            );
+                child:ListView.builder(
+                        itemCount: asyncSnapshot.data.salesCustomerChat.length,
+                        shrinkWrap: true,
+                        itemBuilder: (BuildContext context, int index) {
+                          return CustomerChatListTile(
+                              salesCustomerChat:
+                                  asyncSnapshot.data.salesCustomerChat[index],
+                              senderId: widget.senderId);
+                        }));
           }
         });
   }
@@ -103,25 +105,36 @@ class _CustomerSalesChatDetailsPageState extends State<CustomerSalesChatDetailsP
 
 class CustomerChatListTile extends StatelessWidget {
   final SalesCustomerChat salesCustomerChat;
+  final String senderId;
 
-  const CustomerChatListTile({Key key, this.salesCustomerChat})
+  const CustomerChatListTile({Key key, this.salesCustomerChat, this.senderId})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(10.0),
-      child: GestureDetector(
-        onTap: () {
-
-        },
+    return Container(
+      padding: EdgeInsets.only(left: 10,right: 10,top: 10,bottom: 10),
+      child: Align(
+        alignment: (salesCustomerChat.senderId == senderId?Alignment.topRight
+            :Alignment.topLeft),
         child: Container(
-            padding: EdgeInsets.only(left: 5),
-            decoration: BoxDecoration(color: kPrimaryColor, borderRadius: BorderRadius.circular(5)),
-            child: Text(
-              salesCustomerChat.message,
-              style: TextStyle(color: kWhite, fontWeight: FontWeight.w700, fontSize: 15),
-            )),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10),
+            color: (salesCustomerChat.senderId == senderId?kPrimaryColor: kSecondaryColor),
+          ),
+          padding: EdgeInsets.all(16),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(salesCustomerChat.senderName, style: TextStyle(fontSize: 15,fontWeight: FontWeight.bold,color: kWhite),),
+              SizedBox(height: 5,),
+              Text(salesCustomerChat.message, style: TextStyle(fontSize: 15,color: kWhite),),
+              SizedBox(height: 5,),
+              Text(salesCustomerChat.date.split(" ").first, style: TextStyle(fontSize: 10,color: kWhite),),
+            ],
+          ),
+        ),
       ),
     );
   }
