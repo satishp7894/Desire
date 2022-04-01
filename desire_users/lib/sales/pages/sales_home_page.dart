@@ -18,6 +18,7 @@ import 'package:desire_users/sales/pages/orders/customerOrdersListPage.dart';
 import 'package:desire_users/sales/pages/orders/hold_order_list_page.dart';
 import 'package:desire_users/sales/pages/orders/pendingOrdersListPage.dart';
 import 'package:desire_users/sales/pages/retunMaterial/return_material_sale_page.dart';
+import 'package:desire_users/sales/pages/sales_report/sales_report_page.dart';
 import 'package:desire_users/sales/utils_sales/alerts.dart';
 import 'package:desire_users/sales/utils_sales/progress_dialog.dart';
 import 'package:desire_users/services/connection.dart';
@@ -892,6 +893,49 @@ class _SalesHomePageState extends State<SalesHomePage> {
                   ),
                   Text(
                     "Return Material",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 14,
+                        color: kWhiteColor),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+        GestureDetector(
+          onTap: () {
+            Navigator.push(context, MaterialPageRoute(builder: (context) {
+              return SalesReportPage(salesid:  salesManId);
+            }));
+          },
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Container(
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.all(Radius.circular(15)),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey,
+                      blurRadius: 5.0,
+                    ),
+                  ],
+                  color: kPrimaryColor),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.playlist_add_check,
+                    size: 40,
+                    color: kWhiteColor,
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Text(
+                    "Sales Report",
                     textAlign: TextAlign.center,
                     style: TextStyle(
                         fontWeight: FontWeight.bold,

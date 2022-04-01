@@ -194,7 +194,7 @@ class _BrochurePageState extends State<BrochurePage> {
                   ),
                 );
               }
-              if (s.data.products.length == 0) {
+              if (s.data.data.length == 0) {
                 print("as3 empty");
                 return Container(
                   height: 300,
@@ -206,13 +206,13 @@ class _BrochurePageState extends State<BrochurePage> {
               }
 
               as = s;
-              _order = s.data.products;
+              _order = s.data.data;
 
-              for (int i = 0; i < s.data.products.length; i++) {
+              for (int i = 0; i < s.data.data.length; i++) {
                 check.add(false);
               }
 
-              print("object length ${s.data.products.length} ${check.length}");
+              print("object length ${s.data.data.length} ${check.length}");
 
               return Container(
                 padding: EdgeInsets.all(10),
@@ -300,14 +300,14 @@ class _BrochurePageState extends State<BrochurePage> {
                                             print("object remember $checkAll");
                                             if (checkAll == true) {
                                               for (int i = 0;
-                                                  i < s.data.products.length;
+                                                  i < s.data.data.length;
                                                   i++) {
                                                 check[i] = true;
-                                                send.add(s.data.products[i]);
+                                                send.add(s.data.data[i]);
                                               }
                                             } else {
                                               for (int i = 0;
-                                                  i < s.data.products.length;
+                                                  i < s.data.data.length;
                                                   i++) {
                                                 check[i] = false;
                                                 send = [];
@@ -319,8 +319,8 @@ class _BrochurePageState extends State<BrochurePage> {
                                     ],
                                   ),
                                 ),
-                                for (int i = 0; i < s.data.products.length; i++)
-                                  s.data.products.length == 0
+                                for (int i = 0; i < s.data.data.length; i++)
+                                  s.data.data.length == 0
                                       ? Container(
                                           height: 300,
                                           alignment: Alignment.center,
@@ -377,7 +377,7 @@ class _BrochurePageState extends State<BrochurePage> {
                                                                         .black)),
                                                           ),
                                                           child: Text(
-                                                            '${s.data.products[i].productName}',
+                                                            '${s.data.data[i].productName}',
                                                             //style: content1,
                                                             textAlign: TextAlign
                                                                 .center,
@@ -412,12 +412,12 @@ class _BrochurePageState extends State<BrochurePage> {
                                                           if (check[i] ==
                                                               true) {
                                                             send.add(s.data
-                                                                .products[i]);
+                                                                .data[i]);
                                                           } else {
                                                             send.remove(s
                                                                 .data
-                                                                .products[i]
-                                                                .productId);
+                                                                .data[i]
+                                                                .id);
                                                           }
                                                         },
                                                       ),
@@ -622,7 +622,7 @@ class _BrochurePageState extends State<BrochurePage> {
                                                         } else {
                                                           send.remove(
                                                               _searchResult[i]
-                                                                  .productId);
+                                                                  .id);
                                                         }
                                                       },
                                                     ),
@@ -742,9 +742,9 @@ class _BrochurePageState extends State<BrochurePage> {
           .asUint8List(),
     );
     //final image1 = pw.MemoryImage(responseData.bodyBytes.buffer.asUint8List());
-    for (int i = 0; i < as.data.products.length; i++) {
+    for (int i = 0; i < as.data.data.length; i++) {
       File fileImage =
-          await urlToFile(Connection.image + "${as.data.products[i].image}");
+          await urlToFile(Connection.image + "${as.data.data[i].image}");
       var img = File(fileImage.path);
       print("file details ${fileImage.path}");
       imageN.add(pw.MemoryImage(img.readAsBytesSync()));
@@ -777,7 +777,7 @@ class _BrochurePageState extends State<BrochurePage> {
               ])),
           //pw.Divider(color: PdfColor.fromHex('#4684C2'),thickness: 3),
           pw.GridView(crossAxisCount: 2, childAspectRatio: 1, children: [
-            for (int i = 0; i < as.data.products.length; i++)
+            for (int i = 0; i < as.data.data.length; i++)
               pw.Container(
                   margin: pw.EdgeInsets.only(top: 10),
                   alignment: pw.Alignment.centerLeft,
@@ -791,23 +791,23 @@ class _BrochurePageState extends State<BrochurePage> {
                             height: 100,
                             width: 200),
                         pw.Text(
-                            "Product Name: ${as.data.products[i].productName}",
+                            "Product Name: ${as.data.data[i].productName}",
                             textAlign: pw.TextAlign.left,
                             style: pw.TextStyle(
                               fontSize: 15,
                             )),
-                        pw.Text("Model No.: ${as.data.products[i].modelNo}",
+                        pw.Text("Model No.: ${as.data.data[i].modelNo}",
                             textAlign: pw.TextAlign.left,
                             style: pw.TextStyle(
                               fontSize: 15,
                             )),
-                        pw.Text("Profile No: ${as.data.products[i].profileNo}",
+                        pw.Text("Profile No: ${as.data.data[i].profileNo}",
                             textAlign: pw.TextAlign.left,
                             style: pw.TextStyle(
                               fontSize: 15,
                             )),
                         pw.Text(
-                            "Dimensions: ${as.data.products[i].dimensionsName} ${as.data.products[i].size}",
+                            "Dimensions: ${as.data.data[i].dimensionsName} ${as.data.data[i].size}",
                             textAlign: pw.TextAlign.left,
                             style: pw.TextStyle(
                               fontSize: 15,
