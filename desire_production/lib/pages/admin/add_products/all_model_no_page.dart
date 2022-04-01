@@ -109,33 +109,37 @@ class _allModelNoPageState extends State<AllModelNoPage> {
             asyncSnapshot = s;
             allModel = asyncSnapshot.data.data;
             return SingleChildScrollView(
-              child:  searchView.text.length == 0
-                  ? ListView.builder(
-                  itemCount: 10,
-                  shrinkWrap: true,
-                  itemBuilder: (BuildContext context, int index) {
-                    return AllDimensionsListTile(
-                      addProductBloc: addProductsBloc,
-                      allModel: allModel[index],
-                    );
-                  })
-                  : _searchResult.length == 0
-                  ? Container(
-                  alignment: Alignment.center,
-                  child: Text(
-                    "No Data Found",
-                    style: TextStyle(
-                        fontSize: 20, fontWeight: FontWeight.w800),
-                  ))
-                  : ListView.builder(
-                  itemCount: _searchResult.length,
-                  shrinkWrap: true,
-                  itemBuilder: (BuildContext context, int index) {
-                    return AllDimensionsListTile(
-                      addProductBloc: addProductsBloc,
-                      allModel: _searchResult[index],
-                    );
-                  }),
+              child:  Container(
+                height: MediaQuery.of(context).size.height*0.83,
+                child: searchView.text.length == 0
+                    ? ListView.builder(
+                    itemCount: 10,
+                    shrinkWrap: true,
+                    physics: ClampingScrollPhysics(),
+                    itemBuilder: (BuildContext context, int index) {
+                      return AllDimensionsListTile(
+                        addProductBloc: addProductsBloc,
+                        allModel: allModel[index],
+                      );
+                    })
+                    : _searchResult.length == 0
+                    ? Container(
+                    alignment: Alignment.center,
+                    child: Text(
+                      "No Data Found",
+                      style: TextStyle(
+                          fontSize: 20, fontWeight: FontWeight.w800),
+                    ))
+                    : ListView.builder(
+                    itemCount: _searchResult.length,
+                    shrinkWrap: true,
+                    itemBuilder: (BuildContext context, int index) {
+                      return AllDimensionsListTile(
+                        addProductBloc: addProductsBloc,
+                        allModel: _searchResult[index],
+                      );
+                    }),
+              ),
             );
           }
         });

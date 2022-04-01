@@ -150,6 +150,7 @@ class Connection {
 
   static final String submitNewAdminUser = ipAdmin + "submitNewAdminUser";
   static final String approveCredits = ipAdmin + "approveCredits";
+  static final String approveOrder = ipAdmin + "approvePendingOrder";
 
 
 

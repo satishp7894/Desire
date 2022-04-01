@@ -24,10 +24,12 @@ class _allProductPageState extends State<AllProductPage> {
   List<AllProduct> allProduct = [];
   TextEditingController searchView;
   bool search = false;
+  ScrollController controller;
 
   @override
   void initState() {
     super.initState();
+    controller = new ScrollController()..addListener(_scrollListener);
     searchView = TextEditingController();
     addProductsBloc.fetchAllProducts();
   }
@@ -109,35 +111,39 @@ class _allProductPageState extends State<AllProductPage> {
             asyncSnapshot = s;
             allProduct = asyncSnapshot.data.data;
             return SingleChildScrollView(
-              child: searchView.text.length == 0
-                  ? ListView.builder(
-                      itemCount: 10,
-                      shrinkWrap: true,
-                      itemBuilder: (BuildContext context, int index) {
-                        return AllDimensionsListTile(
-                          addProductBloc: addProductsBloc,
-                          imgPath: asyncSnapshot.data.productImagePath,
-                          allProduct: allProduct[index],
-                        );
-                      })
-                  : _searchResult.length == 0
-                      ? Container(
-                          alignment: Alignment.center,
-                          child: Text(
-                            "No Data Found",
-                            style: TextStyle(
-                                fontSize: 20, fontWeight: FontWeight.w800),
-                          ))
-                      : ListView.builder(
-                          itemCount: _searchResult.length,
-                          shrinkWrap: true,
-                          itemBuilder: (BuildContext context, int index) {
-                            return AllDimensionsListTile(
-                              addProductBloc: addProductsBloc,
-                              imgPath: asyncSnapshot.data.productImagePath,
-                              allProduct: _searchResult[index],
-                            );
-                          }),
+              child: Container(
+                height: MediaQuery.of(context).size.height * 0.83,
+                child: searchView.text.length == 0
+                    ? ListView.builder(
+                        shrinkWrap: true,
+                        itemCount: allProduct.length,
+                        physics: ClampingScrollPhysics(),
+                        itemBuilder: (BuildContext context, int index) {
+                          return AllDimensionsListTile(
+                            addProductBloc: addProductsBloc,
+                            imgPath: asyncSnapshot.data.productImagePath,
+                            allProduct: allProduct[index],
+                          );
+                        })
+                    : _searchResult.length == 0
+                        ? Container(
+                            alignment: Alignment.center,
+                            child: Text(
+                              "No Data Found",
+                              style: TextStyle(
+                                  fontSize: 20, fontWeight: FontWeight.w800),
+                            ))
+                        : ListView.builder(
+                            itemCount: _searchResult.length,
+                            shrinkWrap: true,
+                            itemBuilder: (BuildContext context, int index) {
+                              return AllDimensionsListTile(
+                                addProductBloc: addProductsBloc,
+                                imgPath: asyncSnapshot.data.productImagePath,
+                                allProduct: _searchResult[index],
+                              );
+                            }),
+              ),
             );
           }
         });
@@ -182,13 +188,23 @@ class _allProductPageState extends State<AllProductPage> {
     }
 
     allProduct.forEach((exp) {
-      if (exp.size.toLowerCase().contains(text.toLowerCase()))
+      if (exp.size.toLowerCase().contains(text.toLowerCase()) ||
+          exp.productName.toLowerCase().contains(text.toLowerCase()))
         _searchResult.add(exp);
     });
 
     //print("search objects ${_searchResult.first}");
     print("search result length ${_searchResult.length}");
     setState(() {});
+  }
+
+  void _scrollListener() {
+    print(controller.position.extentAfter);
+    if (controller.position.extentAfter < 500) {
+      setState(() {
+        // allProduct.addAll(new );
+      });
+    }
   }
 }
 
@@ -207,8 +223,13 @@ class AllDimensionsListTile extends StatelessWidget {
         padding: const EdgeInsets.all(10.0),
         child: GestureDetector(
           onTap: () {
-             Navigator.push(context, MaterialPageRoute(builder: (context) {
-              return EditProductPage(modelNo: allProduct.modelNo,profile: allProduct.profileNo,productName: allProduct.productName,productId: allProduct.id,);
+            Navigator.push(context, MaterialPageRoute(builder: (context) {
+              return EditProductPage(
+                modelNo: allProduct.modelNo,
+                profile: allProduct.profileNo,
+                productName: allProduct.productName,
+                productId: allProduct.id,
+              );
             })).then((val) => val ? _fetchList() : null);
           },
           child: Card(
@@ -223,7 +244,6 @@ class AllDimensionsListTile extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-
                   Flexible(
                     child: Container(
                         margin: EdgeInsets.only(left: 10, right: 10),
@@ -284,8 +304,7 @@ class AllDimensionsListTile extends StatelessWidget {
                   ),
                   IconButton(
                       onPressed: () {
-                        deleteItem(allProduct.id, context,
-                                  addProductBloc);
+                        deleteItem(allProduct.id, context, addProductBloc);
                       },
                       icon: Icon(
                         Icons.delete,

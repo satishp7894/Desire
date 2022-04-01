@@ -54,7 +54,7 @@ class _KycApprovependingState extends State<KycApprovepending> {
         backgroundColor: Colors.white,
         iconTheme: IconThemeData(color: Colors.black),
         title: Text(
-          "Customer List",
+          "KYC Pending",
           style: TextStyle(color: Colors.black),
           textAlign: TextAlign.center,
         ),

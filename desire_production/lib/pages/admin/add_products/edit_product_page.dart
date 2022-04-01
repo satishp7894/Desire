@@ -37,7 +37,7 @@ class _EditProductPageState extends State<EditProductPage> with Validator {
   final _formKey = GlobalKey<FormState>();
   AutovalidateMode _autoValidateMode = AutovalidateMode.disabled;
   TextEditingController pName, hsn, remarks;
-  List<String> filepath = [];
+  List<PlatformFile> filepath = [];
   List<String> model = ["Select your Model"];
   List<AllModel> modelList = [];
   String modelId;
@@ -54,6 +54,7 @@ class _EditProductPageState extends State<EditProductPage> with Validator {
   @override
   void initState() {
     super.initState();
+
     if (modelList.length == 0 && profileList.length == 0) {
       addProductsBloc.fetchAllModel();
       addProductsBloc.fetchAllProfile();
@@ -400,8 +401,8 @@ class _EditProductPageState extends State<EditProductPage> with Validator {
                       press: () {
                         KeyboardUtil.hideKeyboard(context);
                         (widget.productId != null && widget.productId != "")
-                            ? EditModel()
-                            : null;
+                            ? EditProduct()
+                            : AddProduct();
                       },
                     ),
                   ),
@@ -422,9 +423,7 @@ class _EditProductPageState extends State<EditProductPage> with Validator {
       List<PlatformFile> file = result.files;
 
       setState(() {
-        for (int i = 0; i <= file.length; i++) {
-          filepath.add(file[i].path);
-        }
+        filepath.addAll(file);
       });
       print("File count " + filepath.length.toString());
     } else {
@@ -432,7 +431,7 @@ class _EditProductPageState extends State<EditProductPage> with Validator {
     }
   }
 
-  EditModel() async {
+  EditProduct() async {
     if (_formKey.currentState.validate()) {
       _formKey.currentState.save();
       ProgressDialog pr = ProgressDialog(
@@ -465,9 +464,9 @@ class _EditProductPageState extends State<EditProductPage> with Validator {
         "new_product": newProduct ? "1" : "0",
         "best_seller": best ? "1" : "0",
       });
-      for (int i = 0; i <= filepath.length; i++) {
-        request.files
-            .add(await http.MultipartFile.fromPath('image[]', filepath[i]));
+      for (int i = 0; i < filepath.length; i++) {
+        request.files.add(
+            await http.MultipartFile.fromPath('image[]', filepath[i].path));
       }
 
       request.send().then((response) async {
@@ -496,10 +495,9 @@ class _EditProductPageState extends State<EditProductPage> with Validator {
     }
   }
 
-/*AddModel() async {
+  AddProduct() async {
     if (_formKey.currentState.validate()) {
       _formKey.currentState.save();
-
       ProgressDialog pr = ProgressDialog(
         context,
         type: ProgressDialogType.Normal,
@@ -509,47 +507,56 @@ class _EditProductPageState extends State<EditProductPage> with Validator {
         message: 'Please wait...',
         progressWidget: Center(
             child: CircularProgressIndicator(
-              color: kPrimaryColor,
-            )),
+          color: kPrimaryColor,
+        )),
       );
       pr.show();
-      var response;
-      response = await http.post(
+      var request = await http.MultipartRequest(
+          "post",
           Uri.parse(
-              "http://loccon.in/desiremoulding/api/AdminApiController/addModelNo"),
-          body: {
-            'secretkey': Connection.secretKey,
-            "model_no": modelNo.text,
-            "box_per_stick": perBox.text,
-            "product_category": categoryId.toString(),
-            "dimension": dimesionId,
-            "customer_price": cPrice.text,
-            "sales_price": sPrice.text,
-            "distributor_price": dPrice.text,
-            "future_model_no": future ? "1" : "0",
-            "new_model_no": newModel ? "1" : "0",
-            "best_seller": best ? "1" : "0",
-          });
-      var results = json.decode(response.body);
-      print('response == $results  ${response.body}');
-      pr.hide();
-      if (results['status'] == true) {
-        final snackBar = SnackBar(
-            content: Text(
-              response['message'],
-              textAlign: TextAlign.start,
-            ));
-        ScaffoldMessenger.of(context).showSnackBar(snackBar);
-        Navigator.pop(context, true);
-      } else {
-        Alerts.showAlertAndBack(context, "Error", results['message']);
+              "http://loccon.in/desiremoulding/api/AdminApiController/addProduct"));
+      request.fields.addAll({
+        'secretkey': Connection.secretKey,
+        "product_name": pName.text,
+        "profile_no_id": profileId,
+        "model_no_id": modelId,
+        "hsn_sac": hsn.text,
+        "remarks": remarks.text,
+        "accessories_product": access ? "1" : "0",
+        "future_product": future ? "1" : "0",
+        "new_product": newProduct ? "1" : "0",
+        "best_seller": best ? "1" : "0",
+      });
+      for (int i = 0; i < filepath.length; i++) {
+        request.files.add(
+            await http.MultipartFile.fromPath('image[]', filepath[i].path));
       }
+
+      request.send().then((response) async {
+        pr.hide();
+        if (response.statusCode == 200) {
+          var dimension = await response.stream.bytesToString();
+          var decode = json.decode(dimension);
+          var msg = decode["message"];
+          // Alerts.showAlertAndBack(context, "Success", msg);
+          final snackBar = SnackBar(
+              content: Text(
+            msg,
+            textAlign: TextAlign.start,
+          ));
+          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+          Navigator.pop(context, true);
+        } else {
+          Alerts.showAlertAndBack(
+              context, "Something Went Wrong", await response.reasonPhrase);
+        }
+      });
     } else {
       setState(() {
         _autoValidateMode = AutovalidateMode.always;
       });
     }
-  }*/
+  }
 }
 
 class AllDimensionsListTile extends StatelessWidget {

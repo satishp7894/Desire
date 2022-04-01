@@ -46,6 +46,7 @@ import 'package:desire_production/model/modelList_model.dart';
 import 'package:desire_production/model/modelNoWiseListModel.dart';
 import 'package:desire_production/model/model_listing_model.dart';
 import 'package:desire_production/model/orderDetailsByIdModel.dart';
+import 'package:desire_production/model/order_approve_pending_model.dart';
 import 'package:desire_production/model/order_model.dart';
 import 'package:desire_production/model/order_track_model.dart';
 import 'package:desire_production/model/pending_order_list_model.dart';
@@ -1395,5 +1396,19 @@ class ApiClient {
     allProfileModel = (AllProfileModel.fromJson(result));
 
     return allProfileModel;
+  }
+  Future<OrderApprovePendingModel> getAllorderPending() async {
+    var response = await http.post(
+        Uri.parse(
+            "http://loccon.in/desiremoulding/api/AdminApiController/orderApprovePending"),
+        body: {
+          'secretkey': Connection.secretKey,
+        });
+    var result = json.decode(response.body);
+
+    OrderApprovePendingModel orderApprovePendingModel;
+    orderApprovePendingModel = (OrderApprovePendingModel.fromJson(result));
+
+    return orderApprovePendingModel;
   }
 }

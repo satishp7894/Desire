@@ -22,6 +22,16 @@ class CreditPendingBloc {
       _creditController.sink.addError("something went wrong ${e.toString()}");
     }
   }
+  fetchOrderApproveList() async {
+    try {
+      final results = await _apiClient.getCreditPending();
+      _creditController.sink.add(results);
+      print("invoices bloc ${results.status}");
+    } on Exception catch (e) {
+      print(e.toString());
+      _creditController.sink.addError("something went wrong ${e.toString()}");
+    }
+  }
 
   dispose() {
     _creditController.close();

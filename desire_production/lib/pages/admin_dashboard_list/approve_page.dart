@@ -1,5 +1,6 @@
 import 'package:desire_production/pages/admin/approvalPending/credit_pending_page.dart';
 import 'package:desire_production/pages/admin/approvalPending/kyc_approve_pending.dart';
+import 'package:desire_production/pages/admin/approvalPending/order_approve_pending.dart';
 import 'package:desire_production/pages/admin/customer/add_customer_page.dart';
 import 'package:desire_production/pages/admin/customer/customer_list_page.dart';
 import 'package:desire_production/pages/admin/sales/customer_credit_page.dart';
@@ -62,7 +63,7 @@ class _ApprovePageState extends State<ApprovePage> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Image.asset("assets/images/add_user.png",height: 40,width:40,color: kPrimaryColor,),
+                    Icon(Icons.pending_actions, size: 40,color: kPrimaryColor,),
                     SizedBox(width: 10),
                     Column(
                       mainAxisAlignment: MainAxisAlignment.start,
@@ -110,7 +111,7 @@ class _ApprovePageState extends State<ApprovePage> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Image.asset("assets/images/add_user.png",height: 40,width:40,color: kPrimaryColor,),
+                    Image.asset("assets/images/user_credit.png",height: 40,width:40,color: kPrimaryColor,),
                     SizedBox(width: 10),
                     Column(
                       mainAxisAlignment: MainAxisAlignment.start,
@@ -123,6 +124,54 @@ class _ApprovePageState extends State<ApprovePage> {
                         ),),
                         SizedBox(height: 5),
                         Text("Customer credit pending",style: TextStyle(
+                          color:kSecondaryColor,
+                          fontSize: 14,
+                        ),),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+          SizedBox(height: 10,),
+          GestureDetector(
+            onTap: (){
+              Navigator.push(context, MaterialPageRoute(builder: (context){
+                return OrderApprovePending();
+              }));
+            },
+            child: Container(
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(5),
+                  color: Colors.white,
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey,
+                      blurRadius: 5.0,
+                      spreadRadius: 1,
+                    )
+                  ]
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(5.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Icon(Icons.approval, size: 40,color: kPrimaryColor,),
+                    SizedBox(width: 10),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text("Order Approve Pending",style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold
+                        ),),
+                        SizedBox(height: 5),
+                        Text("Customer Order pending",style: TextStyle(
                           color:kSecondaryColor,
                           fontSize: 14,
                         ),),

@@ -36,7 +36,7 @@ class AllProduct {
   String productName;
   String profileNo;
   String modelNo;
-  Null dimensionsName;
+  String dimensionsName;
   String size;
   List<String> image;
 
