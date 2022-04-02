@@ -11,7 +11,7 @@ class ProductFromModelNoModel {
     status = json['status'];
     message = json['message'];
     imagepath = json['imagepath'];
-    if (json['data'] != null) {
+    if (json['data'] != "null") {
       data = <Data>[];
       json['data'].forEach((v) {
         data.add(new Data.fromJson(v));

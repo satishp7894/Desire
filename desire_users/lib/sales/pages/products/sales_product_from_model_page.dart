@@ -1,7 +1,5 @@
 import 'package:desire_users/bloc/productFromModelBloc.dart';
-import 'package:desire_users/models/allModel.dart';
 import 'package:desire_users/models/productFromModelNoModel.dart';
-import 'package:desire_users/pages/product/productFromModelDetailPage.dart';
 import 'package:desire_users/sales/pages/products/salesProductFromModelDetailPage.dart';
 import 'package:desire_users/utils/constants.dart';
 import 'package:flutter/material.dart';
@@ -72,6 +70,11 @@ class _ProductFromModelPageState extends State<SalesProductFromModelPage> {
             return Container(height: 300,
               alignment: Alignment.center,
               child: Text("Error Loading Data",),);
+          }
+          if (s.data.data == null) {
+            return Container(height: 300,
+              alignment: Alignment.center,
+              child: Text(s.data.message),);
           }
           else {
           asyncSnapshot = s;
