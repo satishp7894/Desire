@@ -244,6 +244,12 @@ class AllDimensionsListTile extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
+                 /* FadeInImage.assetNetwork(
+                    placeholder: "assets/images/dimensions.png",
+                    image: imgPath + allProduct.image,
+                    width: 50,
+                    height: 50,
+                  ),*/
                   Flexible(
                     child: Container(
                         margin: EdgeInsets.only(left: 10, right: 10),

@@ -182,7 +182,7 @@ class _AddUserPageState extends State<AddUserPage> with Validator {
               ),
             );
           }
-          if (s.data.toString().isEmpty) {
+          if (s.data.stateData.isEmpty) {
             print("as3 empty");
             return Container(
               height: 300,

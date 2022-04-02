@@ -539,6 +539,9 @@ class _EditProductPageState extends State<EditProductPage> with Validator {
           var decode = json.decode(dimension);
           var msg = decode["message"];
           // Alerts.showAlertAndBack(context, "Success", msg);
+          setState(() {
+            filepath = [];
+          });
           final snackBar = SnackBar(
               content: Text(
             msg,

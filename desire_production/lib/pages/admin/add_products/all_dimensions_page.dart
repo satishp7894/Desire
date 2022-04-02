@@ -108,11 +108,11 @@ class _allDimensionsPageState extends State<AllDimensionsPage> {
             allDimesion = asyncSnapshot.data.data;
             return SingleChildScrollView(
               child: Container(
-                height: MediaQuery.of(context).size.height*0.83,
+                height: MediaQuery.of(context).size.height * 0.83,
                 child: searchView.text.length == 0
                     ? ListView.builder(
-                    shrinkWrap: true,
-                  physics: ClampingScrollPhysics(),
+                        shrinkWrap: true,
+                        physics: ClampingScrollPhysics(),
                         itemCount: allDimesion.length,
                         itemBuilder: (BuildContext context, int index) {
                           return AllDimensionsListTile(
@@ -135,6 +135,7 @@ class _allDimensionsPageState extends State<AllDimensionsPage> {
                             itemBuilder: (BuildContext context, int index) {
                               return AllDimensionsListTile(
                                 addProductBloc: addProductsBloc,
+                                imgPath: asyncSnapshot.data.imagePath,
                                 allDimension: _searchResult[index],
                               );
                             }),
@@ -183,8 +184,9 @@ class _allDimensionsPageState extends State<AllDimensionsPage> {
     }
 
     allDimesion.forEach((exp) {
-      if (exp.size.toLowerCase().contains(text.toLowerCase()))
+      if (exp.size.contains(text)) {
         _searchResult.add(exp);
+      }
     });
 
     //print("search objects ${_searchResult.first}");

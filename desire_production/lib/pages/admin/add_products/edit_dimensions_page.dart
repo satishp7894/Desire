@@ -167,7 +167,8 @@ class _EditDimensionsPageState extends State<EditDimensionsPage>
                           image: widget.image,
                           width: 100,
                           height: 100,
-                        ): Container (),
+                        )
+                      : Container(),
                 )
               : Image.file(
                   File(filepath),
@@ -250,9 +251,9 @@ class _EditDimensionsPageState extends State<EditDimensionsPage>
         'dimensions_height': height.text,
         'dimensions_width': width.text
       });
-      if(filepath != "") {
+      if (filepath != "") {
         request.files.add(await http.MultipartFile.fromPath('image', filepath));
-      }else{
+      } else {
         request.files.add(await http.MultipartFile.fromPath('image', ''));
       }
 
@@ -263,11 +264,15 @@ class _EditDimensionsPageState extends State<EditDimensionsPage>
           var decode = json.decode(dimension);
           var msg = decode["message"];
           // Alerts.showAlertAndBack(context, "Success", msg);
+          setState(() {
+            fileName = '';
+            filepath = '';
+          });
           final snackBar = SnackBar(
               content: Text(
-                msg,
-                textAlign: TextAlign.start,
-              ));
+            msg,
+            textAlign: TextAlign.start,
+          ));
           ScaffoldMessenger.of(context).showSnackBar(snackBar);
           Navigator.pop(context, true);
         } else {
@@ -316,11 +321,15 @@ class _EditDimensionsPageState extends State<EditDimensionsPage>
           var dimension = await response.stream.bytesToString();
           var decode = json.decode(dimension);
           var msg = decode["message"];
+          setState(() {
+            fileName = '';
+            filepath = '';
+          });
           final snackBar = SnackBar(
               content: Text(
-                msg,
-                textAlign: TextAlign.start,
-              ));
+            msg,
+            textAlign: TextAlign.start,
+          ));
           ScaffoldMessenger.of(context).showSnackBar(snackBar);
           Navigator.pop(context, true);
         } else {
