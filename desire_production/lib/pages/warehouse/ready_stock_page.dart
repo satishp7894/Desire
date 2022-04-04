@@ -50,7 +50,25 @@ class _ReadyStockListPageListPageState extends State<ReadyStockListPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return WillPopScope(
+        onWillPop: () {
+          return widget.page == "warHouse"
+              ? Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(
+                  builder: (builder) => DashboardPageWarehouse(
+                    page: widget.page,
+                  )),
+                  (route) => false)
+              : Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+                builder: (builder) => DashboardPageWarehouse(
+                  page: widget.page,
+                )),
+          );
+        },
+        child:   Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
         iconTheme: IconThemeData(color: Colors.black),
@@ -106,7 +124,7 @@ class _ReadyStockListPageListPageState extends State<ReadyStockListPage> {
         ),
       ),
       body: _body(),
-    );
+    ));
   }
 
   Widget _body() {

@@ -28,7 +28,7 @@ class ReadyToDispatchListPage extends StatefulWidget {
 class _ReadyToDispatchListPageState extends State<ReadyToDispatchListPage> {
   final ReadyToDispatchBloc readyToDispatchBloc = ReadyToDispatchBloc();
 
-  AsyncSnapshot<ReadyToDispatchListModel> as;
+  List<DataReady> as;
 
   TextEditingController searchView;
 
@@ -179,6 +179,7 @@ class _ReadyToDispatchListPageState extends State<ReadyToDispatchListPage> {
                     );
                   } else {
                     _list = s.data.data;
+                    as = s.data.data;
                     _list == null
                         ? print("0")
                         : print("Length" + _list.length.toString());
@@ -932,7 +933,7 @@ class _ReadyToDispatchListPageState extends State<ReadyToDispatchListPage> {
           pw.Divider(color: PdfColor.fromHex('#4684C2'), thickness: 3),
           pw.ListView.builder(
               //padding: pw.EdgeInsets.only(bottom: 10),
-              itemCount: as.data.data.length,
+              itemCount: as.length,
               itemBuilder: (c, i) {
                 if (i.isEven) {
                   return pw.Container(
@@ -955,7 +956,7 @@ class _ReadyToDispatchListPageState extends State<ReadyToDispatchListPage> {
                           ),
                           pw.Container(
                             child: pw.Text(
-                              '${as.data.data[i].customerId}',
+                              '${as[i].customerId}',
                               style: pw.TextStyle(
                                   fontWeight: pw.FontWeight.bold, fontSize: 15),
                               textAlign: pw.TextAlign.center,
@@ -967,7 +968,7 @@ class _ReadyToDispatchListPageState extends State<ReadyToDispatchListPage> {
                           ),
                           pw.Container(
                             child: pw.Text(
-                              '${as.data.data[i].orderNumber}',
+                              '${as[i].orderNumber}',
                               style: pw.TextStyle(
                                   fontWeight: pw.FontWeight.bold, fontSize: 15),
                               textAlign: pw.TextAlign.center,
@@ -997,7 +998,7 @@ class _ReadyToDispatchListPageState extends State<ReadyToDispatchListPage> {
                       ),
                       pw.Container(
                         child: pw.Text(
-                          '${as.data.data[i].customerId}',
+                          '${as[i].customerId}',
                           style: pw.TextStyle(
                               fontWeight: pw.FontWeight.bold, fontSize: 15),
                           textAlign: pw.TextAlign.center,
@@ -1009,7 +1010,7 @@ class _ReadyToDispatchListPageState extends State<ReadyToDispatchListPage> {
                       ),
                       pw.Container(
                         child: pw.Text(
-                          '${as.data.data[i].orderNumber}',
+                          '${as[i].orderNumber}',
                           style: pw.TextStyle(
                               fontWeight: pw.FontWeight.bold, fontSize: 15),
                           textAlign: pw.TextAlign.center,
@@ -1118,7 +1119,7 @@ class _ReadyToDispatchListPageState extends State<ReadyToDispatchListPage> {
           pw.Divider(color: PdfColor.fromHex('#4684C2'), thickness: 3),
           pw.ListView.builder(
               //padding: pw.EdgeInsets.only(bottom: 10),
-              itemCount: as.data.data.length,
+              itemCount: as.length,
               itemBuilder: (c, i) {
                 if (i.isEven) {
                   return pw.Container(
@@ -1141,7 +1142,7 @@ class _ReadyToDispatchListPageState extends State<ReadyToDispatchListPage> {
                           ),
                           pw.Container(
                             child: pw.Text(
-                              '${as.data.data[i].customerId}',
+                              '${as[i].customerId}',
                               style: pw.TextStyle(
                                   fontWeight: pw.FontWeight.bold, fontSize: 15),
                               textAlign: pw.TextAlign.center,
@@ -1153,7 +1154,7 @@ class _ReadyToDispatchListPageState extends State<ReadyToDispatchListPage> {
                           ),
                           pw.Container(
                             child: pw.Text(
-                              '${as.data.data[i].orderNumber}',
+                              '${as[i].orderNumber}',
                               style: pw.TextStyle(
                                   fontWeight: pw.FontWeight.bold, fontSize: 15),
                               textAlign: pw.TextAlign.center,
@@ -1183,7 +1184,7 @@ class _ReadyToDispatchListPageState extends State<ReadyToDispatchListPage> {
                       ),
                       pw.Container(
                         child: pw.Text(
-                          '${as.data.data[i].customerId}',
+                          '${as[i].customerId}',
                           style: pw.TextStyle(
                               fontWeight: pw.FontWeight.bold, fontSize: 15),
                           textAlign: pw.TextAlign.center,
@@ -1195,7 +1196,7 @@ class _ReadyToDispatchListPageState extends State<ReadyToDispatchListPage> {
                       ),
                       pw.Container(
                         child: pw.Text(
-                          '${as.data.data[i].orderNumber}',
+                          '${as[i].orderNumber}',
                           style: pw.TextStyle(
                               fontWeight: pw.FontWeight.bold, fontSize: 15),
                           textAlign: pw.TextAlign.center,

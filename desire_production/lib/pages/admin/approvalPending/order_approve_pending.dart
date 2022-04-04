@@ -60,7 +60,7 @@ class _OrderApprovePendingState extends State<OrderApprovePending> {
         backgroundColor: Colors.white,
         iconTheme: IconThemeData(color: Colors.black),
         title: Text(
-          "Credit Pending List",
+          "Order approve Pending",
           style: TextStyle(color: Colors.black),
           textAlign: TextAlign.center,
         ),

@@ -242,20 +242,20 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
           ),
           GestureDetector(
             onTap: () {
-              if (Platform.isIOS) {
+              /*if (Platform.isIOS) {*/
                 Navigator.push(context, MaterialPageRoute(builder: (context) {
                   return DashboardPageProduction(
                     page: 'admin',
                   );
                 }));
-              } else {
+            /*  } else {
                 Navigator.pushReplacement(context,
                     MaterialPageRoute(builder: (context) {
                   return DashboardPageProduction(
                     page: 'admin',
                   );
                 }));
-              }
+              }*/
             },
             child: Container(
               decoration: BoxDecoration(

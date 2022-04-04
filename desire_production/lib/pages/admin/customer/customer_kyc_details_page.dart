@@ -108,16 +108,7 @@ class _CustomerKYCDetailsPageState extends State<CustomerKYCDetailsPage> {
                   ),
                 );
               }
-              if (s.data.data == null && s.data.data.length == 0) {
-                print("as3 empty");
-                return Container(
-                  height: 300,
-                  alignment: Alignment.center,
-                  child: Text(
-                    "No Data Found",
-                  ),
-                );
-              }
+
               if (s.data.toString().isEmpty) {
                 print("as3 empty");
                 return Container(
@@ -128,7 +119,16 @@ class _CustomerKYCDetailsPageState extends State<CustomerKYCDetailsPage> {
                   ),
                 );
               }
-
+              if (s.data.data == null) {
+                print("as3 empty");
+                return Container(
+                  height: 300,
+                  alignment: Alignment.center,
+                  child: Text(
+                    "No Data Found",
+                  ),
+                );
+              }
               return ListView.builder(
                   shrinkWrap: true,
                   padding: EdgeInsets.all(10),

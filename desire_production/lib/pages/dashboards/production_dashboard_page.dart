@@ -59,10 +59,12 @@ class _DashboardPageProductionState extends State<DashboardPageProduction> {
       onWillPop: () {
         return widget.page == "production"
             ? Alerts.showAlertExit(context, "Exit", "Are you sure?")
-            : Navigator.pushReplacement(context,
-                MaterialPageRoute(builder: (context) {
-                return AdminDashboardPage();
-              }));
+            : widget.page == "daily"
+                ? Alerts.showAlertExit(context, "Exit", "Are you sure?")
+                : Navigator.pushReplacement(context,
+                    MaterialPageRoute(builder: (context) {
+                    return AdminDashboardPage();
+                  }));
       },
       child: Scaffold(
         appBar: AppBar(
@@ -247,14 +249,15 @@ class _DashboardPageProductionState extends State<DashboardPageProduction> {
               ),
               SizedBox(
                 height: 20,
-              ),GestureDetector(
+              ),
+              GestureDetector(
                 onTap: () {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
                           builder: (b) => PendingOrdersPage(
-                            page: "daily",
-                          )));
+                                page: "daily",
+                              )));
                 },
                 child: Container(
                   decoration: BoxDecoration(
@@ -263,7 +266,7 @@ class _DashboardPageProductionState extends State<DashboardPageProduction> {
                         color: Colors.grey,
                         blurRadius: 5, // has the effect of softening the shadow
                         spreadRadius:
-                        0, // has the effect of extending the shadow
+                            0, // has the effect of extending the shadow
                       ),
                     ],
                     color: Colors.white,
@@ -312,7 +315,8 @@ class _DashboardPageProductionState extends State<DashboardPageProduction> {
                     ),
                   ),
                 ),
-              ), SizedBox(
+              ),
+              SizedBox(
                 height: 20,
               ),
               GestureDetector(
