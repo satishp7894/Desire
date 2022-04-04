@@ -80,6 +80,7 @@ class _BrochurePageState extends State<BrochurePage> {
       appBar: AppBar(
         backgroundColor: kWhiteColor,
         elevation: 0,
+        iconTheme: IconThemeData(color: kBlackColor),
         title: Text(
           "Create Brochure",
           style: TextStyle(color: Colors.black),
@@ -411,13 +412,11 @@ class _BrochurePageState extends State<BrochurePage> {
                                                               "object remember ${check[i]}");
                                                           if (check[i] ==
                                                               true) {
-                                                            send.add(s.data
-                                                                .data[i]);
+                                                            send.add(
+                                                                s.data.data[i]);
                                                           } else {
-                                                            send.remove(s
-                                                                .data
-                                                                .data[i]
-                                                                .id);
+                                                            send.remove(s.data
+                                                                .data[i].id);
                                                           }
                                                         },
                                                       ),
@@ -696,7 +695,8 @@ class _BrochurePageState extends State<BrochurePage> {
     }
 
     _order.forEach((exp) {
-      if (exp.productName.toLowerCase().contains(text.toLowerCase())) _searchResult.add(exp);
+      if (exp.productName.toLowerCase().contains(text.toLowerCase()))
+        _searchResult.add(exp);
     });
     //print("search objects ${_searchResult.first}");
     print("search result length ${_searchResult.length}");
@@ -790,8 +790,7 @@ class _BrochurePageState extends State<BrochurePage> {
                             alignment: pw.Alignment.centerLeft,
                             height: 100,
                             width: 200),
-                        pw.Text(
-                            "Product Name: ${as.data.data[i].productName}",
+                        pw.Text("Product Name: ${as.data.data[i].productName}",
                             textAlign: pw.TextAlign.left,
                             style: pw.TextStyle(
                               fontSize: 15,
