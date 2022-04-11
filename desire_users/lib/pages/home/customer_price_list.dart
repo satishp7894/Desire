@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 
 class CustomerPriceList extends StatefulWidget {
   final customerId;
+
   const CustomerPriceList({Key key, this.customerId}) : super(key: key);
 
   @override
@@ -15,7 +16,6 @@ class CustomerPriceList extends StatefulWidget {
 }
 
 class _CustomerPriceListState extends State<CustomerPriceList> {
-
   final ModelListBloc modelListBloc = ModelListBloc();
   AsyncSnapshot<ModelListModel> asyncSnapshot;
 
@@ -26,14 +26,16 @@ class _CustomerPriceListState extends State<CustomerPriceList> {
     checkConnectivity();
     modelListBloc.fetchModelList(widget.customerId);
   }
-  checkConnectivity() async{
+
+  checkConnectivity() async {
     bool result = await DataConnectionChecker().hasConnection;
-    if(result == true) {
+    if (result == true) {
       print('YAY! Free cute dog pics!');
     } else {
       print('No internet :( Reason:');
       print(DataConnectionChecker().lastTryResults);
-      Alerts.showAlertAndBack(context, "No Internet Connection", "Please check your internet");
+      Alerts.showAlertAndBack(
+          context, "No Internet Connection", "Please check your internet");
     }
   }
 
@@ -53,115 +55,147 @@ class _CustomerPriceListState extends State<CustomerPriceList> {
         iconTheme: IconThemeData(color: kBlackColor),
         centerTitle: true,
         title: Text("Model Price List"),
-        titleTextStyle: TextStyle(color: kBlackColor,fontSize: 18.0),
+        titleTextStyle: TextStyle(color: kBlackColor, fontSize: 18.0),
       ),
       body: _body(),
     );
   }
 
-  Widget _body(){
+  Widget _body() {
     return StreamBuilder<ModelListModel>(
         stream: modelListBloc.modelListStream,
-        builder: (c,s){
-      if (s.connectionState != ConnectionState.active) {
-        print("all connection");
-        return Container(height: 300,
-            alignment: Alignment.center,
-            child: Center(
-              heightFactor: 50, child: CircularProgressIndicator(
-              color: kPrimaryColor,
-            ),));
-      }
-      else if (s.hasError) {
-        print("as3 error");
-        print(s.error);
-        return Container(height: 300,
-          alignment: Alignment.center,
-          child: SelectableText("Error Loading Data ${s.error}",),);
-      }
-     else  if (s.data.toString().isEmpty) {
-        print("as3 empty");
-        return Container(height: 300,
-          alignment: Alignment.center,
-          child: Text("No Data Found",),);
-      }
-     else {
-       asyncSnapshot = s;
-       return SingleChildScrollView(
-         child: Column(
-           mainAxisAlignment: MainAxisAlignment.start,
-           crossAxisAlignment: CrossAxisAlignment.start,
-           children: [
-             Padding(
-               padding: const EdgeInsets.only(left: 10.0,right: 10,top: 10),
-               child: Row(
-                 mainAxisAlignment: MainAxisAlignment.center,
-                 crossAxisAlignment: CrossAxisAlignment.center,
-                 children: [
-                   Expanded(
-                     flex: 1,
-                     child: Container(
-                         decoration: BoxDecoration(
-                             borderRadius: BorderRadius.zero,
-                             border: Border.all(color: kBlackColor,width: 0.5)
-                         ),
-                         child: Padding(
-                           padding: const EdgeInsets.all(10.0),
-                           child: Text("Model No",textAlign: TextAlign.center,style: TextStyle(color: kPrimaryColor,fontSize: 14,fontWeight: FontWeight.bold),),
-                         )),
-                   ),
-                   Expanded(
-                     flex: 1,
-                     child: Container(
-                         decoration: BoxDecoration(
-                             borderRadius: BorderRadius.zero,
-                             border: Border.all(color: kBlackColor,width: 0.5)
-                         ),
-                         child: Padding(
-                           padding: const EdgeInsets.all(10.0),
-                           child: Text("Customer Price",textAlign: TextAlign.center,style: TextStyle(color: kPrimaryColor,fontSize: 14,fontWeight: FontWeight.bold),),
-                         )),
-                   ),
-                   Expanded(
-                     flex: 1,
-                     child: Container(
-                         decoration: BoxDecoration(
-                             borderRadius: BorderRadius.zero,
-                             border: Border.all(color: kBlackColor,width: 0.5)
-                         ),
-                         child: Padding(
-                           padding: const EdgeInsets.all(10.0),
-                           child: Text("View Products",textAlign: TextAlign.center,style: TextStyle(color: kPrimaryColor,fontSize: 14,fontWeight: FontWeight.bold),),
-                         )),
-                   ),
-                 ],
-               ),
-             ),
-             ...List.generate(asyncSnapshot.data.modelList.length, (index) => ModelListTile(
-               modelList: asyncSnapshot.data.modelList[index],
-               customerId: widget.customerId,
-             ))
-           ],
-         ),
-       );
-      }
-
-    });
+        builder: (c, s) {
+          if (s.connectionState != ConnectionState.active) {
+            print("all connection");
+            return Container(
+                height: 300,
+                alignment: Alignment.center,
+                child: Center(
+                  heightFactor: 50,
+                  child: CircularProgressIndicator(
+                    color: kPrimaryColor,
+                  ),
+                ));
+          } else if (s.hasError) {
+            print("as3 error");
+            print(s.error);
+            return Container(
+              height: 300,
+              alignment: Alignment.center,
+              child: SelectableText(
+                "Error Loading Data ${s.error}",
+              ),
+            );
+          } else if (s.data.toString().isEmpty) {
+            print("as3 empty");
+            return Container(
+              height: 300,
+              alignment: Alignment.center,
+              child: Text(
+                "No Data Found",
+              ),
+            );
+          } else {
+            asyncSnapshot = s;
+            return SingleChildScrollView(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding:
+                        const EdgeInsets.only(left: 10.0, right: 10, top: 10),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Expanded(
+                          flex: 1,
+                          child: Container(
+                            width: 10,
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.zero,
+                                  border: Border.all(
+                                      color: kBlackColor, width: 0.5)),
+                              child: Padding(
+                                padding: const EdgeInsets.all(10.0),
+                                child: Text(
+                                  "Model No",
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      color: kPrimaryColor,
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              )),
+                        ),
+                        Expanded(
+                          flex: 1,
+                          child: Container(
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.zero,
+                                  border: Border.all(
+                                      color: kBlackColor, width: 0.5)),
+                              child: Padding(
+                                padding: const EdgeInsets.all(10.0),
+                                child: Text(
+                                  "Customer Price",
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      color: kPrimaryColor,
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              )),
+                        ),
+                        Expanded(
+                          flex: 1,
+                          child: Container(
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.zero,
+                                  border: Border.all(
+                                      color: kBlackColor, width: 0.5)),
+                              child: Padding(
+                                padding: const EdgeInsets.all(10.0),
+                                child: Text(
+                                  "View Products",
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      color: kPrimaryColor,
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              )),
+                        ),
+                      ],
+                    ),
+                  ),
+                  ...List.generate(
+                      asyncSnapshot.data.modelList.length,
+                      (index) => ModelListTile(
+                            modelList: asyncSnapshot.data.modelList[index],
+                            customerId: widget.customerId,
+                          ))
+                ],
+              ),
+            );
+          }
+        });
   }
 }
 
 class ModelListTile extends StatelessWidget {
+  final ModelList modelList;
 
- final  ModelList modelList;
-
-  const ModelListTile({Key key,this.modelList, this.customerId}) : super(key: key);
+  const ModelListTile({Key key, this.modelList, this.customerId})
+      : super(key: key);
 
   final customerId;
 
   @override
   Widget build(BuildContext context) {
-    return    Padding(
-      padding: const EdgeInsets.only(left: 10.0,right: 10),
+    return Padding(
+      padding: const EdgeInsets.only(left: 10.0, right: 10),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -171,11 +205,17 @@ class ModelListTile extends StatelessWidget {
             child: Container(
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.zero,
-                    border: Border.all(color: kBlackColor,width: 0.5)
-                ),
+                    border: Border.all(color: kBlackColor, width: 0.5)),
                 child: Padding(
                   padding: const EdgeInsets.all(10.0),
-                  child: Text(modelList.modelNo,textAlign: TextAlign.center,style: TextStyle(color: kBlackColor,fontSize: 14,fontWeight: FontWeight.bold),),
+                  child: Text(
+                    modelList.modelNo,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        color: kBlackColor,
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold),
+                  ),
                 )),
           ),
           Expanded(
@@ -183,11 +223,17 @@ class ModelListTile extends StatelessWidget {
             child: Container(
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.zero,
-                    border: Border.all(color: kBlackColor,width: 0.5)
-                ),
+                    border: Border.all(color: kBlackColor, width: 0.5)),
                 child: Padding(
                   padding: const EdgeInsets.all(10.0),
-                  child: Text(modelList.customerPrice,textAlign: TextAlign.center,style: TextStyle(color: kBlackColor,fontSize: 14,fontWeight: FontWeight.bold),),
+                  child: Text(
+                    modelList.customerPrice,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        color: kBlackColor,
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold),
+                  ),
                 )),
           ),
           Expanded(
@@ -195,23 +241,40 @@ class ModelListTile extends StatelessWidget {
             child: Container(
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.zero,
-                    border: Border.all(color: kBlackColor,width: 0.5)
-                ),
+                    border: Border.all(color: kBlackColor, width: 0.5)),
                 child: Padding(
-                  padding: const EdgeInsets.all(10.0),
+                  padding: const EdgeInsets.all(5.0),
                   child: GestureDetector(
-                    onTap: (){
-                      Navigator.push(context, MaterialPageRoute(builder: (context){
-                        return ProductFromModelPage(customerId: customerId,modelNoId: modelList.modelNoId,modelNo: modelList.modelNo  ,);
+                    onTap: () {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) {
+                        return ProductFromModelPage(
+                          customerId: customerId,
+                          modelNoId: modelList.modelNoId,
+                          modelNo: modelList.modelNo,
+                        );
                       }));
                     },
                     child: Container(
+                        padding: EdgeInsets.all(5),
                         decoration: BoxDecoration(
-                          color: kPrimaryColor,
-                          borderRadius: BorderRadius.circular(20)
-                        ),
-                        child: Text(
-                          "View Products",textAlign: TextAlign.center,style: TextStyle(color: kWhiteColor,fontSize: 14,fontWeight: FontWeight.bold),)),
+                            color: kPrimaryColor,
+                            borderRadius: BorderRadius.circular(20)),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Text(
+                              "View",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  color: kWhiteColor,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                            Icon(Icons.arrow_forward, color: kWhiteColor,size: 15,)
+                          ],
+                        )),
                   ),
                 )),
           ),
@@ -220,4 +283,3 @@ class ModelListTile extends StatelessWidget {
     );
   }
 }
-

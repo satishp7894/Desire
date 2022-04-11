@@ -205,10 +205,11 @@ class ModelListTile extends StatelessWidget {
                     borderRadius: BorderRadius.zero,
                     border: Border.all(color: kBlackColor, width: 0.5)),
                 child: Padding(
-                  padding: const EdgeInsets.all(10.0),
+                  padding: const EdgeInsets.all(5.0),
                   child: GestureDetector(
                     onTap: () {
-                      Navigator.push(context, MaterialPageRoute(builder: (context){
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) {
                         return ProductFromModelPage(
                             customerId: customerId,
                             modelNo: todaysProduction.modelNo,
@@ -216,20 +217,32 @@ class ModelListTile extends StatelessWidget {
                             customerName: customerName,
                             type: type);
                       }));
-
                     },
                     child: Container(
-                        decoration: BoxDecoration(
-                            color: kPrimaryColor,
-                            borderRadius: BorderRadius.circular(20)),
-                        child: Text(
-                          "View Products",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                              color: kWhiteColor,
-                              fontSize: 14,
-                              fontWeight: FontWeight.bold),
-                        )),
+                      padding: EdgeInsets.all(5),
+                      decoration: BoxDecoration(
+                          color: kPrimaryColor,
+                          borderRadius: BorderRadius.circular(20)),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Text(
+                            "View",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                color: kWhiteColor,
+                                fontSize: 14,
+                                fontWeight: FontWeight.bold),
+                          ),
+                          Icon(
+                            Icons.arrow_forward,
+                            color: kWhiteColor,
+                            size: 15,
+                          )
+                        ],
+                      ),
+                    ),
                   ),
                 )),
           ),

@@ -65,7 +65,7 @@ class HomePage extends StatefulWidget {
   _HomePageState createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage>  {
+class _HomePageState extends State<HomePage> {
   final ProductBloc productBloc = ProductBloc();
   final AllModelBloc allModelBloc = AllModelBloc();
   final CategoryBloc categoryBloc = CategoryBloc();
@@ -82,7 +82,6 @@ class _HomePageState extends State<HomePage>  {
 
   int cartItemCount = 0;
 
-  
   getCartCount() async {
     var response = await http.post(Uri.parse(Connection.cartDetails), body: {
       "secretkey": Connection.secretKey,
@@ -260,7 +259,7 @@ class _HomePageState extends State<HomePage>  {
   }
 
   _getRequests() async {
-   getCartCount();
+    getCartCount();
   }
 
   @override
@@ -312,14 +311,15 @@ class _HomePageState extends State<HomePage>  {
                 child: cartItemCounter(
                     "assets/icons/Cart Icon.svg", cartItemCount, () async {
                   Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (builder) => CustCartPage(
-                                customerId: widget.customerId,
-                                customerName: widget.customerName,
-                                customerEmail: widget.customerEmail,
-                                customerMobile: widget.mobileNo,
-                              ))).then((val) => val == null ? _getRequests() : null);
+                          context,
+                          MaterialPageRoute(
+                              builder: (builder) => CustCartPage(
+                                    customerId: widget.customerId,
+                                    customerName: widget.customerName,
+                                    customerEmail: widget.customerEmail,
+                                    customerMobile: widget.mobileNo,
+                                  )))
+                      .then((val) => val == null ? _getRequests() : null);
                 }),
               ),
             ],
@@ -346,16 +346,32 @@ class _HomePageState extends State<HomePage>  {
               children: [
                 UserAccountsDrawerHeader(
                   decoration: BoxDecoration(color: kPrimaryColor),
-                  currentAccountPicture: Image.asset(
-                    "assets/images/logo_new.png",
-                    height: 20,
+                  currentAccountPicture: Container(
+                    margin: EdgeInsets.only(top: 8, bottom: 8),
+                    child: Image.asset(
+                      "assets/images/logo_new.png",
+                      height: 10,
+                    ),
                   ),
-                  accountName: Text(
-                    "Name: " + widget.customerName,
-                    style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.bold,
-                        color: kWhiteColor),
+                  accountName: Row(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Text(
+                        "Name: " + widget.customerName,
+                        style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                            color: kWhiteColor),
+                      ),
+                      Container(
+                        margin: EdgeInsets.only(bottom: 8, left: 5),
+                        child: Icon(
+                          Icons.verified,
+                          color: kWhiteColor,
+                          size: 15,
+                        ),
+                      )
+                    ],
                   ),
                   accountEmail: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
@@ -382,11 +398,12 @@ class _HomePageState extends State<HomePage>  {
                       tooltip: "Notifications",
                       onPressed: () {
                         Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (builder) => CustomerNotifications(
-                                      customerId: widget.customerId,
-                                    ))).then((val) => val == null ? _getRequests() : null);
+                                context,
+                                MaterialPageRoute(
+                                    builder: (builder) => CustomerNotifications(
+                                          customerId: widget.customerId,
+                                        )))
+                            .then((val) => val == null ? _getRequests() : null);
                       },
                       icon: Icon(
                         Icons.notifications,
@@ -446,12 +463,13 @@ class _HomePageState extends State<HomePage>  {
                 child: GestureDetector(
                   onTap: () {
                     Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (builder) => UserDetailPage(
-                                  status: true,
-                                  orderCount: 0,
-                                ))).then((val) => val == null ? _getRequests() : null);
+                            context,
+                            MaterialPageRoute(
+                                builder: (builder) => UserDetailPage(
+                                      status: true,
+                                      orderCount: 0,
+                                    )))
+                        .then((val) => val == null ? _getRequests() : null);
                   },
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -488,10 +506,11 @@ class _HomePageState extends State<HomePage>  {
                 child: GestureDetector(
                   onTap: () {
                     Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (builder) => CustomerPriceList(
-                                customerId: widget.customerId))).then((val) => val == null ? _getRequests() : null);
+                            context,
+                            MaterialPageRoute(
+                                builder: (builder) => CustomerPriceList(
+                                    customerId: widget.customerId)))
+                        .then((val) => val == null ? _getRequests() : null);
                   },
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -528,11 +547,12 @@ class _HomePageState extends State<HomePage>  {
                 child: GestureDetector(
                   onTap: () {
                     Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (builder) => ReadyStockListView(
-                                  customerId: widget.customerId,
-                                ))).then((val) => val == null ? _getRequests() : null);
+                            context,
+                            MaterialPageRoute(
+                                builder: (builder) => ReadyStockListView(
+                                      customerId: widget.customerId,
+                                    )))
+                        .then((val) => val == null ? _getRequests() : null);
                   },
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -569,12 +589,13 @@ class _HomePageState extends State<HomePage>  {
                 child: GestureDetector(
                   onTap: () {
                     Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (builder) => OrderHistoryPage(
-                                customerId: widget.customerId,
-                                status: true,
-                                orderCount: 0))).then((val) => val == null ? _getRequests() : null);
+                            context,
+                            MaterialPageRoute(
+                                builder: (builder) => OrderHistoryPage(
+                                    customerId: widget.customerId,
+                                    status: true,
+                                    orderCount: 0)))
+                        .then((val) => val == null ? _getRequests() : null);
                   },
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -611,10 +632,11 @@ class _HomePageState extends State<HomePage>  {
                 child: GestureDetector(
                   onTap: () {
                     Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (builder) => CompleteOrderList(
-                                customerId: widget.customerId))).then((val) => val == null ? _getRequests() : null);
+                            context,
+                            MaterialPageRoute(
+                                builder: (builder) => CompleteOrderList(
+                                    customerId: widget.customerId)))
+                        .then((val) => val == null ? _getRequests() : null);
                   },
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -651,10 +673,11 @@ class _HomePageState extends State<HomePage>  {
                 child: GestureDetector(
                   onTap: () {
                     Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (builder) => PendingOrderList(
-                                customerId: widget.customerId))).then((val) => val == null ? _getRequests() : null);
+                            context,
+                            MaterialPageRoute(
+                                builder: (builder) => PendingOrderList(
+                                    customerId: widget.customerId)))
+                        .then((val) => val == null ? _getRequests() : null);
                   },
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -691,13 +714,14 @@ class _HomePageState extends State<HomePage>  {
                 child: GestureDetector(
                   onTap: () {
                     Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (builder) => InvoiceListPage(
-                                  customerId: widget.customerId,
-                                  customerName: widget.customerName,
-                                  type: 0,
-                                ))).then((val) => val == null ? _getRequests() : null);
+                            context,
+                            MaterialPageRoute(
+                                builder: (builder) => InvoiceListPage(
+                                      customerId: widget.customerId,
+                                      customerName: widget.customerName,
+                                      type: 0,
+                                    )))
+                        .then((val) => val == null ? _getRequests() : null);
                   },
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -734,10 +758,11 @@ class _HomePageState extends State<HomePage>  {
                 child: GestureDetector(
                   onTap: () {
                     Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (builder) =>
-                                HoldOrderPage(customerId: widget.customerId))).then((val) => val == null ? _getRequests() : null);
+                            context,
+                            MaterialPageRoute(
+                                builder: (builder) => HoldOrderPage(
+                                    customerId: widget.customerId)))
+                        .then((val) => val == null ? _getRequests() : null);
                     //  Navigator.push(context, MaterialPageRoute(builder: (builder) => CustCartPage(customerId: widget.customerId,customerName: widget.customerName,customerEmail: widget.customerEmail,customerMobile: widget.mobileNo,)));
                   },
                   child: Row(
@@ -775,14 +800,15 @@ class _HomePageState extends State<HomePage>  {
                 child: GestureDetector(
                   onTap: () {
                     Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (builder) => CustCartPage(
-                                  customerId: widget.customerId,
-                                  customerName: widget.customerName,
-                                  customerEmail: widget.customerEmail,
-                                  customerMobile: widget.mobileNo,
-                                ))).then((val) => val == null ? _getRequests() : null);
+                            context,
+                            MaterialPageRoute(
+                                builder: (builder) => CustCartPage(
+                                      customerId: widget.customerId,
+                                      customerName: widget.customerName,
+                                      customerEmail: widget.customerEmail,
+                                      customerMobile: widget.mobileNo,
+                                    )))
+                        .then((val) => val == null ? _getRequests() : null);
                   },
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -819,13 +845,14 @@ class _HomePageState extends State<HomePage>  {
                 child: GestureDetector(
                   onTap: () {
                     Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (builder) => TodayProductionPage(
-                                  customerId: widget.customerId,
-                                  customerName: widget.customerName,
-                                  type: 1,
-                                ))).then((val) => val == null ? _getRequests() : null);
+                            context,
+                            MaterialPageRoute(
+                                builder: (builder) => TodayProductionPage(
+                                      customerId: widget.customerId,
+                                      customerName: widget.customerName,
+                                      type: 1,
+                                    )))
+                        .then((val) => val == null ? _getRequests() : null);
                   },
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -862,13 +889,14 @@ class _HomePageState extends State<HomePage>  {
                 child: GestureDetector(
                   onTap: () {
                     Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (builder) => InvoiceListPage(
-                                  customerId: widget.customerId,
-                                  customerName: widget.customerName,
-                                  type: 2,
-                                ))).then((val) => val == null ? _getRequests() : null);
+                            context,
+                            MaterialPageRoute(
+                                builder: (builder) => InvoiceListPage(
+                                      customerId: widget.customerId,
+                                      customerName: widget.customerName,
+                                      type: 2,
+                                    )))
+                        .then((val) => val == null ? _getRequests() : null);
                   },
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -939,10 +967,11 @@ class _HomePageState extends State<HomePage>  {
                 child: GestureDetector(
                   onTap: () {
                     Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => CustomerLedgerPage(
-                                customerId: widget.customerId))).then((val) => val == null ? _getRequests() : null);
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => CustomerLedgerPage(
+                                    customerId: widget.customerId)))
+                        .then((val) => val == null ? _getRequests() : null);
                   },
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -979,13 +1008,14 @@ class _HomePageState extends State<HomePage>  {
                 child: GestureDetector(
                   onTap: () {
                     Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (builder) => InvoiceListPage(
-                                  customerId: widget.customerId,
-                                  customerName: widget.customerName,
-                                  type: 1,
-                                ))).then((val) => val == null ? _getRequests() : null);
+                            context,
+                            MaterialPageRoute(
+                                builder: (builder) => InvoiceListPage(
+                                      customerId: widget.customerId,
+                                      customerName: widget.customerName,
+                                      type: 1,
+                                    )))
+                        .then((val) => val == null ? _getRequests() : null);
                   },
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -1022,11 +1052,12 @@ class _HomePageState extends State<HomePage>  {
                 child: GestureDetector(
                   onTap: () {
                     Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (builder) => TransportDetailsList(
-                                  customerId: widget.customerId,
-                                ))).then((val) => val == null ? _getRequests() : null);
+                            context,
+                            MaterialPageRoute(
+                                builder: (builder) => TransportDetailsList(
+                                      customerId: widget.customerId,
+                                    )))
+                        .then((val) => val == null ? _getRequests() : null);
                   },
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -1063,12 +1094,13 @@ class _HomePageState extends State<HomePage>  {
                 child: GestureDetector(
                   onTap: () {
                     Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => ChatListPage(
-                                  customerId: widget.customerId,
-                                  salesmanId: widget.salesmanId,
-                                ))).then((val) => val == null ? _getRequests() : null);
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => ChatListPage(
+                                      customerId: widget.customerId,
+                                      salesmanId: widget.salesmanId,
+                                    )))
+                        .then((val) => val == null ? _getRequests() : null);
                   },
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -1105,10 +1137,11 @@ class _HomePageState extends State<HomePage>  {
                 child: GestureDetector(
                   onTap: () {
                     Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => CustomerCreditDetails(
-                                customerId: widget.customerId))).then((val) => val == null ? _getRequests() : null);
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => CustomerCreditDetails(
+                                    customerId: widget.customerId)))
+                        .then((val) => val == null ? _getRequests() : null);
                   },
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -1198,15 +1231,16 @@ class _HomePageState extends State<HomePage>  {
           searchController.text.isEmpty
               ? print("Type Something")
               : Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (c) => UserSearchedPage(
-                            searchKeyword: searchController.text,
-                            customerId: widget.customerId,
-                            customerName: widget.customerName,
-                            customerEmail: widget.customerEmail,
-                            mobileNo: widget.mobileNo,
-                          ))).then((val) => val == null ? _getRequests() : null);
+                      context,
+                      MaterialPageRoute(
+                          builder: (c) => UserSearchedPage(
+                                searchKeyword: searchController.text,
+                                customerId: widget.customerId,
+                                customerName: widget.customerName,
+                                customerEmail: widget.customerEmail,
+                                mobileNo: widget.mobileNo,
+                              )))
+                  .then((val) => val == null ? _getRequests() : null);
         },
         decoration: InputDecoration(
             contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
@@ -1239,25 +1273,33 @@ class _HomePageState extends State<HomePage>  {
     );
   }
 
-  Widget _sectionTile(String title, Function press) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text(
-          title,
-          style: TextStyle(
-            fontSize: 18,
-            color: Colors.black,
-          ),
+  Widget _sectionTile(String title, Function press, String type) {
+    return Card(
+      margin: EdgeInsets.zero,
+      color: type == "2" ? kPrimaryColor : kPrimaryLightColor,
+      child: Container(
+        margin: EdgeInsets.all(5),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              title,
+              style: TextStyle(
+                fontSize: 16,
+                color: kWhiteColor,
+              ),
+            ),
+            GestureDetector(
+              onTap: press,
+              child: Text(
+                "See More",
+                style:
+                    TextStyle(color: kWhiteColor, fontWeight: FontWeight.bold),
+              ),
+            ),
+          ],
         ),
-        GestureDetector(
-          onTap: press,
-          child: Text(
-            "See More",
-            style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold),
-          ),
-        ),
-      ],
+      ),
     );
   }
 
@@ -1305,15 +1347,16 @@ class _HomePageState extends State<HomePage>  {
                   text: categorySnapshot.data.data[index].categoryName,
                   press: () {
                     Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => ModelFromCategoryPage(
-                                  categoryId: categorySnapshot
-                                      .data.data[index].categoryId,
-                                  categoryName: categorySnapshot
-                                      .data.data[index].categoryName,
-                                  customerId: widget.customerId,
-                                ))).then((val) => val == null ? _getRequests() : null);
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => ModelFromCategoryPage(
+                                      categoryId: categorySnapshot
+                                          .data.data[index].categoryId,
+                                      categoryName: categorySnapshot
+                                          .data.data[index].categoryName,
+                                      customerId: widget.customerId,
+                                    )))
+                        .then((val) => val == null ? _getRequests() : null);
                   },
                 ),
               ),
@@ -1339,7 +1382,7 @@ class _HomePageState extends State<HomePage>  {
                     builder: (c) => ModelListPage(
                           customerId: widget.customerId,
                         ))).then((val) => val == null ? _getRequests() : null);
-          }),
+          }, "1"),
         ),
         SizedBox(height: 10),
         StreamBuilder<AllModel>(
@@ -1414,7 +1457,7 @@ class _HomePageState extends State<HomePage>  {
         Padding(
           padding:
               const EdgeInsets.only(left: 10.0, right: 10, top: 20, bottom: 10),
-          child: _sectionTile("Best Products", () {}),
+          child: _sectionTile("Best Products", () {}, "3"),
         ),
         SizedBox(height: 10),
         StreamBuilder<ProductModel>(
@@ -1510,7 +1553,7 @@ class _HomePageState extends State<HomePage>  {
                           refresh: false,
                           status: true,
                         ))).then((val) => val == null ? _getRequests() : null);
-          }),
+          }, "2"),
         ),
         SizedBox(height: 10),
         StreamBuilder<ProductModel>(
@@ -1651,7 +1694,6 @@ class ModelCard extends StatelessWidget {
       this.imagePath,
       this.cartItemCount});
 
-
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -1736,55 +1778,63 @@ class ProductCard extends StatelessWidget {
                     customerEmail: customerEmail,
                     customerName: customerName,
                   ))),
-      child: Padding(
-        padding: const EdgeInsets.only(left: 10.0, right: 10),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Image.network(
-                "http://loccon.in/desiremoulding/upload/Image/Product/${product.image[0]}",
-                height: 150),
-            SizedBox(height: 10),
-            Text(
-              product.productName.toUpperCase(),
-              style: TextStyle(
-                  color: kBlackColor,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 14),
-              //maxLines: 1,
-            ),
-            SizedBox(height: 10),
-            Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  "MRP: " "₹${product.customerprice}",
+      child: Card(
+        elevation: 5,
+        child: Padding(
+          padding: const EdgeInsets.only(left: 10.0, right: 10, bottom: 10),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Image.network(
+                  "http://loccon.in/desiremoulding/upload/Image/Product/${product.image[0]}",
+                  height: 150),
+              // SizedBox(height: 10),
+              Container(
+                width: 110,
+                child: Text(
+                  product.productName.toUpperCase(),
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
                   style: TextStyle(
-                    decoration: product.customernewprice == ""
-                        ? TextDecoration.none
-                        : TextDecoration.lineThrough,
-                    fontSize: product.customernewprice == "" ? 14 : 12,
-                    fontWeight: FontWeight.w600,
-                    color: product.customernewprice == ""
-                        ? kPrimaryColor
-                        : kSecondaryColor,
-                  ),
+                      color: kBlackColor,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 14),
+                  //maxLines: 1,
                 ),
-                Text(
-                  product.customernewprice == ""
-                      ? ""
-                      : "Your Price: " + "₹${product.customernewprice}",
-                  style: TextStyle(
-                    fontSize: 12,
-                    fontWeight: FontWeight.w600,
-                    color: kPrimaryColor,
+              ),
+              SizedBox(height: 10),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "MRP: " "₹${product.customerprice}",
+                    style: TextStyle(
+                      decoration: product.customernewprice == ""
+                          ? TextDecoration.none
+                          : TextDecoration.lineThrough,
+                      fontSize: product.customernewprice == "" ? 14 : 12,
+                      fontWeight: FontWeight.w600,
+                      color: product.customernewprice == ""
+                          ? kPrimaryColor
+                          : kSecondaryColor,
+                    ),
                   ),
-                ),
-              ],
-            )
-          ],
+                  Text(
+                    product.customernewprice == ""
+                        ? ""
+                        : "Your Price: " + "₹${product.customernewprice}",
+                    style: TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w600,
+                      color: kPrimaryColor,
+                    ),
+                  ),
+                ],
+              )
+            ],
+          ),
         ),
       ),
     );

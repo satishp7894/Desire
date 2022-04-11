@@ -133,7 +133,6 @@ class _CustomerOrderHistoryPageState extends State<CustomerOrderHistoryPage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Column(

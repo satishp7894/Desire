@@ -57,7 +57,7 @@ class _InvoiceListPageState extends State<InvoiceListPage> {
       appBar: AppBar(
         backgroundColor: kWhiteColor,
         iconTheme: IconThemeData(color: kBlackColor),
-        title: Text("${widget.customerName} Invoices"),
+        title: Text("Invoices"),
         titleTextStyle: TextStyle(
             color: kBlackColor, fontSize: 18, fontWeight: FontWeight.bold),
         centerTitle: true,
@@ -117,8 +117,7 @@ class _InvoiceListPageState extends State<InvoiceListPage> {
                 "No Data Found",
               ),
             );
-          }
-          else if (s.data.customerInvoice.length == 0 ) {
+          } else if (s.data.customerInvoice.length == 0) {
             return Container(
               height: 300,
               alignment: Alignment.center,
@@ -126,7 +125,7 @@ class _InvoiceListPageState extends State<InvoiceListPage> {
                 s.data.message,
               ),
             );
-          }else {
+          } else {
             asyncSnapshot = s.data;
             cs = asyncSnapshot.customerInvoice;
             return SingleChildScrollView(
@@ -135,7 +134,7 @@ class _InvoiceListPageState extends State<InvoiceListPage> {
                   AnimatedSize(
                       duration: Duration(milliseconds: 1000),
                       child: Container(
-                        height: !isVisible ? 0.0 :null,
+                          height: !isVisible ? 0.0 : null,
                           child: Visibility(
                               visible: isVisible,
                               child: Column(
@@ -358,71 +357,96 @@ class InvoicesTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(10.0),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            "Invoice No: " + customerInvoice.invoiceNumber,
-            style: TextStyle(color: kBlackColor, fontWeight: FontWeight.bold),
-          ),
-          SizedBox(
-            height: 5,
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Text(
-                "Invoice Date: " + customerInvoice.invoiceDate,
-                style:
-                    TextStyle(color: kBlackColor, fontWeight: FontWeight.w500),
+    return Card(
+      elevation: 5,
+      child: Container(
+        decoration: BoxDecoration(border: Border.all(width: 1, color: kPrimaryColor), borderRadius: BorderRadius.circular(5)),
+        padding: const EdgeInsets.all(10.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Column(
+              children: [
+                Text(
+                  "Invoice No: " + customerInvoice.invoiceNumber,
+                  style: TextStyle(
+                      color: kBlackColor, fontWeight: FontWeight.bold),
+                ),
+                SizedBox(
+                  height: 5,
+                ),
+                Text(
+                  "Invoice Date: " + customerInvoice.invoiceDate,
+                  style: TextStyle(
+                      color: kBlackColor, fontWeight: FontWeight.w500),
+                ),
+              ],
+            ),
+            Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(5),
+                color: kPrimaryColor,
               ),
-              TextButton(
-                  style: TextButton.styleFrom(backgroundColor: kPrimaryColor),
-                  onPressed: () {
-                    if (type == 0) {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => InvoiceDetailPage(
-                                  id: customerInvoice.dispatchinvoiceid)));
-                    } else if (type == 2) {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => SubmitReturnMaterial(
-                                  id: customerInvoice.dispatchinvoiceid,
-                                  customerId: customerId,
-                                  type: 1)));
-                    } else {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => SubmitReturnMaterial(
-                                  id: customerInvoice.dispatchinvoiceid,
-                                  customerId: customerId,
-                                  type: 0)));
-                    }
-                  },
-                  child: Text(
-                    "View & Download Invoice",
-                    style: TextStyle(color: kWhiteColor),
-                  ))
-            ],
-          ),
-          SizedBox(
-            height: 10,
-          ),
-          Divider(
-            height: 0.0,
-            color: kSecondaryColor,
-            thickness: 1,
-          ),
-        ],
+              child: GestureDetector(
+                onTap: () {
+                  if (type == 0) {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => InvoiceDetailPage(
+                                id: customerInvoice.dispatchinvoiceid)));
+                  } else if (type == 2) {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => SubmitReturnMaterial(
+                                id: customerInvoice.dispatchinvoiceid,
+                                customerId: customerId,
+                                type: 1)));
+                  } else {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => SubmitReturnMaterial(
+                                id: customerInvoice.dispatchinvoiceid,
+                                customerId: customerId,
+                                type: 0)));
+                  }
+                },
+                child: type == 0
+                    ? buttonWidget(Icons.read_more, "View")
+                    : type == 2
+                        ? buttonWidget(Icons.feedback, "Complaint")
+                        : buttonWidget(Icons.assignment_return_outlined,
+                            "Return Material"),
+              ),
+            ),
+          ],
+        ),
       ),
     );
+  }
+
+  Widget buttonWidget(IconData icon, String name) {
+    return Container(
+        padding: EdgeInsets.all(8),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Icon(
+              icon,
+              color: kWhiteColor,
+            ),
+            Text(
+              name,
+              style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 14,
+                  color: kWhiteColor),
+            )
+          ],
+        ));
   }
 }
