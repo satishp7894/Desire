@@ -10,8 +10,10 @@ import 'package:flutter/material.dart';
 
 class CustomerCreditDetails extends StatefulWidget {
   final customerId;
+  final name;
 
-  const CustomerCreditDetails({Key key, this.customerId}) : super(key: key);
+  const CustomerCreditDetails({Key key, this.customerId, this.name})
+      : super(key: key);
 
   @override
   _CustomerCreditDetailsState createState() => _CustomerCreditDetailsState();
@@ -99,18 +101,46 @@ class _CustomerCreditDetailsState extends State<CustomerCreditDetails> {
           } else {
             asyncSnapshot = s;
             return SingleChildScrollView(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                textwidget(
-                    "Credit Limit : ", asyncSnapshot.data.data.creditLimit),
-                textwidget(
-                    "Credit Days : ", asyncSnapshot.data.data.creditDays),
-                textwidget(
-                    "Pending Credit Limit : ", asyncSnapshot.data.data.pendingCreditLimit)
-              ],
-            ));
+              child: Card(
+                child: Container(
+                  height: 150,
+                  margin: EdgeInsets.only(top: 20),
+                  width: double.infinity,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Text(
+                        widget.name,
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 24),
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      textwidget("Credit Limit : ",
+                          asyncSnapshot.data.data.creditLimit),
+                      textwidget(
+                          "Credit Days : ", asyncSnapshot.data.data.creditDays),
+                      textwidget("Pending Credit Limit : ",
+                          asyncSnapshot.data.data.pendingCreditLimit),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      Container(
+                        decoration: BoxDecoration(borderRadius: BorderRadius.circular(10)),
+                        width: 50,
+                        child: Divider(
+                          height: 1,
+                          thickness: 10,
+                          color: kPrimaryColor,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            );
           }
         });
   }

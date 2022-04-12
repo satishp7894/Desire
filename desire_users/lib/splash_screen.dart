@@ -4,6 +4,7 @@ import 'package:desire_users/pages/intro/kyc_pagen.dart';
 import 'package:desire_users/pages/intro/new_login_page.dart';
 import 'package:desire_users/pages/intro/sales_login_page.dart';
 import 'package:desire_users/pages/intro/success_page.dart';
+import 'package:desire_users/pages/introSlider/into_slider_page.dart';
 import 'package:desire_users/sales/pages/sales_home_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -27,9 +28,11 @@ class SplashScreenState extends State<SplashScreen>
 
   void navigationPage() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
+    bool _seen = (prefs.getBool('seen') ?? false);
     String login = prefs.getString("login");
     if (login == "sales") {
-      if (prefs.getBool('sales_remember') != null && prefs.getBool('sales_remember')) {
+      if (prefs.getBool('sales_remember') != null &&
+          prefs.getBool('sales_remember')) {
         setState(() {
           Navigator.pushAndRemoveUntil(
               context,
@@ -76,9 +79,16 @@ class SplashScreenState extends State<SplashScreen>
                       (Route<dynamic> route) => false);
         });
       } else {
-        Navigator.of(context).pushAndRemoveUntil(
-            MaterialPageRoute(builder: (builder) => NewLoginPage()),
-            (route) => false);
+        if (_seen) {
+          Navigator.of(context).pushAndRemoveUntil(
+              MaterialPageRoute(builder: (builder) => NewLoginPage()),
+              (route) => false);
+        } else {
+          await prefs.setBool('seen', true);
+          Navigator.of(context).pushAndRemoveUntil(
+              MaterialPageRoute(builder: (builder) => IntroSliderPage()),
+              (route) => false);
+        }
       }
     }
   }

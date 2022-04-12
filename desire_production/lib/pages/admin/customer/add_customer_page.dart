@@ -228,7 +228,7 @@ class _AddCustomerPageState extends State<AddCustomerPage> with Validator{
                 ),
               ),
               SizedBox(height: 20,),
-              TextFormField(
+              /*TextFormField(
                 textInputAction: TextInputAction.next,
                 keyboardType: TextInputType.text,
                 onSaved: (newValue) => uName = newValue,
@@ -257,7 +257,7 @@ class _AddCustomerPageState extends State<AddCustomerPage> with Validator{
                 ),
                 ),
               ),
-              SizedBox(height: 20,),
+              SizedBox(height: 20,),*/
               TextFormField(
                 textInputAction: TextInputAction.next,
                 keyboardType: TextInputType.emailAddress,

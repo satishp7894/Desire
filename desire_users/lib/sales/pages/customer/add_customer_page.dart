@@ -177,7 +177,7 @@ class _AddCustomerPageState extends State<AddCustomerPage> with Validator{
             ),cursorColor: kBlackColor,
           ),
           SizedBox(height: 10,),
-          TextFormField(
+          /*TextFormField(
             textInputAction: TextInputAction.next,
             keyboardType: TextInputType.text,
             onSaved: (newValue) => uName = newValue,
@@ -205,7 +205,7 @@ class _AddCustomerPageState extends State<AddCustomerPage> with Validator{
                 hintStyle: TextStyle(color: kSecondaryColor,fontSize: 12)
             ),cursorColor: kBlackColor,
           ),
-          SizedBox(height: 10,),
+          SizedBox(height: 10,),*/
           TextFormField(
             textInputAction: TextInputAction.next,
             keyboardType: TextInputType.emailAddress,

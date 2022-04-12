@@ -13,14 +13,13 @@ import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
-
-
 class SalesProductFromModelDetailPage extends StatefulWidget {
   final productId;
   final customerId;
   final customerName;
 
-  const SalesProductFromModelDetailPage({Key key, this.customerId, this.productId,this.customerName})
+  const SalesProductFromModelDetailPage(
+      {Key key, this.customerId, this.productId, this.customerName})
       : super(key: key);
 
   @override
@@ -28,8 +27,8 @@ class SalesProductFromModelDetailPage extends StatefulWidget {
       _SalesProductFromModelDetailPageState();
 }
 
-class _SalesProductFromModelDetailPageState extends State<SalesProductFromModelDetailPage> {
-
+class _SalesProductFromModelDetailPageState
+    extends State<SalesProductFromModelDetailPage> {
   final ProductDetailBloc productDetailBloc = ProductDetailBloc();
   int totQty = 1;
   int orderCount = 0;
@@ -37,13 +36,15 @@ class _SalesProductFromModelDetailPageState extends State<SalesProductFromModelD
 
   String salesId;
 
-  String salesEmail,salesName;
-  getDetails() async{
+  String salesEmail, salesName;
+
+  getDetails() async {
     prefs = await SharedPreferences.getInstance();
     salesId = prefs.getString("sales_id");
     salesEmail = prefs.getString("sales_email");
     salesName = prefs.getString("sales_name");
   }
+
   @override
   void initState() {
     // TODO: implement initState
@@ -61,8 +62,25 @@ class _SalesProductFromModelDetailPageState extends State<SalesProductFromModelD
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: kWhiteColor,
+      appBar: AppBar(
+        iconTheme: IconThemeData(color: Colors.black),
+        backgroundColor: kWhiteColor,
+        elevation: 0,
+      ),
       body: body(),
-      bottomNavigationBar: bottomNavigation(),
+      floatingActionButton: FloatingActionButton.extended(
+        backgroundColor: kPrimaryColor,
+        icon: Icon(
+          Icons.shopping_cart,
+          color: kWhiteColor,
+        ),
+        label: Text("Add To Cart"),
+        onPressed: () {
+          addToCartApi();
+        },
+      ),
+      // bottomNavigationBar: bottomNavigation(),
     );
   }
 
@@ -108,52 +126,157 @@ class _SalesProductFromModelDetailPageState extends State<SalesProductFromModelD
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-
                       Container(
-                        height: 300,
+                        margin: EdgeInsets.only(top: 20),
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 10.0, right: 10),
+                          child: Text(
+                            s.data.data[i].productName,
+                            style: TextStyle(
+                                color: kPrimaryColor,
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                      ),
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: Padding(
+                          padding:
+                              EdgeInsets.only(left: 10, right: 20, top: 10),
+                          child: Text(
+                            "MRP: ₹${s.data.data[i].customerprice}/stick",
+                            maxLines: 3,
+                            style: TextStyle(
+                              color: s.data.data[i].customernewprice == ""
+                                  ? kPrimaryColor
+                                  : kSecondaryColor,
+                              decoration: s.data.data[i].customernewprice == ""
+                                  ? TextDecoration.none
+                                  : TextDecoration.lineThrough,
+                              fontSize: s.data.data[i].customernewprice == ""
+                                  ? 20
+                                  : 16,
+                            ),
+                            textAlign: TextAlign.left,
+                          ),
+                        ),
+                      ),
+                      s.data.data[i].customernewprice == ""
+                          ? Container()
+                          : Align(
+                              alignment: Alignment.centerLeft,
+                              child: Padding(
+                                padding: EdgeInsets.only(
+                                    left: 10, right: 20, bottom: 10),
+                                child: Text(
+                                  "Your Price: ₹${s.data.data[i].customernewprice}/stick",
+                                  maxLines: 3,
+                                  style: appbarStyle,
+                                  textAlign: TextAlign.left,
+                                ),
+                              ),
+                            ),
+                      Container(
+                        height: 250,
                         child: Swiper(
                           scrollDirection: Axis.horizontal,
                           autoplay: true,
                           duration: 2000,
-                          itemBuilder:
-                              (BuildContext context, int index) {
-                            return  Image.network(
+                          itemBuilder: (BuildContext context, int index) {
+                            return Image.network(
                               "${s.data.data[i].imagepath}" +
                                   "${s.data.data[i].image[index]}",
                               fit: BoxFit.contain,
-                              height: 300,
+                              height: 200,
                               width: MediaQuery.of(context).size.width,
                             );
                           },
                           itemCount: s.data.data[i].image.length,
                         ),
                       ),
-                      SizedBox(height: 20,),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 10.0,right: 10),
-                        child: Text(s.data.data[i].productName,style: TextStyle(color: kPrimaryColor,fontSize: 20,fontWeight: FontWeight.bold),),
+                      Divider(
+                        thickness: 2,
+                        color: kPrimaryColor,
+                      ),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      Container(
+                          margin: EdgeInsets.only(left: 10),
+                          alignment: Alignment.center,
+                          child: Text(
+                            "Description",
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.w700,
+                              color: Colors.black,
+                            ),
+                          )),
+                      SizedBox(
+                        height: 20,
                       ),
                       Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
-                          Align(
-                            alignment: Alignment.centerLeft,
-                            child: Padding(
-                              padding: EdgeInsets.only(
-                                  left: 10, right: 20, top: 10),
-                              child: Text(
-                                "MRP: ₹${s.data.data[i].customerprice}",
-                                maxLines: 3,
-                                style: TextStyle(
-                                  color: s.data.data[i].customernewprice==""?kPrimaryColor:kSecondaryColor,
-                                  decoration: s.data.data[i].customernewprice==""?TextDecoration.none:TextDecoration.lineThrough,
-                                  fontSize: s.data.data[i].customernewprice==""?20:16,
+                          Padding(
+                              padding:
+                                  const EdgeInsets.only(left: 10.0, top: 10),
+                              child: detailWidget(
+                                  "Stick Per Box", s.data.data[i].perBoxStick)),
+                          Padding(
+                              padding:
+                                  const EdgeInsets.only(left: 10.0, top: 10),
+                              child: detailWidget("Total Box Price",
+                                  s.data.data[i].boxPrice.toString())),
+                          Padding(
+                              padding: const EdgeInsets.only(
+                                left: 10.0,
+                                top: 10,
+                              ),
+                              child: detailWidget(
+                                  "Category", s.data.data[i].category)),
+                        ],
+                      ),
+                      Container(
+                        margin: EdgeInsets.only(top: 10),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            Padding(
+                                padding: const EdgeInsets.only(left: 10.0),
+                                child: detailWidget(
+                                    "Model No", s.data.data[i].modelNo)),
+                            Padding(
+                                padding: const EdgeInsets.only(
+                                    left: 10.0, top: 10, bottom: 10),
+                                child: detailWidget(
+                                    "Dimension", s.data.data[i].dimensionSize)),
+                          ],
+                        ),
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(left: 10.0),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
+                                  border: Border.all(color: kPrimaryColor)),
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Image.network(
+                                  "${s.data.data[i].dimensionImagePath}" +
+                                      "${s.data.data[i].dimensionImage}",
+                                  height: 80,
+                                  width: 80,
                                 ),
-                                textAlign: TextAlign.left,
                               ),
                             ),
-                          ), Align(
-                            alignment: Alignment.centerRight,
+                          ),
+                          Align(
+                            alignment: Alignment.bottomLeft,
                             child: Padding(
                               padding: const EdgeInsets.only(right: 20),
                               child: CustomStepper(
@@ -166,70 +289,57 @@ class _SalesProductFromModelDetailPageState extends State<SalesProductFromModelD
                                   }),
                             ),
                           ),
-
                         ],
-                      ),
-                      s.data.data[i].customernewprice == "" ?  Container():Align(
-                        alignment: Alignment.centerLeft,
-                        child: Padding(
-                          padding: EdgeInsets.only(
-                              left: 10, right: 20,bottom: 10),
-                          child: Text(
-                            "Your Price: ₹${s.data.data[i].customernewprice}",
-                            maxLines: 3,
-                            style: appbarStyle,
-                            textAlign: TextAlign.left,
-                          ),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 10.0,top: 10,bottom: 10),
-                        child: Text("Category - ${s.data.data[i].category}",style: TextStyle(fontSize: 14,color: Colors.black,),),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 10.0),
-                        child: Text("Model No - ${s.data.data[i].modelNo}",style: TextStyle(fontSize: 14,color: Colors.black,),),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 10.0,top: 10,bottom: 10),
-                        child: Text("Dimension - ${s.data.data[i].dimensionSize}",style: TextStyle(fontSize: 14,color: Colors.black,),),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 10.0),
-                        child: Container(
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              border: Border.all(color: kPrimaryColor)
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Image.network(
-                              "${s.data.data[i].dimensionImagePath}" +
-                                  "${s.data.data[i].dimensionImage}",
-                              height: 80,
-                              width: 80,
-                            ),
-                          ),
-                        ),
-                      ),
+                      )
                     ],
                   );
                 });
         });
   }
 
-  Widget bottomNavigation(){
-    return SafeArea(child: GestureDetector(
-      onTap: (){
+  Widget detailWidget(String title, String data) {
+    return Container(
+      width: 110,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Text(
+            title,
+            style: TextStyle(
+              fontSize: 14,
+              color: kSecondaryColor,
+            ),
+          ),
+          Text(
+            data,
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+            style: TextStyle(
+                fontSize: 14, color: Colors.black, fontWeight: FontWeight.bold),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget bottomNavigation() {
+    return SafeArea(
+        child: GestureDetector(
+      onTap: () {
         addToCartApi();
       },
       child: Container(
         color: kPrimaryColor,
         height: 50,
-        child: Center(child: Text("Add To Basket",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 16,color: kWhiteColor),),),
+        child: Center(
+          child: Text(
+            "Add To Basket",
+            style: TextStyle(
+                fontWeight: FontWeight.bold, fontSize: 16, color: kWhiteColor),
+          ),
+        ),
       ),
     ));
-
   }
 
   addToCartApi() async {
@@ -257,24 +367,24 @@ class _SalesProductFromModelDetailPageState extends State<SalesProductFromModelD
     if (results['status'] == true) {
       final snackBar = SnackBar(
           content: Row(
-            children: [
-              Text('Added to Basket Successfully'),
-              TextButton(
-                  onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (builder) => CustomerCartPage(
+        children: [
+          Text('Added to Basket Successfully'),
+          TextButton(
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (builder) => CustomerCartPage(
                               customerId: widget.customerId,
                               customerName: widget.customerName,
                             )));
-                  },
-                  child: Text(
-                    "View Cart",
-                    style: TextStyle(color: kPrimaryColor),
-                  ))
-            ],
-          ));
+              },
+              child: Text(
+                "View Cart",
+                style: TextStyle(color: kPrimaryColor),
+              ))
+        ],
+      ));
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
       //Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (builder)=>ProductDetailPage(product: widget.product, page: widget.page, snapshot: widget.snapshot,status: false, orderCount: widget.orderCount,)), (route) => false);
     } else {

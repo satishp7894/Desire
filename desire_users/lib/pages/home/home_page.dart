@@ -1140,7 +1140,9 @@ class _HomePageState extends State<HomePage> {
                             context,
                             MaterialPageRoute(
                                 builder: (context) => CustomerCreditDetails(
-                                    customerId: widget.customerId)))
+                                      customerId: widget.customerId,
+                                      name: widget.customerName,
+                                    )))
                         .then((val) => val == null ? _getRequests() : null);
                   },
                   child: Row(
@@ -1372,6 +1374,10 @@ class _HomePageState extends State<HomePage> {
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        Container(
+          margin: EdgeInsets.all(10),
+          child: Image.asset("assets/images/temp.jpg"),
+        ),
         Padding(
           padding:
               const EdgeInsets.only(left: 10.0, right: 10, top: 10, bottom: 10),

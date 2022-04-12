@@ -60,6 +60,8 @@ class _VerifyMobileNumberPageState extends State<VerifyMobileNumberPage> with Va
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
+          backgroundColor: kWhiteColor,
+          iconTheme: IconThemeData(color: kBlackColor),
           elevation: 0,
           title: Text("Mobile Number Verification", style: TextStyle(color: Colors.black,fontSize: 18),),
           centerTitle: false,),

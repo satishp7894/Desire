@@ -19,9 +19,7 @@ import 'package:flutter/material.dart';
 
 import 'package:http/http.dart' as http;
 
-
 class SignUpPage extends StatefulWidget {
-
   final String mail;
   final String name;
   final String mobile;
@@ -32,14 +30,23 @@ class SignUpPage extends StatefulWidget {
   _SignUpPageState createState() => _SignUpPageState();
 }
 
-class _SignUpPageState extends State<SignUpPage> with Validator{
-
+class _SignUpPageState extends State<SignUpPage> with Validator {
   final _formKey = GlobalKey<FormState>();
   final _focusNode = FocusNode();
   bool remember = false;
   AutovalidateMode _autoValidateMode = AutovalidateMode.disabled;
-  TextEditingController name, user, mail, mob, pass, pin, state, city,address, areaN, company;
-  
+  TextEditingController name,
+      user,
+      mail,
+      mob,
+      pass,
+      pin,
+      state,
+      city,
+      address,
+      areaN,
+      company;
+
   String value = "";
 
   bool checkBoxValue = false;
@@ -64,18 +71,17 @@ class _SignUpPageState extends State<SignUpPage> with Validator{
     });
   }
 
-  checkConnectivity() async{
+  checkConnectivity() async {
     bool result = await DataConnectionChecker().hasConnection;
-    if(result == true) {
+    if (result == true) {
       print('YAY! Free cute dog pics!');
     } else {
       print('No internet :( Reason:');
       print(DataConnectionChecker().lastTryResults);
-      Alerts.showAlertAndBack(context, "No Internet Connection", "Please check your internet");
+      Alerts.showAlertAndBack(
+          context, "No Internet Connection", "Please check your internet");
     }
   }
-
-
 
   @override
   void dispose() {
@@ -94,12 +100,15 @@ class _SignUpPageState extends State<SignUpPage> with Validator{
     _focusNode.dispose();
   }
 
-   bool obscure = true;
+  bool obscure = true;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         toolbarHeight: 50,
+        backgroundColor: kWhiteColor,
+        iconTheme: IconThemeData(color: kBlackColor),
         elevation: 0.0,
         actions: [
           Container(
@@ -112,23 +121,29 @@ class _SignUpPageState extends State<SignUpPage> with Validator{
                   borderRadius: BorderRadius.circular(10),
                 ),
                 elevation: 0.0,
-                onPressed: (){
+                onPressed: () {
                   signUp();
-
-              },
-              icon: Icon(Icons.how_to_reg,color: kWhiteColor,),
-                label: Text("Register",style: TextStyle(fontSize: 14,color: kWhiteColor),),
+                },
+                icon: Icon(
+                  Icons.how_to_reg,
+                  color: kWhiteColor,
+                ),
+                label: Text(
+                  "Register",
+                  style: TextStyle(fontSize: 14, color: kWhiteColor),
+                ),
               ),
             ),
           ),
-          SizedBox(width: 10,)
+          SizedBox(
+            width: 10,
+          )
         ],
       ),
       body: _body(),
       bottomNavigationBar: bottomView(),
     );
   }
-
 
   Widget _body() {
     return SingleChildScrollView(
@@ -138,14 +153,14 @@ class _SignUpPageState extends State<SignUpPage> with Validator{
     );
   }
 
-  Widget _signUpForm(){
-    if(widget.mail != null && widget.name != null){
+  Widget _signUpForm() {
+    if (widget.mail != null && widget.name != null) {
       setState(() {
         name.text = widget.name;
         mail.text = widget.mail;
       });
     }
-    if(widget.mobile != null){
+    if (widget.mobile != null) {
       setState(() {
         mob.text = widget.mobile;
       });
@@ -154,20 +169,20 @@ class _SignUpPageState extends State<SignUpPage> with Validator{
       autovalidateMode: _autoValidateMode,
       key: _formKey,
       child: Padding(
-        padding: const EdgeInsets.only(left: 20.0,right: 20.0,top: 10,bottom: 10),
+        padding:
+            const EdgeInsets.only(left: 20.0, right: 20.0, top: 10, bottom: 10),
         child: ListView(
           shrinkWrap: true,
           physics: BouncingScrollPhysics(),
           children: <Widget>[
             Padding(
-              padding: const EdgeInsets.only(top: 20.0,bottom: 10),
+              padding: const EdgeInsets.only(top: 20.0, bottom: 10),
               child: Image.asset(
                 "assets/images/logo_new.png",
                 height: 80,
                 width: 80,
               ),
             ),
-
             Text(
               "Welcome to Desire Moulding",
               textAlign: TextAlign.center,
@@ -194,12 +209,20 @@ class _SignUpPageState extends State<SignUpPage> with Validator{
                   Icons.apartment,
                   color: kPrimaryColor,
                 ),
-                border:  OutlineInputBorder(borderSide: BorderSide(color: kSecondaryColor), borderRadius: BorderRadius.circular(10)),
-                focusedErrorBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.red), borderRadius: BorderRadius.circular(10)),
-                enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.black), borderRadius: BorderRadius.circular(10)),
-                focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: kPrimaryColor), borderRadius: BorderRadius.circular(10)),
+                border: OutlineInputBorder(
+                    borderSide: BorderSide(color: kSecondaryColor),
+                    borderRadius: BorderRadius.circular(10)),
+                focusedErrorBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.red),
+                    borderRadius: BorderRadius.circular(10)),
+                enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.black),
+                    borderRadius: BorderRadius.circular(10)),
+                focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: kPrimaryColor),
+                    borderRadius: BorderRadius.circular(10)),
                 labelStyle: TextStyle(color: kPrimaryColor),
-                hintStyle: TextStyle(color: kSecondaryColor,fontSize: 12),
+                hintStyle: TextStyle(color: kSecondaryColor, fontSize: 12),
               ),
             ),
             SizedBox(height: 10.0),
@@ -217,20 +240,27 @@ class _SignUpPageState extends State<SignUpPage> with Validator{
                 hintText: "Enter your Full Name",
                 floatingLabelBehavior: FloatingLabelBehavior.always,
                 prefixIcon: Icon(
-                  Icons.person
-                  ,
+                  Icons.person,
                   color: kPrimaryColor,
                 ),
-                border:  OutlineInputBorder(borderSide: BorderSide(color: kSecondaryColor), borderRadius: BorderRadius.circular(10)),
-                focusedErrorBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.red), borderRadius: BorderRadius.circular(10)),
-                enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.black), borderRadius: BorderRadius.circular(10)),
-                focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: kPrimaryColor), borderRadius: BorderRadius.circular(10)),
+                border: OutlineInputBorder(
+                    borderSide: BorderSide(color: kSecondaryColor),
+                    borderRadius: BorderRadius.circular(10)),
+                focusedErrorBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.red),
+                    borderRadius: BorderRadius.circular(10)),
+                enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.black),
+                    borderRadius: BorderRadius.circular(10)),
+                focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: kPrimaryColor),
+                    borderRadius: BorderRadius.circular(10)),
                 labelStyle: TextStyle(color: kPrimaryColor),
-                hintStyle: TextStyle(color: kSecondaryColor,fontSize: 12),
+                hintStyle: TextStyle(color: kSecondaryColor, fontSize: 12),
               ),
             ),
             SizedBox(height: 10.0),
-            TextFormField(
+            /*TextFormField(
               cursorColor: kBlackColor,
               textInputAction: TextInputAction.next,
               controller: user,
@@ -243,19 +273,26 @@ class _SignUpPageState extends State<SignUpPage> with Validator{
                 hintText: "Enter your Username",
                 floatingLabelBehavior: FloatingLabelBehavior.always,
                 prefixIcon: Icon(
-                  Icons.person
-                  ,
+                  Icons.person,
                   color: kPrimaryColor,
                 ),
-                border:  OutlineInputBorder(borderSide: BorderSide(color: kSecondaryColor), borderRadius: BorderRadius.circular(10)),
-                focusedErrorBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.red), borderRadius: BorderRadius.circular(10)),
-                enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.black), borderRadius: BorderRadius.circular(10)),
-                focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: kPrimaryColor), borderRadius: BorderRadius.circular(10)),
+                border: OutlineInputBorder(
+                    borderSide: BorderSide(color: kSecondaryColor),
+                    borderRadius: BorderRadius.circular(10)),
+                focusedErrorBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.red),
+                    borderRadius: BorderRadius.circular(10)),
+                enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.black),
+                    borderRadius: BorderRadius.circular(10)),
+                focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: kPrimaryColor),
+                    borderRadius: BorderRadius.circular(10)),
                 labelStyle: TextStyle(color: kPrimaryColor),
-                hintStyle: TextStyle(color: kSecondaryColor,fontSize: 12),
+                hintStyle: TextStyle(color: kSecondaryColor, fontSize: 12),
               ),
             ),
-            SizedBox(height: 10.0),
+            SizedBox(height: 10.0),*/
             TextFormField(
               cursorColor: kBlackColor,
               textInputAction: TextInputAction.next,
@@ -270,16 +307,23 @@ class _SignUpPageState extends State<SignUpPage> with Validator{
                 hintText: "Enter your Email-Id",
                 floatingLabelBehavior: FloatingLabelBehavior.always,
                 prefixIcon: Icon(
-                  Icons.email
-                  ,
+                  Icons.email,
                   color: kPrimaryColor,
                 ),
-                border:  OutlineInputBorder(borderSide: BorderSide(color: kSecondaryColor), borderRadius: BorderRadius.circular(10)),
-                focusedErrorBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.red), borderRadius: BorderRadius.circular(10)),
-                enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.black), borderRadius: BorderRadius.circular(10)),
-                focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: kPrimaryColor), borderRadius: BorderRadius.circular(10)),
+                border: OutlineInputBorder(
+                    borderSide: BorderSide(color: kSecondaryColor),
+                    borderRadius: BorderRadius.circular(10)),
+                focusedErrorBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.red),
+                    borderRadius: BorderRadius.circular(10)),
+                enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.black),
+                    borderRadius: BorderRadius.circular(10)),
+                focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: kPrimaryColor),
+                    borderRadius: BorderRadius.circular(10)),
                 labelStyle: TextStyle(color: kPrimaryColor),
-                hintStyle: TextStyle(color: kSecondaryColor,fontSize: 12),
+                hintStyle: TextStyle(color: kSecondaryColor, fontSize: 12),
               ),
             ),
             SizedBox(height: 10.0),
@@ -287,7 +331,7 @@ class _SignUpPageState extends State<SignUpPage> with Validator{
               cursorColor: kBlackColor,
               textInputAction: TextInputAction.next,
               controller: mob,
-              readOnly: widget.mobile ==null ? false : true,
+              readOnly: widget.mobile == null ? false : true,
               validator: validateMobile,
               textAlign: TextAlign.left,
               keyboardType: TextInputType.phone,
@@ -301,16 +345,23 @@ class _SignUpPageState extends State<SignUpPage> with Validator{
                 labelText: "Mobile",
                 floatingLabelBehavior: FloatingLabelBehavior.always,
                 prefixIcon: Icon(
-                  Icons.phone_android
-                  ,
+                  Icons.phone_android,
                   color: kPrimaryColor,
                 ),
-                border:  OutlineInputBorder(borderSide: BorderSide(color: kSecondaryColor), borderRadius: BorderRadius.circular(10)),
-                focusedErrorBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.red), borderRadius: BorderRadius.circular(10)),
-                enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.black), borderRadius: BorderRadius.circular(10)),
-                focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: kPrimaryColor), borderRadius: BorderRadius.circular(10)),
+                border: OutlineInputBorder(
+                    borderSide: BorderSide(color: kSecondaryColor),
+                    borderRadius: BorderRadius.circular(10)),
+                focusedErrorBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.red),
+                    borderRadius: BorderRadius.circular(10)),
+                enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.black),
+                    borderRadius: BorderRadius.circular(10)),
+                focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: kPrimaryColor),
+                    borderRadius: BorderRadius.circular(10)),
                 labelStyle: TextStyle(color: kPrimaryColor),
-                hintStyle: TextStyle(color: kSecondaryColor,fontSize: 12),
+                hintStyle: TextStyle(color: kSecondaryColor, fontSize: 12),
               ),
             ),
             SizedBox(height: 10.0),
@@ -327,33 +378,49 @@ class _SignUpPageState extends State<SignUpPage> with Validator{
                 hintText: "Enter Password",
                 labelText: "Password",
                 suffixIcon: GestureDetector(
-                  onTap: (){
+                  onTap: () {
                     setState(() {
                       obscure = false;
                     });
                   },
-                  child: obscure ==  true ? Icon(Icons.visibility_off,size: 25,color: kPrimaryColor,)
-                      : GestureDetector(child: Icon(Icons.visibility,size: 25,color: kPrimaryColor,),
-                    onTap: (){
-                      setState(() {
-                        obscure = true;
-                      });
-                    },
-                  ),
-
+                  child: obscure == true
+                      ? Icon(
+                          Icons.visibility_off,
+                          size: 25,
+                          color: kPrimaryColor,
+                        )
+                      : GestureDetector(
+                          child: Icon(
+                            Icons.visibility,
+                            size: 25,
+                            color: kPrimaryColor,
+                          ),
+                          onTap: () {
+                            setState(() {
+                              obscure = true;
+                            });
+                          },
+                        ),
                 ),
                 floatingLabelBehavior: FloatingLabelBehavior.always,
                 prefixIcon: Icon(
-                  Icons.password
-                  ,
+                  Icons.password,
                   color: kPrimaryColor,
                 ),
-                border:  OutlineInputBorder(borderSide: BorderSide(color: kSecondaryColor), borderRadius: BorderRadius.circular(10)),
-                focusedErrorBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.red), borderRadius: BorderRadius.circular(10)),
-                enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.black), borderRadius: BorderRadius.circular(10)),
-                focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: kPrimaryColor), borderRadius: BorderRadius.circular(10)),
+                border: OutlineInputBorder(
+                    borderSide: BorderSide(color: kSecondaryColor),
+                    borderRadius: BorderRadius.circular(10)),
+                focusedErrorBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.red),
+                    borderRadius: BorderRadius.circular(10)),
+                enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.black),
+                    borderRadius: BorderRadius.circular(10)),
+                focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: kPrimaryColor),
+                    borderRadius: BorderRadius.circular(10)),
                 labelStyle: TextStyle(color: kPrimaryColor),
-                hintStyle: TextStyle(color: kSecondaryColor,fontSize: 12),
+                hintStyle: TextStyle(color: kSecondaryColor, fontSize: 12),
               ),
             ),
             SizedBox(height: 10.0),
@@ -370,16 +437,23 @@ class _SignUpPageState extends State<SignUpPage> with Validator{
                 labelText: "Address",
                 floatingLabelBehavior: FloatingLabelBehavior.always,
                 prefixIcon: Icon(
-                  Icons.location_on
-                  ,
+                  Icons.location_on,
                   color: kPrimaryColor,
                 ),
-                border:  OutlineInputBorder(borderSide: BorderSide(color: kSecondaryColor), borderRadius: BorderRadius.circular(10)),
-                focusedErrorBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.red), borderRadius: BorderRadius.circular(10)),
-                enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.black), borderRadius: BorderRadius.circular(10)),
-                focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: kPrimaryColor), borderRadius: BorderRadius.circular(10)),
+                border: OutlineInputBorder(
+                    borderSide: BorderSide(color: kSecondaryColor),
+                    borderRadius: BorderRadius.circular(10)),
+                focusedErrorBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.red),
+                    borderRadius: BorderRadius.circular(10)),
+                enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.black),
+                    borderRadius: BorderRadius.circular(10)),
+                focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: kPrimaryColor),
+                    borderRadius: BorderRadius.circular(10)),
                 labelStyle: TextStyle(color: kPrimaryColor),
-                hintStyle: TextStyle(color: kSecondaryColor,fontSize: 12),
+                hintStyle: TextStyle(color: kSecondaryColor, fontSize: 12),
               ),
             ),
             SizedBox(height: 10.0),
@@ -396,19 +470,28 @@ class _SignUpPageState extends State<SignUpPage> with Validator{
                 hintText: "Enter Area",
                 floatingLabelBehavior: FloatingLabelBehavior.always,
                 prefixIcon: Icon(
-                  Icons.location_on
-                  ,
+                  Icons.location_on,
                   color: kPrimaryColor,
                 ),
-                border:  OutlineInputBorder(borderSide: BorderSide(color: kSecondaryColor), borderRadius: BorderRadius.circular(10)),
-                focusedErrorBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.red), borderRadius: BorderRadius.circular(10)),
-                enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.black), borderRadius: BorderRadius.circular(10)),
-                focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: kPrimaryColor), borderRadius: BorderRadius.circular(10)),
+                border: OutlineInputBorder(
+                    borderSide: BorderSide(color: kSecondaryColor),
+                    borderRadius: BorderRadius.circular(10)),
+                focusedErrorBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.red),
+                    borderRadius: BorderRadius.circular(10)),
+                enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.black),
+                    borderRadius: BorderRadius.circular(10)),
+                focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: kPrimaryColor),
+                    borderRadius: BorderRadius.circular(10)),
                 labelStyle: TextStyle(color: kPrimaryColor),
-                hintStyle: TextStyle(color: kSecondaryColor,fontSize: 12),
+                hintStyle: TextStyle(color: kSecondaryColor, fontSize: 12),
               ),
             ),
-            SizedBox(height: 10,),
+            SizedBox(
+              height: 10,
+            ),
             TextFormField(
               cursorColor: kBlackColor,
               textInputAction: TextInputAction.next,
@@ -422,27 +505,35 @@ class _SignUpPageState extends State<SignUpPage> with Validator{
                 hintText: "Enter City",
                 floatingLabelBehavior: FloatingLabelBehavior.always,
                 prefixIcon: Icon(
-                  Icons.location_on
-                  ,
+                  Icons.location_on,
                   color: kPrimaryColor,
                 ),
-                border:  OutlineInputBorder(borderSide: BorderSide(color: kSecondaryColor), borderRadius: BorderRadius.circular(10)),
-                focusedErrorBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.red), borderRadius: BorderRadius.circular(10)),
-                enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.black), borderRadius: BorderRadius.circular(10)),
-                focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: kPrimaryColor), borderRadius: BorderRadius.circular(10)),
+                border: OutlineInputBorder(
+                    borderSide: BorderSide(color: kSecondaryColor),
+                    borderRadius: BorderRadius.circular(10)),
+                focusedErrorBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.red),
+                    borderRadius: BorderRadius.circular(10)),
+                enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.black),
+                    borderRadius: BorderRadius.circular(10)),
+                focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: kPrimaryColor),
+                    borderRadius: BorderRadius.circular(10)),
                 labelStyle: TextStyle(color: kPrimaryColor),
-                hintStyle: TextStyle(color: kSecondaryColor,fontSize: 12),
+                hintStyle: TextStyle(color: kSecondaryColor, fontSize: 12),
               ),
             ),
             SizedBox(height: 10.0),
             Focus(
-              onFocusChange: (v){
+              onFocusChange: (v) {
                 print("object focus changed response $v");
-                if(v == false){
+                if (v == false) {
                   if (pin.text.length == 6) {
                     getOtherAttributes(pin.text);
                   } else {
-                    Alerts.showAlertAndBack(context, "Incorrect Pin-code", "Enter a valid Pin-code");
+                    Alerts.showAlertAndBack(context, "Incorrect Pin-code",
+                        "Enter a valid Pin-code");
                   }
                 }
               },
@@ -463,16 +554,23 @@ class _SignUpPageState extends State<SignUpPage> with Validator{
                   hintText: "Enter PinCode",
                   floatingLabelBehavior: FloatingLabelBehavior.always,
                   prefixIcon: Icon(
-                    Icons.location_on
-                    ,
+                    Icons.location_on,
                     color: kPrimaryColor,
                   ),
-                  border:  OutlineInputBorder(borderSide: BorderSide(color: kSecondaryColor), borderRadius: BorderRadius.circular(10)),
-                  focusedErrorBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.red), borderRadius: BorderRadius.circular(10)),
-                  enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.black), borderRadius: BorderRadius.circular(10)),
-                  focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: kPrimaryColor), borderRadius: BorderRadius.circular(10)),
+                  border: OutlineInputBorder(
+                      borderSide: BorderSide(color: kSecondaryColor),
+                      borderRadius: BorderRadius.circular(10)),
+                  focusedErrorBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.red),
+                      borderRadius: BorderRadius.circular(10)),
+                  enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.black),
+                      borderRadius: BorderRadius.circular(10)),
+                  focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: kPrimaryColor),
+                      borderRadius: BorderRadius.circular(10)),
                   labelStyle: TextStyle(color: kPrimaryColor),
-                  hintStyle: TextStyle(color: kSecondaryColor,fontSize: 12),
+                  hintStyle: TextStyle(color: kSecondaryColor, fontSize: 12),
                 ),
               ),
             ),
@@ -488,19 +586,28 @@ class _SignUpPageState extends State<SignUpPage> with Validator{
                 hintText: "Enter State",
                 floatingLabelBehavior: FloatingLabelBehavior.always,
                 prefixIcon: Icon(
-                  Icons.location_on
-                  ,
+                  Icons.location_on,
                   color: kPrimaryColor,
                 ),
-                border:  OutlineInputBorder(borderSide: BorderSide(color: kSecondaryColor), borderRadius: BorderRadius.circular(10)),
-                focusedErrorBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.red), borderRadius: BorderRadius.circular(10)),
-                enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.black), borderRadius: BorderRadius.circular(10)),
-                focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: kPrimaryColor), borderRadius: BorderRadius.circular(10)),
+                border: OutlineInputBorder(
+                    borderSide: BorderSide(color: kSecondaryColor),
+                    borderRadius: BorderRadius.circular(10)),
+                focusedErrorBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.red),
+                    borderRadius: BorderRadius.circular(10)),
+                enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.black),
+                    borderRadius: BorderRadius.circular(10)),
+                focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: kPrimaryColor),
+                    borderRadius: BorderRadius.circular(10)),
                 labelStyle: TextStyle(color: kPrimaryColor),
-                hintStyle: TextStyle(color: kSecondaryColor,fontSize: 12),
+                hintStyle: TextStyle(color: kSecondaryColor, fontSize: 12),
               ),
             ),
-            SizedBox(height: 20,)
+            SizedBox(
+              height: 20,
+            )
           ],
         ),
       ),
@@ -517,34 +624,42 @@ class _SignUpPageState extends State<SignUpPage> with Validator{
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Text("Privacy Policy | Terms of Service",
-                style: TextStyle(color: kPrimaryColor,fontSize: 12)),
+                style: TextStyle(color: kPrimaryColor, fontSize: 12)),
             SizedBox(
               height: 5,
             ),
             Text("Copyright © 2021 Desire Moulding. All Rights Reserved",
-                style: TextStyle(color: kPrimaryColor,fontSize: 12)),
+                style: TextStyle(color: kPrimaryColor, fontSize: 12)),
           ],
         ),
       ),
     );
   }
-  getOtherAttributes(String pin) async{
+
+  getOtherAttributes(String pin) async {
     print("object pin $pin");
-    if(pin.isEmpty || pin.length > 6){
-      Alerts.showAlertAndBack(context, "Invalid Value", "Please Enter 6 digit Pin code");
+    if (pin.isEmpty || pin.length > 6) {
+      Alerts.showAlertAndBack(
+          context, "Invalid Value", "Please Enter 6 digit Pin code");
     } else {
-      ProgressDialog pr = ProgressDialog(context, type: ProgressDialogType.Normal,
-        isDismissible: false,);
-      pr.style(message: 'Please wait...',
-        progressWidget: Center(child: CircularProgressIndicator()),);
+      ProgressDialog pr = ProgressDialog(
+        context,
+        type: ProgressDialogType.Normal,
+        isDismissible: false,
+      );
+      pr.style(
+        message: 'Please wait...',
+        progressWidget: Center(child: CircularProgressIndicator()),
+      );
       pr.show();
-      var response = await http.get(Uri.parse(Connection.getAttributes+"$pin"));
+      var response =
+          await http.get(Uri.parse(Connection.getAttributes + "$pin"));
       var result = json.decode(response.body);
 
-
-      if(result[0]["Message"] == "No records found"){
+      if (result[0]["Message"] == "No records found") {
         pr.hide();
-        Alerts.showAlertAndBack(context, "Incorrect PinCode", "Enter a valid Pincode");
+        Alerts.showAlertAndBack(
+            context, "Incorrect PinCode", "Enter a valid Pincode");
       } else {
         //String cityN = result[0]["PostOffice"][0]["Division"];
         String stateN = result[0]["PostOffice"][0]["State"];
@@ -564,81 +679,89 @@ class _SignUpPageState extends State<SignUpPage> with Validator{
       }
     }
   }
-  signUp() async{
+
+  signUp() async {
     print("value from form ${name.text} ${mail.text} ${mob.text}"
         "${user.text} ${pass.text} ${address.text} ${pin.text}"
         "${state.text} ${city.text} ${areaN.text}");
     if (_formKey.currentState.validate()) {
       _formKey.currentState.save();
-      ProgressDialog pr = ProgressDialog(context, type: ProgressDialogType.Normal,
-        isDismissible: true,);
-      pr.style(message: 'Please wait...',
-        progressWidget: Center(child: CircularProgressIndicator()),);
+      ProgressDialog pr = ProgressDialog(
+        context,
+        type: ProgressDialogType.Normal,
+        isDismissible: true,
+      );
+      pr.style(
+        message: 'Please wait...',
+        progressWidget: Center(child: CircularProgressIndicator()),
+      );
       pr.show();
 
-    var response = await http.post(Uri.parse(Connection.signUp), body: {
-      "companyname":"${company.text}",
-      "customername":"${name.text}",
-      "email":"${mail.text}",
-      "mobile":"${mob.text}",
-      "username":"${user.text}",
-      "password":"${pass.text}",
-      "address":"${address.text}",
-      "state":"${state.text}",
-      "city":"${city.text}",
-      "area":"${areaN.text}",
-      "pincode":"${pin.text}",
-      "secretkey":"12!@34#\$5%"
-    });
+      var response = await http.post(Uri.parse(Connection.signUp), body: {
+        "companyname": "${company.text}",
+        "customername": "${name.text}",
+        "email": "${mail.text}",
+        "mobile": "${mob.text}",
+        "username": "${user.text}",
+        "password": "${pass.text}",
+        "address": "${address.text}",
+        "state": "${state.text}",
+        "city": "${city.text}",
+        "area": "${areaN.text}",
+        "pincode": "${pin.text}",
+        "secretkey": "12!@34#\$5%"
+      });
       print('results: $response');
 
-    var result = json.decode(response.body);
+      var result = json.decode(response.body);
 
-    print('results: $result');
+      print('results: $result');
 
-    pr.hide();
+      pr.hide();
 
-    if(result['status'] == true){
-      UserModel userModel = UserModel.fromJson(result['data'][0]);
-      print("model value ${userModel.customerId}");
-      SharedPreferences preferences = await SharedPreferences.getInstance();
-      preferences.setString('company_name', userModel.companyName);
-      preferences.setString('customer_id', userModel.customerId);
-      preferences.setString('Customer_name', userModel.customerName);
-      preferences.setString('Email', userModel.email);
-      preferences.setString('Mobile_no', userModel.mobileNo);
-      preferences.setString('User_name', userModel.userName);
-      preferences.setString('show_password', userModel.showPassword);
-      preferences.setString('address', userModel.address);
-      preferences.setString('area', userModel.area);
-      preferences.setString('City', userModel.city);
-      preferences.setString('State', userModel.state);
-      preferences.setString("kycStats", userModel.kycStatus);
-      preferences.setString('Pincode', userModel.pincode);
+      if (result['status'] == true) {
+        UserModel userModel = UserModel.fromJson(result['data'][0]);
+        print("model value ${userModel.customerId}");
+        SharedPreferences preferences = await SharedPreferences.getInstance();
+        preferences.setString('company_name', userModel.companyName);
+        preferences.setString('customer_id', userModel.customerId);
+        preferences.setString('Customer_name', userModel.customerName);
+        preferences.setString('Email', userModel.email);
+        preferences.setString('Mobile_no', userModel.mobileNo);
+        preferences.setString('User_name', userModel.userName);
+        preferences.setString('show_password', userModel.showPassword);
+        preferences.setString('address', userModel.address);
+        preferences.setString('area', userModel.area);
+        preferences.setString('City', userModel.city);
+        preferences.setString('State', userModel.state);
+        preferences.setString("kycStats", userModel.kycStatus);
+        preferences.setString('Pincode', userModel.pincode);
 
-      // setState(() {
-      //   _id = userModel.customerId;
-      //   _initOneSignal();
-      // });
+        // setState(() {
+        //   _id = userModel.customerId;
+        //   _initOneSignal();
+        // });
 
-      //Alerts.showAlertAndBack(context, "Success", "SignUp");
-      Navigator.pushReplacement(context, MaterialPageRoute(builder: (c) => SelectCardType(userId: userModel.customerId)));
-      //Navigator.pushReplacement(context, MaterialPageRoute(builder: (c) => OtpPage(page: "login", mob: userModel.mobileNo, remember:  false,)));
-      return true;
-    }
-    if(result['message'] == "Email,Mobile and Username allready exists"){
-      Alerts.showAlertAndBack(context, 'Error SignUp', 'Username,Email or Mobile Number already exist.');
-    }
-    else {
-      Alerts.showAlertAndBack(context, 'Error SignUP', 'Try again later');
-      return false;
-    }
+        //Alerts.showAlertAndBack(context, "Success", "SignUp");
+        Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+                builder: (c) => SelectCardType(userId: userModel.customerId)));
+        //Navigator.pushReplacement(context, MaterialPageRoute(builder: (c) => OtpPage(page: "login", mob: userModel.mobileNo, remember:  false,)));
+        return true;
+      }
+      if (result['message'] == "Email,Mobile and Username allready exists") {
+        Alerts.showAlertAndBack(context, 'Error SignUp',
+            'Username,Email or Mobile Number already exist.');
+      } else {
+        Alerts.showAlertAndBack(context, 'Error SignUP', 'Try again later');
+        return false;
+      }
     } else {
       setState(() {
         _autoValidateMode = AutovalidateMode.always;
       });
     }
-
   }
 // List<String> areaWise = ['Please Select your Area'];
 //
