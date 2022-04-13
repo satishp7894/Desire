@@ -311,6 +311,7 @@ class _CustomerInvoiceListPageState extends State<CustomerInvoiceListPage> {
                             customerInvoice: filterDate.length > 0
                                 ? filterDate[index]
                                 : asyncSnapshot.customerInvoice[index],
+                            link: asyncSnapshot.invoiceUrl,
                           ))
                 ],
               ),
@@ -343,63 +344,78 @@ class _CustomerInvoiceListPageState extends State<CustomerInvoiceListPage> {
 
 class InvoicesTile extends StatelessWidget {
   final CustomerInvoice customerInvoice;
+  final link;
 
-  const InvoicesTile({
-    Key key,
-    this.customerInvoice,
-  }) : super(key: key);
+  const InvoicesTile({Key key, this.customerInvoice, this.link})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(10.0),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            "Invoice No: " + customerInvoice.invoiceNumber,
-            style: TextStyle(color: kBlackColor, fontWeight: FontWeight.bold),
-          ),
-          SizedBox(
-            height: 5,
-          ),
-          FittedBox(
-            fit: BoxFit.contain,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.center,
+    return Card(
+      elevation: 5,
+      child: Container(
+        decoration: BoxDecoration(
+            border: Border.all(width: 1, color: kPrimaryColor),
+            borderRadius: BorderRadius.circular(5)),
+        padding: const EdgeInsets.all(10.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Column(
               children: [
+                Text(
+                  "Invoice No: " + customerInvoice.invoiceNumber,
+                  style: TextStyle(
+                      color: kBlackColor, fontWeight: FontWeight.bold),
+                ),
+                SizedBox(
+                  height: 5,
+                ),
                 Text(
                   "Invoice Date: " + customerInvoice.invoiceDate,
                   style: TextStyle(
                       color: kBlackColor, fontWeight: FontWeight.w500),
                 ),
-                TextButton(
-                    style: TextButton.styleFrom(backgroundColor: kPrimaryColor),
-                    onPressed: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => InvoiceDetailSalesPage(
-                                  id: customerInvoice.dispatchinvoiceid)));
-                    },
-                    child: Text(
-                      "View & Download Invoice",
-                      style: TextStyle(color: kWhite),
-                    ))
               ],
             ),
-          ),
-          SizedBox(
-            height: 10,
-          ),
-          Divider(
-            height: 0.0,
-            color: kSecondaryColor,
-            thickness: 1,
-          ),
-        ],
+            Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(5),
+                color: kPrimaryColor,
+              ),
+              padding: EdgeInsets.all(8),
+              child: GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => InvoiceDetailSalesPage(
+                                id: customerInvoice.dispatchinvoiceid,
+                                pdf: link + customerInvoice.invoiceFile,
+                              )));
+                },
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Icon(
+                      Icons.read_more,
+                      color: kWhite,
+                    ),
+                    Text(
+                      "View",
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 14,
+                          color: kWhite),
+                    )
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

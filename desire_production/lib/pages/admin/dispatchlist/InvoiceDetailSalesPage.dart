@@ -2,10 +2,12 @@ import 'package:desire_production/bloc/InvoiceSalesDetailBloc.dart';
 import 'package:desire_production/model/InvoiceDetailModel.dart';
 import 'package:desire_production/utils/alerts.dart';
 import 'package:desire_production/utils/constants.dart';
+import 'package:dio/dio.dart';
 import 'package:downloads_path_provider/downloads_path_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:intl/intl.dart';
+import 'package:open_file/open_file.dart';
 import 'package:pdf/pdf.dart';
 import 'dart:io';
 
@@ -14,8 +16,9 @@ import 'package:permission_handler/permission_handler.dart';
 
 class InvoiceDetailSalesPage extends StatefulWidget {
   final id;
+  final pdf;
 
-  const InvoiceDetailSalesPage({Key key, this.id}) : super(key: key);
+  const InvoiceDetailSalesPage({Key key, this.id, this.pdf}) : super(key: key);
 
   @override
   _InvoiceDetailSalesPageState createState() => _InvoiceDetailSalesPageState();
@@ -32,6 +35,11 @@ class _InvoiceDetailSalesPageState extends State<InvoiceDetailSalesPage> {
   List<InvoiceProducts> _searchResult = [];
   List<InvoiceProducts> _order = [];
   TextEditingController searchViewController = TextEditingController();
+
+  bool downloading = false;
+  String downloadingStr = "No data";
+  String savePath = "";
+  double download=0.0;
 
   @override
   void initState() {
@@ -66,8 +74,9 @@ class _InvoiceDetailSalesPageState extends State<InvoiceDetailSalesPage> {
       floatingActionButton: FloatingActionButton.extended(
         backgroundColor: kPrimaryColor,
         onPressed: () {
-          generatePdf();
-          savePdf();
+          /*generatePdf();
+          savePdf();*/
+          downloadFile(widget.pdf);
         },
         label: Text(
           "Download Invoice",
@@ -80,6 +89,48 @@ class _InvoiceDetailSalesPageState extends State<InvoiceDetailSalesPage> {
       ),
       body: _body(),
     );
+  }
+
+  Future downloadFile(String url) async {
+    try{
+      _reqPer(Permission.storage);
+      Dio dio=Dio();
+      var dir=await DownloadsPathProvider.downloadsDirectory;
+      print("object directory path ${dir.path}");
+
+      dio.download(url, "${dir.path}/InvoiceUser",onReceiveProgress: (rec,total){
+        setState(() {
+          downloading=true;
+          download=(rec/total)*100;
+          downloadingStr="Downloading Image : "+(download).toStringAsFixed(0);
+        });
+
+        print("object download str $download $downloading $downloadingStr");
+
+        setState(() {
+          downloading=false;
+          downloadingStr="Completed";
+          final snackBar = SnackBar(content: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Text('PDF Downloaded Successfully'),
+              TextButton(
+                  onPressed: (){
+                    OpenFile.open("${dir.path}/InvoiceUser");
+                  }, child: Text("View Pdf", style: TextStyle(color: kPrimaryColor),))
+            ],
+          ));
+          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+        });
+
+        //OpenFile.open("${dir.path}/$id.pdf");
+
+      });
+    }catch( e)
+    {
+      print(e.getMessage());
+    }
   }
 
   Widget _searchView() {

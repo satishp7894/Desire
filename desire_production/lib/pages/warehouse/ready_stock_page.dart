@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:desire_production/bloc/ready_stock_list_bloc.dart';
 import 'package:desire_production/model/readyStockListModel.dart';
+import 'package:desire_production/pages/dashboards/admin_dashboard_page.dart';
 import 'package:desire_production/pages/dashboards/dashboard_page_warhouse.dart';
 import 'package:desire_production/pages/warehouse/ready_stock_detail_page.dart';
 import 'package:desire_production/utils/alerts.dart';
@@ -54,77 +55,87 @@ class _ReadyStockListPageListPageState extends State<ReadyStockListPage> {
         onWillPop: () {
           return widget.page == "warHouse"
               ? Navigator.pushAndRemoveUntil(
-              context,
-              MaterialPageRoute(
-                  builder: (builder) => DashboardPageWarehouse(
-                    page: widget.page,
-                  )),
+                  context,
+                  MaterialPageRoute(
+                      builder: (builder) => DashboardPageWarehouse(
+                            page: widget.page,
+                          )),
                   (route) => false)
-              : Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-                builder: (builder) => DashboardPageWarehouse(
-                  page: widget.page,
-                )),
-          );
+              : widget.page == "admin"
+                  ? Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                          builder: (builder) => AdminDashboardPage()))
+                  : Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                          builder: (builder) => DashboardPageWarehouse(
+                                page: widget.page,
+                              )),
+                    );
         },
-        child:   Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        iconTheme: IconThemeData(color: Colors.black),
-        elevation: 0,
-        centerTitle: true,
-        backgroundColor: Colors.white,
-        actions: [
-          PopupMenuButton(
-              icon: Icon(
-                Icons.settings_outlined,
-                color: Colors.black,
-              ),
-              itemBuilder: (b) => [
-                    PopupMenuItem(
-                        child: TextButton(
-                      child: Text(
-                        "Generate PDF",
-                        textAlign: TextAlign.center,
-                        style: TextStyle(color: Colors.black),
-                      ),
-                      onPressed: () {
-                        print(
-                            "object search result inside pdf ${_searchResult.length}");
-                        Navigator.pop(context);
-                        _searchResult.length == 0
-                            ? generatePdf()
-                            : generatePdfSearch();
-                        _searchResult.length == 0 ? savePdf() : savePdfSearch();
-                      },
-                    )),
-                    PopupMenuItem(
-                        child: TextButton(
-                      child: Text(
-                        "Log Out",
-                        textAlign: TextAlign.center,
-                        style: TextStyle(color: Colors.black),
-                      ),
-                      onPressed: () {
-                        Alerts.showLogOut(context, "Log Out", "Are you sure?");
-                      },
-                    )),
-                  ])
-        ],
-        title: Text(
-          "Ready Stock List",
-          style: TextStyle(
-              color: Colors.black, fontWeight: FontWeight.bold, fontSize: 20),
-          textAlign: TextAlign.center,
-        ),
-        bottom: PreferredSize(
-          preferredSize: Size.fromHeight(50),
-          child: _searchView(),
-        ),
-      ),
-      body: _body(),
-    ));
+        child: Scaffold(
+          backgroundColor: Colors.white,
+          appBar: AppBar(
+            iconTheme: IconThemeData(color: Colors.black),
+            elevation: 0,
+            centerTitle: true,
+            backgroundColor: Colors.white,
+            actions: [
+              PopupMenuButton(
+                  icon: Icon(
+                    Icons.settings_outlined,
+                    color: Colors.black,
+                  ),
+                  itemBuilder: (b) => [
+                        PopupMenuItem(
+                            child: TextButton(
+                          child: Text(
+                            "Generate PDF",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(color: Colors.black),
+                          ),
+                          onPressed: () {
+                            print(
+                                "object search result inside pdf ${_searchResult.length}");
+                            Navigator.pop(context);
+                            _searchResult.length == 0
+                                ? generatePdf()
+                                : generatePdfSearch();
+                            _searchResult.length == 0
+                                ? savePdf()
+                                : savePdfSearch();
+                          },
+                        )),
+                        PopupMenuItem(
+                            child: TextButton(
+                          child: Text(
+                            "Log Out",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(color: Colors.black),
+                          ),
+                          onPressed: () {
+                            Alerts.showLogOut(
+                                context, "Log Out", "Are you sure?");
+                          },
+                        )),
+                      ])
+            ],
+            title: Text(
+              "Ready Stock List",
+              style: TextStyle(
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 20),
+              textAlign: TextAlign.center,
+            ),
+            bottom: PreferredSize(
+              preferredSize: Size.fromHeight(50),
+              child: _searchView(),
+            ),
+          ),
+          body: _body(),
+        ));
   }
 
   Widget _body() {
@@ -570,8 +581,10 @@ class _ReadyStockListPageListPageState extends State<ReadyStockListPage> {
                                                     Expanded(
                                                         flex: 2,
                                                         child: Container(
-                                                          decoration: BoxDecoration(
-                                                            color: kPrimaryColor,
+                                                          decoration:
+                                                              BoxDecoration(
+                                                            color:
+                                                                kPrimaryColor,
                                                             border: Border(
                                                                 right: BorderSide(
                                                                     color: Colors
@@ -586,12 +599,13 @@ class _ReadyStockListPageListPageState extends State<ReadyStockListPage> {
                                                           child: Text(
                                                               '', //style: content1,
                                                               textAlign:
-                                                              TextAlign.center,
+                                                                  TextAlign
+                                                                      .center,
                                                               style: TextStyle(
                                                                   color: Colors
                                                                       .white)),
                                                           alignment:
-                                                          Alignment.center,
+                                                              Alignment.center,
                                                         )),
                                                   ],
                                                 ),
@@ -692,51 +706,45 @@ class _ReadyStockListPageListPageState extends State<ReadyStockListPage> {
                                                             Expanded(
                                                                 flex: 2,
                                                                 child:
-                                                                GestureDetector(
+                                                                    GestureDetector(
                                                                   onTap: () {
                                                                     Navigator.push(
                                                                         context,
                                                                         MaterialPageRoute(
                                                                             builder: (context) => ReadyStockDetailPage(
-                                                                                modelNoId:
-                                                                                _searchResult[i].modelNoId,
+                                                                                modelNoId: _searchResult[i].modelNoId,
                                                                                 status: 1,
                                                                                 page: widget.page)));
                                                                   },
-                                                                  child: Container(
+                                                                  child:
+                                                                      Container(
                                                                     decoration:
-                                                                    BoxDecoration(
+                                                                        BoxDecoration(
                                                                       color: Colors
                                                                           .white,
                                                                       border: Border(
-                                                                          right: BorderSide(
-                                                                              color: Colors
-                                                                                  .black),
-                                                                          bottom: BorderSide(
-                                                                              color: Colors
-                                                                                  .black),
-                                                                          top: BorderSide(
-                                                                              color:
-                                                                              Colors.black)),
+                                                                          right:
+                                                                              BorderSide(color: Colors.black),
+                                                                          bottom: BorderSide(color: Colors.black),
+                                                                          top: BorderSide(color: Colors.black)),
                                                                     ),
                                                                     child: Text(
                                                                       'View Details',
                                                                       style: TextStyle(
-                                                                          decoration:
-                                                                          TextDecoration
+                                                                          decoration: TextDecoration
                                                                               .underline,
                                                                           fontSize:
-                                                                          14,
+                                                                              14,
                                                                           color:
-                                                                          kPrimaryColor),
+                                                                              kPrimaryColor),
                                                                       //style: content1,
                                                                       textAlign:
-                                                                      TextAlign
-                                                                          .center,
+                                                                          TextAlign
+                                                                              .center,
                                                                     ),
                                                                     alignment:
-                                                                    Alignment
-                                                                        .center,
+                                                                        Alignment
+                                                                            .center,
                                                                   ),
                                                                 ))
                                                           ],
