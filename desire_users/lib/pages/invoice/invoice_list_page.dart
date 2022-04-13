@@ -1,9 +1,12 @@
+import 'dart:io';
+
 import 'package:desire_users/bloc/invoice_bloc.dart';
 import 'package:desire_users/components/default_button.dart';
 import 'package:desire_users/models/invoice_model.dart';
 import 'package:desire_users/pages/complaint/add_complaint.dart';
 import 'package:desire_users/pages/return_material/submit_return_material.dart';
 import 'package:desire_users/utils/constants.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -312,17 +315,20 @@ class _InvoiceListPageState extends State<InvoiceListPage> {
                           ? filterDate.length
                           : asyncSnapshot.customerInvoice.length,
                       (index) => InvoicesTile(
-                          customerInvoice: filterDate.length > 0
-                              ? filterDate[index]
-                              : asyncSnapshot.customerInvoice[index],
-                          type: widget.type,
-                          customerId: widget.customerId))
+                            customerInvoice: filterDate.length > 0
+                                ? filterDate[index]
+                                : asyncSnapshot.customerInvoice[index],
+                            type: widget.type,
+                            customerId: widget.customerId,
+                            link: asyncSnapshot.invoiceUrl,
+                          ))
                 ],
               ),
             );
           }
         });
   }
+
 
   void filterList() {
     filterDate.clear();
@@ -350,9 +356,10 @@ class InvoicesTile extends StatelessWidget {
   final CustomerInvoice customerInvoice;
   final type;
   final customerId;
+  final link;
 
   const InvoicesTile(
-      {Key key, this.customerInvoice, this.type, this.customerId})
+      {Key key, this.customerInvoice, this.type, this.customerId, this.link})
       : super(key: key);
 
   @override
@@ -360,7 +367,9 @@ class InvoicesTile extends StatelessWidget {
     return Card(
       elevation: 5,
       child: Container(
-        decoration: BoxDecoration(border: Border.all(width: 1, color: kPrimaryColor), borderRadius: BorderRadius.circular(5)),
+        decoration: BoxDecoration(
+            border: Border.all(width: 1, color: kPrimaryColor),
+            borderRadius: BorderRadius.circular(5)),
         padding: const EdgeInsets.all(10.0),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -395,7 +404,9 @@ class InvoicesTile extends StatelessWidget {
                         context,
                         MaterialPageRoute(
                             builder: (context) => InvoiceDetailPage(
-                                id: customerInvoice.dispatchinvoiceid)));
+                                  id: customerInvoice.dispatchinvoiceid,
+                                  pdf: link + customerInvoice.invoiceFile,
+                                )));
                   } else if (type == 2) {
                     Navigator.push(
                         context,

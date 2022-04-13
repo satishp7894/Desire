@@ -3,10 +3,13 @@ import 'package:desire_users/components/default_button.dart';
 import 'package:desire_users/models/invoice_detail_model.dart';
 import 'package:desire_users/sales/utils_sales/alerts.dart';
 import 'package:desire_users/utils/constants.dart';
+import 'package:dio/dio.dart';
 import 'package:downloads_path_provider/downloads_path_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:intl/intl.dart';
+import 'package:open_file/open_file.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:pdf/pdf.dart';
 import 'dart:io';
 
@@ -15,8 +18,9 @@ import 'package:permission_handler/permission_handler.dart';
 
 class InvoiceDetailPage extends StatefulWidget {
   final id;
+  final pdf;
 
-  const InvoiceDetailPage({Key key, this.id}) : super(key: key);
+  const InvoiceDetailPage({Key key, this.id, this.pdf}) : super(key: key);
 
   @override
   _InvoiceDetailPageState createState() => _InvoiceDetailPageState();
@@ -33,12 +37,17 @@ class _InvoiceDetailPageState extends State<InvoiceDetailPage> {
   List<InvoiceProducts> _searchResult = [];
   List<InvoiceProducts> _order = [];
   TextEditingController searchViewController = TextEditingController();
+  bool downloading = false;
+  String downloadingStr = "No data";
+  String savePath = "";
+  double download=0.0;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     invoiceDetailBloc.fetchInvoiceDetails(widget.id);
+    print(widget.pdf);
   }
 
   @override
@@ -46,6 +55,49 @@ class _InvoiceDetailPageState extends State<InvoiceDetailPage> {
     // TODO: implement dispose
     super.dispose();
     invoiceDetailBloc.dispose();
+  }
+
+
+  Future downloadFile(String url) async {
+    try{
+      _reqPer(Permission.storage);
+      Dio dio=Dio();
+      var dir=await DownloadsPathProvider.downloadsDirectory;
+      print("object directory path ${dir.path}");
+
+      dio.download(url, "${dir.path}/Invoice",onReceiveProgress: (rec,total){
+        setState(() {
+          downloading=true;
+          download=(rec/total)*100;
+          downloadingStr="Downloading Image : "+(download).toStringAsFixed(0);
+        });
+
+        print("object download str $download $downloading $downloadingStr");
+
+        setState(() {
+          downloading=false;
+          downloadingStr="Completed";
+          final snackBar = SnackBar(content: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Text('PDF Downloaded Successfully'),
+              TextButton(
+                  onPressed: (){
+                    OpenFile.open("${dir.path}/Invoice");
+                  }, child: Text("View Pdf", style: TextStyle(color: kPrimaryColor),))
+            ],
+          ));
+          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+        });
+
+        //OpenFile.open("${dir.path}/$id.pdf");
+
+      });
+    }catch( e)
+    {
+      print(e.getMessage());
+    }
   }
 
   @override
@@ -67,8 +119,9 @@ class _InvoiceDetailPageState extends State<InvoiceDetailPage> {
       floatingActionButton: FloatingActionButton.extended(
         backgroundColor: kPrimaryColor,
         onPressed: () {
-          generatePdf();
-          savePdf();
+          /*generatePdf();
+          savePdf();*/
+          downloadFile(widget.pdf);
         },
         label: Text(
           "Download Invoice",
@@ -79,7 +132,30 @@ class _InvoiceDetailPageState extends State<InvoiceDetailPage> {
           color: kWhiteColor,
         ),
       ),
-      body: _body(),
+      body: downloading
+          ? Container(
+              height: 250,
+              width: 250,
+              child: Card(
+                color: Colors.pink,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    CircularProgressIndicator(
+                      backgroundColor: Colors.white,
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    Text(
+                      downloadingStr,
+                      style: TextStyle(color: Colors.white),
+                    )
+                  ],
+                ),
+              ),
+            )
+          : _body(),
     );
   }
 

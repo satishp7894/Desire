@@ -352,7 +352,71 @@ class InvoicesTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
+    return Card(
+      elevation: 5,
+      child: Container(
+        decoration: BoxDecoration(
+            border: Border.all(width: 1, color: kPrimaryColor),
+            borderRadius: BorderRadius.circular(5)),
+        padding: const EdgeInsets.all(10.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Column(
+              children: [
+                Text(
+                  "Invoice No: " + customerInvoice.invoiceNumber,
+                  style: TextStyle(
+                      color: kBlackColor, fontWeight: FontWeight.bold),
+                ),
+                SizedBox(
+                  height: 5,
+                ),
+                Text(
+                  "Invoice Date: " + customerInvoice.invoiceDate,
+                  style: TextStyle(
+                      color: kBlackColor, fontWeight: FontWeight.w500),
+                ),
+              ],
+            ),
+            Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(5),
+                color: kPrimaryColor,
+              ),
+              padding: EdgeInsets.all(8),
+              child: GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => InvoiceDetailSalesPage(
+                              id: customerInvoice.dispatchinvoiceid)));
+                },
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Icon(
+                      Icons.read_more,
+                      color: kWhiteColor,
+                    ),
+                    Text(
+                      "View",
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 14,
+                          color: kWhiteColor),
+                    )
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    ); /*Padding(
       padding: const EdgeInsets.all(10.0),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
@@ -399,6 +463,6 @@ class InvoicesTile extends StatelessWidget {
           ),
         ],
       ),
-    );
+    );*/
   }
 }

@@ -37,6 +37,7 @@ import 'package:desire_users/services/connection.dart';
 import 'package:desire_users/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:http/http.dart' as http;
 import 'package:onesignal_flutter/onesignal_flutter.dart';
@@ -1376,7 +1377,28 @@ class _HomePageState extends State<HomePage> {
       children: [
         Container(
           margin: EdgeInsets.all(10),
-          child: Image.asset("assets/images/temp.jpg"),
+          height: 200,
+          decoration: BoxDecoration(borderRadius: BorderRadius.circular(8)),
+          child: Swiper(
+            scrollDirection: Axis.horizontal,
+            autoplay: true,
+            duration: 2000,
+            itemBuilder: (BuildContext context, int index) {
+              return ClipRRect(
+                borderRadius: BorderRadius.circular(8.0),
+                child: Image.asset(
+                  index == 0
+                      ? "assets/images/temp.jpg"
+                      : "assets/images/temp.jpg",
+                  height: 200,
+                  fit: BoxFit.fill,
+                  width: MediaQuery.of(context).size.width,
+                ),
+              );
+            },
+            itemCount: 2,
+          ),
+          // child: Image.asset("assets/images/temp.jpg"),
         ),
         Padding(
           padding:

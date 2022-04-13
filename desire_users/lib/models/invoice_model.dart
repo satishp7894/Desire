@@ -34,22 +34,22 @@ class InvoiceModel {
 
 class CustomerInvoice {
   String dispatchinvoiceid;
-  String orderId;
   String invoiceNumber;
+  String invoiceAmount;
   String invoiceDate;
   String invoiceFile;
 
   CustomerInvoice(
       {this.dispatchinvoiceid,
-        this.orderId,
         this.invoiceNumber,
+        this.invoiceAmount,
         this.invoiceDate,
         this.invoiceFile});
 
   CustomerInvoice.fromJson(Map<String, dynamic> json) {
     dispatchinvoiceid = json['dispatch_invoice_id'];
-    orderId = json['order_id'];
     invoiceNumber = json['invoice_number'];
+    invoiceAmount = json['invoice_amount'];
     invoiceDate = json['invoice_date'];
     invoiceFile = json['invoice_file'];
   }
@@ -57,8 +57,8 @@ class CustomerInvoice {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['dispatch_invoice_id'] = this.dispatchinvoiceid;
-    data['order_id'] = this.orderId;
     data['invoice_number'] = this.invoiceNumber;
+    data['invoice_amount'] = this.invoiceAmount;
     data['invoice_date'] = this.invoiceDate;
     data['invoice_file'] = this.invoiceFile;
     return data;
