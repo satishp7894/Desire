@@ -83,6 +83,15 @@ class _HomePageState extends State<HomePage> {
 
   int cartItemCount = 0;
 
+  List<Map> images = [
+    {"image": "assets/images/banner1.jpg"},
+    {"image": "assets/images/banner2.jpg"},
+    {"image": "assets/images/banner3.jpg"},
+    {"image": "assets/images/banner4.jpg"},
+    {"image": "assets/images/banner5.jpg"},
+    {"image": "assets/images/banner6.jpg"}
+  ];
+
   getCartCount() async {
     var response = await http.post(Uri.parse(Connection.cartDetails), body: {
       "secretkey": Connection.secretKey,
@@ -1382,21 +1391,19 @@ class _HomePageState extends State<HomePage> {
           child: Swiper(
             scrollDirection: Axis.horizontal,
             autoplay: true,
-            duration: 2000,
+            duration: 3000,
             itemBuilder: (BuildContext context, int index) {
               return ClipRRect(
                 borderRadius: BorderRadius.circular(8.0),
                 child: Image.asset(
-                  index == 0
-                      ? "assets/images/temp.jpg"
-                      : "assets/images/temp.jpg",
+                  images[index]['image'],
                   height: 200,
                   fit: BoxFit.fill,
                   width: MediaQuery.of(context).size.width,
                 ),
               );
             },
-            itemCount: 2,
+            itemCount: images.length,
           ),
           // child: Image.asset("assets/images/temp.jpg"),
         ),
