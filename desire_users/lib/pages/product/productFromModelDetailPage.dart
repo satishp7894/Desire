@@ -116,178 +116,184 @@ class _ProductFromModelDetailPageState
           } else
             return ListView.builder(
                 shrinkWrap: true,
+                physics: AlwaysScrollableScrollPhysics(),
                 itemCount: s.data.data.length,
                 itemBuilder: (c, i) {
-                  return Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Container(
-                        margin: EdgeInsets.only(top: 20),
-                        child: Padding(
-                          padding: const EdgeInsets.only(left: 10.0, right: 10),
-                          child: Text(
-                            s.data.data[i].productName,
-                            style: TextStyle(
-                                color: kPrimaryColor,
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                      ),
-                      Align(
-                        alignment: Alignment.centerLeft,
-                        child: Padding(
-                          padding:
-                              EdgeInsets.only(left: 10, right: 20, top: 10),
-                          child: Text(
-                            "MRP: ₹${s.data.data[i].customerprice}/stick",
-                            maxLines: 3,
-                            style: TextStyle(
-                              color: s.data.data[i].customernewprice == ""
-                                  ? kPrimaryColor
-                                  : kSecondaryColor,
-                              decoration: s.data.data[i].customernewprice == ""
-                                  ? TextDecoration.none
-                                  : TextDecoration.lineThrough,
-                              fontSize: s.data.data[i].customernewprice == ""
-                                  ? 20
-                                  : 16,
+                  return Container(
+                    margin: EdgeInsets.only(bottom: 50),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          margin: EdgeInsets.only(top: 20),
+                          child: Padding(
+                            padding:
+                                const EdgeInsets.only(left: 10.0, right: 10),
+                            child: Text(
+                              s.data.data[i].productName,
+                              style: TextStyle(
+                                  color: kPrimaryColor,
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold),
                             ),
-                            textAlign: TextAlign.left,
                           ),
                         ),
-                      ),
-                      s.data.data[i].customernewprice == ""
-                          ? Container()
-                          : Align(
-                              alignment: Alignment.centerLeft,
-                              child: Padding(
-                                padding: EdgeInsets.only(
-                                    left: 10, right: 20, bottom: 10),
-                                child: Text(
-                                  "Your Price: ₹${s.data.data[i].customernewprice}/stick",
-                                  maxLines: 3,
-                                  style: appbarStyle,
-                                  textAlign: TextAlign.left,
+                        Align(
+                          alignment: Alignment.centerLeft,
+                          child: Padding(
+                            padding:
+                                EdgeInsets.only(left: 10, right: 20, top: 10),
+                            child: Text(
+                              "MRP: ₹${s.data.data[i].customerprice}/stick",
+                              maxLines: 3,
+                              style: TextStyle(
+                                color: s.data.data[i].customernewprice == ""
+                                    ? kPrimaryColor
+                                    : kSecondaryColor,
+                                decoration:
+                                    s.data.data[i].customernewprice == ""
+                                        ? TextDecoration.none
+                                        : TextDecoration.lineThrough,
+                                fontSize: s.data.data[i].customernewprice == ""
+                                    ? 20
+                                    : 16,
+                              ),
+                              textAlign: TextAlign.left,
+                            ),
+                          ),
+                        ),
+                        s.data.data[i].customernewprice == ""
+                            ? Container()
+                            : Align(
+                                alignment: Alignment.centerLeft,
+                                child: Padding(
+                                  padding: EdgeInsets.only(
+                                      left: 10, right: 20, bottom: 10),
+                                  child: Text(
+                                    "Your Price: ₹${s.data.data[i].customernewprice}/stick",
+                                    maxLines: 3,
+                                    style: appbarStyle,
+                                    textAlign: TextAlign.left,
+                                  ),
                                 ),
                               ),
-                            ),
-                      Container(
-                        height: 250,
-                        child: Swiper(
-                          scrollDirection: Axis.horizontal,
-                          autoplay: true,
-                          duration: 2000,
-                          itemBuilder: (BuildContext context, int index) {
-                            return Image.network(
-                              "${s.data.data[i].imagepath}" +
-                                  "${s.data.data[i].image[index]}",
-                              fit: BoxFit.contain,
-                              height: 200,
-                              width: MediaQuery.of(context).size.width,
-                            );
-                          },
-                          itemCount: s.data.data[i].image.length,
+                        Container(
+                          height: 180,
+                          child: Swiper(
+                            scrollDirection: Axis.horizontal,
+                            autoplay: true,
+                            duration: 2000,
+                            itemBuilder: (BuildContext context, int index) {
+                              return Image.network(
+                                "${s.data.data[i].imagepath}" +
+                                    "${s.data.data[i].image[index]}",
+                                fit: BoxFit.contain,
+                                height: 180,
+                                width: MediaQuery.of(context).size.width,
+                              );
+                            },
+                            itemCount: s.data.data[i].image.length,
+                          ),
                         ),
-                      ),
-                      Divider(
-                        thickness: 2,
-                        color: kPrimaryColor,
-                      ),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      Container(
-                          margin: EdgeInsets.only(left: 10),
-                          alignment: Alignment.center,
-                          child: Text(
-                            "Description",
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.w700,
-                              color: Colors.black,
-                            ),
-                          )),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          Padding(
-                              padding:
-                                  const EdgeInsets.only(left: 10.0, top: 10),
-                              child: detailWidget(
-                                  "Stick Per Box", s.data.data[i].perBoxStick)),
-                          Padding(
-                              padding:
-                                  const EdgeInsets.only(left: 10.0, top: 10),
-                              child: detailWidget("Total Box Price",
-                                  s.data.data[i].boxPrice.toString())),
-                          Padding(
-                              padding: const EdgeInsets.only(
-                                left: 10.0,
-                                top: 10,
+                        Divider(
+                          thickness: 2,
+                          color: kPrimaryColor,
+                        ),
+                        SizedBox(
+                          height: 20,
+                        ),
+                        Container(
+                            margin: EdgeInsets.only(left: 10),
+                            alignment: Alignment.center,
+                            child: Text(
+                              "Description",
+                              style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.w700,
+                                color: Colors.black,
                               ),
-                              child: detailWidget(
-                                  "Category", s.data.data[i].category)),
-                        ],
-                      ),
-                      Container(
-                        margin: EdgeInsets.only(top: 10),
-                        child: Row(
+                            )),
+                        SizedBox(
+                          height: 20,
+                        ),
+                        Row(
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: [
                             Padding(
-                                padding: const EdgeInsets.only(left: 10.0),
-                                child: detailWidget(
-                                    "Model No", s.data.data[i].modelNo)),
+                                padding:
+                                    const EdgeInsets.only(left: 10.0, top: 10),
+                                child: detailWidget("Stick Per Box",
+                                    s.data.data[i].perBoxStick)),
+                            Padding(
+                                padding:
+                                    const EdgeInsets.only(left: 10.0, top: 10),
+                                child: detailWidget("Total Box Price",
+                                    s.data.data[i].boxPrice.toString())),
                             Padding(
                                 padding: const EdgeInsets.only(
-                                    left: 10.0, top: 10, bottom: 10),
+                                  left: 10.0,
+                                  top: 10,
+                                ),
                                 child: detailWidget(
-                                    "Dimension", s.data.data[i].dimensionSize)),
+                                    "Category", s.data.data[i].category)),
                           ],
                         ),
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.only(left: 10.0),
-                            child: Container(
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10),
-                                  border: Border.all(color: kPrimaryColor)),
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Image.network(
-                                  "${s.data.data[i].dimensionImagePath}" +
-                                      "${s.data.data[i].dimensionImage}",
-                                  height: 80,
-                                  width: 80,
+                        Container(
+                          margin: EdgeInsets.only(top: 10),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              Padding(
+                                  padding: const EdgeInsets.only(left: 10.0),
+                                  child: detailWidget(
+                                      "Model No", s.data.data[i].modelNo)),
+                              Padding(
+                                  padding: const EdgeInsets.only(
+                                      left: 10.0, top: 10, bottom: 10),
+                                  child: detailWidget("Dimension",
+                                      s.data.data[i].dimensionSize)),
+                            ],
+                          ),
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.only(left: 10.0),
+                              child: Container(
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10),
+                                    border: Border.all(color: kPrimaryColor)),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Image.network(
+                                    "${s.data.data[i].dimensionImagePath}" +
+                                        "${s.data.data[i].dimensionImage}",
+                                    height: 80,
+                                    width: 80,
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
-                          Align(
-                            alignment: Alignment.bottomLeft,
-                            child: Padding(
-                              padding: const EdgeInsets.only(right: 20),
-                              child: CustomStepper(
-                                  initialValue: 1,
-                                  maxValue: 100,
-                                  onChanged: (val) {
-                                    setState(() {
-                                      totQty = val;
-                                    });
-                                  }),
+                            Align(
+                              alignment: Alignment.bottomLeft,
+                              child: Padding(
+                                padding: const EdgeInsets.only(right: 20),
+                                child: CustomStepper(
+                                    initialValue: 1,
+                                    maxValue: 100,
+                                    onChanged: (val) {
+                                      setState(() {
+                                        totQty = val;
+                                      });
+                                    }),
+                              ),
                             ),
-                          ),
-                        ],
-                      )
-                    ],
+                          ],
+                        )
+                      ],
+                    ),
                   );
                 });
         });
